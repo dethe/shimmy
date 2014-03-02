@@ -9,7 +9,7 @@
 		return element(document.createElement(name), attributes, children);
 	}
 
-	function element(elem, attributes /* optional object */, children /* optional array, node, or string */){}
+	function element(elem, attributes /* optional object */, children /* optional array, node, or string */){
 		if (!children && attributes && (Array.isArray(attributes) || 
 			               attributes.nodeName || 
 			               typeof attributes === 'string')){
@@ -35,18 +35,15 @@
 		if (attributes){
 	        Object.keys(attributes).forEach(function(key){
 	            if (attributes[key] === null || attributes[key] === undefined) return;
-		            if (typeof attributes[key] === 'function'){
-		                var val = attributes[key](key, attributes);
-		                if (val){
-		                    elem.setAttribute(key, val);
-		                }
-		            }else{
-		                elem.setAttribute(key, attributes[key]);
-		            } 
-		        });
-		    }
-	    }catch(err){
-	        console.log('attributes: not what we think they are: %o', attributes);
+	            if (typeof attributes[key] === 'function'){
+	                var val = attributes[key](key, attributes);
+	                if (val){
+	                    elem.setAttribute(key, val);
+	                }
+	            }else{
+	                elem.setAttribute(key, attributes[key]);
+	            } 		      
+		    });
 	    }
 	    return elem; // for chaining
 	}
@@ -76,7 +73,7 @@
 
    function closest(elem, selector){
         while(elem){
-            if (wb.matches(elem, selector)){
+            if (matches(elem, selector)){
                 return elem;
             }
             if (!elem.parentElement){
@@ -117,7 +114,6 @@
     }else if(document.body.oMatchesSelector){
         matches = function matches(elem, selector){ return elem.oMatchesSelector(selector); };
     }
-
 
 	global.dom = {
 		html: html,
