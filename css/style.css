@@ -145,5 +145,9 @@ output{
   margin-top: 20px;
 }
 
+path{
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
 
 
