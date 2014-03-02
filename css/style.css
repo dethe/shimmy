@@ -26,6 +26,11 @@ time,mark,audio,video{
   font:inherit;
   vertical-align:baseline;
 }
+
+*, *:before, *:after {
+  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
+}
+
 /* HTML5 display-role reset for older browsers */
 article,aside,details,figcaption,figure,
 footer,header,hgroup,menu,nav,section{
@@ -67,3 +72,78 @@ table{
   MAIN
 \*------------------------------------*/
 /* GO! */
+
+html, body, svg{
+  height: 100%;
+}
+
+.sidebar{
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100px;
+  height: calc(100% - 100px);
+  border-radius: 16px;
+  border: 2px outset hsl(0, 0, 60%);
+  background-color: hsl(0, 0%, 90%);
+  padding: 16px;
+}
+
+
+input[type=range]{
+  width: 60px;
+}
+
+.footbar{
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  width: calc(100% - 100px);
+  height: 100px;
+  border-radius: 16px;
+  border: 2px outset hsl(0, 0, 60%);
+  background-color: hsl(0, 0%, 90%);
+  padding: 16px;
+}
+
+button{
+  width: 60px;
+  height: 60px;
+  border-radius: 16px;
+  border: 2px outset #000;
+}
+
+.sidebar button, .sidebar input{
+  margin-bottom: 16px;
+}
+
+.footbar button{
+  vertical-align: top;
+}
+
+hr.vertical{
+  position: relative;
+  width: 1px;
+  height: 100%;
+  display: inline-block;
+  margin-left: 16px;
+  margin-right: 16px;
+  margin-top: 0;
+  margin-bottom: 0;
+  border: 0;
+  border-right: 1px inset #000;
+}
+
+output{
+  display: inline-block;
+  position: relative;
+  vertical-align: top;
+  padding: 8px 16px;
+  font-size: 20px;
+  border-radius: 16px;
+  border: 2px inset #000;
+  margin-top: 20px;
+}
+
+
+

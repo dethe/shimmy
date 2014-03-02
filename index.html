@@ -3,10 +3,62 @@
 <head>
 	<meta charset="utf-8" />
 	<title>Drawing Board</title>
+	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/style.css" />
-	<script src="js/script.js"></script>
 </head>
 <body>
-	<h1>Drawing Board</h1>
+	<svg id="main-canvas" width="100%" height="100%"></svg>
+	<div class="sidebar">
+		<p>
+			<label for="pen-size">Pen Size</label>
+			<input type="range" min="1" value="3" max="20" id="pen-size" title="Pen Size" />
+		</p>
+		<p>
+			<label for="pen-color">Pen Color</label>
+			<input type="color" id="pen-color" title="Pen Color" />
+		</p>
+		<p>
+			<label for="pen-fill">Pen Fill</label>
+			<input type="checkbox" id="pen-fill" title="Pen Fill" />
+		</p>
+		<p>
+			<label for="pen-undo">Undo Line</label>
+			<button id="canvas-undo" title="Undo Line"><i class="fa fa-4x fa-reply"></i></button
+		</p>
+		<p>
+			<button id="canvas-rotate-clockwise" title="Rotate Canvas Clockwise"><i class="fa fa-4x fa-rotate-right"></i></button>
+			<button id="canvas-rotate-counter-clockwise" title="Rotate Canvas Counter-Clockwise"><i class="fa fa-4x fa-rotate-left"></i></button>
+		</p>
+		<p>
+			<!-- Put canvas translation tool here -->
+		</p>
+		<p>
+			<!-- Put canvas scaling tool here -->
+		</p>
+		<p>
+			<!-- Put playback speed tool here -->
+		</p>
+		<p>
+			<label for="canvas-onionskin">Onionskin</label>
+			<input type="checkbox" id="canvas-onionskin" title="Onionskin" />
+		</p>
+	</div>
+	<div class="footbar">
+		<button id="first-frame" title="First frame"><i class="fa fa-4x fa-backward"></i></button>
+		<button id="previous-frame" title="Previous Frame"><i class="fa fa-4x fa-step-backward"></i></button>
+		<button id="play" title="Play"><i class="fa fa-4x fa-play"></i></button>
+		<button id="next-frame" title="Next Frame"><i class="fa fa-4x fa-step-forward"></i></button>
+		<button id="last-frame" title="Last Frame"><i class="fa fa-4x fa-forward"></i></button>
+		<hr class="vertical" />
+		<button id="new-frame" title="New Frame"><i class="fa fa-4x fa-film"></i></button>
+		<button id="duplicate-frame" title="Duplicate Frame"><i class="fa fa-4x fa-copy"></i></button>
+		<hr class="vertical" />
+		<output id="frame-count">Frame 1 of 1</output>
+	</div>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/underscore.string/2.3.3/underscore.string.min.js"></script>
+	<script src="//cdnjs.cloudflare.com/ajax/libs/bacon.js/0.7.2/bacon.min.js"></script>
+	<script src="js/dom.js"></script>
+	<script src="js/script.js"></script>
 </body>
 </html>
