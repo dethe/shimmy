@@ -71,6 +71,10 @@
 		elem.parentElement.removeChild(elem);
 	}
 
+	function insertAfter(newElement, sibling){
+		sibling.parentElement.insertBefore(newElement, sibling.nextElementSibling);
+	}
+
    function closest(elem, selector){
         while(elem){
             if (matches(elem, selector)){
@@ -115,14 +119,55 @@
         matches = function matches(elem, selector){ return elem.oMatchesSelector(selector); };
     }
 
+    function addClass(elem, klass){
+    	/* Conditionally add class if element exists */
+    	if (elem){
+    		elem.classList.add(klass);
+    	}
+    }
+
+    function removeClass(elem, klass){
+    	/* Conditionall remove class if element exists */
+    	if (elem){
+    		elem.classList.remove(klass);
+    	}
+    }
+
+    function nextSibling(elem){
+    	/* conditionally returns next sibling if element exists */
+    	return elem ? elem.nextElementSibling : null;
+    }
+
+    function prevSibling(elem){
+    	/* conditionally returns previous sibling if element exists */
+    	return elem ? elem.previousElementSibling : null;
+    }
+
+    function toggleClass(elements, klass){
+    	if (!elements) return;
+    	if (Array.isArray(elements)){
+    		elements.forEach(function(elem){
+    			toggleClass(elem, klass);
+    		});
+    	}else{
+    		elements.classList.toggle(klass);
+    	}
+    }
+
 	global.dom = {
 		html: html,
 		svg: svg,
 		remove: remove,
+		insertAfter: insertAfter,
 		matches: matches,
 		find: find,
 		findAll: findAll,
-		closest: closest
+		closest: closest,
+		addClass: addClass,
+		removeClass: removeClass,
+		prevSibling: prevSibling,
+		nextSibling: nextSibling,
+		toggleClass: toggleClass
 	};
 
 })(this);
