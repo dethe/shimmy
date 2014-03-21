@@ -89,6 +89,23 @@ html, body, svg{
   padding: 16px;
 }
 
+.playing .sidebar input, .playing .sidebar button, .playing .footbar button{
+  pointer-events: none;
+}
+
+.playing #play{
+  display: none;
+}
+
+#stop{
+  display: none;
+}
+
+.playing #stop{
+  display: inline;
+  pointer-events: auto;
+}
+
 
 input[type=range]{
   width: 60px;
@@ -157,10 +174,20 @@ path{
 .frame.selected{
   display: inline;
 }
+.playing .frame.selected{
+  display: none;
+}
+
+.playing .frame.play-frame{
+  display: inline;
+}
 
 .frame.onionskin{
   display: inline;
   opacity: .5;
 }
 
+.playing .frame.onionskin{
+  display: none;
+}
 

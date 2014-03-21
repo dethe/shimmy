@@ -154,6 +154,17 @@
     	}
     }
 
+    function indexOf(child){
+    	var allChildren = [].slice.call(child.parentElement.children);
+    	return allChildren.indexOf(child);
+    }
+
+    window.requestAnimationFrame = window.requestAnimationFrame ||
+                                   window.mozRequestAnimationFrame || 
+                                   window.msRequestAnimationFrame || 
+                                   window.webkitRequestAnimationFrame || 
+                                   function(fn){ setTimeout(fn, 20); };
+
 	global.dom = {
 		html: html,
 		svg: svg,
@@ -167,7 +178,8 @@
 		removeClass: removeClass,
 		prevSibling: prevSibling,
 		nextSibling: nextSibling,
-		toggleClass: toggleClass
+		toggleClass: toggleClass,
+		indexOf: indexOf
 	};
 
 })(this);
