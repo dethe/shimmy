@@ -206,7 +206,6 @@
         var frames = currentFrame().parentElement.children.length;
         var index = dom.indexOf(currentFrame());
         document.querySelector('#frame-count').textContent = 'Frame ' + (index+1) + ' of ' + frames;
-        console.log('implement updateFrameCount');
      }
 
      document.querySelector('#canvas-onionskin').addEventListener('change', toggleOnionskin, false);

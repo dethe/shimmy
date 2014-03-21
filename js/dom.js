@@ -1,79 +1,79 @@
 // DOM utilities
 
 (function(global){
-	'use strict';
+    'use strict';
 
-	var SVG_NS = 'http://www.w3.org/2000/svg';
-	
-	function html(name, attributes, children){
-		return element(document.createElement(name), attributes, children);
-	}
+    var SVG_NS = 'http://www.w3.org/2000/svg';
+    
+    function html(name, attributes, children){
+        return element(document.createElement(name), attributes, children);
+    }
 
-	function element(elem, attributes /* optional object */, children /* optional array, node, or string */){
-		if (!children && attributes && (Array.isArray(attributes) || 
-			               attributes.nodeName || 
-			               typeof attributes === 'string')){
-    		children = attributes;
-	    	attributes = null;
-   		}
-		if (attributes){
-			setAttributes(elem, attributes);
-		}
-		if (children){
-			appendChildren(elem, children);
-		}
-		return elem;
-	}
+    function element(elem, attributes /* optional object */, children /* optional array, node, or string */){
+        if (!children && attributes && (Array.isArray(attributes) || 
+                           attributes.nodeName || 
+                           typeof attributes === 'string')){
+            children = attributes;
+            attributes = null;
+        }
+        if (attributes){
+            setAttributes(elem, attributes);
+        }
+        if (children){
+            appendChildren(elem, children);
+        }
+        return elem;
+    }
 
-	function svg(name, attrs, children){
-		return element(document.createElementNS(SVG_NS, name), attrs, children);
-	}
+    function svg(name, attrs, children){
+        return element(document.createElementNS(SVG_NS, name), attrs, children);
+    }
 
-	function setAttributes(elem, attributes){
-		// keys must be strings
-		// values can be strings, numbers, booleans, or functions
-		if (attributes){
-	        Object.keys(attributes).forEach(function(key){
-	            if (attributes[key] === null || attributes[key] === undefined) return;
-	            if (typeof attributes[key] === 'function'){
-	                var val = attributes[key](key, attributes);
-	                if (val){
-	                    elem.setAttribute(key, val);
-	                }
-	            }else{
-	                elem.setAttribute(key, attributes[key]);
-	            } 		      
-		    });
-	    }
-	    return elem; // for chaining
-	}
+    function setAttributes(elem, attributes){
+        // keys must be strings
+        // values can be strings, numbers, booleans, or functions
+        if (attributes){
+            Object.keys(attributes).forEach(function(key){
+                if (attributes[key] === null || attributes[key] === undefined) return;
+                if (typeof attributes[key] === 'function'){
+                    var val = attributes[key](key, attributes);
+                    if (val){
+                        elem.setAttribute(key, val);
+                    }
+                }else{
+                    elem.setAttribute(key, attributes[key]);
+                }             
+            });
+        }
+        return elem; // for chaining
+    }
 
-	function appendChildren(elem, children){
-		// Children can be a single child or an array
-		// Each child can be a string or a node
-		if (children){
-	       	if (!Array.isArray(children)){
-    			children = [children]; // convenience, allow a single argument vs. an array of one
-   			}
-   			children.forEach(function(child){
-          		if (child.nodeName){
-              		e.appendChild(child);
-          		}else{
-               		// assumes child is a string
-               		e.appendChild(document.createTextNode(child));
-           		}
-       		});
-   		}
-		return elem;
-	}
+    function appendChildren(elem, children){
+        // Children can be a single child or an array
+        // Each child can be a string or a node
+        if (children){
+            if (!Array.isArray(children)){
+                children = [children]; // convenience, allow a single argument vs. an array of one
+            }
+            children.forEach(function(child){
+                if (child.nodeName){
+                    e.appendChild(child);
+                }else{
+                    // assumes child is a string
+                    e.appendChild(document.createTextNode(child));
+                }
+            });
+        }
+        return elem;
+    }
 
-	function remove(elem){
-		elem.parentElement.removeChild(elem);
-	}
+    function remove(elem){
+        elem.parentElement.removeChild(elem);
+    }
 
-	function insertAfter(newElement, sibling){
-		sibling.parentElement.insertBefore(newElement, sibling.nextElementSibling);
-	}
+    function insertAfter(newElement, sibling){
+        sibling.parentElement.insertBefore(newElement, sibling.nextElementSibling);
+    }
 
    function closest(elem, selector){
         while(elem){
@@ -120,43 +120,43 @@
     }
 
     function addClass(elem, klass){
-    	/* Conditionally add class if element exists */
-    	if (elem){
-    		elem.classList.add(klass);
-    	}
+        /* Conditionally add class if element exists */
+        if (elem){
+            elem.classList.add(klass);
+        }
     }
 
     function removeClass(elem, klass){
-    	/* Conditionall remove class if element exists */
-    	if (elem){
-    		elem.classList.remove(klass);
-    	}
+        /* Conditionall remove class if element exists */
+        if (elem){
+            elem.classList.remove(klass);
+        }
     }
 
     function nextSibling(elem){
-    	/* conditionally returns next sibling if element exists */
-    	return elem ? elem.nextElementSibling : null;
+        /* conditionally returns next sibling if element exists */
+        return elem ? elem.nextElementSibling : null;
     }
 
     function prevSibling(elem){
-    	/* conditionally returns previous sibling if element exists */
-    	return elem ? elem.previousElementSibling : null;
+        /* conditionally returns previous sibling if element exists */
+        return elem ? elem.previousElementSibling : null;
     }
 
     function toggleClass(elements, klass){
-    	if (!elements) return;
-    	if (Array.isArray(elements)){
-    		elements.forEach(function(elem){
-    			toggleClass(elem, klass);
-    		});
-    	}else{
-    		elements.classList.toggle(klass);
-    	}
+        if (!elements) return;
+        if (Array.isArray(elements)){
+            elements.forEach(function(elem){
+                toggleClass(elem, klass);
+            });
+        }else{
+            elements.classList.toggle(klass);
+        }
     }
 
     function indexOf(child){
-    	var allChildren = [].slice.call(child.parentElement.children);
-    	return allChildren.indexOf(child);
+        var allChildren = [].slice.call(child.parentElement.children);
+        return allChildren.indexOf(child);
     }
 
     window.requestAnimationFrame = window.requestAnimationFrame ||
@@ -165,21 +165,21 @@
                                    window.webkitRequestAnimationFrame || 
                                    function(fn){ setTimeout(fn, 20); };
 
-	global.dom = {
-		html: html,
-		svg: svg,
-		remove: remove,
-		insertAfter: insertAfter,
-		matches: matches,
-		find: find,
-		findAll: findAll,
-		closest: closest,
-		addClass: addClass,
-		removeClass: removeClass,
-		prevSibling: prevSibling,
-		nextSibling: nextSibling,
-		toggleClass: toggleClass,
-		indexOf: indexOf
-	};
+    global.dom = {
+        html: html,
+        svg: svg,
+        remove: remove,
+        insertAfter: insertAfter,
+        matches: matches,
+        find: find,
+        findAll: findAll,
+        closest: closest,
+        addClass: addClass,
+        removeClass: removeClass,
+        prevSibling: prevSibling,
+        nextSibling: nextSibling,
+        toggleClass: toggleClass,
+        indexOf: indexOf
+    };
 
 })(this);
