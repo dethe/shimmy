@@ -55,6 +55,7 @@
             stroke: getStroke(),
             'stroke-width': getStrokeWidth()
         }));
+        file.onChange();
     }
 
     function appendToPath(x,y){
@@ -104,13 +105,15 @@
         currentFrame().classList.remove('selected');
         updateOnionskin();
         updateFrameCount();
+        file.onChange();
     }
 
      function cloneFrame(){
-        dom.insertAfter(currentFrame().clone(true), currentFrame());
+        dom.insertAfter(currentFrame().cloneNode(true), currentFrame());
         currentFrame().classList.remove('selected');
         updateOnionskin();
         updateFrameCount();
+        file.onChange();
      }
 
      function deleteFrame(){
@@ -123,6 +126,7 @@
         dom.remove(frameToDelete);
         updateOnionskin();
         updateFrameCount();
+        file.onChange();
      }
 
      function toggleOnionskin(){
@@ -181,9 +185,11 @@
         // add SVG SMIL animation
         // Unless looping, call stop() when animation is finished
         // How much of this can I do by adding "playing" class to body?
-        _frameDelay = Number(document.querySelector('#canvas-playbackrate').value);
-        _lastFrameTime = Date.now();
-        requestAnimationFrame(playNextFrame);
+        setTimeout(function(){
+            _frameDelay = Number(document.querySelector('#canvas-playbackrate').value);
+            _lastFrameTime = Date.now();
+            requestAnimationFrame(playNextFrame);
+        }, 500);
      }
 
      function stop(){
@@ -215,17 +221,35 @@
      }
 
      function updateFrameCount(){
-        var frames = currentFrame().parentElement.children.length;
-        var index = dom.indexOf(currentFrame());
-        document.querySelector('#frame-count').textContent = 'Frame ' + (index+1) + ' of ' + frames;
+        try{
+            var frames = currentFrame().parentElement.children.length;
+            var index = dom.indexOf(currentFrame());
+            document.querySelector('#frame-count').textContent = 'Frame ' + (index+1) + ' of ' + frames;
+        }catch(e){
+            // wait for the file to load, probably
+        }
      }
 
      function undoLine(){
         dom.remove(currentFrame().lastElementChild);
+        file.onChange();
+     }
+
+     function keydownHandler(evt){
+        if ((evt.key || evt.keyIdentifier) === 'Control'){
+            document.body.classList.add('usefiles');
+        }
+     }
+
+     function keyupHandler(evt){
+        if ((evt.key || evt.keyIdentifier) === 'Control'){
+            document.body.classList.remove('usefiles');
+        }
      }
 
      window.app = {
-        updateFrameCount: updateFrameCount
+        updateFrameCount: updateFrameCount,
+        play: play
      };
 
      document.querySelector('#canvas-undo').addEventListener('click', undoLine, false);
@@ -238,5 +262,7 @@
      document.querySelector('#new-frame').addEventListener('click', addFrame, false);
      document.querySelector('#duplicate-frame').addEventListener('click', cloneFrame, false);
      document.querySelector('#delete-frame').addEventListener('click', deleteFrame, false);
+     document.addEventListener('keydown', keydownHandler, false);
+     document.addEventListener('keyup', keyupHandler, false);
 
 })(this);

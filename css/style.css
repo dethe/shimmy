@@ -75,6 +75,7 @@ table{
 
 html, body, svg{
   height: 100%;
+  overflow: hidden;
 }
 
 .sidebar{
@@ -87,10 +88,17 @@ html, body, svg{
   border: 2px outset hsl(0, 0, 60%);
   background-color: hsl(0, 0%, 90%);
   padding: 16px;
+  -moz-transition: left .5s;
+  -webkit-transition: left .5s;
+  transition: left .5s;
 }
 
 .playing .sidebar input, .playing .sidebar button, .playing .footbar button{
   pointer-events: none;
+}
+
+.playing .sidebar{
+  left: -100px;
 }
 
 .playing #play{
@@ -121,6 +129,13 @@ input[type=range]{
   border: 2px outset hsl(0, 0, 60%);
   background-color: hsl(0, 0%, 90%);
   padding: 16px;
+  -moz-transition: bottom .5s;
+  -webkit-transition: bottom .5s;
+  transition: bottom .5s;
+}
+
+.playing .footbar{
+  bottom: -100px;
 }
 
 button{
@@ -136,6 +151,18 @@ button{
 
 .footbar button{
   vertical-align: top;
+}
+
+.filesystem{
+  display: none;
+}
+
+.usefiles .filesystem{
+  display: inline;
+}
+
+.usefiles .gist{
+  display: none;
 }
 
 hr.vertical{

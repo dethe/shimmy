@@ -72,13 +72,23 @@
 		<hr class="vertical" />
 		<output id="frame-count">Frame 1 of 1</output>
 		<hr class="vertical" />
-		<button id="clear" title="Clear Animation"><i class="fa fa-4x fa-ban"></i></button>
-		<button id="save" title="Save Animation"><i class="fa fa-4x fa-download"></i></button>
-		<button id="open" title="Open Animation"><i class="fa fa-4x fa-upload"></i></button>
+		<button id="new" class="gist" title="New Animation"><i class="fa fa-4x fa-file"></i></button>
+		<button id="upload" class="gist" title="Save as Gist">
+			<i class="fa fa-2x fa-github-alt"></i>
+			<i class="fa fa-2x fa-upload"></i>
+		</button>
+		<button id="download" class="gist" title="Load from Gist">
+			<i class="fa fa-2x fa-github-alt"></i>
+			<i class="fa fa-2x fa-download"></i>
+		</button>
+		<button id="clear" class="filesystem" title="Clear Animation"><i class="fa fa-4x fa-ban"></i></button>
+		<button id="save" class="filesystem" title="Save Animation"><i class="fa fa-4x fa-download"></i></button>
+		<button id="open" class="filesystem" title="Open Animation"><i class="fa fa-4x fa-upload"></i></button>
 	</div>
 	<!--script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script-->
 	<!--script src="//cdnjs.cloudflare.com/ajax/libs/underscore.string/2.3.3/underscore.string.min.js"></script-->
 	<!--script src="//cdnjs.cloudflare.com/ajax/libs/bacon.js/0.7.2/bacon.min.js"></script-->
+	<script src="lib/ajax.js"></script>
 	<script src="js/dom.js"></script>
 	<script src="js/file.js"></script>
 	<script src="js/script.js"></script>
