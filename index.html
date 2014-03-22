@@ -27,10 +27,10 @@
 			<label for="pen-undo">Undo Line</label>
 			<button id="canvas-undo" title="Undo Line"><i class="fa fa-4x fa-reply"></i></button
 		</p>
-		<p>
+		<!--p>
 			<button id="canvas-rotate-clockwise" title="Rotate Canvas Clockwise"><i class="fa fa-4x fa-rotate-right"></i></button>
 			<button id="canvas-rotate-counter-clockwise" title="Rotate Canvas Counter-Clockwise"><i class="fa fa-4x fa-rotate-left"></i></button>
-		</p>
+		</p-->
 		<p>
 			<!-- Put canvas translation tool here -->
 		</p>
@@ -44,6 +44,19 @@
 			<label for="canvas-onionskin">Onionskin</label>
 			<input type="checkbox" id="canvas-onionskin" title="Onionskin" />
 		</p>
+		<p>
+			<label for="canvas-playbackrate">Frame rate</label>
+			<select id="canvas-playbackrate">
+				<option value="33">30 FPS</option>
+				<option value="40">25 FPS</option>
+				<option value="50">20 FPS</option>
+				<option value="67">15 FPS</option>
+				<option value="100">10 FPS</option>
+				<option value="200">5 FPS</option>
+				<option value="1000">1 FPS</option>
+				<option value="5000">5 SPF</option>
+			</select>
+		</p>
 	</div>
 	<div class="footbar">
 		<button id="first-frame" title="First frame"><i class="fa fa-4x fa-backward"></i></button>
@@ -55,6 +68,7 @@
 		<hr class="vertical" />
 		<button id="new-frame" title="New Frame"><i class="fa fa-4x fa-film"></i></button>
 		<button id="duplicate-frame" title="Duplicate Frame"><i class="fa fa-4x fa-copy"></i></button>
+		<button id="delete-frame" title="Delete Frame"><i class="fa fa-4x fa-eraser"></i></button>
 		<hr class="vertical" />
 		<output id="frame-count">Frame 1 of 1</output>
 		<hr class="vertical" />

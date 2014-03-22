@@ -3,7 +3,9 @@
 
     var defaultCanvas = '<svg id="main-canvas" width="100%" height="100%"><g class="frame selected"></g></svg>';
 
-    function saveLocal(){ localStorage._currentWork = saveFormat(); }
+    function saveLocal(){ 
+        localStorage._currentWork = saveFormat(); 
+    }
 
     function saveFormat(){
         return document.getElementById('main-canvas').outerHTML;
@@ -11,9 +13,12 @@
 
     function restoreFormat(savetext){
         document.getElementById('main-canvas').outerHTML = savetext;
+        app.updateFrameCount();
     }
 
-    function restoreLocal(){ restoreFormat(localStorage._currentWork || defaultCanvas); }
+    function restoreLocal(){ 
+        restoreFormat(localStorage._currentWork || defaultCanvas); 
+    }
 
     function clear(){
         restoreFormat(defaultCanvas);

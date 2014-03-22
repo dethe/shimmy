@@ -93,36 +93,35 @@
         return document.querySelector('.frame.onionskin');
     }
 
-    function nextOnionskinFrame(){
-        // if there is no current onionskin frame, assume we're at the start of the document */
-        return dom.nextSibling(currentOnionskinFrame()) || document.querySelector('.frame');
-    }
-
-    function prevOnionskinFrame(){
-        return dom.preSibling(currentOnionskinFrame());
-    }
-
-    function incrementOnionskin(){
+    function updateOnionskin(){
         if (!isOnionskinOn()) return;
-        dom.toggleClass([currentOnionskinFrame(), nextOnionskinFrame()], 'onionskin');
+        dom.removeClass(currentOnionskinFrame(), 'onionskin');
+        dom.addClass(currentFrame().previousElementSibling, 'onionskin');
     }
-
-    function decrementOnionskin(){
-        if (!isOnionskinOn()) return;
-        dom.toggleClass([currentOnionskinFrame(), nextOnionskinFrame()], 'onionskin');
-    }  
 
     function addFrame(){
         dom.insertAfter(dom.svg('g', {'class': 'frame selected'}), currentFrame());
         currentFrame().classList.remove('selected');
-        incrementOnionskin();
+        updateOnionskin();
         updateFrameCount();
     }
 
      function cloneFrame(){
         dom.insertAfter(currentFrame().clone(true), currentFrame());
         currentFrame().classList.remove('selected');
-        incrementOnionskin();
+        updateOnionskin();
+        updateFrameCount();
+     }
+
+     function deleteFrame(){
+        var frameToDelete = currentFrame();
+        if (frameToDelete.nextElementSibling){
+            incrementFrame();
+        }else if (frameToDelete.previousElementSibling){
+            decrementFrame();
+        }
+        dom.remove(frameToDelete);
+        updateOnionskin();
         updateFrameCount();
      }
 
@@ -140,7 +139,7 @@
             curr.classList.remove('selected');
             curr.nextElementSibling.classList.add('selected');
         }
-        incrementOnionskin();
+        updateOnionskin();
         updateFrameCount();
      }
 
@@ -150,7 +149,7 @@
             curr.classList.remove('selected');
             curr.previousElementSibling.classList.add('selected');
         }
-        decrementOnionskin();
+        updateOnionskin();
         updateFrameCount();
      }
 
@@ -169,6 +168,9 @@
         updateFrameCount();
      }
 
+     var _lastFrameTime = 0;
+     var _frameDelay = 0;
+
      function play(){
         document.body.classList.add('playing');
         // turn play button into stop button
@@ -179,6 +181,8 @@
         // add SVG SMIL animation
         // Unless looping, call stop() when animation is finished
         // How much of this can I do by adding "playing" class to body?
+        _frameDelay = Number(document.querySelector('#canvas-playbackrate').value);
+        _lastFrameTime = Date.now();
         requestAnimationFrame(playNextFrame);
      }
 
@@ -188,11 +192,19 @@
         // return to the frame we were on
         // re-enable onionskin if needed
         // turn stop button into play button
+        dom.removeClass(playingFrame(), 'play-frame');
         document.body.classList.remove('playing');
      }
 
+
      function playNextFrame(){
+        var time = Date.now();
+        if ((time - _lastFrameTime) < _frameDelay){
+            requestAnimationFrame(playNextFrame);
+            return;            
+        }
         var currFrame = playingFrame();
+        _lastFrameTime = time;
         if (currFrame.nextElementSibling){
             currFrame.classList.remove('play-frame');
             currFrame.nextElementSibling.classList.add('play-frame');
@@ -209,8 +221,12 @@
      }
 
      function undoLine(){
-        dom.remove(currentFrame().lastElement);
+        dom.remove(currentFrame().lastElementChild);
      }
+
+     window.app = {
+        updateFrameCount: updateFrameCount
+     };
 
      document.querySelector('#canvas-undo').addEventListener('click', undoLine, false);
      document.querySelector('#canvas-onionskin').addEventListener('change', toggleOnionskin, false);
@@ -221,5 +237,6 @@
      document.querySelector('#last-frame').addEventListener('click', gotoLastFrame, false);
      document.querySelector('#new-frame').addEventListener('click', addFrame, false);
      document.querySelector('#duplicate-frame').addEventListener('click', cloneFrame, false);
+     document.querySelector('#delete-frame').addEventListener('click', deleteFrame, false);
 
 })(this);

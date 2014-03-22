@@ -68,7 +68,10 @@
     }
 
     function remove(elem){
-        elem.parentElement.removeChild(elem);
+        // conditionally remove element if it exists
+        if (elem){
+            elem.parentElement.removeChild(elem);
+        }
     }
 
     function insertAfter(newElement, sibling){
