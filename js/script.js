@@ -208,6 +208,11 @@
         document.querySelector('#frame-count').textContent = 'Frame ' + (index+1) + ' of ' + frames;
      }
 
+     function undoLine(){
+        dom.remove(currentFrame().lastElement);
+     }
+
+     document.querySelector('#canvas-undo').addEventListener('click', undoLine, false);
      document.querySelector('#canvas-onionskin').addEventListener('change', toggleOnionskin, false);
      document.querySelector('#first-frame').addEventListener('click', gotoFirstFrame, false);
      document.querySelector('#previous-frame').addEventListener('click', decrementFrame, false);
