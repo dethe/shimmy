@@ -23,6 +23,7 @@
     }
 
     document.body.addEventListener('mousedown', function(evt){
+        console.log('mousedown');
         startPath(evt.clientX, evt.clientY);
         drawing = true;
     }, false);
@@ -37,6 +38,10 @@
     });
 
     document.body.addEventListener('mouseup', function(evt){
+        if (currentPath){
+            dom.simplifyPath(currentPath);
+            currentPath = null;
+        }
         drawing = false;
     });
 
@@ -48,8 +53,11 @@
         return document.querySelector('.frame.play-frame');        
     }
 
+    var currentPath = null;
+
     function startPath(x,y){
-        currentFrame().appendChild(dom.svg('path', {
+
+        currentPath = currentFrame().appendChild(dom.svg('path', {
             d: 'M ' + x + ',' + y,
             fill: getFill(),
             stroke: getStroke(),

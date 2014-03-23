@@ -162,6 +162,28 @@
         return allChildren.indexOf(child);
     }
 
+    function pathToArray(pathElem){
+        return [].slice.call(pathElem.pathSegList).map(function(seg){
+            return {x: seg.x, y: seg.y};
+        });
+    }
+
+    function arrayToPath(arr){
+        return arr.map(function(point, index){
+            if (index){
+                return 'L' + point.x + ',' + point.y;
+            }else{
+                return 'M' + point.x + ',' + point.y;
+            }
+        }).join(' ');
+    }
+
+    function simplifyPath(pathElem){
+        console.log('before: %s', pathElem.pathSegList.length);
+        pathElem.setAttribute('d', arrayToPath(simplify(pathToArray(pathElem),2)));
+        console.log('after: %s', pathElem.pathSegList.length);        
+    }
+
     window.requestAnimationFrame = window.requestAnimationFrame ||
                                    window.mozRequestAnimationFrame || 
                                    window.msRequestAnimationFrame || 
@@ -182,7 +204,8 @@
         prevSibling: prevSibling,
         nextSibling: nextSibling,
         toggleClass: toggleClass,
-        indexOf: indexOf
+        indexOf: indexOf,
+        simplifyPath: simplifyPath
     };
 
 })(this);

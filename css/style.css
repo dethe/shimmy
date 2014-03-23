@@ -192,6 +192,7 @@ output{
 path{
   stroke-linecap: round;
   stroke-linejoin: round;
+  pointer-events: none;
 }
 
 .frame{
