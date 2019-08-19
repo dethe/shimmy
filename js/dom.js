@@ -1,5 +1,7 @@
 // DOM utilities
 
+/* globals simplify */
+
 (function(global){
     'use strict';
 
@@ -57,10 +59,10 @@
             }
             children.forEach(function(child){
                 if (child.nodeName){
-                    e.appendChild(child);
+                    elem.appendChild(child);
                 }else{
                     // assumes child is a string
-                    e.appendChild(document.createTextNode(child));
+                    elem.appendChild(document.createTextNode(child));
                 }
             });
         }
@@ -179,9 +181,9 @@
     }
 
     function simplifyPath(pathElem){
-        console.log('before: %s', pathElem.pathSegList.length);
+        // console.log('before: %s', pathElem.pathSegList.length);
         pathElem.setAttribute('d', arrayToPath(simplify(pathToArray(pathElem),2)));
-        console.log('after: %s', pathElem.pathSegList.length);        
+        // console.log('after: %s', pathElem.pathSegList.length);        
     }
 
     window.requestAnimationFrame = window.requestAnimationFrame ||

@@ -155,7 +155,6 @@ function inBounds(x,y){
 }
 
 document.body.addEventListener('mousedown', function(evt){
-  console.log('mousedown');
   startPath(evt.clientX, evt.clientY);
   drawing = true;
 }, false);
