@@ -396,14 +396,6 @@ window.app = {
 
 // document.querySelector('#canvas-undo').addEventListener('click', undoLine, false);
 // document.querySelector('#canvas-onionskin').addEventListener('change', toggleOnionskin, false);
-// document.querySelector('#first-frame').addEventListener('click', gotoFirstFrame, false);
-// document.querySelector('#previous-frame').addEventListener('click', decrementFrame, false);
-// document.querySelector('#play').addEventListener('click', play, false);
-// document.querySelector('#next-frame').addEventListener('click', incrementFrame, false);
-// document.querySelector('#last-frame').addEventListener('click', gotoLastFrame, false);
-// document.querySelector('#new-frame').addEventListener('click', addFrame, false);
-// document.querySelector('#duplicate-frame').addEventListener('click', cloneFrame, false);
-// document.querySelector('#delete-frame').addEventListener('click', deleteFrame, false);
-// document.addEventListener('keydown', keydownHandler, false);
-// document.addEventListener('keyup', keyupHandler, false);
+document.addEventListener('keydown', keydownHandler, false);
+document.addEventListener('keyup', keyupHandler, false);
 
