@@ -183,19 +183,24 @@ function getXY(evt){
     return {x,y};
 }
 
-document.body.addEventListener('mousedown', function(evt){
+const startDrawing = evt => {
   let {x,y} = getXY(evt);
   startPath(x,y);
   drawing = true;
-}, false);
+};
 
-document.body.addEventListener('mousemove', function(evt){
+const draw = evt => {
   if (!drawing) return;
   let {x,y} = getXY(evt);
   if (inBounds(x,y)){
       appendToPath(x,y);
   }
-});
+};
+
+document.body.addEventListener('mousedown', startDrawing);
+document.body.addEventListener('touchstart', startDrawing);
+document.body.addEventListener('mousemove', draw);
+document.body.addEventListener('touch')
 
 document.body.addEventListener('mouseup', function(evt){
   if (currentPath){
