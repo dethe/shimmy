@@ -1,4 +1,4 @@
-/* globals atrament LC KellyColorPicker palettes */
+/* globals dom file KellyColorPicker palettes */
 
 // Initialize
 const canvas = document.querySelector('#canvas');
@@ -49,6 +49,26 @@ function setPalette(evt){
   }
 }
 
+class Pen{
+  
+}
+
+class Pan{
+  
+}
+
+class Rotate{
+  
+}
+
+class ZoomIn{
+  
+}
+
+class ZoomOut{
+  
+}
+
 let tools = {
   pen: new Pen(canvas),
   pan: new Pan(canvas),
@@ -57,19 +77,23 @@ let tools = {
   zoomout: new ZoomOut(canvas)
 }
 
+let currentTool = tools.pen;
+
 function selectTool(button){
   let name = button.getAttribute('title').toLowerCase();
   document.querySelector('.js-tool.active').classList.remove('active');
   button.classList.add('active');
   switch(name){
-    case 'pen': lc.setTool(tools.pen); break;
-    case 'pan': lc.setTool(tools.pan); break;
-    case 'rotate': sketcher.mode = 'rotate'; break;
-    case 'zoom in':  sketcher.mode = 'zoom in'; break;
-    case 'zoom out': sketcher.mode = 'zoom out'; break;
+    case 'pen': currentTool = tools.pen; break;
+    case 'pan': currentTool = tools.pan; break;
+    case 'rotate': currentTool = tools.rotate; break;
+    case 'zoom in':  currentTool = tools.zoomin; break;
+    case 'zoom out': currentTool = tools.zoomout; break;
     default: console.error('unrecognized tool name: %s', name);
   }
 }
+
+let currentColor;
 
 function colorPopup(input){
   let popup = document.querySelector('.popup-colour');
@@ -81,7 +105,7 @@ function colorPopup(input){
     let color = colorpicker.getCurColorHex();
     colorButton(colorwell, color);
     colorButton(input, color);
-    sketcher.color = color;
+    currentColor = color;
     popup.style.display = 'none';
   }
 }
@@ -107,11 +131,11 @@ function selectColor(input){
     let color = colorpicker.getCurColorHex();
     colorButton(colorwell, color);
     colorButton(input, color);
-    sketcher.color = color;
+    currentColor = color;
     popup.style.display = 'none';
   }else{
     colorButton(colorwell, input.value);
-    sketcher.color = input.value;
+    currentColor = input.value;
   }
 }
 
