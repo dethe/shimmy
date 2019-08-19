@@ -149,6 +149,8 @@ var HEIGHT = document.body.clientHeight;
 function swallowClicks(evt){
   evt.stopPropagation();
 }
+document.querySelector('.buttonbar.animation').addEventListener('mousedown', swallowClicks);
+document.querySelector('.buttonbar.tools').addEventListener('mousedown', swallowClicks);
 
 function inBounds(x,y){
   return !(x < 0 || x > WIDTH || y < 0 || y > HEIGHT);
