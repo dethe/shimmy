@@ -78,6 +78,7 @@ let tools = {
 }
 
 let currentTool = tools.pen;
+let currentStrokeWidth = 1;
 
 function selectTool(button){
   let name = button.getAttribute('title').toLowerCase();
@@ -190,15 +191,16 @@ function startPath(x,y){
 
   currentPath = currentFrame().appendChild(dom.svg('path', {
       d: 'M ' + x + ',' + y,
-      fill: getFill(),
-      stroke: getStroke(),
-      'stroke-width': getStrokeWidth()
+      fill: 'none',
+      stroke: currentColor,
+      'stroke-width': currentStrokeWidth
   }));
   file.onChange();
 }
 
 function appendToPath(x,y){
   var path = document.querySelector('.selected path:last-child');
+  console.log(path);
   var seg = path.createSVGPathSegLinetoAbs(x,y);
   path.pathSegList.appendItem(seg);
 }

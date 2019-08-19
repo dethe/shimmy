@@ -23,7 +23,7 @@
       <i class="far fa-eraser"></i>
     </button>
     <label>Pen Size<br>
-      <input onchange="sketcher.weight = Number(this.value)" type="range" min="1" max="30" value="2" title="Pen Size" autocomplete="off" class="slider">
+      <input onchange="currentStrokeWidth = Number(this.value)" type="range" min="1" max="30" value="2" title="Pen Size" autocomplete="off" class="slider">
     </label>
     <button onclick="colorPopup(this)" title="Colour" class="js-colour colourwell">                                          
       Colour<br>
@@ -64,7 +64,7 @@
       Rotate<br>
       <i class="far fa-sync"></i>
     </button>
-    <button data-script="clear" onclick="sketcher.clear()" title="Clear" class="clear">
+    <button data-script="clear" onclick="clear()" title="Clear" class="clear">
       Clear
     </button>
   </nav>
@@ -115,6 +115,7 @@
   <script src="lib/html5-color-picker.js"></script>
   <script src="lib/simplify.js"></script>
   <script src="js/dom.js"></script>
+  <script src="js/file.js"></script>
 	<script src="js/script.js"></script>
 </body>
 </html>

@@ -1,3 +1,5 @@
+/* globals ajax app dom */
+
 (function(global){
     'use strict';
 
@@ -124,13 +126,13 @@
         onChange: onChange
     };
 
-    document.querySelector('#new').addEventListener('click', newFile, false);
-    document.querySelector('#upload').addEventListener('click', saveCurrentScriptsToGist, false);
-    document.querySelector('#download').addEventListener('click', loadScriptsFromGistId, false);
-    document.querySelector('#clear').addEventListener('click', clear, false);
-    document.querySelector('#save').addEventListener('click', saveFile, false);
-    document.querySelector('#open').addEventListener('click', loadFile, false);
-    window.addEventListener('unload', saveLocal, false);
-    window.addEventListener('load', restore, false);
+    // document.querySelector('#new').addEventListener('click', newFile, false);
+    // document.querySelector('#upload').addEventListener('click', saveCurrentScriptsToGist, false);
+    // document.querySelector('#download').addEventListener('click', loadScriptsFromGistId, false);
+    // document.querySelector('#clear').addEventListener('click', clear, false);
+    // document.querySelector('#save').addEventListener('click', saveFile, false);
+    // document.querySelector('#open').addEventListener('click', loadFile, false);
+    // window.addEventListener('unload', saveLocal, false);
+    // window.addEventListener('load', restore, false);
 
 })(window);
