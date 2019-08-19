@@ -75,6 +75,12 @@
             elem.parentElement.removeChild(elem);
         }
     }
+  
+    function clear(elem){
+      while(elem.firstChild){
+        elem.firstChild.remove();
+      }
+    }
 
     function insertAfter(newElement, sibling){
         sibling.parentElement.insertBefore(newElement, sibling.nextElementSibling);
@@ -196,6 +202,7 @@
         html: html,
         svg: svg,
         remove: remove,
+        clear: clear,
         insertAfter: insertAfter,
         matches: matches,
         find: find,

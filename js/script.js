@@ -269,10 +269,18 @@ function deleteFrame(){
   }else if (frameToDelete.previousElementSibling){
       decrementFrame();
   }
-  dom.remove(frameToDelete);
+  if (frameToDelete.parentNode.children.length > 1){
+    dom.remove(frameToDelete);
+  }else{
+    dom.clear(frameToDelete); // don't delete the last frame, just its children
+  }
   updateOnionskin();
   updateFrameCount();
   file.onChange();
+}
+
+function clear(){
+  dom.clear(currentFrame());
 }
 
 function toggleOnionskin(){
