@@ -200,9 +200,8 @@ function startPath(x,y){
 
 function appendToPath(x,y){
   var path = document.querySelector('.selected path:last-child');
-  console.log(path);
-  var seg = path.createSVGPathSegLinetoAbs(x,y);
-  path.pathSegList.appendItem(seg);
+  var d = path.getAttribute('d');
+  path.setAttribute('d', `${d} L${x} ${y}`);
 }
 
 function getFill(){
