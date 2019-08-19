@@ -79,6 +79,7 @@ let tools = {
 
 let currentTool = tools.pen;
 let currentStrokeWidth = 1;
+let currentDoOnionskin = true;
 
 function selectTool(button){
   let name = button.getAttribute('title').toLowerCase();
@@ -95,6 +96,7 @@ function selectTool(button){
 }
 
 let currentColor = '#000000';
+let currentFrameDelay = 30; // milliseconds
 
 function colorPopup(input){
   let popup = document.querySelector('.popup-colour');
@@ -227,7 +229,7 @@ function getStrokeWidth(){
 ***************************************/
 
 function isOnionskinOn(){
-  return document.querySelector('#canvas-onionskin').checked;
+  return currentDoOnionskin;
 }
 
 function currentOnionskinFrame(){
@@ -326,7 +328,7 @@ function play(){
   // Unless looping, call stop() when animation is finished
   // How much of this can I do by adding "playing" class to body?
   setTimeout(function(){
-      _frameDelay = Number(document.querySelector('#canvas-playbackrate').value);
+      _frameDelay = currentFrameDelay;
       _lastFrameTime = Date.now();
       requestAnimationFrame(playNextFrame);
   }, 500);

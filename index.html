@@ -9,8 +9,8 @@
 	<link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-  <svg id="canvas" class="frame selected">
-    <g class=
+  <svg id="canvas">
+    <g class="frame selected"></g>
   </svg>
   <button class="palette">
     <i class="far fa-palette"></i>
@@ -89,7 +89,7 @@
     <button data-script="last-frame" onclick="gotoLastFrame()" title="Last Frame">
       <i class="far fa-fast-forward"></i>
     </button>
-    <button data-script="add-frame" onclick="addFrame" title="Add Frame">
+    <button data-script="add-frame" onclick="addFrame()" title="Add Frame">
       <span class="fa-stack fa-2x">
         <i class="fas fa-film-alt fa-stack-2x"></i>
         <i class="far fa-plus fa-stack-1x fa-inverse"></i>
