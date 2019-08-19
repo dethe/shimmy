@@ -52,28 +52,31 @@ function setPalette(evt){
 }
 
 class Pen{
+  constructor(){
+    this.drawing = false;
+  }
   start(evt){
     let {x,y} = getXY(evt);
     startPath(x,y);
-    drawing = true;
+    this.drawing = true;
   }
 
   move(evt){
-    if (!drawing) return;
-    // FIXME: draw a dot if we haven't moved
+    if (!this.drawing) return;
     let {x,y} = getXY(evt);
     if (inBounds(x,y)){
         appendToPath(x,y);
     }
   }
 
-  const stopDrawing = evt => {
+  stop(evt){
     let {x,y} = getXY(evt);
+    // FIXME: draw a dot if we haven't moved
     if (currentPath){
       dom.simplifyPath(currentPath);
       currentPath = null;
     }
-    drawing = false;
+    this.drawing = false;
   }
   
 }
