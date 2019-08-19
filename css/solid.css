@@ -7,8 +7,8 @@
   font-style: normal;
   font-weight: 900;
   font-display: auto;
-  src: url("https://cdn.glitch.com/353e4ee0-fd7e-4a69-a21f-e502e99c117d%2Ffa-solid-900.eot?v=1565136534786");
-  src: url("https://cdn.glitch.com/353e4ee0-fd7e-4a69-a21f-e502e99c117d%2Ffa-solid-900.eot?v=1565136534786?#iefix") format("embedded-opentype"), url("https://cdn.glitch.com/353e4ee0-fd7e-4a69-a21f-e502e99c117d%2Ffa-solid-900.woff2?v=1565136543563") format("woff2"), url("https://cdn.glitch.com/353e4ee0-fd7e-4a69-a21f-e502e99c117d%2Ffa-solid-900.woff?v=1565136541571") format("woff"), url("https://cdn.glitch.com/353e4ee0-fd7e-4a69-a21f-e502e99c117d%2Ffa-solid-900.ttf?v=1565136539863") format("truetype"), url("https://cdn.glitch.com/353e4ee0-fd7e-4a69-a21f-e502e99c117d%2Ffa-solid-900.svg?v=1565136537727#fontawesome") format("svg"); }
+  src: url("../font/fa-solid-900.eot");
+  src: url("../font/fa-solid-900.eot#iefix") format("embedded-opentype"), url("../font/fa-solid-900.woff2") format("woff2"), url("../font/fa-solid-900.woff") format("woff"), url("../font/fa-solid-900.ttf") format("truetype"), url("../font/fa-solid-900.svg#fontawesome") format("svg"); }
 
 .fa,
 .fas {
