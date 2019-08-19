@@ -52,6 +52,29 @@ function setPalette(evt){
 }
 
 class Pen{
+  start(evt){
+    let {x,y} = getXY(evt);
+    startPath(x,y);
+    drawing = true;
+  }
+
+  move(evt){
+    if (!drawing) return;
+    // FIXME: draw a dot if we haven't moved
+    let {x,y} = getXY(evt);
+    if (inBounds(x,y)){
+        appendToPath(x,y);
+    }
+  }
+
+  const stopDrawing = evt => {
+    let {x,y} = getXY(evt);
+    if (currentPath){
+      dom.simplifyPath(currentPath);
+      currentPath = null;
+    }
+    drawing = false;
+  }
   
 }
 
@@ -185,39 +208,24 @@ function getXY(evt){
     return {x,y};
 }
 
-const startDrawing = evt => {
-  let {x,y} = getXY(evt);
-  startPath(x,y);
-  drawing = true;
-};
-
-const draw = evt => {
-  if (!drawing) return;
-  let {x,y} = getXY(evt);
-  if (inBounds(x,y)){
-      appendToPath(x,y);
+const toolStart = evt => currentTool.start(evt);
+const toolMove = evt => currentTool.move(evt);
+const toolStop = evt => currentTool.stop(evt);
+const toolCancel = evt => currentTool.cancel();
+const escCancel = evt => {
+  if (evt.code && evt.code === 'Escape'){
+    currentTool.cancel();
   }
-};
-
-const stopDrawing = evt => {
-  let {x,y} = getXY(evt);
-  if (currentPath){
-    dom.simplifyPath(currentPath);
-    currentPath = null;
-  }
-  drawing = false;
 }
 
-const toolStart = evt => 
-const cancelTool = evt => currentTool.cancel()
-
-document.body.addEventListener('mousedown', startDrawing);
-document.body.addEventListener('touchstart', startDrawing);
-document.body.addEventListener('mousemove', draw);
-document.body.addEventListener('touchmove', draw);
-document.body.addEventListener('touchend', stopDrawing);
-document.body.addEventListener('mouseup', stopDrawing);
-document.body.addEventListener('touchcancel', cancelMove)
+document.body.addEventListener('mousedown', toolStart);
+document.body.addEventListener('touchstart', toolStart);
+document.body.addEventListener('mousemove', toolMove);
+document.body.addEventListener('touchmove', toolMove);
+document.body.addEventListener('touchend', toolStop);
+document.body.addEventListener('mouseup', toolStop);
+document.body.addEventListener('touchcancel', toolCancel);
+document.body.addEventListener('keydown', escCancel);
 
 function currentFrame(){
   return document.querySelector('.frame.selected');
