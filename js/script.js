@@ -191,7 +191,6 @@ function startPath(x,y){
 
   currentPath = currentFrame().appendChild(dom.svg('path', {
       d: 'M ' + x + ',' + y,
-      fill: 'none',
       stroke: currentColor,
       'stroke-width': currentStrokeWidth
   }));

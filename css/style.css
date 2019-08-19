@@ -125,3 +125,35 @@ label{
     margin-left: -30px;
     margin-top: -10px;
 }
+
+path{
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  pointer-events: none;
+  fill: none;
+}
+
+.frame{
+  display: none;
+}
+
+.frame.selected{
+  display: inline;
+}
+.playing .frame.selected{
+  display: none;
+}
+
+.playing .frame.play-frame{
+  display: inline;
+}
+
+.frame.onionskin{
+  display: inline;
+  pointer-events: none;
+  opacity: .5;
+}
+
+.playing .frame.onionskin{
+  display: none;
+}
