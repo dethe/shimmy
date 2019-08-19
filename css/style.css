@@ -68,6 +68,10 @@ button .label{
   background-color: white;
 }
 
+.feedback input{
+  max-width: 4em;
+}
+
 .palette{
   position: absolute;
   top: 0;
