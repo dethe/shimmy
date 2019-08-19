@@ -54,8 +54,8 @@ button .label{
 }
 
 .animation{
-  flex-direction: row;
-  width: calc(100% - 4rem);
+  flex-direction: column;
+  width: 48rem;
   height: 4rem;
   left: 4rem;
   top: 0;
