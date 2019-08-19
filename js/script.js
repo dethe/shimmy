@@ -41,6 +41,8 @@ const colorpicker = new KellyColorPicker(
   });
 setPalette({target: colorpaletteselect});
 
+const mouse = {};
+
 function setPalette(evt){
   let palette = palettes[parseInt(evt.target.value)];
   let wells = document.querySelectorAll('.js-miniwell');
@@ -197,18 +199,25 @@ const draw = evt => {
   }
 };
 
+const stopDrawing = evt => {
+  let {x,y} = getXY(evt);
+  if (currentPath){
+    dom.simplifyPath(currentPath);
+    currentPath = null;
+  }
+  drawing = false;
+}
+
+const toolStart = evt => 
+const cancelTool = evt => currentTool.cancel()
+
 document.body.addEventListener('mousedown', startDrawing);
 document.body.addEventListener('touchstart', startDrawing);
 document.body.addEventListener('mousemove', draw);
-document.body.addEventListener('touch')
-
-document.body.addEventListener('mouseup', function(evt){
-  if (currentPath){
-      dom.simplifyPath(currentPath);
-      currentPath = null;
-  }
-  drawing = false;
-});
+document.body.addEventListener('touchmove', draw);
+document.body.addEventListener('touchend', stopDrawing);
+document.body.addEventListener('mouseup', stopDrawing);
+document.body.addEventListener('touchcancel', cancelMove)
 
 function currentFrame(){
   return document.querySelector('.frame.selected');
