@@ -164,17 +164,34 @@ function inBounds(x,y){
   return !(x < 0 || x > WIDTH || y < 0 || y > HEIGHT);
 }
 
-function getX
+function getXY(evt){
+   if (evt.cancelable) {
+      evt.preventDefault();
+    }
+
+    const rect = this.canvas.getBoundingClientRect();
+    const position = evt.changedTouches && evt.changedTouches[0] || evt;
+    let x = position.offsetX;
+    let y = position.offsetY;
+
+    if (typeof x === 'undefined') {
+      x = position.clientX - rect.left;
+    }
+    if (typeof y === 'undefined') {
+      y = position.clientY - rect.top;
+    }
+    return {x,y};
+}
 
 document.body.addEventListener('mousedown', function(evt){
-  startPath(evt.clientX, evt.clientY);
+  let {x,y} = getXY(evt);
+  startPath(x,y);
   drawing = true;
 }, false);
 
 document.body.addEventListener('mousemove', function(evt){
   if (!drawing) return;
-  var x = evt.clientX;
-  var y = evt.clientY;
+  let {x,y} = getXY(evt);
   if (inBounds(x,y)){
       appendToPath(x,y);
   }
@@ -212,22 +229,6 @@ function appendToPath(x,y){
   var path = document.querySelector('.selected path:last-child');
   var d = path.getAttribute('d');
   path.setAttribute('d', `${d} L${x} ${y}`);
-}
-
-function getFill(){
-  if (document.querySelector('#pen-fill').checked){
-      return getStroke();
-  }else{
-      return 'none';
-  }
-}
-
-function getStroke(){
-  return document.querySelector('#pen-color').value;
-}
-
-function getStrokeWidth(){
-  return document.querySelector('#pen-size').value + 'px';
 }
 
 /***************************************
