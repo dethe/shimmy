@@ -157,10 +157,14 @@ function swallowClicks(evt){
 }
 document.querySelector('.buttonbar.animation').addEventListener('mousedown', swallowClicks);
 document.querySelector('.buttonbar.tools').addEventListener('mousedown', swallowClicks);
+document.querySelector('.buttonbar.animation').addEventListener('touchstart', swallowClicks);
+document.querySelector('.buttonbar.tools').addEventListener('touchstart', swallowClicks);
 
 function inBounds(x,y){
   return !(x < 0 || x > WIDTH || y < 0 || y > HEIGHT);
 }
+
+function getX
 
 document.body.addEventListener('mousedown', function(evt){
   startPath(evt.clientX, evt.clientY);
