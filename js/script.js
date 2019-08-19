@@ -94,7 +94,7 @@ function selectTool(button){
   }
 }
 
-let currentColor;
+let currentColor = '#000000';
 
 function colorPopup(input){
   let popup = document.querySelector('.popup-colour');
