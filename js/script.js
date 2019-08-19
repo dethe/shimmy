@@ -98,6 +98,10 @@ function selectTool(button){
 let currentColor = '#000000';
 let currentFrameDelay = 30; // milliseconds
 
+function setFrameRate(input){
+  currentFrameDelay = Math.floor(1000 / Number(input.value));
+}
+
 function colorPopup(input){
   let popup = document.querySelector('.popup-colour');
   let colorwell = document.querySelector('.colourwell');
@@ -366,7 +370,7 @@ function updateFrameCount(){
   try{
       var frames = currentFrame().parentElement.children.length;
       var index = dom.indexOf(currentFrame());
-      document.querySelector('#frame-count').textContent = 'Frame ' + (index+1) + ' of ' + frames;
+      document.querySelector('.framecount').textContent = 'Frame ' + (index+1) + ' of ' + frames;
   }catch(e){
       // wait for the file to load, probably
   }
