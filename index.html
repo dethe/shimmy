@@ -3,96 +3,119 @@
 <head>
 	<meta charset="utf-8" />
 	<title>Drawing Board</title>
-	<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+	<link href="css/fontawesome.css" rel="stylesheet">
+  <link href="css/regular.css" rel="stylesheet">
+  <link href="css/solid.css" rel="stylesheet">
 	<link rel="stylesheet" href="css/style.css" />
 </head>
 <body>
-	<svg id="main-canvas" width="100%" height="100%">
-		<g class="frame selected"></g>
-	</svg>
-	<div class="sidebar">
-		<p>
-			<label for="pen-size">Pen Size</label>
-			<input type="range" min="1" value="3" max="20" id="pen-size" title="Pen Size" />
-		</p>
-		<p>
-			<label for="pen-color">Pen Color</label>
-			<input type="color" id="pen-color" title="Pen Color" />
-		</p>
-		<p>
-			<label for="pen-fill">Pen Fill</label>
-			<input type="checkbox" id="pen-fill" title="Pen Fill" />
-		</p>
-		<p>
-			<label for="pen-undo">Undo Line</label>
-			<button id="canvas-undo" title="Undo Line"><i class="fa fa-4x fa-reply"></i></button
-		</p>
-		<!--p>
-			<button id="canvas-rotate-clockwise" title="Rotate Canvas Clockwise"><i class="fa fa-4x fa-rotate-right"></i></button>
-			<button id="canvas-rotate-counter-clockwise" title="Rotate Canvas Counter-Clockwise"><i class="fa fa-4x fa-rotate-left"></i></button>
-		</p-->
-		<p>
-			<!-- Put canvas translation tool here -->
-		</p>
-		<p>
-			<!-- Put canvas scaling tool here -->
-		</p>
-		<p>
-			<!-- Put playback speed tool here -->
-		</p>
-		<p>
-			<label for="canvas-onionskin">Onionskin</label>
-			<input type="checkbox" id="canvas-onionskin" title="Onionskin" />
-		</p>
-		<p>
-			<label for="canvas-playbackrate">Frame rate</label>
-			<select id="canvas-playbackrate">
-				<option value="33">30 FPS</option>
-				<option value="40">25 FPS</option>
-				<option value="50">20 FPS</option>
-				<option value="67">15 FPS</option>
-				<option value="100">10 FPS</option>
-				<option value="200">5 FPS</option>
-				<option value="1000">1 FPS</option>
-				<option value="5000">5 SPF</option>
-			</select>
-		</p>
-	</div>
-	<div class="footbar">
-		<button id="first-frame" title="First frame"><i class="fa fa-4x fa-backward"></i></button>
-		<button id="previous-frame" title="Previous Frame"><i class="fa fa-4x fa-step-backward"></i></button>
-		<button id="play" title="Play"><i class="fa fa-4x fa-play"></i></button>
-		<button id="stop" title="Stop"><i class="fa fa-4x fa-stop"></i></button>
-		<button id="next-frame" title="Next Frame"><i class="fa fa-4x fa-step-forward"></i></button>
-		<button id="last-frame" title="Last Frame"><i class="fa fa-4x fa-forward"></i></button>
-		<hr class="vertical" />
-		<button id="new-frame" title="New Frame"><i class="fa fa-4x fa-film"></i></button>
-		<button id="duplicate-frame" title="Duplicate Frame"><i class="fa fa-4x fa-copy"></i></button>
-		<button id="delete-frame" title="Delete Frame"><i class="fa fa-4x fa-eraser"></i></button>
-		<hr class="vertical" />
-		<output id="frame-count">Frame 1 of 1</output>
-		<hr class="vertical" />
-		<button id="new" class="gist" title="New Animation"><i class="fa fa-4x fa-file"></i></button>
-		<button id="upload" class="gist" title="Save as Gist">
-			<i class="fa fa-2x fa-github-alt"></i>
-			<i class="fa fa-2x fa-upload"></i>
-		</button>
-		<button id="download" class="gist" title="Load from Gist">
-			<i class="fa fa-2x fa-github-alt"></i>
-			<i class="fa fa-2x fa-download"></i>
-		</button>
-		<button id="clear" class="filesystem" title="Clear Animation"><i class="fa fa-4x fa-ban"></i></button>
-		<button id="save" class="filesystem" title="Save Animation"><i class="fa fa-4x fa-download"></i></button>
-		<button id="open" class="filesystem" title="Open Animation"><i class="fa fa-4x fa-upload"></i></button>
-	</div>
-	<!--script src="//cdnjs.cloudflare.com/ajax/libs/underscore.js/1.6.0/underscore-min.js"></script-->
-	<!--script src="//cdnjs.cloudflare.com/ajax/libs/underscore.string/2.3.3/underscore.string.min.js"></script-->
-	<!--script src="//cdnjs.cloudflare.com/ajax/libs/bacon.js/0.7.2/bacon.min.js"></script-->
-	<script src="//cdnjs.cloudflare.com/ajax/libs/raphael/2.1.2/raphael-min.js"></script>
-	<script src="lib/ajax.js"></script>
-	<script src="lib/simplify.js"></script>
-	<script src="js/dom.js"></script>
-	<script src="js/file.js"></script>
+  <canvas id="canvas"></canvas>
+  <button class="palette">
+    <i class="far fa-palette"></i>
+  </button>
+  <nav class="buttonbar tools">
+    <button onclick="selectTool(this)" title="Pen" class="js-tool active">
+      Pen<br>
+      <i class="far fa-pen"></i>
+    </button>
+    <button onclick="selectTool(this)" title="Eraser" class="js-tool">
+      Eraser<br>
+      <i class="far fa-eraser"></i>
+    </button>
+    <label>Pen Size<br>
+      <input onchange="sketcher.weight = Number(this.value)" type="range" min="1" max="30" value="2" title="Pen Size" autocomplete="off" class="slider">
+    </label>
+    <button onclick="colorPopup(this)" title="Colour" class="js-colour colourwell">                                          
+      Colour<br>
+    </button>
+    <label>Palette
+      <select class="colorpalette">
+      </select>
+    </label>
+    <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color half" value="#000000" style="background-color: #000000;">
+    </button>
+    <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color half" value="#FFFFFF" style="background-color: #FFFFFF;">
+    </button>
+    <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color half" value="#666666" style="background-color: #666666;">
+    </button>
+    <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color half js-miniwell">
+    </button>
+    <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color half js-miniwell">
+    </button>
+    <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color half js-miniwell">
+    </button>
+    <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color half js-miniwell">
+    </button>
+    <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color half js-miniwell">
+    </button>
+    <button onclick="selectTool(this)" title="Zoom Out" class="js-tool">
+      Zoom Out<br>
+      <i class="far fa-search-minus"></i>
+    </button>
+    <button onclick="selectTool(this)" title="Zoom In" class="js-tool">
+      Zoom In<br>
+      <i class="far fa-search-plus"></i>
+    </button>
+    <button onclick="selectTool(this)" title="Pan" class="js-tool">
+      Pan<br>
+      <i class="far fa-arrows"></i>
+    </button>
+    <button onclick="selectTool(this)" title="Rotate" class="js-tool">
+      Rotate<br>
+      <i class="far fa-sync"></i>
+    </button>
+    <button data-script="clear" onclick="sketcher.clear()" title="Clear" class="clear">
+      Clear
+    </button>
+  </nav>
+  <nav class="buttonbar animation">
+    <button data-script="first-frame" title="First Frame">
+      <i class="far fa-fast-backward"></i>
+    </button>
+    <button data-script="prev-frame" title="Previous Frame">
+      <i class="far fa-step-backward"></i>
+    </button>
+    <button data-script="play" title="Play">
+      <i class="far fa-play"></i>
+    </button>
+    <button data-script="stop" title="Stop" hidden>
+      <i class="far fa-stop"></i>
+    </button>
+    <button data-script="next-frame" title="Next Frame">
+      <i class="far fa-step-forward"></i>
+    </button>
+    <button data-script="last-frame" title="Last Frame">
+      <i class="far fa-fast-forward"></i>
+    </button>
+    <button data-script="add-frame" title="Add Frame">
+      <span class="fa-stack fa-2x">
+        <i class="fas fa-film-alt fa-stack-2x"></i>
+        <i class="far fa-plus fa-stack-1x fa-inverse"></i>
+      </span>
+    </button>
+    <button data-script="copy-frame" title="Copy Frame">
+      <i class="far fa-photo-video"></i>
+    </button>
+    <button data-script="delete-frame" title="Delete Frame">
+      <span class="fa-stack fa-2x">
+        <i class="fas fa-film-alt fa-stack-2x"></i>
+        <i class="far fa-minus fa-stack-1x fa-inverse"></i>
+      </span>
+    </button>
+    <span class="feedback">
+      Frame Rate 10 FPS
+    </span>
+    <span class="feedback">
+      Frame X of Y
+    </span>
+  </nav>
+  <div class="popup-colour">
+  </div>
+  <script src="js/mouse.js"></script>
+<!--   <script src="js/atrament.js"></script> -->
+  <script src="js/literally-canvas-core.js"></script>
+  <script src="js/palettes.js"></script>
+  <script src="js/html5-color-picker.js"></script>
 	<script src="js/script.js"></script>
 </body>
 </html>

@@ -1,222 +1,127 @@
-/*------------------------------------*\
-  RESET
-\*------------------------------------*/
-/* http://meyerweb.com/eric/tools/css/reset/
-   v2.0b1 | 201101
-   NOTE:WORK IN PROGRESS
-   USE WITH CAUTION AND TEST WITH ABANDON */
 
-html,body,div,span,applet,object,iframe,
-h1,h2,h3,h4,h5,h6,p,blockquote,pre,
-a,abbr,acronym,address,big,cite,code,
-del,dfn,em,img,ins,kbd,q,s,samp,
-small,strike,strong,sub,sup,tt,var,
-b,u,i,center,
-dl,dt,dd,ol,ul,li,
-fieldset,form,label,legend,
-table,caption,tbody,tfoot,thead,tr,th,td,
-article,aside,canvas,details,figcaption,figure,
-footer,header,hgroup,menu,nav,section,summary,
-time,mark,audio,video{
-  margin:0;
-  padding:0;
-  border:0;
-  outline:0;
-  font-size:100%;
-  font:inherit;
-  vertical-align:baseline;
-}
+/* Tools */
 
-*, *:before, *:after {
-  -moz-box-sizing: border-box; -webkit-box-sizing: border-box; box-sizing: border-box;
-}
-
-/* HTML5 display-role reset for older browsers */
-article,aside,details,figcaption,figure,
-footer,header,hgroup,menu,nav,section{
-  display:block;
-}
-body{
-  line-height:1;
-}
-ol,ul{
-  list-style:none;
-}
-blockquote,q{
-  quotes:none;
-}
-blockquote:before,blockquote:after,
-q:before,q:after{
-  content:'';
-  content:none;
-}
-/* remember to define visible focus styles!
-:focus{
-  outline:?????;
-} */
-
-/* remember to highlight inserts somehow! */
-ins{
-  text-decoration:none;
-}
-del{
-  text-decoration:line-through;
-}
-
-table{
-  border-collapse:collapse;
-  border-spacing:0;
-}
-
-/*------------------------------------*\
-  MAIN
-\*------------------------------------*/
-/* GO! */
-
-html, body, svg{
+html, body{
+  width: 100%;
   height: 100%;
-  overflow: hidden;
 }
 
-.sidebar{
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100px;
-  height: calc(100% - 100px);
-  border-radius: 16px;
-  border: 2px outset hsl(0, 0, 60%);
-  background-color: hsl(0, 0%, 90%);
-  padding: 16px;
-  -moz-transition: left .5s;
-  -webkit-transition: left .5s;
-  transition: left .5s;
-}
-
-.playing .sidebar input, .playing .sidebar button, .playing .footbar button{
-  pointer-events: none;
-}
-
-.playing .sidebar{
-  left: -100px;
-}
-
-.playing #play{
-  display: none;
-}
-
-#stop{
-  display: none;
-}
-
-.playing #stop{
-  display: inline;
-  pointer-events: auto;
-}
-
-
-input[type=range]{
-  width: 60px;
-}
-
-.footbar{
-  position: absolute;
-  right: 0;
-  bottom: 0;
-  width: calc(100% - 100px);
-  height: 100px;
-  border-radius: 16px;
-  border: 2px outset hsl(0, 0, 60%);
-  background-color: hsl(0, 0%, 90%);
-  padding: 16px;
-  -moz-transition: bottom .5s;
-  -webkit-transition: bottom .5s;
-  transition: bottom .5s;
-}
-
-.playing .footbar{
-  bottom: -100px;
+*{
+  padding: 0;
+  margin: 0;
+  border-width: 0;
 }
 
 button{
-  width: 60px;
-  height: 60px;
-  border-radius: 16px;
-  border: 2px outset #000;
+  border-width: 1px;
+  min-width: 4rem;
+  min-height: 4rem;
+/*   position: relative; */
 }
 
-.sidebar button, .sidebar input{
-  margin-bottom: 16px;
+button.half{
+  min-width: 2rem;
+  min-height: 2rem;
 }
 
-.footbar button{
-  vertical-align: top;
+button i{
+  font-size: 2rem;
+  top: 0;
+  left: 0;
 }
 
-.filesystem{
-  display: none;
+button .label{
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-.usefiles .filesystem{
-  display: inline;
+.buttonbar{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  position: absolute;
 }
 
-.usefiles .gist{
-  display: none;
+.buttonbar .fa-stack{
+  font-size: .8rem;
 }
 
-hr.vertical{
-  position: relative;
-  width: 1px;
-  height: 100%;
-  display: inline-block;
-  margin-left: 16px;
-  margin-right: 16px;
-  margin-top: 0;
-  margin-bottom: 0;
-  border: 0;
-  border-right: 1px inset #000;
+.tools{
+  width: 4rem;
+  left: 0;
+  top: 4rem;
 }
 
-output{
-  display: inline-block;
-  position: relative;
-  vertical-align: top;
-  padding: 8px 16px;
-  font-size: 20px;
-  border-radius: 16px;
-  border: 2px inset #000;
-  margin-top: 20px;
+.animation{
+  flex-direction: row;
+  width: calc(100% - 4rem);
+  height: 4rem;
+  left: 4rem;
+  top: 0;
 }
 
-path{
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  pointer-events: none;
+.animation .feedback{
+  flex: 4 4;
+  min-height: 2rem;
+  font-size: 1rem;
+  background-color: white;
 }
 
-.frame{
-  display: none;
+.palette{
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
-.frame.selected{
-  display: inline;
-}
-.playing .frame.selected{
-  display: none;
+.fa-stack-1x{
+  font-size: 1rem;
 }
 
-.playing .frame.play-frame{
-  display: inline;
+.fa-stack-2x{
+  font-size: 2rem;
 }
 
-.frame.onionskin{
-  display: inline;
-  pointer-events: none;
-  opacity: .5;
+label{
+  font-size: 1rem;
 }
 
-.playing .frame.onionskin{
-  display: none;
+.buttonbar .colourwell{
+  min-height: 2rem;
+  background-color: black;
+  color: white;
 }
 
+.buttonbar .clear{
+  min-height: 2rem;
+  max-width: 4rem;
+  font-size: 1rem;
+}
+
+.buttonbar .slider{
+  max-width: 4em;
+}
+
+.active{
+  background-color: lightblue;
+}
+
+.colorpalette{
+  width: 4rem;
+}
+
+.popup-colour {
+    position : absolute;
+    display : none;
+    background-color : rgb(225, 225, 225);
+    border : 1px solid rgb(191, 191, 191);
+    box-shadow : rgba(0, 0, 0, 0.24) 7px 7px 14px -3px;
+    border-radius : 4px;
+    padding : 12px;
+    box-sizing : content-box;
+    left : calc(50% - 100px);
+    top : calc(50% - 100px);
+    border-radius: 110px;
+    margin-left: -30px;
+    margin-top: -10px;
+}
