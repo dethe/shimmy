@@ -84,34 +84,106 @@ class Pen{
     this.drawing = false;
   }
   
+  cancel(){
+    // remove the path in progress
+  }
+  
 }
 
 class Pan{
   constructor(){
-    
+    this.dragging = false; 
   }
-  starte(evt){
-    
+  
+  start(evt){
+    if (!evt.button){
+      // button 0 is the main button, we're not interested in others
+      return;
+    }
+    let {x,y} = getXY(evt);
+    this.matrix = currentFrame().get
+    startPath(x,y);
+    this.drawing = true;
   }
+  
   move(evt){
     
   }
+  
   stop(evt){
+    
+  }
+  
+  cancel(){
     
   }
   
 }
 
 class Rotate{
+  constructor(){
+    
+  }
   
+  start(evt){
+    
+  }
+  
+  move(evt){
+    
+  }
+  
+  stop(evt){
+    
+  }
+  
+  cancel(evt){
+    
+  }
 }
 
 class ZoomIn{
+  constructor(){
+    
+  }
   
+  start(evt){
+    
+  }
+  
+  move(evt){
+    
+  }
+  
+  stop(evt){
+    
+  }
+  
+  cancel(evt){
+    
+  }  
 }
 
 class ZoomOut{
+  constructor(){
+    
+  }
   
+  start(evt){
+    
+  }
+  
+  move(evt){
+    
+  }
+  
+  stop(evt){
+    
+  }
+  
+  cancel(evt){
+    
+  }    
 }
 
 let tools = {
