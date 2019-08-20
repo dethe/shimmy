@@ -100,7 +100,7 @@ class Pan{
   }
   
   start(evt){
-    if (!evt.button){
+    if (evt.button !== 0){
       // button 0 is the main button, we're not interested in others
       return;
     }
