@@ -57,7 +57,7 @@ class Pen{
   }
   start(evt){
     console.log('start evt button: ', evt.button);
-    if (evt.button === 0){
+    if (evt.button !== 0){
       // button 0 is the main button, we're not interested in others
       // can't test for truthiness, because touch events have button=undefined
       return;
