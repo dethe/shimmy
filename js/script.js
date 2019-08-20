@@ -56,8 +56,10 @@ class Pen{
     this.drawing = false;
   }
   start(evt){
-    if (!evt.button){
+    console.log('start evt button: ', evt.button);
+    if (evt.button === 0){
       // button 0 is the main button, we're not interested in others
+      // can't test for truthiness, because touch events have button=undefined
       return;
     }
     let {x,y} = getXY(evt);
@@ -66,6 +68,7 @@ class Pen{
   }
 
   move(evt){
+    console.log('move %s', this.drawing);
     if (!this.drawing) return;
     let {x,y} = getXY(evt);
     if (inBounds(x,y)){
@@ -74,6 +77,7 @@ class Pen{
   }
 
   stop(evt){
+    console.log('stop %s', this.drawing);
     if (!this.drawing) return;
     let {x,y} = getXY(evt);
     // FIXME: draw a dot if we haven't moved
