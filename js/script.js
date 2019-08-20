@@ -56,6 +56,10 @@ class Pen{
     this.drawing = false;
   }
   start(evt){
+    if (!evt.button){
+      // button 0 is the main button, we're not interested in others
+      return;
+    }
     let {x,y} = getXY(evt);
     startPath(x,y);
     this.drawing = true;
@@ -70,6 +74,7 @@ class Pen{
   }
 
   stop(evt){
+    if (!this.drawing) return;
     let {x,y} = getXY(evt);
     // FIXME: draw a dot if we haven't moved
     if (currentPath){
@@ -82,6 +87,18 @@ class Pen{
 }
 
 class Pan{
+  constructor(){
+    
+  }
+  starte(evt){
+    
+  }
+  move(evt){
+    
+  }
+  stop(evt){
+    
+  }
   
 }
 
