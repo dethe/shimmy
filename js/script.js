@@ -56,13 +56,8 @@ class Pen{
     this.drawing = false;
   }
   start(evt){
-    console.log('start evt button: ', evt.button);
-    if (evt.button){
-      // button 0 is the main button, we're not interested in others
-      // can't test for truthiness, because touch events have button=undefined
-      return;
-    }
-    let {x,y} = getXY(evt);
+    let {x,y, err} = getXY(evt);
+    if (err){ return };
     startPath(x,y);
     this.drawing = true;
   }
@@ -70,7 +65,8 @@ class Pen{
   move(evt){
     console.log('move %s', this.drawing);
     if (!this.drawing) return;
-    let {x,y} = getXY(evt);
+    let {x,y,err} = getXY(evt);
+    if (err){ return; }
     if (inBounds(x,y)){
         appendToPath(x,y);
     }
@@ -79,7 +75,8 @@ class Pen{
   stop(evt){
     console.log('stop %s', this.drawing);
     if (!this.drawing) return;
-    let {x,y} = getXY(evt);
+    let {x,y,err} = getXY(evt);
+    if (err){ return; }
     // FIXME: draw a dot if we haven't moved
     if (currentPath){
       //dom.simplifyPath(currentPath);
@@ -286,6 +283,14 @@ function inBounds(x,y){
 }
 
 function getXY(evt){
+   if (evt.button){
+     // left button is 0, for touch events button will be undefined
+     return {x: 0, y: 0, err: true};
+   }
+   if (evt.changedTouches && evt.changedTouches.length > 1){
+     // don't interfere with multi-touch
+     return {x: 0, y: 0, err: true};
+   }
    if (evt.cancelable) {
       evt.preventDefault();
     }
@@ -301,7 +306,7 @@ function getXY(evt){
     if (typeof y === 'undefined') {
       y = position.clientY - rect.top;
     }
-    return {x,y};
+    return {x, y, err:false};
 }
 
 const toolStart = evt => currentTool.start(evt);
@@ -397,7 +402,7 @@ function deleteFrame(){
   if (frameToDelete.parentNode.children.length > 1){
     dom.remove(frameToDelete);
   }else{
-    dom.clear(frameToDelete); // don't delete the last frame, just its children
+    clear(); // don't delete the last frame, just its children
   }
   updateOnionskin();
   updateFrameCount();
@@ -405,6 +410,7 @@ function deleteFrame(){
 }
 
 function clear(){
+  
   dom.clear(currentFrame());
 }
 
