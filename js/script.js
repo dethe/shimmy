@@ -339,8 +339,8 @@ function getXY(evt){
       y = position.clientY - rect.top;
     }
     // if the frame has been translated, rotated, or scaled, we need to map the point to the current matrix
-    let tx = currentFrame().getCTM().transformPoint(new DOMPoint(x,y));
-    return {x, y, err:false};
+    let pt = currentFrame().getCTM().transformPoint(new DOMPoint(x,y));
+    return {x: pt.x, y: pt.y, err: false};
 }
 
 const toolStart = evt => currentTool.start(evt);
