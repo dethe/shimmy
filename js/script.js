@@ -59,8 +59,10 @@ class Pen{
     this.drawing = false;
   }
   start(evt){
+    saveMatrix();
     let {x,y, err} = getXY(evt);
     if (err){ return };
+    // FIXME: move path into pen tool
     startPath(x,y);
     this.drawing = true;
   }
@@ -70,6 +72,7 @@ class Pen{
     let {x,y,err} = getXY(evt);
     if (err){ return; }
     if (inBounds(x,y)){
+        // FIXME: move path into Pen tool
         appendToPath(x,y);
     }
   }
@@ -80,10 +83,12 @@ class Pen{
     if (err){ return; }
     // FIXME: draw a dot if we haven't moved
     if (currentPath){
+      // FIXME: move path into pen tool
       //dom.simplifyPath(currentPath);
       currentPath = null;
     }
     this.drawing = false;
+    currentMatrix = null;
   }
   
   cancel(){
@@ -100,6 +105,7 @@ class Pan{
   }
   
   start(evt){
+    saveMatrix();
     let {x,y,err} = getXY(evt);
     if (err){ return; }
     this.px = x;
@@ -124,6 +130,7 @@ class Pan{
     this.py = 0;
     this.dragging = false;
     this.origTransform = '';
+    currentMatrix = null;
   }
   
   cancel(){
@@ -140,6 +147,7 @@ class Rotate{
   }
   
   start(evt){
+    saveMatrix();
     let {x,y,err} = getXY(evt);
     if (err){ return; }
     this.px = x;
@@ -246,6 +254,7 @@ function selectTool(button){
 
 let currentColor = '#000000';
 let currentFrameDelay = 30; // milliseconds
+let currentMatrix = null;
 
 function setFrameRate(input){
   currentFrameDelay = Math.floor(1000 / Number(input.value));
@@ -314,6 +323,16 @@ function inBounds(x,y){
   return !(x < 0 || x > WIDTH || y < 0 || y > HEIGHT);
 }
 
+function saveMatrix(){
+  let matrix = currentFrame().getScreenCTM();
+  if (matrix instanceof SVGMatrix){
+    currentMatrix = new DOMMatrix([matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f]);
+  }else{
+    currentMatrix = matrix;
+  }
+
+}
+
 function getXY(evt){
    if (evt.button){
      // left button is 0, for touch events button will be undefined
@@ -349,11 +368,7 @@ function transformPoint(x,y){
   if (frame.transform.baseVal.length === 0){
     return {x,y};
   }
-  let matrix = frame.getCTM();
-  if (matrix instanceof SVGMatrix){
-    matrix = new DOMMatrix([matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f]);
-  }
-  return matrix.transformPoint(new DOMPoint(x,y));
+  return currentMatrix.transformPoint(new DOMPoint(x,y));
 }
 
 const toolStart = evt => currentTool.start(evt);
