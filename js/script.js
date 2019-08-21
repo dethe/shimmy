@@ -271,13 +271,14 @@ var HEIGHT = document.body.clientHeight;
 
 // Prevent control clicks from passing through to svg
 function swallowClicks(evt){
+  console.log('gulp!');
   evt.stopPropagation();
   evt.preventDefault();
 }
-document.querySelector('.buttonbar.animation').addEventListener('mousedown', swallowClicks);
-document.querySelector('.buttonbar.tools').addEventListener('mousedown', swallowClicks);
-document.querySelector('.buttonbar.animation').addEventListener('touchstart', swallowClicks);
-document.querySelector('.buttonbar.tools').addEventListener('touchstart', swallowClicks);
+document.querySelector('.buttonbar.animation').addEventListener('mousedown', swallowClicks, true);
+document.querySelector('.buttonbar.tools').addEventListener('mousedown', swallowClicks, true);
+document.querySelector('.buttonbar.animation').addEventListener('touchstart', swallowClicks, true);
+document.querySelector('.buttonbar.tools').addEventListener('touchstart', swallowClicks, true);
 
 function inBounds(x,y){
   return !(x < 0 || x > WIDTH || y < 0 || y > HEIGHT);
@@ -286,12 +287,15 @@ function inBounds(x,y){
 function getXY(evt){
    if (evt.button){
      // left button is 0, for touch events button will be undefined
+     console.log('event button: %s', evt.button);
      return {x: 0, y: 0, err: true};
    }
    if (evt.changedTouches && evt.changedTouches.length > 1){
      // don't interfere with multi-touch
+     console.log('event touches: %s', event.changedTouches.length);
      return {x: 0, y: 0, err: true};
    }
+   console.log(evt);
    if (evt.cancelable) {
       evt.preventDefault();
     }
