@@ -80,6 +80,7 @@
       while(elem.firstChild){
         elem.firstChild.remove();
       }
+      elem.removeAttribute('transform');
     }
 
     function insertAfter(newElement, sibling){

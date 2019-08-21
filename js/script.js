@@ -324,12 +324,11 @@ function inBounds(x,y){
 }
 
 function saveMatrix(){
-  let matrix = currentFrame().getScreenCTM();
+  let matrix = currentFrame().getCTM();
   if (matrix instanceof SVGMatrix){
-    currentMatrix = new DOMMatrix([matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f]);
-  }else{
-    currentMatrix = matrix;
+    matrix = new DOMMatrix([matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f]);
   }
+  currentMatrix = matrix.inverse();
 
 }
 
