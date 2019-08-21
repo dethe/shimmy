@@ -182,25 +182,35 @@ class Rotate{
   }
 }
 
+const ZOOMIN = 1.2;
+const ZOOMOUT = 1 / ZOOMIN;
+
 class ZoomIn{
   constructor(){
-    
+    // do nothing
   }
   
   start(evt){
+    saveMatrix();
+    let {x,y,err} = getXY(evt);
+    if (err){ return; }
+    let tx = x * ZOOMIN;
+    let ty = y * ZOOMIN;
     
+    let transform = currentFrame().getAttribute('transform') || '';
+    currentFrame().setAttribute('transform', `${transform} translate(${tx} ${ty}) scale(${ZOOMIN}) translate(-${x}, -${y})`);
   }
   
   move(evt){
-    
+    // do nothing
   }
   
   stop(evt){
-    
+    // do nothing
   }
   
   cancel(evt){
-    
+    // do nothing
   }  
 }
 
@@ -358,7 +368,6 @@ function getXY(evt){
     }
     // if the frame has been translated, rotated, or scaled, we need to map the point to the current matrix
     let {x:tx, y:ty} = transformPoint(x,y);
-    console.log('x: %s, y: %s, tx: %s, ty: %s', x, y, tx, ty);
     return {x: tx, y: ty, err: false};
 }
 
