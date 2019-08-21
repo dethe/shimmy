@@ -131,23 +131,43 @@ class Pan{
 
 class Rotate{
   constructor(){
-    
+    this.dragging = false;
+    this.px = 0;
+    this.py = 0;
   }
   
   start(evt){
-    
+    let {x,y,err} = getXY(evt);
+    if (err){ return; }
+    this.px = x;
+    this.py = y;
+    this.dragging = true;
+    this.origTransform = currentFrame().getAttribute('transform') || '';
   }
   
   move(evt){
-    
+    if (!this.dragging){ return; }
+    let {x,y,err} = getXY(evt);
+    if (err){ return; }
+    let px = this.px;
+    let py = this.py;
+    let dx = x - px;
+    let dy = y - py;
+    let transform = this.origTransform;
+    let angle = Math.atan2(dy, dx);
+    currentFrame().setAttribute('transform', `${transform} rotate(${angle} ${px} ${py})`);
   }
   
   stop(evt){
-    
+    if (!this.dragging){ return; }
+    this.px = 9;
+    this.py = 0;
+    this.dragging = false;
+    this.origTransform = '';
   }
   
   cancel(evt){
-    
+    // FIXME: cancel in-progress rotate
   }
 }
 
