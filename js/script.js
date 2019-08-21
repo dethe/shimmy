@@ -272,6 +272,7 @@ var HEIGHT = document.body.clientHeight;
 // Prevent control clicks from passing through to svg
 function swallowClicks(evt){
   evt.stopPropagation();
+  evt.preventDefault();
 }
 document.querySelector('.buttonbar.animation').addEventListener('mousedown', swallowClicks);
 document.querySelector('.buttonbar.tools').addEventListener('mousedown', swallowClicks);
@@ -402,15 +403,15 @@ function deleteFrame(){
   if (frameToDelete.parentNode.children.length > 1){
     dom.remove(frameToDelete);
   }else{
-    clear(); // don't delete the last frame, just its children
+    _clear(); // don't delete the last frame, just its children
   }
   updateOnionskin();
   updateFrameCount();
   file.onChange();
 }
 
-function clear(){
-  
+function _clear(){
+  console.log('clear');
   dom.clear(currentFrame());
 }
 
