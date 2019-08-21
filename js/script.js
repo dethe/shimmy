@@ -43,6 +43,9 @@ setPalette({target: colorpaletteselect});
 
 const mouse = {};
 
+const DEG = 180 / Math.PI;
+const degrees = radians => radians * DEG;
+
 function setPalette(evt){
   let palette = palettes[parseInt(evt.target.value)];
   let wells = document.querySelectorAll('.js-miniwell');
@@ -154,7 +157,7 @@ class Rotate{
     let dx = x - px;
     let dy = y - py;
     let transform = this.origTransform;
-    let angle = Math.atan2(dy, dx);
+    let angle = degrees(Math.atan2(dy, dx));
     currentFrame().setAttribute('transform', `${transform} rotate(${angle} ${px} ${py})`);
   }
   
@@ -335,6 +338,8 @@ function getXY(evt){
     if (typeof y === 'undefined') {
       y = position.clientY - rect.top;
     }
+    // if the frame has been translated, rotated, or scaled, we need to map the point to the current matrix
+    let tx = currentFrame().getCTM().transformPoint(new DOMPoint(x,y));
     return {x, y, err:false};
 }
 
