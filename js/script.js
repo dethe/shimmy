@@ -339,7 +339,8 @@ function getXY(evt){
       y = position.clientY - rect.top;
     }
     // if the frame has been translated, rotated, or scaled, we need to map the point to the current matrix
-    let {tx, ty} = transformPoint(x,y);
+    let {x:tx, y:ty} = transformPoint(x,y);
+    console.log('x: %s, y: %s, tx: %s, ty: %s', x, y, tx, ty);
     return {x: tx, y: ty, err: false};
 }
 
@@ -351,8 +352,6 @@ function transformPoint(x,y){
   let matrix = frame.getCTM();
   if (matrix instanceof SVGMatrix){
     matrix = new DOMMatrix([matrix.a, matrix.b, matrix.c, matrix.d, matrix.e, matrix.f]);
-  }else{
-    console.log(matrix);
   }
   return matrix.transformPoint(new DOMPoint(x,y));
 }
