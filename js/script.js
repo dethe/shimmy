@@ -194,11 +194,8 @@ class ZoomIn{
     saveMatrix();
     let {x,y,err} = getXY(evt);
     if (err){ return; }
-    let tx = x * ZOOMIN;
-    let ty = y * ZOOMIN;
-    
     let transform = currentFrame().getAttribute('transform') || '';
-    currentFrame().setAttribute('transform', `${transform} translate(${tx} ${ty}) scale(${ZOOMIN}) translate(-${x}, -${y})`);
+    currentFrame().setAttribute('transform', `${transform} translate(${x} ${y}) scale(${ZOOMIN}) translate(-${x}, -${y})`);
   }
   
   move(evt){
@@ -216,23 +213,27 @@ class ZoomIn{
 
 class ZoomOut{
   constructor(){
-    
+    // do nothing
   }
   
   start(evt){
-    
+    saveMatrix();
+    let {x,y,err} = getXY(evt);
+    if (err){ return; }    
+    let transform = currentFrame().getAttribute('transform') || '';
+    currentFrame().setAttribute('transform', `${transform} translate(${x} ${y}) scale(${ZOOMOUT}) translate(-${x}, -${y})`);
   }
   
   move(evt){
-    
+    // do nothing    
   }
   
   stop(evt){
-    
+    // do nothing
   }
   
   cancel(evt){
-    
+    // do nothing
   }    
 }
 
