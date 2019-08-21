@@ -94,20 +94,25 @@ class Pen{
 class Pan{
   constructor(){
     this.dragging = false; 
+    this.px = 0;
+    this.py = 0;
   }
   
   start(evt){
-    if (evt.button !== 0){
-      // button 0 is the main button, we're not interested in others
-      return;
-    }
-    let {x,y} = getXY(evt);
-    this.matrix = currentFrame().get
-    startPath(x,y);
-    this.drawing = true;
+    let {x,y,err} = getXY(evt);
+    if (err){ return; }
+    this.px = x;
+    this.py = y;
+    this.dragging = true;
   }
   
   move(evt){
+    let {x,y,err} = getXY(evt);
+    if (err){ return; }
+    let frame = currentFrame();
+    let transform = frame.getAttribute('transform');
+    let dx = 
+    frame.setAttribute('transform', `${transform} translate`
     
   }
   
@@ -273,7 +278,7 @@ var HEIGHT = document.body.clientHeight;
 function swallowClicks(evt){
   console.log('gulp!');
   evt.stopPropagation();
-  evt.preventDefault();
+  // evt.preventDefault();
 }
 document.querySelector('.buttonbar.animation').addEventListener('mousedown', swallowClicks, true);
 document.querySelector('.buttonbar.tools').addEventListener('mousedown', swallowClicks, true);
