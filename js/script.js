@@ -91,7 +91,7 @@ class Pen{
 
 class Pan{
   constructor(){
-    this.dragging = false; 
+    this.dragging = false;
     this.px = 0;
     this.py = 0;
   }
@@ -102,24 +102,25 @@ class Pan{
     this.px = x;
     this.py = y;
     this.dragging = true;
+    this.origTransform = currentFrame().getAttribute('transform') || '';
   }
   
   move(evt){
+    if (!this.dragging){ return; }
     let {x,y,err} = getXY(evt);
     if (err){ return; }
-    let frame = currentFrame();
-    let transform = frame.getAttribute('transform');
     let dx = x - this.px;
     let dy = y - this.py;
-    this.px = x;
-    this.py = y;
-    frame.setAttribute('transform', `${transform} translate(${dx} ${dy})`);
+    let transform = this.origTransform;
+    currentFrame().setAttribute('transform', `${transform} translate(${dx} ${dy})`);
   }
   
   stop(evt){
+    if (!this.dragging){ return; }
     this.px = 9;
     this.py = 0;
     this.dragging = false;
+    this.origTransform = '';
   }
   
   cancel(){
