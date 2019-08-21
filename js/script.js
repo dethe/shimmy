@@ -57,7 +57,7 @@ class Pen{
   }
   start(evt){
     console.log('start evt button: ', evt.button);
-    if (evt.button !== 0){
+    if (evt.button){
       // button 0 is the main button, we're not interested in others
       // can't test for truthiness, because touch events have button=undefined
       return;
@@ -82,7 +82,7 @@ class Pen{
     let {x,y} = getXY(evt);
     // FIXME: draw a dot if we haven't moved
     if (currentPath){
-      dom.simplifyPath(currentPath);
+      //dom.simplifyPath(currentPath);
       currentPath = null;
     }
     this.drawing = false;
@@ -314,14 +314,16 @@ const escCancel = evt => {
   }
 }
 
-document.body.addEventListener('mousedown', toolStart);
-document.body.addEventListener('touchstart', toolStart);
-document.body.addEventListener('mousemove', toolMove);
-document.body.addEventListener('touchmove', toolMove);
-document.body.addEventListener('touchend', toolStop);
-document.body.addEventListener('mouseup', toolStop);
-document.body.addEventListener('touchcancel', toolCancel);
-document.body.addEventListener('keydown', escCancel);
+let body = document.body;
+let svg = body.querySelector('svg');
+svg.addEventListener('mousedown', toolStart);
+svg.addEventListener('touchstart', toolStart);
+svg.addEventListener('mousemove', toolMove);
+svg.addEventListener('touchmove', toolMove);
+svg.addEventListener('touchend', toolStop);
+body.addEventListener('mouseup', toolStop);
+svg.addEventListener('touchcancel', toolCancel);
+body.addEventListener('keydown', escCancel);
 
 function currentFrame(){
   return document.querySelector('.frame.selected');
