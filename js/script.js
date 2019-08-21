@@ -63,7 +63,6 @@ class Pen{
   }
 
   move(evt){
-    console.log('move %s', this.drawing);
     if (!this.drawing) return;
     let {x,y,err} = getXY(evt);
     if (err){ return; }
@@ -73,7 +72,6 @@ class Pen{
   }
 
   stop(evt){
-    console.log('stop %s', this.drawing);
     if (!this.drawing) return;
     let {x,y,err} = getXY(evt);
     if (err){ return; }
@@ -111,17 +109,21 @@ class Pan{
     if (err){ return; }
     let frame = currentFrame();
     let transform = frame.getAttribute('transform');
-    let dx = 
-    frame.setAttribute('transform', `${transform} translate`
-    
+    let dx = x - this.px;
+    let dy = y - this.py;
+    this.px = x;
+    this.py = y;
+    frame.setAttribute('transform', `${transform} translate(${dx} ${dy})`);
   }
   
   stop(evt){
-    
+    this.px = 9;
+    this.py = 0;
+    this.dragging = false;
   }
   
   cancel(){
-    
+    // FIXME: cancel in-progress panning
   }
   
 }
@@ -276,7 +278,6 @@ var HEIGHT = document.body.clientHeight;
 
 // Prevent control clicks from passing through to svg
 function swallowClicks(evt){
-  console.log('gulp!');
   evt.stopPropagation();
   // evt.preventDefault();
 }
@@ -292,15 +293,12 @@ function inBounds(x,y){
 function getXY(evt){
    if (evt.button){
      // left button is 0, for touch events button will be undefined
-     console.log('event button: %s', evt.button);
      return {x: 0, y: 0, err: true};
    }
    if (evt.changedTouches && evt.changedTouches.length > 1){
      // don't interfere with multi-touch
-     console.log('event touches: %s', event.changedTouches.length);
      return {x: 0, y: 0, err: true};
    }
-   console.log(evt);
    if (evt.cancelable) {
       evt.preventDefault();
     }
@@ -420,7 +418,6 @@ function deleteFrame(){
 }
 
 function _clear(){
-  console.log('clear');
   dom.clear(currentFrame());
 }
 
