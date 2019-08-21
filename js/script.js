@@ -63,6 +63,8 @@ class Pen{
     let {x,y, err} = getXY(evt);
     if (err){ return };
     // FIXME: move path into pen tool
+    this.sx = x;
+    this.sy = y;
     startPath(x,y);
     this.drawing = true;
   }
@@ -83,6 +85,9 @@ class Pen{
     if (err){ return; }
     // FIXME: draw a dot if we haven't moved
     if (currentPath){
+      if (inBounds(x,y) && this.sx === x && this.sy === y){
+        appendToPath(x,y);
+      }
       // FIXME: move path into pen tool
       //dom.simplifyPath(currentPath);
       currentPath = null;
@@ -454,6 +459,7 @@ function addFrame(){
   updateFrameCount();
   file.onChange();
 }
+updateFrameCount();
 
 function cloneFrame(){
   dom.insertAfter(currentFrame().cloneNode(true), currentFrame());
