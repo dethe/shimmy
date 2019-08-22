@@ -565,6 +565,7 @@ function getAnimationBBox(show){
     }else{
       frame.classList.add('selected');
       let box = frame.getBoundingClientRect();
+      console.log(box);
       frame.classList.remove('selected');
       return box;
     }
@@ -576,7 +577,7 @@ function getAnimationBBox(show){
     height: Math.floor(Math.max(...boxes.map(b => b.height)))
   };
   if (show){
-    dom.insertAfter(dom.svg('rect', {x: box.x, y: box.y, width: box.width, h}), currentFrame()
+    dom.insertAfter(dom.svg('rect', {x: box.x, y: box.y, width: box.width, height: box.height, stroke: "red", fill: "none"}), currentFrame());
   }
   return box;
 }
