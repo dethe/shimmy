@@ -555,6 +555,22 @@ var _frameDelay = 0;
 
 function getAnimationBBox(){
   let frames = document.querySelectorAll('.frame');
+  let boxes = frames.map(frame => {
+    if (frame.classList.contains('selected')){
+      return frame.getBoundingClientRect();
+    }else{
+      frame.classList.add('selected');
+      let box = frame.getBoundingClientRect();
+      frame.classList.remove('selected');
+      return box;
+    }
+  });
+  return {
+    x: Math.min(...boxes.map(b => b.x)),
+    y: Math.min(...boxes.map(b => b.y)),
+    width: Math.max(...boxes.map(b => b.width)),
+    height: Math.max(...boxes.map(b => b.height))
+  };
 }
 
 function play(){
@@ -562,8 +578,9 @@ function play(){
   // disable all other controls
   // temporarily turn off onionskin (remember state)
   // start at beginning of document (remember state)
-  document.querySelector('.frame').classList.add('play-frame');
   let viewingRect = getAnimationBBox();
+  document.body.classList.add('playing');
+  document.querySelector('.frame').classList.add('play-frame');
   let svg = document.querySelector('svg');
   svg.style.width = viewingRect.width;
   svg.style.height = viewingRect.height;
