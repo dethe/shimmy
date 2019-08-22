@@ -97,7 +97,9 @@ class Pen{
   }
   
   cancel(){
-    // remove the path in progress
+    currentPath.remove();
+    currentPath = null;
+    currentMatrix = null;
   }
   
 }
@@ -139,7 +141,10 @@ class Pan{
   }
   
   cancel(){
-    // FIXME: cancel in-progress panning
+    currentFrame().setAttribute('transform', this.origTransform);
+    this.dragging = false;
+    this.origTransform = false;
+    currentMatrix = null;
   }
   
 }
@@ -180,10 +185,14 @@ class Rotate{
     this.py = 0;
     this.dragging = false;
     this.origTransform = '';
+    currentMatrix = null;
   }
   
   cancel(evt){
-    // FIXME: cancel in-progress rotate
+    currentFrame().setAttribute('transform', this.origTransform);
+    this.dragging = false;
+    this.origTransform = false;
+    currentMatrix = null;
   }
 }
 
@@ -201,6 +210,7 @@ class ZoomIn{
     if (err){ return; }
     let transform = currentFrame().getAttribute('transform') || '';
     currentFrame().setAttribute('transform', `${transform} translate(${x} ${y}) scale(${ZOOMIN}) translate(-${x}, -${y})`);
+    currentMatrix = null;
   }
   
   move(evt){
@@ -227,6 +237,7 @@ class ZoomOut{
     if (err){ return; }    
     let transform = currentFrame().getAttribute('transform') || '';
     currentFrame().setAttribute('transform', `${transform} translate(${x} ${y}) scale(${ZOOMOUT}) translate(-${x}, -${y})`);
+    currentMatrix = null;
   }
   
   move(evt){
