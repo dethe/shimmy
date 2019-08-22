@@ -553,6 +553,10 @@ function gotoLastFrame(){
 var _lastFrameTime = 0;
 var _frameDelay = 0;
 
+function getAnimationBBox(){
+  let frames = document.querySelectorAll('.frame');
+}
+
 function play(){
   document.body.classList.add('playing');
   // turn play button into stop button
@@ -564,7 +568,8 @@ function play(){
   let svg = document.querySelector('svg');
   svg.style.width = viewingRect.width;
   svg.style.height = viewingRect.height;
-  svg.style.top = 
+  svg.style.left = (window.clientWidth - viewingRect.width) / 2 + 'px';
+  svg.style.top = (window.clientHeight - viewingRect.height) / 2 + 'px';
   svg.setAttribute('viewBox', [viewingRect.x, viewingRect.y, viewingRect.width, viewingRect.height].join(' '));
   // add SVG SMIL animation
   // Unless looping, call stop() when animation is finished
