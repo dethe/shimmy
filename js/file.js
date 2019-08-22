@@ -3,14 +3,14 @@
 (function(global){
     'use strict';
 
-    var defaultCanvas = '<svg id="main-canvas" width="100%" height="100%"><g class="frame selected"></g></svg>';
+    var defaultCanvas = '<svg id="canvas"><g class="frame selected"></g></svg>';
 
     function saveLocal(){ 
         localStorage._currentWork = saveFormat(); 
     }
 
     function saveFormat(){
-        return document.getElementById('main-canvas').outerHTML;
+        return document.getElementById('canvas').outerHTML;
     }
 
     function restoreFormat(savetext){
