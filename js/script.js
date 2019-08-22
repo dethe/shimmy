@@ -594,7 +594,7 @@ function playNextFrame(){
       currFrame.nextElementSibling.classList.add('play-frame');
       requestAnimationFrame(playNextFrame);
   }else{
-      stop();
+      setTimeout(stop, 500);
   }
 }
 
