@@ -14,7 +14,7 @@
     }
 
     function restoreFormat(savetext){
-        document.getElementById('main-canvas').outerHTML = savetext;
+        document.getElementById('canvas').outerHTML = savetext;
         app.updateFrameCount();
         app.play();
     }
@@ -132,7 +132,7 @@
     // document.querySelector('#clear').addEventListener('click', clear, false);
     // document.querySelector('#save').addEventListener('click', saveFile, false);
     // document.querySelector('#open').addEventListener('click', loadFile, false);
-    // window.addEventListener('unload', saveLocal, false);
-    // window.addEventListener('load', restore, false);
+    window.addEventListener('unload', saveLocal, false);
+    window.addEventListener('load', restore, false);
 
 })(window);

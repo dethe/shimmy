@@ -581,12 +581,11 @@ function play(){
   let viewingRect = getAnimationBBox();
   document.body.classList.add('playing');
   document.querySelector('.frame').classList.add('play-frame');
-  let svg = document.querySelector('svg');
-  svg.style.width = viewingRect.width;
-  svg.style.height = viewingRect.height;
-  svg.style.left = (window.clientWidth - viewingRect.width) / 2 + 'px';
-  svg.style.top = (window.clientHeight - viewingRect.height) / 2 + 'px';
-  svg.setAttribute('viewBox', [viewingRect.x, viewingRect.y, viewingRect.width, viewingRect.height].join(' '));
+  canvas.setAttribute('width', viewingRect.width + 'px')
+  canvas.setAttribute('height', viewingRect.height + 'px');
+  canvas.style.left = (window.clientWidth - viewingRect.width) / 2 + 'px';
+  canvas.style.top = (window.clientHeight - viewingRect.height) / 2 + 'px';
+  canvas.setAttribute('viewBox', [viewingRect.x, viewingRect.y, viewingRect.width, viewingRect.height].join(' '));
   // add SVG SMIL animation
   // Unless looping, call stop() when animation is finished
   // How much of this can I do by adding "playing" class to body?
@@ -605,6 +604,11 @@ function stop(){
   // turn stop button into play button
   dom.removeClass(playingFrame(), 'play-frame');
   document.body.classList.remove('playing');
+  canvas.removeAttribute('viewBox');
+  canvas.setAttribute('width', document.body.clientWidth + 'px');
+  canvas.setAttribute('height', document.body.clientHeight + 'px');
+  canvas.style.left = 0;
+  canvas.style.top = 0;
 }
 
 
