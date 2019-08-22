@@ -501,6 +501,12 @@ function _clear(){
   dom.clear(currentFrame());
 }
 
+function setOnionSkin(input){
+  console.log(input.checked);
+  currentDoOnionskin = input.checked;
+  toggleOnionskin();
+}
+
 function toggleOnionskin(){
   if (isOnionskinOn()){
       dom.addClass(currentFrame().previousElementSibling, 'onionskin');
