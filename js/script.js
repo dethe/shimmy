@@ -554,7 +554,7 @@ var _lastFrameTime = 0;
 var _frameDelay = 0;
 
 function getAnimationBBox(){
-  let frames = document.querySelectorAll('.frame');
+  let frames = Array.from(document.querySelectorAll('.frame'));
   let boxes = frames.map(frame => {
     if (frame.classList.contains('selected')){
       return frame.getBoundingClientRect();
@@ -566,7 +566,7 @@ function getAnimationBBox(){
     }
   });
   return {
-    x: Math.min(...boxes.map(b => b.x)),
+    x: Math.min(...(boxes.map(b => b.x))),
     y: Math.min(...boxes.map(b => b.y)),
     width: Math.max(...boxes.map(b => b.width)),
     height: Math.max(...boxes.map(b => b.height))
