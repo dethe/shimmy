@@ -27,7 +27,7 @@ const colorpicker = new KellyColorPicker(
     colorSaver : false,
     resizeWith : true, // auto redraw canvas on resize window
     popupClass: 'popup-colour',
-    userEvents : { 
+    userEvents : {
       // change : function(self) {
       //   // set background color for 'input' to current color of color picker
       //   if(self.getCurColorHsv().v < 0.5){
