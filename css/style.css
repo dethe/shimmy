@@ -5,7 +5,10 @@ html, body{
   width: 100%;
   height: 100%;
   -webkit-overflow-scrolling: auto;
-  background-color: #000;
+}
+
+body.playing{
+  background-color: #000;  
 }
 
 *{
@@ -44,6 +47,10 @@ svg{
   transitioni: margin-right .5s ease-in-out;
   transition: margin-top: .5s ease-in-out;
   transition: margin-bottom: .5s ease-in-out;
+}
+
+.playing svg{
+  background-color: white;
 }
 
 .buttonbar{

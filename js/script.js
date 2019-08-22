@@ -558,7 +558,6 @@ function getAnimationBBox(){
 }
 
 function play(){
-  document.body.classList.add('playing');
   // turn play button into stop button
   // disable all other controls
   // temporarily turn off onionskin (remember state)
