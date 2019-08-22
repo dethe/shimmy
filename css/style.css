@@ -64,12 +64,12 @@ button .label{
 
 .animation .feedback{
   flex: 4 4;
-  min-height: 2rem;
+  min-height: 1.3rem;
   font-size: 1rem;
   background-color: white;
 }
 
-.feedback input{
+.feedback input[type=number]{
   max-width: 3em;
 }
 
