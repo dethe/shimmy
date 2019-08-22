@@ -571,10 +571,10 @@ function getAnimationBBox(show){
     }
   });
   let box = {
-    x: Math.floor(Math.min(...(boxes.map(b => b.x)))),
-    y: Math.floor(Math.min(...boxes.map(b => b.y))),
-    right: Math.floor(Math.max(...boxes.map(b => b.right))),
-    bottom: Math.floor(Math.max(...boxes.map(b => b.bottom)))
+    x: Math.max(Math.floor(Math.min(...(boxes.map(b => b.x)))) - 10, 0),
+    y: Math.max(Math.floor(Math.min(...boxes.map(b => b.y))) - 10, 0),
+    right: Math.min(Math.floor(Math.max(...boxes.map(b => b.right))) + 10, document.body.clientWidth),
+    bottom: Math.min(Math.floor(Math.max(...boxes.map(b => b.bottom))) + 10, document.body.clientHeight)
   };
   box.width = box.right - box.x;
   box.height = box.bottom - box.y;
@@ -597,7 +597,6 @@ function play(){
   canvas.setAttribute('height', height + 'px');
   canvas.style.left = (document.body.clientWidth - width) / 2 + 'px';
   canvas.style.top = (document.body.clientHeight - height) / 2 + 'px';
-  alert('hi');
   canvas.setAttribute('viewBox', [x, y, width, height].join(' '));
   // add SVG SMIL animation
   // Unless looping, call stop() when animation is finished
