@@ -560,6 +560,12 @@ function play(){
   // temporarily turn off onionskin (remember state)
   // start at beginning of document (remember state)
   document.querySelector('.frame').classList.add('play-frame');
+  let viewingRect = getAnimationBBox();
+  let svg = document.querySelector('svg');
+  svg.style.width = viewingRect.width;
+  svg.style.height = viewingRect.height;
+  svg.style.top = 
+  svg.setAttribute('viewBox', [viewingRect.x, viewingRect.y, viewingRect.width, viewingRect.height].join(' '));
   // add SVG SMIL animation
   // Unless looping, call stop() when animation is finished
   // How much of this can I do by adding "playing" class to body?
