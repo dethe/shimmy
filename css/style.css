@@ -42,7 +42,8 @@ button .label{
   left: 0;
 }
 
-svg{
+#canvas{
+  position: absolute;
   transition: margin-left .5s ease-in-out;
   transitioni: margin-right .5s ease-in-out;
   transition: margin-top: .5s ease-in-out;

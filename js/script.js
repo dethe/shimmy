@@ -573,9 +573,11 @@ function getAnimationBBox(show){
   let box = {
     x: Math.floor(Math.min(...(boxes.map(b => b.x)))),
     y: Math.floor(Math.min(...boxes.map(b => b.y))),
-    width: Math.floor(Math.max(...boxes.map(b => b.width))),
-    height: Math.floor(Math.max(...boxes.map(b => b.height)))
+    right: Math.floor(Math.max(...boxes.map(b => b.right))),
+    bottom: Math.floor(Math.max(...boxes.map(b => b.bottom)))
   };
+  box.width = box.right - box.x;
+  box.height = box.bottom - box.y;
   if (show){
     dom.insertAfter(dom.svg('rect', {x: box.x, y: box.y, width: box.width, height: box.height, stroke: "red", fill: "none"}), currentFrame());
   }
@@ -593,8 +595,9 @@ function play(){
   document.querySelector('.frame').classList.add('play-frame');
   canvas.setAttribute('width', width + 'px')
   canvas.setAttribute('height', height + 'px');
-  canvas.style.left = (window.clientWidth - width) / 2 + 'px';
-  canvas.style.top = (window.clientHeight - height) / 2 + 'px';
+  canvas.style.left = (document.body.clientWidth - width) / 2 + 'px';
+  canvas.style.top = (document.body.clientHeight - height) / 2 + 'px';
+  alert('hi');
   canvas.setAttribute('viewBox', [x, y, width, height].join(' '));
   // add SVG SMIL animation
   // Unless looping, call stop() when animation is finished
