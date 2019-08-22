@@ -567,7 +567,7 @@ function play(){
       _frameDelay = currentFrameDelay;
       _lastFrameTime = Date.now();
       requestAnimationFrame(playNextFrame);
-  }, 500);
+  }, 1);
 }
 
 function stop(){
