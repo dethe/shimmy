@@ -1,7 +1,7 @@
 /* globals dom file KellyColorPicker palettes */
 
 // Initialize
-const canvas = document.querySelector('#canvas');
+let canvas = document.querySelector('#canvas');
 canvas.setAttribute('width', document.body.clientWidth + 'px');
 canvas.setAttribute('height', document.body.clientHeight + 'px');
 const colorpaletteselect = document.querySelector('.colorpalette');
@@ -407,14 +407,18 @@ const escCancel = evt => {
 }
 
 let body = document.body;
-let svg = body.querySelector('svg');
-svg.addEventListener('mousedown', toolStart);
-svg.addEventListener('touchstart', toolStart);
-svg.addEventListener('mousemove', toolMove);
-svg.addEventListener('touchmove', toolMove);
-svg.addEventListener('touchend', toolStop);
+
+function listenCanvas(){
+  canvas.addEventListener('mousedown', toolStart);
+  canvas.addEventListener('touchstart', toolStart);
+  canvas.addEventListener('mousemove', toolMove);
+  canvas.addEventListener('touchmove', toolMove);
+  canvas.addEventListener('touchend', toolStop);
+  canvas.addEventListener('touchcancel', toolCancel);
+}
+
+listenCanvas();
 body.addEventListener('mouseup', toolStop);
-svg.addEventListener('touchcancel', toolCancel);
 body.addEventListener('keydown', escCancel);
 
 function currentFrame(){
@@ -605,10 +609,9 @@ function stop(){
   dom.removeClass(playingFrame(), 'play-frame');
   document.body.classList.remove('playing');
   canvas.removeAttribute('viewBox');
+  canvas.removeAttribute('style');
   canvas.setAttribute('width', document.body.clientWidth + 'px');
   canvas.setAttribute('height', document.body.clientHeight + 'px');
-  canvas.style.left = 0;
-  canvas.style.top = 0;
 }
 
 

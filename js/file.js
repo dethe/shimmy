@@ -1,4 +1,4 @@
-/* globals ajax app dom */
+/* globals ajax app dom canvas listenCanvas */
 
 (function(global){
     'use strict';
@@ -16,7 +16,7 @@
     function restoreFormat(savetext){
         document.getElementById('canvas').outerHTML = savetext;
         app.updateFrameCount();
-        app.play();
+        //app.play();
     }
 
     function restore(){
@@ -33,7 +33,10 @@
     }
 
     function restoreLocal(){ 
-        restoreFormat(localStorage._currentWork || defaultCanvas); 
+      restoreFormat(localStorage._currentWork || defaultCanvas); 
+      canvas = document.querySelector('#canvas');
+      canvas.setAttribute('width', document.body.clientWidth + 'px');
+      canvas.setAttribute('height', document.body.clientHeight + 'px');
     }
 
     function clear(){
