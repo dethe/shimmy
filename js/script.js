@@ -570,8 +570,8 @@ function getAnimationBBox(){
     }
   });
   return {
-    x: Math.min(...(boxes.map(b => b.x))),
-    y: Math.min(...boxes.map(b => b.y)),
+    x: Math.floor(Math.min(...(boxes.map(b => b.x)))),
+    y: Math.floor(Math.min(...boxes.map(b => b.y))),
     width: Math.max(...boxes.map(b => b.width)),
     height: Math.max(...boxes.map(b => b.height))
   };
@@ -582,14 +582,15 @@ function play(){
   // disable all other controls
   // temporarily turn off onionskin (remember state)
   // start at beginning of document (remember state)
-  let viewingRect = getAnimationBBox();
+  let {x,y,width,height} = getAnimationBBox();
+  console.log('viewingRect: x: %s, y: %s, width: %s, height: %s',x,y,width,height );
   document.body.classList.add('playing');
   document.querySelector('.frame').classList.add('play-frame');
-  canvas.setAttribute('width', viewingRect.width + 'px')
-  canvas.setAttribute('height', viewingRect.height + 'px');
-  canvas.style.left = (window.clientWidth - viewingRect.width) / 2 + 'px';
-  canvas.style.top = (window.clientHeight - viewingRect.height) / 2 + 'px';
-  canvas.setAttribute('viewBox', [viewingRect.x, viewingRect.y, viewingRect.width, viewingRect.height].join(' '));
+  canvas.setAttribute('width', width + 'px')
+  canvas.setAttribute('height', height + 'px');
+  canvas.style.left = (window.clientWidth - width) / 2 + 'px';
+  canvas.style.top = (window.clientHeight - height) / 2 + 'px';
+  canvas.setAttribute('viewBox', [x, y, width, height].join(' '));
   // add SVG SMIL animation
   // Unless looping, call stop() when animation is finished
   // How much of this can I do by adding "playing" class to body?

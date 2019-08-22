@@ -14,9 +14,13 @@
     }
 
     function restoreFormat(savetext){
-        document.getElementById('canvas').outerHTML = savetext;
-        app.updateFrameCount();
-        //app.play();
+      document.getElementById('canvas').outerHTML = savetext;
+      app.updateFrameCount();
+      //app.play();
+      canvas = document.querySelector('#canvas');
+      canvas.setAttribute('width', document.body.clientWidth + 'px');
+      canvas.setAttribute('height', document.body.clientHeight + 'px');
+      listenCanvas();
     }
 
     function restore(){
@@ -34,9 +38,6 @@
 
     function restoreLocal(){ 
       restoreFormat(localStorage._currentWork || defaultCanvas); 
-      canvas = document.querySelector('#canvas');
-      canvas.setAttribute('width', document.body.clientWidth + 'px');
-      canvas.setAttribute('height', document.body.clientHeight + 'px');
     }
 
     function clear(){
