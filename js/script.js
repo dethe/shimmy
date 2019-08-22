@@ -557,7 +557,7 @@ function gotoLastFrame(){
 var _lastFrameTime = 0;
 var _frameDelay = 0;
 
-function getAnimationBBox(){
+function getAnimationBBox(show){
   let frames = Array.from(document.querySelectorAll('.frame'));
   let boxes = frames.map(frame => {
     if (frame.classList.contains('selected')){
@@ -569,12 +569,16 @@ function getAnimationBBox(){
       return box;
     }
   });
-  return {
+  let box = {
     x: Math.floor(Math.min(...(boxes.map(b => b.x)))),
     y: Math.floor(Math.min(...boxes.map(b => b.y))),
-    width: Math.max(...boxes.map(b => b.width)),
-    height: Math.max(...boxes.map(b => b.height))
+    width: Math.floor(Math.max(...boxes.map(b => b.width))),
+    height: Math.floor(Math.max(...boxes.map(b => b.height)))
   };
+  if (show){
+    dom.insertAfter(dom.svg('rect', {x: box.x, y: box.y, width: box.width, h}), currentFrame()
+  }
+  return box;
 }
 
 function play(){
