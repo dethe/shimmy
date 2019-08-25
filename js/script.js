@@ -690,7 +690,8 @@ function displayAsStoryboard(evt){
     let i = dom.element('img', {src: s.toDataURL()});
     return i;
   });
-  
+  frames.forEach(f => document.body.appendChild(f));
+  canvas.style.display = 'none';
 }
 
 function displayAsDrawingboard(evt){
