@@ -655,16 +655,54 @@ function undoLine(){
   file.onChange();
 }
 
+function newAnimation(evt){
+  console.log('new animation');
+}
+
+function saveAsSVG(evt){
+  console.log('save as SVG');
+}
+
+function saveFrameAsPNG(evt){
+  console.log('save frame as PNG');
+}
+
+function saveAsGIF(evt){
+  console.log('save as GIF');
+}
+
+function saveAsMovie(evt){
+  console.log('save as movie');
+}
+
+function openSVG(evt){
+  console.log('open SVG');
+}
+
+function displayAsStoryboard(evt){
+  evt.preventDefault();
+  
+  
+}
+
+function displayAsDrawingboard(evt){
+  console.log('displayAsDrawingboard');
+}
+
 function hotkeys(evt){
+  console.log(evt);
   if (evt.altKey) return;
   if (evt.shiftKey) return;
   if (!evt.ctrlKey) return;
   switch(evt.key){
-    case 's': saveAsSVG(); break;
-    case 'f': saveFrameAsPNG(); break;
-    case 'g': saveAsGIF(); break;
-    case 'm': saveAsMovie(); break;
-    case 'o': openSVG(); break;
+    case 'n': newAnimation(evt); break;
+    case 's': saveAsSVG(evt); break;
+    case 'f': saveFrameAsPNG(evt); break;
+    case 'g': saveAsGIF(evt); break;
+    case 'm': saveAsMovie(evt); break;
+    case 'o': openSVG(evt); break;
+    case 'b': displayAsStoryboard(evt); break;
+    case 'd': displayAsDrawingboard(evt); break;
   }
 }
 
@@ -689,4 +727,5 @@ window.app = {
 // document.querySelector('#canvas-onionskin').addEventListener('change', toggleOnionskin, false);
 document.addEventListener('keydown', keydownHandler, false);
 document.addEventListener('keyup', keyupHandler, false);
+document.addEventListener('keydown', hotkeys, false);
 
