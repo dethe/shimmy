@@ -681,7 +681,15 @@ function openSVG(evt){
 
 function displayAsStoryboard(evt){
   evt.preventDefault();
-  mdn.
+  let {x,y,width,height} = getAnimationBBox();
+
+  let frames = Array.toArray(document.querySelectorAll('.frame')).map(f => {
+    f.cloneNode();
+    f.removeAttribute('class');
+    let s = dom.svg('svg', {viewBox: [x, y, width, height].join(' '), width: width + 'px', height: height + 'px'}, [f]);
+    let i = dom.element('img', {src: s.toDataURL()});
+    return i;
+  });
   
 }
 
