@@ -657,9 +657,14 @@ function undoLine(){
 
 function hotkeys(evt){
   if (evt.altKey) return;
-  if (evt.)
-  if ((evt.key || evt.keyIdentifier) === 'Control'){
-    if )(mdn
+  if (evt.shiftKey) return;
+  if (!evt.ctrlKey) return;
+  switch(evt.key){
+    case 's': saveAsSVG(); break;
+    case 'f': saveFrameAsPNG(); break;
+    case 'g': saveAsGIF(); break;
+    case 'm': saveAsMovie(); break;
+    case 'o': openSVG(); break;
   }
 }
 
