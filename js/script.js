@@ -655,6 +655,14 @@ function undoLine(){
   file.onChange();
 }
 
+function hotkeys(evt){
+  if (evt.altKey) return;
+  if (evt.)
+  if ((evt.key || evt.keyIdentifier) === 'Control'){
+    if )(mdn
+  }
+}
+
 function keydownHandler(evt){
   if ((evt.key || evt.keyIdentifier) === 'Control'){
       document.body.classList.add('usefiles');
