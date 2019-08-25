@@ -681,7 +681,7 @@ function openSVG(evt){
 
 function displayAsStoryboard(evt){
   evt.preventDefault();
-  
+  mdn.
   
 }
 
