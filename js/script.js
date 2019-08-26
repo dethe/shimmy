@@ -2,6 +2,10 @@
 
 // Initialize
 let canvas = document.querySelector('#canvas');
+if (!canvas){
+  canvas = dom.svg('svg');
+  document.body.insertBefore(canvas, document.body.firstElementChild);
+}
 canvas.setAttribute('width', document.body.clientWidth + 'px');
 canvas.setAttribute('height', document.body.clientHeight + 'px');
 const colorpaletteselect = document.querySelector('.colorpalette');
@@ -422,7 +426,12 @@ body.addEventListener('mouseup', toolStop);
 body.addEventListener('keydown', escCancel);
 
 function currentFrame(){
-  return document.querySelector('.frame.selected');
+  let frame = document.querySelector('.frame.selected');
+  if (!frame){
+    frame = dom.svg('g', {'class': 'frame selected'});
+    canvas.insertBefore(frame, canvas.firstElementChild);
+  }
+  return frame;
 }
 
 function playingFrame(){
@@ -657,6 +666,7 @@ function undoLine(){
 
 function newAnimation(evt){
   console.log('new animation');
+  file.new();
 }
 
 function saveAsSVG(evt){
