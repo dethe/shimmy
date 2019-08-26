@@ -163,13 +163,13 @@ label{
     margin-top: -10px;
 }
 
-/* path{
+path{
   stroke-linecap: round;
   stroke-linejoin: round;
   pointer-events: none;
   fill: none;
 }
- */
+
 .frame{
   display: none;
 }

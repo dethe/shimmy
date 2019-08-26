@@ -62,10 +62,7 @@ class Pen{
     this.currentPath = currentFrame().appendChild(dom.svg('path', {
       d: 'M ' + x + ',' + y,
       stroke: currentColor,
-      fill: 'none',
-      'stroke-width': currentStrokeWidth,
-      'stroke-linecap': 'round',
-      'stroke-linejoin': 'round'
+      'stroke-width': currentStrokeWidth
     }));
     file.onChange();
   }
@@ -679,6 +676,10 @@ function saveAsMovie(evt){
 
 function openSVG(evt){
   file.loadFile();
+}
+
+function getCanvas(w,h){
+  let c = dom.html('canvas', {width: w + 'px', height: h + 'px'};
 }
 
 function frameToImage(frame, x, y, width, height){
