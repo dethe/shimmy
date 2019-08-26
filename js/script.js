@@ -65,6 +65,7 @@ class Pen{
   }
 
   startPath(x,y){
+    console.log('start path');
     this.currentPath = currentFrame().appendChild(dom.svg('path', {
       d: 'M ' + x + ',' + y,
       stroke: currentColor,
@@ -75,16 +76,17 @@ class Pen{
   }
   
   appendToPath(x,y){
+    console.log('appendToPath');
     let path = this.currentPath;
     let d = path.getAttribute('d');
     path.setAttribute('d', `${d} L${x}, ${y}`);
   }
   
   start(evt){
+    console.log('start');
     saveMatrix();
     let {x,y, err} = getXY(evt);
     if (err){ return };
-    // FIXME: move path into pen tool
     this.sx = x;
     this.sy = y;
     this.startPath(x,y);
