@@ -668,11 +668,13 @@ function newAnimation(evt){
 }
 
 function saveAsSVG(evt){
-  console.log('save as SVG');
+  file.saveFile();
 }
 
 function saveFrameAsPNG(evt){
-  console.log('save frame as PNG');
+  let {x,y,width,height} = getAnimationBBox();
+  let img = frameToImage(currentFrame(), x, y, width, height);
+  // FIXME: save the image
 }
 
 function saveAsGIF(evt){
@@ -684,19 +686,21 @@ function saveAsMovie(evt){
 }
 
 function openSVG(evt){
-  console.log('open SVG');
+  file.loadFile();
+}
+
+function frameToImg(frame, x, y, width, height){
+    let f = frame.cloneNode();
+    f.removeAttribute('class');
+    let s = dom.svg('svg', {viewBox: [x, y, width, height].join(' '), width: width + 'px', height: height + 'px'}, [f]);
+    let i = dom.html('img', {'class': 'storyboard-frame', src: toDataURL(s)});
+    return i;  
 }
 
 function displayAsStoryboard(evt){
   evt.preventDefault();
   let {x,y,width,height} = getAnimationBBox();
-  let frames = Array.from(document.querySelectorAll('.frame')).map(f => {
-    f.cloneNode();
-    f.removeAttribute('class');
-    let s = dom.svg('svg', {viewBox: [x, y, width, height].join(' '), width: width + 'px', height: height + 'px'}, [f]);
-    let i = dom.html('img', {'class': 'storyboard-frame', src: toDataURL(s)});
-    return i;
-  });
+  let frames = Array.from(document.querySelectorAll('.frame')).map(frame => frameToImg(frame, x, y, width, height));
   frames.forEach(f => document.body.appendChild(f));
   document.body.classList.add('playing');
   canvas.style.display = 'none';
