@@ -141,8 +141,25 @@
     function previous(elem, selector){
       let node = elem.previousElementSibling;
       while(node){
-        
+        if (node.matches(selector)){
+            return node;
+        }else{
+          node = elem.previousElementSibling;
+        }
       }
+      return null;
+    }
+  
+    function next(elem, selector){
+      let node = elem.nextElementSibling;
+      while(node){
+        if (node.matches(selector)){
+            return node;
+        }else{
+          node = elem.nextElementSibling;
+        }
+      }
+      return null;
     }
 
     function removeClass(elem, klass){

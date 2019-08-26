@@ -464,11 +464,7 @@ function currentOnionskinFrame(){
 function updateOnionskin(){
   if (!isOnionskinOn()) return;
   dom.removeClass(currentOnionskinFrame(), 'onionskin');
-  let prev = dom.previous(currentFrame(), '.frame');
-  if (prev){
-    prev.classList.add('onionskin');
-  }
-  dom.addClass(dom.previous(currentFrame(), '.frame', 'onionskin'));
+  dom.addClass(dom.previous(currentFrame(), '.frame'), 'onionskin');
 }
 
 function addFrame(){
