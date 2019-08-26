@@ -200,6 +200,7 @@
                                    function(fn){ setTimeout(fn, 20); };
 
     global.dom = {
+        element: element,
         html: html,
         svg: svg,
         remove: remove,

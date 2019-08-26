@@ -698,7 +698,7 @@ function displayAsStoryboard(evt){
     f.cloneNode();
     f.removeAttribute('class');
     let s = dom.svg('svg', {viewBox: [x, y, width, height].join(' '), width: width + 'px', height: height + 'px'}, [f]);
-    let i = dom.element('img', {src: toDataURL(s)});
+    let i = dom.html('img', {src: toDataURL(s)});
     return i;
   });
   frames.forEach(f => document.body.appendChild(f));
