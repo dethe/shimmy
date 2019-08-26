@@ -1,4 +1,4 @@
-/* globals ajax app dom canvas listenCanvas */
+/* globals ajax app dom listenCanvas canvas */
 
 (function(global){
     'use strict';
@@ -11,17 +11,24 @@
     }
 
     function saveFormat(){
-        return document.getElementById('canvas').outerHTML;
+      if (canvas){
+        return canvas.outerHTML;
+      }else{
+        return '';
+      }
     }
+  
+    window.canvas = null;
 
     function restoreFormat(savetext){
       canvas = document.querySelector('#canvas');
       if (!canvas){
-        canvas = document.body.prepend('<svg></svg>');
+        canvas = document.body.prepend(dom.svg('svg'));
       }
       if (!savetext){
         savetext = defaultCanvas;
-      document.getElementById('canvas').outerHTML = savetext;
+      }
+      canvas.outerHTML = savetext;
       canvas = document.querySelector('#canvas');
       app.updateFrameCount();
       canvas.setAttribute('width', document.body.clientWidth + 'px');

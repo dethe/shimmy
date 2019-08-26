@@ -1,4 +1,4 @@
-/* globals dom file KellyColorPicker palettes toDataURL */
+/* globals dom file KellyColorPicker palettes toDataURL canvas */
 
 // Initialization of canvas happens in file.js
 const colorpaletteselect = document.querySelector('.colorpalette');
@@ -431,7 +431,6 @@ function listenCanvas(){
   canvas.addEventListener('touchcancel', toolCancel);
 }
 
-listenCanvas();
 body.addEventListener('mouseup', toolStop);
 body.addEventListener('keydown', escCancel);
 
