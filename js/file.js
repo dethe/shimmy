@@ -45,7 +45,9 @@
     }
 
     function saveFile(evt){
-        evt.preventDefault();
+        if (evt){
+          evt.preventDefault();
+        }
         var title = prompt("Save file as: ");
         if (!title){ return; }
         var file = new Blob([saveFormat()], {type: 'image/svg+xml'});

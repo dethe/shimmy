@@ -515,7 +515,6 @@ function _clear(){
 }
 
 function setOnionSkin(input){
-  console.log(input.checked);
   currentDoOnionskin = input.checked;
   toggleOnionskin();
 }
@@ -574,7 +573,6 @@ function getAnimationBBox(show){
     }else{
       frame.classList.add('selected');
       let box = frame.getBoundingClientRect();
-      console.log(box);
       frame.classList.remove('selected');
       return box;
     }
@@ -702,14 +700,13 @@ function displayAsStoryboard(evt){
   let {x,y,width,height} = getAnimationBBox();
   let frames = Array.from(document.querySelectorAll('.frame')).map(frame => frameToImage(frame, x, y, width, height));
   frames.forEach(f => document.body.appendChild(f));
-  document.body.classList.add('playing');
+  // document.body.classList.add('playing');
   canvas.style.display = 'none';
 }
 
 function displayAsDrawingboard(evt){
-  console.log('displayAsDrawingboard');
   Array.from(document.querySelectorAll('.storyboard-frame')).map( f => f.remove());
-  document.body.classList.remove('playing');
+  // document.body.classList.remove('playing');
   canvas.style.display = 'block';
 }
 

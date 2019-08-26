@@ -59,7 +59,7 @@ button .label{
   flex-direction: row;
   flex-wrap: wrap;
   position: absolute;
-  transition: top 0.5s ease-in-out;
+  transition: top  0.5s ease-in-out;
   transition: left 0.5s ease-in-out;
 }
 
