@@ -3,8 +3,8 @@
 (function(global){
     'use strict';
 
-    var defaultCanvas = '<svg id="canvas"><g class="frame selected"></g></svg>';
     var defaultStyle = '<style>path{stroke-linecap: round; stroke-linejoin: round; pointer-events: none; fill: none;}';
+    var defaultCanvas = `<svg id="canvas">${defaultStyle}<g class="frame selected"></g></svg>`;
 
     function saveLocal(){ 
         localStorage._currentWork = saveFormat(); 
@@ -15,12 +15,21 @@
     }
 
     function restoreFormat(savetext){
-      document.getElementById('canvas').outerHTML = savetext;
-      app.updateFrameCount();
-      //app.play();
       canvas = document.querySelector('#canvas');
+      if (!canvas){
+        canvas = document.body.prepend('<svg></svg>');
+      }
+      if (!savetext){
+        savetext = defaultCanvas;
+      document.getElementById('canvas').outerHTML = savetext;
+      canvas = document.querySelector('#canvas');
+      app.updateFrameCount();
       canvas.setAttribute('width', document.body.clientWidth + 'px');
       canvas.setAttribute('height', document.body.clientHeight + 'px');
+      let style = canvas.querySelector('style');
+      if (!style){
+        canvas.prepend(defaultStyle);
+      }
       listenCanvas();
     }
 

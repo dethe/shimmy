@@ -1,13 +1,6 @@
 /* globals dom file KellyColorPicker palettes toDataURL */
 
-// Initialize
-let canvas = document.querySelector('#canvas');
-if (!canvas){
-  canvas = dom.svg('svg');
-  document.body.insertBefore(canvas, document.body.firstElementChild);
-}
-canvas.setAttribute('width', document.body.clientWidth + 'px');
-canvas.setAttribute('height', document.body.clientHeight + 'px');
+// Initialization of canvas happens in file.js
 const colorpaletteselect = document.querySelector('.colorpalette');
 palettes.forEach((p,i) => {
   let opt = document.createElement('option');
