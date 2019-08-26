@@ -654,6 +654,7 @@ function undoLine(){
 
 function newAnimation(evt){
   file.new();
+  updateFrameCount();
 }
 
 function saveAsSVG(evt){
@@ -679,15 +680,21 @@ function openSVG(evt){
 }
 
 function getCanvas(w,h){
-  let c = dom.html('canvas', {width: w + 'px', height: h + 'px'};
+  return dom.html('canvas', {width: w + 'px', height: h + 'px'});
 }
 
-function frameToImage(frame, x, y, width, height){
+function frameToImage(frame, x, y, width, height, callback){
     let f = frame.cloneNode(true);
     f.removeAttribute('class');
     let s = dom.svg('svg', {viewBox: [x, y, width, height].join(' '), width: width + 'px', height: height + 'px'}, [f]);
-    let i = dom.html('img', {'class': 'storyboard-frame', src: toDataURL(s)});
-    return i;  
+    let i = dom.html('img', {'class': 'storyboard-frame'});
+    toDataURL(s, {type: 'image/png', renderer: 'native', callback: url => {
+      i.setAttribute('src', url);
+      if(callback){
+        callback(i);
+      }
+    }});
+    return i;
 }
 
 function displayAsStoryboard(evt){
