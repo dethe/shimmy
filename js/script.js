@@ -61,7 +61,25 @@ function setPalette(evt){
 class Pen{
   constructor(){
     this.drawing = false;
+    this.currentPath = null;
   }
+
+  startPath(x,y){
+    this.currentPath = currentFrame().appendChild(dom.svg('path', {
+      d: 'M ' + x + ',' + y,
+      stroke: currentColor,
+      fill: 'none',
+      'stroke-width': currentStrokeWidth
+    }));
+    file.onChange();
+  }
+  
+  appendToPath(x,y){
+    let path = this.currentPath;
+    let d = path.getAttribute('d');
+    path.setAttribute('d', `${d} L${x}, ${y}`);
+  }
+  
   start(evt){
     saveMatrix();
     let {x,y, err} = getXY(evt);
@@ -69,7 +87,7 @@ class Pen{
     // FIXME: move path into pen tool
     this.sx = x;
     this.sy = y;
-    startPath(x,y);
+    this.startPath(x,y);
     this.drawing = true;
   }
 
@@ -78,8 +96,7 @@ class Pen{
     let {x,y,err} = getXY(evt);
     if (err){ return; }
     if (inBounds(x,y)){
-        // FIXME: move path into Pen tool
-        appendToPath(x,y);
+      this.appendToPath(x,y);
     }
   }
 
@@ -87,22 +104,20 @@ class Pen{
     if (!this.drawing) return;
     let {x,y,err} = getXY(evt);
     if (err){ return; }
-    // FIXME: draw a dot if we haven't moved
-    if (currentPath){
+    if (this.currentPath){
       if (inBounds(x,y) && this.sx === x && this.sy === y){
-        appendToPath(x,y);
+        this.appendToPath(x,y);
       }
-      // FIXME: move path into pen tool
       //dom.simplifyPath(currentPath);
-      currentPath = null;
+      this.currentPath = null;
     }
     this.drawing = false;
     currentMatrix = null;
   }
   
   cancel(){
-    currentPath.remove();
-    currentPath = null;
+    this.currentPath.remove();
+    this.currentPath = null;
     currentMatrix = null;
   }
   
@@ -438,23 +453,6 @@ function playingFrame(){
   return document.querySelector('.frame.play-frame');        
 }
 
-var currentPath = null;
-
-function startPath(x,y){
-
-  currentPath = currentFrame().appendChild(dom.svg('path', {
-      d: 'M ' + x + ',' + y,
-      stroke: currentColor,
-      'stroke-width': currentStrokeWidth
-  }));
-  file.onChange();
-}
-
-function appendToPath(x,y){
-  var path = document.querySelector('.selected path:last-child');
-  var d = path.getAttribute('d');
-  path.setAttribute('d', `${d} L${x} ${y}`);
-}
 
 /***************************************
 *
@@ -599,7 +597,6 @@ function play(){
   // temporarily turn off onionskin (remember state)
   // start at beginning of document (remember state)
   let {x,y,width,height} = getAnimationBBox();
-  console.log('viewingRect: x: %s, y: %s, width: %s, height: %s',x,y,width,height );
   document.body.classList.add('playing');
   document.querySelector('.frame').classList.add('play-frame');
   canvas.setAttribute('width', width + 'px')
@@ -690,9 +687,9 @@ function openSVG(evt){
 }
 
 function displayAsStoryboard(evt){
-  console.log('displayAsStoryboard');
   evt.preventDefault();
   let {x,y,width,height} = getAnimationBBox();
+  document.body.classList.add('playing');
 
   let frames = Array.from(document.querySelectorAll('.frame')).map(f => {
     f.cloneNode();
