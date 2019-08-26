@@ -63,7 +63,9 @@ class Pen{
       d: 'M ' + x + ',' + y,
       stroke: currentColor,
       fill: 'none',
-      'stroke-width': currentStrokeWidth
+      'stroke-width': currentStrokeWidth,
+      'stroke-linecap': 'round',
+      'stroke-linejoin': 'round'
     }));
     file.onChange();
   }
@@ -699,7 +701,7 @@ function displayAsStoryboard(evt){
 function displayAsDrawingboard(evt){
   Array.from(document.querySelectorAll('.storyboard-frame')).map( f => f.remove());
   // document.body.classList.remove('playing');
-  canvas.style.display = 'block;'
+  canvas.style.display = 'block';
 }
 
 function hotkeys(evt){
@@ -717,6 +719,7 @@ function hotkeys(evt){
     case 'd': displayAsDrawingboard(evt); break;
   }
 }
+console.log('n new | s save | f save frame | g gif | m movie | o open | b storyboard | d drawingboard');
 
 function keydownHandler(evt){
   if ((evt.key || evt.keyIdentifier) === 'Control'){
