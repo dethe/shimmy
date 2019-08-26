@@ -523,24 +523,24 @@ function toggleOnionskin(){
 
 function incrementFrame(){
   var curr = currentFrame();
-  var next = dom.next(currentFrame(), '.frame'));
+  var next = dom.next(curr, '.frame');
   if (next){
       curr.classList.remove('selected');
-      next.add('selected');
-  updateOnionskin();
-  updateFrameCount();
+      next.classList.add('selected');
+      updateOnionskin();
+      updateFrameCount();
   }
 }
 
 function decrementFrame(){
   var curr = currentFrame();
-  dom.
-  if (curr.previousElementSibling){
+  var prev = dom.previous(curr, '.frame');
+  if (prev){
       curr.classList.remove('selected');
-      curr.previousElementSibling.classList.add('selected');
+      prev.classList.add('selected');
+      updateOnionskin();
+      updateFrameCount();
   }
-  updateOnionskin();
-  updateFrameCount();
 }
 
 function gotoFirstFrame(){
@@ -554,7 +554,7 @@ function gotoLastFrame(){
   currentFrame().classList.remove('selected');
   document.querySelector('.frame:last-child').classList.add('selected');
   dom.removeClass(currentOnionskinFrame(), 'onionskin');
-  dom.addClass(currentFrame().previousElementSibling, 'onionskin');
+  dom.addClass(dom.previous(currentFrame(), '.frame'), 'onionskin');
   updateFrameCount();
 }
 
