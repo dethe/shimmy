@@ -688,7 +688,7 @@ function openSVG(evt){
 }
 
 function frameToImage(frame, x, y, width, height){
-    let f = frame.cloneNode();
+    let f = frame.cloneNode(true);
     f.removeAttribute('class');
     let s = dom.svg('svg', {viewBox: [x, y, width, height].join(' '), width: width + 'px', height: height + 'px'}, [f]);
     let i = dom.html('img', {'class': 'storyboard-frame', src: toDataURL(s)});

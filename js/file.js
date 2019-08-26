@@ -4,6 +4,7 @@
     'use strict';
 
     var defaultCanvas = '<svg id="canvas"><g class="frame selected"></g></svg>';
+    var defaultStyle = '<style>path{stroke-linecap: round; stroke-linejoin: round; pointer-events: none; fill: none;}';
 
     function saveLocal(){ 
         localStorage._currentWork = saveFormat(); 
