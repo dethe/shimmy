@@ -689,21 +689,23 @@ function openSVG(evt){
 function displayAsStoryboard(evt){
   evt.preventDefault();
   let {x,y,width,height} = getAnimationBBox();
-  document.body.classList.add('playing');
-
   let frames = Array.from(document.querySelectorAll('.frame')).map(f => {
     f.cloneNode();
     f.removeAttribute('class');
     let s = dom.svg('svg', {viewBox: [x, y, width, height].join(' '), width: width + 'px', height: height + 'px'}, [f]);
-    let i = dom.html('img', {src: toDataURL(s)});
+    let i = dom.html('img', {'class': 'storyboard-frame', src: toDataURL(s)});
     return i;
   });
   frames.forEach(f => document.body.appendChild(f));
+  document.body.classList.add('playing');
   canvas.style.display = 'none';
 }
 
 function displayAsDrawingboard(evt){
   console.log('displayAsDrawingboard');
+  Array.from(document.querySelectorAll('.storyboard-frame')).map( f => f.remove());
+  document.body.classList.remove('playing');
+  canvas.style.display = 'block';
 }
 
 function hotkeys(evt){

@@ -127,7 +127,11 @@
     }
 
     window.file = {
-        onChange: onChange
+        onChange: onChange,
+        'new': newFile,
+        clear: clear,
+        loadFile,
+        saveFile
     };
 
     // document.querySelector('#new').addEventListener('click', newFile, false);
