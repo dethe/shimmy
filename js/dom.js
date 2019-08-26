@@ -137,6 +137,13 @@
             elem.classList.add(klass);
         }
     }
+  
+    function previous(elem, selector){
+      let node = elem.previousElementSibling;
+      while(node){
+        
+      }
+    }
 
     function removeClass(elem, klass){
         /* Conditionall remove class if element exists */
