@@ -672,7 +672,7 @@ function saveAsSVG(evt){
 }
 
 function saveFrameAsPNG(evt){
-  let {x,y,width,height} = getAnimationBBox();
+  let {x, y, width, height} = getAnimationBBox();
   let img = frameToImage(currentFrame(), x, y, width, height);
   // FIXME: save the image
 }
@@ -689,7 +689,7 @@ function openSVG(evt){
   file.loadFile();
 }
 
-function frameToImg(frame, x, y, width, height){
+function frameToImage(frame, x, y, width, height){
     let f = frame.cloneNode();
     f.removeAttribute('class');
     let s = dom.svg('svg', {viewBox: [x, y, width, height].join(' '), width: width + 'px', height: height + 'px'}, [f]);
@@ -700,7 +700,7 @@ function frameToImg(frame, x, y, width, height){
 function displayAsStoryboard(evt){
   evt.preventDefault();
   let {x,y,width,height} = getAnimationBBox();
-  let frames = Array.from(document.querySelectorAll('.frame')).map(frame => frameToImg(frame, x, y, width, height));
+  let frames = Array.from(document.querySelectorAll('.frame')).map(frame => frameToImage(frame, x, y, width, height));
   frames.forEach(f => document.body.appendChild(f));
   document.body.classList.add('playing');
   canvas.style.display = 'none';
