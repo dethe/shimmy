@@ -1,4 +1,4 @@
-/* globals dom file KellyColorPicker palettes */
+/* globals dom file KellyColorPicker palettes toDataURL */
 
 // Initialize
 let canvas = document.querySelector('#canvas');
@@ -680,14 +680,15 @@ function openSVG(evt){
 }
 
 function displayAsStoryboard(evt){
+  console.log('displayAsStoryboard');
   evt.preventDefault();
   let {x,y,width,height} = getAnimationBBox();
 
-  let frames = Array.toArray(document.querySelectorAll('.frame')).map(f => {
+  let frames = Array.from(document.querySelectorAll('.frame')).map(f => {
     f.cloneNode();
     f.removeAttribute('class');
     let s = dom.svg('svg', {viewBox: [x, y, width, height].join(' '), width: width + 'px', height: height + 'px'}, [f]);
-    let i = dom.element('img', {src: s.toDataURL()});
+    let i = dom.element('img', {src: toDataURL(s)});
     return i;
   });
   frames.forEach(f => document.body.appendChild(f));
@@ -699,7 +700,6 @@ function displayAsDrawingboard(evt){
 }
 
 function hotkeys(evt){
-  console.log(evt);
   if (evt.altKey) return;
   if (evt.shiftKey) return;
   if (!evt.ctrlKey) return;
