@@ -664,7 +664,6 @@ function undoLine(){
 }
 
 function newAnimation(evt){
-  console.log('new animation');
   file.new();
 }
 
