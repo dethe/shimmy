@@ -62,7 +62,10 @@ class Pen{
     this.currentPath = currentFrame().appendChild(dom.svg('path', {
       d: 'M ' + x + ',' + y,
       stroke: currentColor,
-      'stroke-width': currentStrokeWidth
+      'stroke-width': currentStrokeWidth,
+      'stroke-linejoin': 'round',
+      'stroke-linecap': 'round',
+      fill: 'none'
     }));
     file.onChange();
   }
@@ -520,16 +523,18 @@ function toggleOnionskin(){
 
 function incrementFrame(){
   var curr = currentFrame();
-  if (curr.nextElementSibling){
+  var next = dom.next(currentFrame(), '.frame'));
+  if (next){
       curr.classList.remove('selected');
-      curr.nextElementSibling.classList.add('selected');
-  }
+      next.add('selected');
   updateOnionskin();
   updateFrameCount();
+  }
 }
 
 function decrementFrame(){
   var curr = currentFrame();
+  dom.
   if (curr.previousElementSibling){
       curr.classList.remove('selected');
       curr.previousElementSibling.classList.add('selected');
@@ -639,9 +644,9 @@ function playNextFrame(){
 
 function updateFrameCount(){
   try{
-      var frames = currentFrame().parentElement.children.length;
-      var index = dom.indexOf(currentFrame());
-      document.querySelector('.framecount').textContent = 'Frame ' + (index+1) + ' of ' + frames;
+      var frames = Array.from(document.querySelectorAll('.frame'));
+      var index = frames.indexOf(currentFrame()) + 1;
+      document.querySelector('.framecount').textContent = 'Frame ' + index + ' of ' + frames.length;
   }catch(e){
       // wait for the file to load, probably
   }

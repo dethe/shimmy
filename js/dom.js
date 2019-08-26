@@ -230,6 +230,8 @@
         remove: remove,
         clear: clear,
         insertAfter: insertAfter,
+        previous: previous,
+        next: next,
         matches: matches,
         find: find,
         findAll: findAll,
