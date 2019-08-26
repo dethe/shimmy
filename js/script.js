@@ -633,9 +633,10 @@ function playNextFrame(){
   }
   var currFrame = playingFrame();
   _lastFrameTime = time;
-  if (currFrame.nextElementSibling){
+  let next = dom.next(currFrame, '.frame');
+  if (next){
       currFrame.classList.remove('play-frame');
-      currFrame.nextElementSibling.classList.add('play-frame');
+      next.classList.add('play-frame');
       requestAnimationFrame(playNextFrame);
   }else{
       setTimeout(stop, 500);
