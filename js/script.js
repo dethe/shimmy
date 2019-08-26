@@ -699,7 +699,7 @@ function displayAsStoryboard(evt){
 function displayAsDrawingboard(evt){
   Array.from(document.querySelectorAll('.storyboard-frame')).map( f => f.remove());
   // document.body.classList.remove('playing');
-  canvas.style.display = 'block';
+  canvas.style.display = 'block;'
 }
 
 function hotkeys(evt){

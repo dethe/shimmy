@@ -3,7 +3,7 @@
 (function(global){
     'use strict';
 
-    var defaultStyle = '<style>path{stroke-linecap: round; stroke-linejoin: round; pointer-events: none; fill: none;}';
+    var defaultStyle = '<style>path{stroke-linecap: round; stroke-linejoin: round; pointer-events: none; fill: none;}</style>';
     var defaultCanvas = `<svg id="canvas">${defaultStyle}<g class="frame selected"></g></svg>`;
 
     function saveLocal(){ 
@@ -23,7 +23,8 @@
     function restoreFormat(savetext){
       canvas = document.querySelector('#canvas');
       if (!canvas){
-        canvas = document.body.prepend(dom.svg('svg'));
+        canvas = dom.svg('svg');
+        document.body.prepend(canvas);
       }
       if (!savetext){
         savetext = defaultCanvas;
