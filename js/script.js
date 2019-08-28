@@ -41,7 +41,8 @@ setPalette({target: colorpaletteselect});
 const mouse = {};
 
 const DEG = 180 / Math.PI;
-const degrees = radians => radians * DEG;
+const degrees = rads => rads * DEG;
+const radians = degs => degs / DEG;
 
 function setPalette(evt){
   let palette = palettes[parseInt(evt.target.value)];
@@ -689,6 +690,7 @@ class SVGCanvas{
   constructor(frame, x, y, width, height){
     this.canvas = dom.html('canvas', {width: width + 'px', height: height + 'px'});
     this.ctx = this.canvas.getContext('2d');
+    this.ctx.
     this.svg = frame;
     this.offset = {x,y};
     this.draw();
@@ -701,12 +703,26 @@ class SVGCanvas{
   }
   
   setTransforms(){
-    let transforms = this.svg.getAttribute('transform').trim().split(/\s+/);
-    console.log('transforms: %s', JSON.stringify(transforms));
+    let transforms = this.svg.getAttribute('transform').trim().split(/\)\s*/).map(t => t + ')')
+    transforms.forEach(t => eval('this.' + t));
+  }
+  
+  translate(x,y){
+    this.ctx.translate(x,y);
+  }
+  
+  scale(x){
+    this.ctx.scale(x)
+  }
+  
+  rotate(angle, cx, cy){
+    this.translate(cx, cy);
+    this.rotate(radians(angle));
+    this.translate(-cx, -cy);
   }
   
   drawLine(line){
-    
+    ctx.
   }
   
 }
