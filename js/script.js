@@ -690,7 +690,8 @@ class SVGCanvas{
   constructor(frame, x, y, width, height){
     this.canvas = dom.html('canvas', {width: width + 'px', height: height + 'px'});
     this.ctx = this.canvas.getContext('2d');
-    this.ctx.
+    this.ctx.lineCap = 'round';
+    this.ctx.lineJoin = 'round';
     this.svg = frame;
     this.offset = {x,y};
     this.draw();
@@ -722,7 +723,10 @@ class SVGCanvas{
   }
   
   drawLine(line){
-    ctx.
+    this.ctx.lineWidth = Number(this.svg.getAttribute('stroke-width'));
+    this.ctx.strokeStyle = this.svg.getAttribute('stroke');
+    
+    this.ctx.stroke();
   }
   
 }
