@@ -59,7 +59,6 @@ class Pen{
   }
 
   startPath(x,y){
-    console.log('start path');
     this.currentPath = currentFrame().appendChild(dom.svg('path', {
       d: 'M ' + x + ',' + y,
       stroke: currentColor,
@@ -72,14 +71,12 @@ class Pen{
   }
   
   appendToPath(x,y){
-    console.log('appendToPath');
     let path = this.currentPath;
     let d = path.getAttribute('d');
     path.setAttribute('d', `${d} L${x}, ${y}`);
   }
   
   start(evt){
-    console.log('start');
     saveMatrix();
     let {x,y, err} = getXY(evt);
     if (err){ return };
@@ -725,34 +722,18 @@ class SVGCanvas{
   drawLine(line){
     this.ctx.lineWidth = Number(this.svg.getAttribute('stroke-width'));
     this.ctx.strokeStyle = this.svg.getAttribute('stroke');
-    let path = this.svg.getAttribute('d').slice(1).trim().split(/\s*L\s*/).map(pair => split)
-    let start = path.shift().split(/\s*,?\s*/).map(Number);
-    
+    let path = this.svg.getAttribute('d').slice(1).trim().split(/\s*L\s*/).map(pair => pair.split(/\s*,?\s*/).map(Number))
+    let start = path.shift();
+    this.ctx.moveTo(...start);
+    path.forEach(p => this.ctx.lineTo(...p))    
     this.ctx.stroke();
   }
   
 }
 
-function getCanvas(w,h){
-  return dom.html('canvas', {width: w + 'px', height: h + 'px'});
-}
-
-
-
-
 function frameToImage(frame, x, y, width, height, callback){
-    let f = frame.cloneNode(true);
-    f.removeAttribute('class');
-    let temp = new SVGCanvas(frame, x, y, width, height);
-    let s = dom.svg('svg', {viewBox: [x, y, width, height].join(' '), width: width + 'px', height: height + 'px'}, [f]);
-    let i = dom.html('img', {'class': 'storyboard-frame'});
-    toDataURL(s, {type: 'image/png', renderer: 'native', callback: url => {
-      i.setAttribute('src', url);
-      if(callback){
-        callback(i);
-      }
-    }});
-    return i;
+    let c = new SVGCanvas(frame, x, y, width, height);
+    return c.canvas;
 }
 
 function displayAsStoryboard(evt){
