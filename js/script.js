@@ -687,7 +687,7 @@ function openSVG(evt){
 
 class SVGCanvas{
   constructor(frame, x, y, width, height){
-    this.canvas = dom.html('canvas', {width: w + 'px', height: h + 'px'});
+    this.canvas = dom.html('canvas', {width: width + 'px', height: height + 'px'});
     this.ctx = this.canvas.getContext('2d');
     this.svg = frame;
     this.offset = {x,y};
@@ -696,7 +696,17 @@ class SVGCanvas{
   
   draw(){
     this.setTransforms();
-    let lines = this.svg.querySelector('')
+    let lines = this.svg.querySelectorAll('path');
+    lines.forEach(line => this.drawLine(line));
+  }
+  
+  setTransforms(){
+    let transforms = this.svg.getAttribute('transform').trim().split(/\s+/);
+    console.log('transforms: %s', JSON.stringify(transforms));
+  }
+  
+  drawLine(line){
+    
   }
   
 }
@@ -711,6 +721,7 @@ function getCanvas(w,h){
 function frameToImage(frame, x, y, width, height, callback){
     let f = frame.cloneNode(true);
     f.removeAttribute('class');
+    let temp = new SVGCanvas(frame, x, y, width, height);
     let s = dom.svg('svg', {viewBox: [x, y, width, height].join(' '), width: width + 'px', height: height + 'px'}, [f]);
     let i = dom.html('img', {'class': 'storyboard-frame'});
     toDataURL(s, {type: 'image/png', renderer: 'native', callback: url => {
