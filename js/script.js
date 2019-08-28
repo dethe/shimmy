@@ -685,9 +685,28 @@ function openSVG(evt){
   file.loadFile();
 }
 
+class SVGCanvas{
+  constructor(frame, x, y, width, height){
+    this.canvas = dom.html('canvas', {width: w + 'px', height: h + 'px'});
+    this.ctx = this.canvas.getContext('2d');
+    this.svg = frame;
+    this.offset = {x,y};
+    this.draw();
+  }
+  
+  draw(){
+    this.setTransforms();
+    let lines = this.svg.querySelector('')
+  }
+  
+}
+
 function getCanvas(w,h){
   return dom.html('canvas', {width: w + 'px', height: h + 'px'});
 }
+
+
+
 
 function frameToImage(frame, x, y, width, height, callback){
     let f = frame.cloneNode(true);
