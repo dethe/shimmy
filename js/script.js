@@ -725,6 +725,8 @@ class SVGCanvas{
   drawLine(line){
     this.ctx.lineWidth = Number(this.svg.getAttribute('stroke-width'));
     this.ctx.strokeStyle = this.svg.getAttribute('stroke');
+    let path = this.svg.getAttribute('d').slice(1).trim().split(/\s*L\s*/).map(pair => split)
+    let start = path.shift().split(/\s*,?\s*/).map(Number);
     
     this.ctx.stroke();
   }
