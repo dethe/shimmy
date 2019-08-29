@@ -715,7 +715,7 @@ class SVGCanvas{
         this[name](...argv);
       }
     });
-    this.translate(this.offset.x, this.offset.y);
+    this.ctx.translate(this.offset.x, this.offset.y);
   }
   
   translate(x,y){
@@ -735,10 +735,16 @@ class SVGCanvas{
   drawLine(line){
     this.ctx.lineWidth = Number(this.svg.getAttribute('stroke-width'));
     this.ctx.strokeStyle = this.svg.getAttribute('stroke');
-    let path = line.getAttribute('d').slice(1).trim().split(/\s*L\s*/).map(pair => pair.split(/\s*,?\s*/).map(Number))
-    let start = path.shift();
+    let path = line.getAttribute('d').slice(1).trim().split(/\s*L\s*/);
+    path.forEach(p => console.log('path pair: %s', p));
+    let pairs = path.map(p => p.split(/\s*,\s*/).map(Number))
+    let start = pairs.shift();
+    console.log('moveTo(%s)', start);
     this.ctx.moveTo(...start);
-    path.forEach(p => this.ctx.lineTo(...p))    
+    pairs.forEach(p => {
+      console.log('lineTo(%s)', p);
+      this.ctx.lineTo(...p)
+    });
     this.ctx.stroke();
   }
   
