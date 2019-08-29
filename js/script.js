@@ -702,16 +702,11 @@ class SVGCanvas{
   
   setTransforms(){
     let transforms = this.svg.getAttribute('transform').trim().split(/\)\s*/).map(t => t + ')')
-    transforms = transforms.map(t => {
+    transforms.forEach(t => {
       let name, args, argv;
-      try{
-        [name, args] = t.replace(/\)/g, '').split(/\(/);
-        argv = args.split(/\,?\s+/).map(Number);
-      }catch(e){
-        console.log('Error parsing %s', t);
-        return;
-      }
-      console.log('name: "%s", argv: "%s"', name, argv);
+      [name, args] = t.replace(/\)/g, '').split(/\(/);
+      argv = args.split(/\,?\s+/).map(Number);
+      this[name](...argv);
     });
   }
   
@@ -732,7 +727,7 @@ class SVGCanvas{
   drawLine(line){
     this.ctx.lineWidth = Number(this.svg.getAttribute('stroke-width'));
     this.ctx.strokeStyle = this.svg.getAttribute('stroke');
-    let path = this.svg.getAttribute('d').slice(1).trim().split(/\s*L\s*/).map(pair => pair.split(/\s*,?\s*/).map(Number))
+    let path = line.getAttribute('d').slice(1).trim().split(/\s*L\s*/).map(pair => pair.split(/\s*,?\s*/).map(Number))
     let start = path.shift();
     this.ctx.moveTo(...start);
     path.forEach(p => this.ctx.lineTo(...p))    
@@ -748,6 +743,7 @@ function frameToImage(frame, x, y, width, height, callback){
 
 function displayAsStoryboard(evt){
   evt.preventDefault();
+  evt.stopPropagation();
   let {x,y,width,height} = getAnimationBBox();
   let frames = Array.from(document.querySelectorAll('.frame')).map(frame => frameToImage(frame, x, y, width, height));
   frames.forEach(f => document.body.appendChild(f));
