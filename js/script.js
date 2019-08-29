@@ -685,7 +685,7 @@ function openSVG(evt){
 
 class SVGCanvas{
   constructor(frame, x, y, width, height){
-    this.canvas = dom.html('canvas', {width: width + 'px', height: height + 'px'});
+    this.canvas = dom.html('canvas', {width: width, height: height});
     this.ctx = this.canvas.getContext('2d');
     this.ctx.lineCap = 'round';
     this.ctx.lineJoin = 'round';
@@ -698,7 +698,6 @@ class SVGCanvas{
     this.setTransforms();
     let lines = this.svg.querySelectorAll('path');
     lines.forEach(line => this.drawLine(line));
-    this.translate(this.offset.x, this.offset.y);
   }
   
   setTransforms(){
@@ -716,6 +715,7 @@ class SVGCanvas{
         this[name](...argv);
       }
     });
+    this.translate(this.offset.x, this.offset.y);
   }
   
   translate(x,y){
