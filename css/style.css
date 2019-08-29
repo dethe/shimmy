@@ -11,6 +11,10 @@ body.playing{
   background-color: #000;  
 }
 
+body.storyboard{
+  background-color: #CCC;
+}
+
 *{
   padding: 0;
   margin: 0;
@@ -54,6 +58,10 @@ button .label{
   background-color: white;
 }
 
+.storyboard svg{
+  display: none;
+}
+
 .buttonbar{
   display: flex;
   flex-direction: row;
@@ -73,7 +81,7 @@ button .label{
   top: 4rem;
 }
 
-.playing .tools{
+.playing .tools, .storyboard .tools{
   left: -4rem;
 }
 
@@ -85,7 +93,7 @@ button .label{
   top: 0;
 }
 
-.playing .animation{
+.playing .animation, .storyboard .animation{
   top: -4rem;
 }
 
@@ -106,7 +114,7 @@ button .label{
   left: 0;
 }
 
-.playing .palette{
+.playing .palette, .storyboard .palette{
   top: -4rem;
   left: -4rem;
 }

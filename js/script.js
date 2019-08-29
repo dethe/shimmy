@@ -698,6 +698,7 @@ class SVGCanvas{
     this.setTransforms();
     let lines = this.svg.querySelectorAll('path');
     lines.forEach(line => this.drawLine(line));
+    this.translate(this.offset.x, this.offset.y);
   }
   
   setTransforms(){
@@ -754,14 +755,14 @@ function displayAsStoryboard(evt){
   let {x,y,width,height} = getAnimationBBox();
   let frames = Array.from(document.querySelectorAll('.frame')).map(frame => frameToImage(frame, x, y, width, height));
   frames.forEach(f => document.body.appendChild(f));
-  // document.body.classList.add('playing');
-  canvas.style.display = 'none';
+  document.body.classList.add('storyboard');
+  // canvas.style.display = 'none';
 }
 
 function displayAsDrawingboard(evt){
   Array.from(document.querySelectorAll('.storyboard-frame')).map( f => f.remove());
-  // document.body.classList.remove('playing');
-  canvas.style.display = 'block';
+  document.body.classList.remove('storyboard');
+  // canvas.style.display = 'block';
 }
 
 function hotkeys(evt){
