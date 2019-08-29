@@ -715,10 +715,10 @@ class SVGCanvas{
     //     this[name](...argv);
     //   }
     // });
+    // this.ctx.translate(-this.offset.x, -this.offset.y);
     let {a,b,c,d,e,f} = this.svg.getCTM();
     console.log('matrix: [%s, %s, %s, %s, %s, %s]', a, b, c, d, e, f);
-    this.ctx.setTransform(a,b,c,d,e,f);
-    this.ctx.translate(-this.offset.x, -this.offset.y);
+    this.ctx.setTransform(a,b,c,d,e-this.offset.x,f-this.offset.y);
   }
   
   translate(x,y){
