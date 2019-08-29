@@ -701,23 +701,7 @@ class SVGCanvas{
   }
   
   setTransforms(){
-    // let tx = this.svg.getAttribute('transform');
-    // if (!tx || !tx.trim()){
-    //   this.ctx.translate(-this.offset.x, -this.offset.y);
-    //   return;
-    // }
-    // let transforms = tx.trim().split(/\)\s*/).map(t => t + ')')
-    // transforms.forEach(t => {
-    //   let name, args, argv;
-    //   [name, args] = t.replace(/\)/g, '').split(/\(/);
-    //   if (args){
-    //     argv = args.split(/\,?\s+/).map(Number);
-    //     this[name](...argv);
-    //   }
-    // });
-    // this.ctx.translate(-this.offset.x, -this.offset.y);
     let {a,b,c,d,e,f} = this.svg.getCTM();
-    console.log('matrix: [%s, %s, %s, %s, %s, %s]', a, b, c, d, e, f);
     this.ctx.setTransform(a,b,c,d,e-this.offset.x,f-this.offset.y);
   }
   
