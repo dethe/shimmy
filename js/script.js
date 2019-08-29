@@ -705,8 +705,10 @@ class SVGCanvas{
     transforms.forEach(t => {
       let name, args, argv;
       [name, args] = t.replace(/\)/g, '').split(/\(/);
-      argv = args.split(/\,?\s+/).map(Number);
-      this[name](...argv);
+      if (args){
+        argv = args.split(/\,?\s+/).map(Number);
+        this[name](...argv);
+      }
     });
   }
   
@@ -715,13 +717,13 @@ class SVGCanvas{
   }
   
   scale(x){
-    this.ctx.scale(x)
+    this.ctx.scale(x,x);
   }
   
   rotate(angle, cx, cy){
-    this.translate(cx, cy);
-    this.rotate(radians(angle));
-    this.translate(-cx, -cy);
+    this.ctx.translate(cx, cy);
+    this.ctx.rotate(radians(angle));
+    this.ctx.translate(-cx, -cy);
   }
   
   drawLine(line){
