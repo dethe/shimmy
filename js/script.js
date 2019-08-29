@@ -703,6 +703,7 @@ class SVGCanvas{
   setTransforms(){
     let tx = this.svg.getAttribute('transform');
     if (!tx || !tx.trim()){
+      this.ctx.translate(-this.offset.x, -this.offset.y);
       return;
     }
     let transforms = tx.trim().split(/\)\s*/).map(t => t + ')')
@@ -715,8 +716,7 @@ class SVGCanvas{
         this[name](...argv);
       }
     });
-    console.log('bump');
-    this.ctx.translate(this.offset.x, this.offset.y);
+    this.ctx.translate(-this.offset.x, -this.offset.y);
   }
   
   translate(x,y){
@@ -734,6 +734,7 @@ class SVGCanvas{
   }
   
   drawLine(line){
+    this.ctx.beginPath();
     this.ctx.lineWidth = Number(line.getAttribute('stroke-width'));
     this.ctx.strokeStyle = line.getAttribute('stroke');
     let path = line.getAttribute('d').slice(1).trim().split(/\s*L\s*/);
