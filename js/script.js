@@ -685,7 +685,7 @@ function openSVG(evt){
 
 class SVGCanvas{
   constructor(frame, x, y, width, height){
-    this.canvas = dom.html('canvas', {width: width, height: height});
+    this.canvas = dom.html('canvas', {width: width, height: height, 'class': 'storyboard-frame'});
     this.ctx = this.canvas.getContext('2d');
     this.ctx.lineCap = 'round';
     this.ctx.lineJoin = 'round';
@@ -715,6 +715,7 @@ class SVGCanvas{
         this[name](...argv);
       }
     });
+    console.log('bump');
     this.ctx.translate(this.offset.x, this.offset.y);
   }
   
@@ -733,16 +734,13 @@ class SVGCanvas{
   }
   
   drawLine(line){
-    this.ctx.lineWidth = Number(this.svg.getAttribute('stroke-width'));
-    this.ctx.strokeStyle = this.svg.getAttribute('stroke');
+    this.ctx.lineWidth = Number(line.getAttribute('stroke-width'));
+    this.ctx.strokeStyle = line.getAttribute('stroke');
     let path = line.getAttribute('d').slice(1).trim().split(/\s*L\s*/);
-    path.forEach(p => console.log('path pair: %s', p));
     let pairs = path.map(p => p.split(/\s*,\s*/).map(Number))
     let start = pairs.shift();
-    console.log('moveTo(%s)', start);
     this.ctx.moveTo(...start);
     pairs.forEach(p => {
-      console.log('lineTo(%s)', p);
       this.ctx.lineTo(...p)
     });
     this.ctx.stroke();
