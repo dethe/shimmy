@@ -707,7 +707,6 @@ class SVGCanvas{
       return;
     }
     let transforms = tx.trim().split(/\)\s*/).map(t => t + ')')
-    
     transforms.forEach(t => {
       let name, args, argv;
       [name, args] = t.replace(/\)/g, '').split(/\(/);
