@@ -702,7 +702,17 @@ class SVGCanvas{
   
   setTransforms(){
     let transforms = this.svg.getAttribute('transform').trim().split(/\)\s*/).map(t => t + ')')
-    transforms.forEach(t => eval('this.' + t));
+    transforms = transforms.map(t => {
+      let name, args;
+      try{
+        [name, args] = t.replace(')', '').split(/\(/);
+      }catch(e){
+        console.log('Error parsing %s', t);
+        return;
+      }
+      let argv = args.split(/\,?\s+/).map(Number);
+      console.log('name: "%s", args: "%s"', name, argv);
+    });
   }
   
   translate(x,y){
