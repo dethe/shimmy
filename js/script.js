@@ -729,7 +729,7 @@ class SVGCanvas{
   }
   
   rotate(angle, cx, cy){
-    console.log('rotate(angle=%s, x=%s, y=%s'), angle, cx, cy);
+    console.log('rotate(angle=%s, x=%s, y=%s)', angle, cx, cy);
     this.ctx.translate(cx, cy);
     this.ctx.rotate(radians(angle));
     this.ctx.translate(-cx, -cy);
