@@ -4,7 +4,7 @@
     'use strict';
 
     var defaultStyle = '<style>path{stroke-linecap: round; stroke-linejoin: round; pointer-events: none; fill: none;}</style>';
-    var defaultCanvas = `<svg id="canvas">${defaultStyle}<g class="frame selected"></g></svg>`;
+    var defaultCanvas = '<svg id="canvas"><g class="frame selected"></g></svg>';
 
     function saveLocal(){ 
         localStorage._currentWork = saveFormat(); 
@@ -34,10 +34,10 @@
       app.updateFrameCount();
       canvas.setAttribute('width', document.body.clientWidth + 'px');
       canvas.setAttribute('height', document.body.clientHeight + 'px');
-      let style = canvas.querySelector('style');
-      if (!style){
-        canvas.prepend(defaultStyle);
-      }
+      // let style = canvas.querySelector('style');
+      // if (!style){
+      //   canvas.prepend(defaultStyle);
+      // }
       listenCanvas();
     }
 

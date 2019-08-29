@@ -701,7 +701,12 @@ class SVGCanvas{
   }
   
   setTransforms(){
-    let transforms = this.svg.getAttribute('transform').trim().split(/\)\s*/).map(t => t + ')')
+    let tx = this.svg.getAttribute('transform');
+    if (!tx || !tx.trim()){
+      return;
+    }
+    let transforms = tx.trim().split(/\)\s*/).map(t => t + ')')
+    
     transforms.forEach(t => {
       let name, args, argv;
       [name, args] = t.replace(/\)/g, '').split(/\(/);
