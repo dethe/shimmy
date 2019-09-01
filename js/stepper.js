@@ -2,7 +2,7 @@
 
 // CSS 
 
-const rules = `
+const css_rules = `
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button{
   -webkit-appearace: none;
@@ -10,4 +10,10 @@ input::-webkit-inner-spin-button{
   margin: 0;
 }
 `;
+document.head.append(dom.element('style', {}, css_rules));
 
+function upgrade(input){
+  
+}
+
+document.querySelectorAll('input ')
