@@ -22,13 +22,31 @@ function addCSS(){
 }
 addCSS();
 
-document.head.append(
-  dom.element('style', {}, css_rules));
-
 function upgrade(input){
-  
+  let id = input.id;
+  let name = input.getAttribute('name') || input.id;
+  let value = input.value;
+  let min = input.getAttribute('min');
+  let max = input.getAttribute('max');
+  let step = input.getAttribute('step');
+  let label = document.querySelector(`label[for=${id}]`);
+  let labelText = label ? label.innerText : `${id} input`;
   input.outerHTML = `<div class="field">
+    <label for="${id}" id="${id}-label">${labelText}</label>
+    <div class="stepper">
+      <button type="button" aria-label="Decrease" aria-describedby="${id}-label">&plus;</button>
+      <input type="number"
   `;
+  let newInput = input.querySelector('input');
+  if (min){
+    newInput.setAttribute('min', min);
+  }
+  if (max){
+    newInput.setAttribute('max', max);
+  }
+  if (step){
+    newInput.setAttribute('step', step);
+  }
 }
 
 Array.from(document.querySelectorAll('input[type=number]')).forEach(upgrade);
