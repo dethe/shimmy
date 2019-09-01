@@ -117,12 +117,8 @@ function upgrade(input){
   if (!label){
     if (input.parentElement.tagName === 'LABEL'){
       label = input.parentElement;
-      label.parent.insertBefore(input, label);
+      label.parentElement.insertBefore(input, label);
     }
-    input.parentElement;
-  if (label && label.tagName !== 'LABEL'){
-    label = null;
-    alert('input must have a label!');
   }
   let labelText = label ? label.innerText : `${id} input`;
   if (label){
