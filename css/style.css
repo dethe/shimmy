@@ -25,8 +25,18 @@ button{
   border-width: 1px;
   min-width: 4rem;
   min-height: 4rem;
-  transition: top .5s ease-in-out;
-  transition: left .5s ease-in-out;
+}
+
+.stepper button{
+  min-width: 1rem;
+  min-height: 1rem;
+  max-width: 1rem;
+  max-height: 2rem;
+}
+
+.stepper input{
+  max-width: 2rem;
+  max-height: 2rem;
 }
 
 button.half{
@@ -52,6 +62,8 @@ button .label{
   transitioni: margin-right .5s ease-in-out;
   transition: margin-top: .5s ease-in-out;
   transition: margin-bottom: .5s ease-in-out;
+  transition: width: .5s ease-in-out;
+  transition: height: .5s ease-in-out;
 }
 
 .playing svg{
@@ -67,8 +79,6 @@ button .label{
   flex-direction: row;
   flex-wrap: wrap;
   position: absolute;
-  transition: top  0.5s ease-in-out;
-  transition: left 0.5s ease-in-out;
 }
 
 .buttonbar .fa-stack{
@@ -79,6 +89,7 @@ button .label{
   width: 4rem;
   left: 0;
   top: 4rem;
+  transition: left 0.5s ease-in-out;
 }
 
 .playing .tools, .storyboard .tools{
@@ -91,6 +102,7 @@ button .label{
   height: 4rem;
   left: 4rem;
   top: 0;
+  transition: top 0.5s ease-in-out;
 }
 
 .playing .animation, .storyboard .animation{
@@ -112,6 +124,8 @@ button .label{
   position: absolute;
   top: 0;
   left: 0;
+  transition: top .5s ease-in-out;
+  transition: left .5s ease-in-out;
 }
 
 .playing .palette, .storyboard .palette{
