@@ -104,15 +104,30 @@ function addCSS(){
 addCSS();
 
 function upgrade(input){
+  console.log('upgrading %s', input.id);
   let id = input.id;
   let name = input.getAttribute('name') || input.id;
   let value = input.value;
   let min = input.getAttribute('min');
   let max = input.getAttribute('max');
   let step = input.getAttribute('step');
-  let class= input.getAttribute('class')
+  let klass= input.getAttribute('class');
+  let onchange = input.getAttribute('onchange');
   let label = document.querySelector(`label[for=${id}]`);
+  if (!label){
+    if (input.parentElement.tagName === 'LABEL'){
+      label = input.parentElement;
+      label.parent.insertBefore(input, label);
+    }
+    input.parentElement;
+  if (label && label.tagName !== 'LABEL'){
+    label = null;
+    alert('input must have a label!');
+  }
   let labelText = label ? label.innerText : `${id} input`;
+  if (label){
+    label.remove();
+  }
   input.outerHTML = `<div class="field">
     <label for="${id}" id="${id}-label">${labelText}</label>
     <div class="stepper">
@@ -123,7 +138,7 @@ function upgrade(input){
      </div>
    </div>
   `;
-  let newInput = input.querySelector('input');
+  let newInput = document.querySelector(`#${id}`);
   if (min){
     newInput.setAttribute('min', min);
   }
@@ -132,6 +147,12 @@ function upgrade(input){
   }
   if (step){
     newInput.setAttribute('step', step);
+  }
+  if (klass){
+    newInput.setAttribute('class', klass);
+  }
+  if (onchange){
+    newInput.setAttribute('onchange', onchange);
   }
 }
 
