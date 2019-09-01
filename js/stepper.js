@@ -4,15 +4,6 @@
 // CSS 
 
 const css_rules = `
-input::-webkit-outer-spin-button,
-input::-webkit-inner-spin-button{
-  -webkit-appearace: none;
-  appearance: none;
-  margin: 0;
-}
-input[type="number"] {
-    -moz-appearance: textfield;
-}
 .visually-hidden {
  border:0!important;
  clip:rect(0 0 0 0)!important;
@@ -22,6 +13,86 @@ input[type="number"] {
  padding:0!important;
  position:absolute!important;
  width:1px!important
+}
+[type=number]{
+ width:100%;
+ padding:8px;
+ font-size:1em;
+ line-height:1.25;
+ font-family:inherit;
+ -webkit-box-sizing:border-box;
+ -moz-box-sizing:border-box;
+ box-sizing:border-box;
+ -webkit-appearance:none;
+ appearance:none;
+ border:2px solid #222
+}
+@media (min-width:37.5em) {
+ [type=number]{
+  font-size:1.125em;
+  line-height:1.38889
+ }
+}
+[type=number]:focus {
+ outline:0;
+ box-shadow:0 0 1px 4px #ffbf47
+}
+.stepper-add-button,
+.stepper-remove-button {
+ font:inherit;
+ border:none;
+ appearance:none;
+ -webkit-appearance:none;
+ font-size:1em;
+ line-height:1.5625;
+ padding:10px 20px;
+ background-color:#222;
+ padding-top:10px;
+ padding-bottom:10px;
+ line-height:1.17em;
+ font-size:1.5em;
+ vertical-align:bottom;
+ color:#fff
+}
+@media (min-width:37.5em) {
+ .stepper-add-button,
+ .stepper-remove-button {
+  font-size:1.125em;
+  line-height:1.38889
+ }
+}
+.stepper-add-button:hover,
+.stepper-remove-button:hover {
+ background-color:#000
+}
+.stepper-add-button:hover,
+.stepper-remove-button:hover {
+ color:#ffbf47
+}
+.stepper-remove-button {
+ border-radius:10px 0 0 10px;
+ padding-right:13px;
+ padding-left:15px
+}
+.stepper-add-button {
+ border-radius:0 10px 10px 0;
+ padding-left:13px;
+ padding-right:15px
+}
+.stepper input {
+ display:inline-block;
+ width:4em;
+ text-align:center;
+ z-index:2;
+ position:relative
+}
+.stepper input[type=number]::-webkit-inner-spin-button,
+.stepper input[type=number]::-webkit-outer-spin-button {
+ -webkit-appearance:none;
+ margin:0
+}
+.stepper input[type="number"] {
+    -moz-appearance: textfield;
 }
 `;
 
@@ -39,6 +110,7 @@ function upgrade(input){
   let min = input.getAttribute('min');
   let max = input.getAttribute('max');
   let step = input.getAttribute('step');
+  let class= input.getAttribute('class')
   let label = document.querySelector(`label[for=${id}]`);
   let labelText = label ? label.innerText : `${id} input`;
   input.outerHTML = `<div class="field">

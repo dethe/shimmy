@@ -18,7 +18,7 @@
       <i class="far fa-pen"></i>
     </button>
     <label>Pen Size<br>
-      <input onchange="currentStrokeWidth = Number(this.value)" type="range" min="1" max="30" value="2" title="Pen Size" autocomplete="off" class="slider">
+      <input onchange="currentStrokeWidth = Number(this.value)" type="number" min="1" max="30" value="2" title="Pen Size" class="slider">
     </label>
     <button onclick="colorPopup(this)" title="Colour" class="js-colour colourwell">                                          
       Colour<br>
@@ -98,7 +98,7 @@
       </span>
     </button>
     <span class="feedback framerate">
-      Frame Rate <input type="number" value="10" onchange="setFrameRate(this);"> FPS
+      <label>Frame Rate <input type="number" value="10" onchange="setFrameRate(this);"></label> FPS
     </span>
     <span class="feedback framecount">
       Frame X of Y
