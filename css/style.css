@@ -82,7 +82,7 @@ button .label{
 
 .tabbar{
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   position: absolute;
   top: 0;
