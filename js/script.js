@@ -285,6 +285,12 @@ let currentTool = tools.pen;
 let currentStrokeWidth = 1;
 let currentDoOnionskin = true;
 
+function selectToobar(button){
+  let name = button.getAttribute('title').toLowerCase();
+  document.querySelect('.toolbar.active').classList.remove('active');
+  button.
+}
+
 function selectTool(button){
   let name = button.getAttribute('title').toLowerCase();
   document.querySelector('.js-tool.active').classList.remove('active');
@@ -311,7 +317,14 @@ let choosingBackground = false;
 
 function colorPopup(input){
   let popup = document.querySelector('.popup-color');
-  let colorwell = document.querySelector('.js-color');
+  let colorwell;
+  if (input.id === 'backgroundcolor'){
+    choosingBackground = true;
+    colorwell = input;
+  }else{
+    choosingBackground = false;
+    colorwell = document.querySelector('.js-color');
+  }
   if (popup.style.display === 'none' || popup.style.display === ""){
     colorpicker.setColor(input.value);
     popup.style.display = 'block';    
@@ -319,7 +332,11 @@ function colorPopup(input){
     let color = colorpicker.getCurColorHex();
     colorButton(colorwell, color);
     colorButton(input, color);
-    currentColor = color;
+    if (choosingBackground){
+      canvas.style.backgroundColor = color;
+    }else{
+      currentColor = color;
+    }
     popup.style.display = 'none';
   }
 }

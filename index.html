@@ -13,22 +13,22 @@
     <i class="far fa-palette"></i>
   </button>
   <nav class="tabbar">
-    <button onclick="selectToolbar('file')" title="File">
+    <button onclick="selectToolbar(this)" title="File" class="js-tab">
       File
     </button>
-    <button onclick="selectToolbar('draw')" title="Draw" class="js-tab active">
+    <button onclick="selectToolbar(this)" title="Draw" class="js-tab active">
       Draw
     </button>
-    <button onclick="selectTool('animate')" title="Animate" class="js-tab">
+    <button onclick="selectToolbar(this)" title="Animate" class="js-tab">
       Animate
     </button>
-    <button onclick="selectTool('options')" title="Options" class="js-tab">
+    <button onclick="selectToolbar(this)" title="Options" class="js-tab">
       Options
     </button>
-    <button onclick="selectTool('help')" title="Help" class="js-tab">
+    <button onclick="selectToolbar(this)" title="Help" class="js-tab">
       Help
     </button>
-    <button onclick="selectTool('about')" title="About" class="js-tab">
+    <button onclick="selectToolbar(this)" title="About" class="js-tab">
       About
     </button>
   </nav>
@@ -47,7 +47,7 @@
     <button onclick="colorPopup(this)" title="Pen Colour" class="js-color fgcolor colorwell"> 
       Pen Colour
     </button>
-    <button onclick="colorPopup(this)" title="Background Color" class="js-bgcolor colorwell bgcolor">
+    <button onclick="colorPopup(this)" title="Background Color" class="js-bgcolor colorwell bgcolor" id="backgroundcolor">
       Background
     </button>
       <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color miniwell" value="#000000" style="background-color: #000000;">
