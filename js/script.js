@@ -287,8 +287,10 @@ let currentDoOnionskin = true;
 
 function selectToobar(button){
   let name = button.getAttribute('title').toLowerCase();
-  document.querySelect('.toolbar.active').classList.remove('active');
-  button.
+  document.querySelector('.js-tab.active').classList.remove('active');
+  button.classList.add('active');
+  document.querySelector('.toolbar.active').classList.remove('active');
+  document.querySeletor(`#${name}-toolbar`).classList.add('active');
 }
 
 function selectTool(button){
