@@ -9,6 +9,11 @@ palettes.forEach((p,i) => {
   colorpaletteselect.append(opt);
 });
 colorpaletteselect.addEventListener('change', setPalette);
+
+function changeColor(picker){
+  let color = picker.getCurColorHex();
+  let hsv = picker.getCurColorHsv();
+}
 // Color picker 
 const colorpicker = new KellyColorPicker(
   {
@@ -25,6 +30,7 @@ const colorpicker = new KellyColorPicker(
     resizeWith : true, // auto redraw canvas on resize window
     popupClass: 'popup-color',
     userEvents : {
+      change: changeColor
       // change : function(self) {
       //   // set background color for 'input' to current color of color picker
       //   if(self.getCurColorHsv().v < 0.5){
