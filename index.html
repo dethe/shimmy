@@ -40,32 +40,34 @@
     <label>Pen Size<br>
       <input id="pensize" onchange="currentStrokeWidth = Number(this.value)" type="number" min="1" max="30" value="2" title="Pen Size">
     </label>
-    <button onclick="colorPopup(this)" title="Colour" class="js-colour colourwell">                   
-      Colour<br>
-    </button>
-    <label>Palette
-      <select class="colorpalette">
+    <label>Palette<br>
+      <select class="palettechooser js-colorpalette">
       </select>
     </label>
-    <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color half" value="#000000" style="background-color: #000000;">
+    <button onclick="colorPopup(this)" title="Colour" class="js-color colorwell">                   
+      Colour
     </button>
-    <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color half" value="#FFFFFF" style="background-color: #FFFFFF;">
-    </button>
-    <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color half" value="#666666" style="background-color: #666666;">
-    </button>
-    <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color half js-miniwell">
-    </button>
-    <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color half js-miniwell">
-    </button>
-    <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color half js-miniwell">
-    </button>
-    <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color half js-miniwell">
-    </button>
-    <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color half js-miniwell">
-    </button>
+    <div class="colorpalette">
+      <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color miniwell" value="#000000" style="background-color: #000000;">
+      </button>
+      <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color miniwell" value="#FFFFFF" style="background-color: #FFFFFF;">
+      </button>
+      <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color miniwell" value="#666666" style="background-color: #666666;">
+      </button>
+      <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color miniwell js-miniwell">
+      </button>
+      <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color miniwell js-miniwell">
+      </button>
+      <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color miniwell js-miniwell">
+      </button>
+      <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color miniwell js-miniwell">
+      </button>
+      <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color miniwell js-miniwell">
+      </button>
+    </div>
     <button onclick="selectTool(this)" title="Zoom Out" class="js-tool">
-      Zoom Out<br>
-      <i class="far fa-search-minus"></i>
+    Zoom Out<br>
+    <i class="far fa-search-minus"></i>
     </button>
     <button onclick="selectTool(this)" title="Zoom In" class="js-tool">
       Zoom In<br>
@@ -130,7 +132,7 @@
       </label>
     </span>
   </nav>
-  <div class="popup-colour">
+  <div class="popup-color">
   </div>
   <script src="lib/svgToDataURL.js"></script>
   <script src="lib/gif.js"></script>

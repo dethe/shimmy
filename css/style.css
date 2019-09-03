@@ -133,8 +133,19 @@ label{
   font-size: 1rem;
 }
 
-.toolbar .colourwell{
+.palettechooser{
+  max-width: 4rem;
+}
+
+.toolbar .miniwell{
+  min-width: 2rem;
   min-height: 2rem;
+  max-width: 2rem;
+  max-height: 2rem;
+}
+
+.toolbar .colorwell{
+  max-height: 4rem;
   background-color: black;
   color: white;
 }
@@ -150,10 +161,14 @@ label{
 }
 
 .colorpalette{
-  width: 4rem;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  height: 4rem;
+  width: 8rem;
 }
 
-.popup-colour {
+.popup-color {
     position : absolute;
     display : none;
     background-color : rgb(225, 225, 225);

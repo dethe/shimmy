@@ -1,7 +1,7 @@
 /* globals dom file KellyColorPicker palettes toDataURL canvas */
 
 // Initialization of canvas happens in file.js
-const colorpaletteselect = document.querySelector('.colorpalette');
+const colorpaletteselect = document.querySelector('.palettechooser');
 palettes.forEach((p,i) => {
   let opt = document.createElement('option');
   opt.setAttribute('value', i);
@@ -12,8 +12,8 @@ colorpaletteselect.addEventListener('change', setPalette);
 // Color picker 
 const colorpicker = new KellyColorPicker(
   {
-    place : document.querySelector('.popup-colour'),    
-    input : '.js-colour',  
+    place : document.querySelector('.popup-color'),    
+    input : '.js-color',  
     size : 200, 
     color : '#ffffff',
     method : 'square',
@@ -23,7 +23,7 @@ const colorpicker = new KellyColorPicker(
     alpha_slider : false, // or alphaSlider (since v1.15)
     colorSaver : false,
     resizeWith : true, // auto redraw canvas on resize window
-    popupClass: 'popup-colour',
+    popupClass: 'popup-color',
     userEvents : {
       // change : function(self) {
       //   // set background color for 'input' to current color of color picker
@@ -302,8 +302,8 @@ function setFrameRate(input){
 }
 
 function colorPopup(input){
-  let popup = document.querySelector('.popup-colour');
-  let colorwell = document.querySelector('.colourwell');
+  let popup = document.querySelector('.popup-color');
+  let colorwell = document.querySelector('.js-color');
   if (popup.style.display === 'none'){
     colorpicker.setColor(input.value);
     popup.style.display = 'block';    
@@ -331,8 +331,8 @@ function hexToValue(hex){
 }
 
 function selectColor(input){
-  let popup = document.querySelector('.popup-colour');
-  let colorwell = document.querySelector('.colourwell');
+  let popup = document.querySelector('.popup-color');
+  let colorwell = document.querySelector('.js-color');
   if (popup.style.display === 'block'){
     let color = colorpicker.getCurColorHex();
     colorButton(colorwell, color);
