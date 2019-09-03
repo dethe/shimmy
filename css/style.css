@@ -74,14 +74,14 @@ button .label{
   display: none;
 }
 
-.buttonbar{
+.toolbar{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   position: absolute;
 }
 
-.buttonbar .fa-stack{
+.toolbar .fa-stack{
   font-size: .8rem;
 }
 
@@ -97,7 +97,7 @@ button .label{
 }
 
 .animation{
-  flex-direction: column;
+  flex-direction: row;
   width: 48rem;
   height: 4rem;
   left: 4rem;

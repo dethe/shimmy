@@ -12,7 +12,15 @@
   <button class="palette">
     <i class="far fa-palette"></i>
   </button>
-  <nav class="buttonbar tools">
+  <nav class="tabbar">
+    <button onclick="selectToolbar('file')" title="File">
+      File
+    </button>
+    <button onclick="selectToolbar('draw')" title="Draw" class="js-tab active">
+      Draw
+    </button>
+  </nav>
+  <nav class="toolbar" id="draw-toolbar">
     <button onclick="selectTool(this)" title="Pen" class="js-tool active">
       Pen<br>
       <i class="far fa-pen"></i>
@@ -63,7 +71,7 @@
       Clear
     </button>
   </nav>
-  <nav class="buttonbar animation">
+  <nav class="toolbar" id="animate-toolbar">
     <button onclick="gotoFirstFrame()" title="First Frame">
       <i class="far fa-fast-backward"></i>
     </button>
@@ -98,7 +106,7 @@
       </span>
     </button>
     <span class="feedback framerate">
-      <label>Frame Rate <input id="framerate" type="number" value="10" onchange="setFrameRate(this);"></label> FPS
+      <label>Frames per second <input id="framerate" type="number" value="10" onchange="setFrameRate(this);"></label>
     </span>
     <span class="feedback framecount">
       Frame X of Y
@@ -106,7 +114,7 @@
     <span class="feedback onionskin">
       <label>
         <input type="checkbox" checked onchange="setOnionSkin(this);">
-        Use onionskin
+        Onionskin
       </label>
     </span>
   </nav>
