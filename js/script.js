@@ -307,10 +307,12 @@ function setFrameRate(input){
   currentFrameDelay = Math.floor(1000 / Number(input.value));
 }
 
+let choosingBackground = false;
+
 function colorPopup(input){
   let popup = document.querySelector('.popup-color');
   let colorwell = document.querySelector('.js-color');
-  if (popup.style.display === 'none'){
+  if (popup.style.display === 'none' || popup.style.display === ""){
     colorpicker.setColor(input.value);
     popup.style.display = 'block';    
   }else{

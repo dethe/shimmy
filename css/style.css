@@ -45,11 +45,6 @@ body.storyboard{
   max-height: 2rem;
 }
 
-button.half{
-  min-width: 2rem;
-  min-height: 2rem;
-}
-
 button i{
   font-size: 2rem;
   top: 0;
@@ -159,7 +154,7 @@ label{
   color: black;
 }
 
-.toolbar .clear{
+.toolbar .half{
   min-height: 2rem;
   max-width: 4rem;
   font-size: 1rem;
