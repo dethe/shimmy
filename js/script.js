@@ -355,11 +355,7 @@ function swallowClicks(evt){
   evt.stopPropagation();
   // evt.preventDefault();
 }
-dom.listen('.toolbar, .tabbar', [swallowClicks]);
-document.querySelector('#draw-toolbar').addEventListener('mousedown', swallowClicks, true);
-document.querySelector('#draw-').addEventListener('mousedown', swallowClicks, true);
-document.querySelector('.buttonbar.animation').addEventListener('touchstart', swallowClicks, true);
-document.querySelector('.buttonbar.tools').addEventListener('touchstart', swallowClicks, true);
+dom.listen('.toolbar, .tabbar', ['mousedown', 'touchstart'], swallowClicks);
 
 function inBounds(x,y){
   return !(x < 0 || x > WIDTH || y < 0 || y > HEIGHT);
@@ -424,16 +420,14 @@ const escCancel = evt => {
 let body = document.body;
 
 function listenCanvas(){
-  canvas.addEventListener('mousedown', toolStart);
-  canvas.addEventListener('touchstart', toolStart);
-  canvas.addEventListener('mousemove', toolMove);
-  canvas.addEventListener('touchmove', toolMove);
-  canvas.addEventListener('touchend', toolStop);
-  canvas.addEventListener('touchcancel', toolCancel);
+  dom.listen(canvas, ['mousedown', 'touchstart'], toolStart);
+  dom.listen(canvas, ['mousemove', 'touchmove'], toolMove);
+  dom.listen(canvas, 'touchend', toolStop);
+  dom.listen(canvas, 'touchcancel', toolCancel);
 }
 
-body.addEventListener('mouseup', toolStop);
-body.addEventListener('keydown', escCancel);
+dom.listen(body, 'mouseup', toolStop);
+dom.listen(body, 'keydown', escCancel);
 
 function currentFrame(){
   let frame = document.querySelector('.frame.selected');
