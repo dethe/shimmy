@@ -19,8 +19,20 @@
     <button onclick="selectToolbar('draw')" title="Draw" class="js-tab active">
       Draw
     </button>
+    <button onclick="selectTool('animate')" title="Animate" class="js-tab">
+      Animate
+    </button>
+    <button onclick="selectTool('options')" title="Options" class="js-tab">
+      Options
+    </button>
+    <button onclick="selectTool('help')" title="Help" class="js-tab">
+      Help
+    </button>
+    <button onclick="selectTool('about')" title="About" class="js-tab">
+      About
+    </button>
   </nav>
-  <nav class="toolbar" id="draw-toolbar">
+  <nav class="toolbar active" id="draw-toolbar">
     <button onclick="selectTool(this)" title="Pen" class="js-tool active">
       Pen<br>
       <i class="far fa-pen"></i>
@@ -28,7 +40,7 @@
     <label>Pen Size<br>
       <input id="pensize" onchange="currentStrokeWidth = Number(this.value)" type="number" min="1" max="30" value="2" title="Pen Size">
     </label>
-    <button onclick="colorPopup(this)" title="Colour" class="js-colour colourwell">                                          
+    <button onclick="colorPopup(this)" title="Colour" class="js-colour colourwell">                   
       Colour<br>
     </button>
     <label>Palette

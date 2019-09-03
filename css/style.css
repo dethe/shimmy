@@ -21,7 +21,13 @@ body.storyboard{
   border-width: 0;
 }
 
-button{
+.tabbar button{
+  border-wdith: 1px;
+  min-width: 4rem;
+  max-height: 2rem;
+}
+
+.toolbar button{
   border-width: 1px;
   min-width: 4rem;
   min-height: 4rem;
@@ -59,9 +65,9 @@ button .label{
 #canvas{
   position: absolute;
   transition: margin-left .5s ease-in-out;
-  transitioni: margin-right .5s ease-in-out;
+/*   transitioni: margin-right .5s ease-in-out; */
   transition: margin-top: .5s ease-in-out;
-  transition: margin-bottom: .5s ease-in-out;
+/*   transition: margin-bottom: .5s ease-in-out; */
   transition: width: .5s ease-in-out;
   transition: height: .5s ease-in-out;
 }
@@ -74,63 +80,45 @@ button .label{
   display: none;
 }
 
-.toolbar{
+.tabbar{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   position: absolute;
+  top: 0;
+  left: 0;
+  height: 2rem;
+  transition: top 0.5s ease-in-out;
+}
+
+.toolbar{
+  display: none;
+  flex-direction: row;
+  flex-wrap: wrap;
+  position: absolute;
+  height: 4rem;
+  left: 0;
+  top: 2rem;
+  transition: top 0.5s ease-in-out;
+}
+
+.toolbar.active{
+  display: flex;
 }
 
 .toolbar .fa-stack{
   font-size: .8rem;
 }
 
-.tools{
-  width: 4rem;
-  left: 0;
-  top: 4rem;
-  transition: left 0.5s ease-in-out;
+.playing .toolbar, .storyboard .toolbar{
+  top: -6rem;
 }
 
-.playing .tools, .storyboard .tools{
-  left: -4rem;
-}
-
-.animation{
-  flex-direction: row;
-  width: 48rem;
-  height: 4rem;
-  left: 4rem;
-  top: 0;
-  transition: top 0.5s ease-in-out;
-}
-
-.playing .animation, .storyboard .animation{
-  top: -4rem;
-}
-
-.animation .feedback{
+.toolbar .feedback{
   flex: 4 4;
   min-height: 1.3rem;
   font-size: 1rem;
   background-color: white;
-}
-
-.feedback input[type=number]{
-  max-width: 3em;
-}
-
-.palette{
-  position: absolute;
-  top: 0;
-  left: 0;
-  transition: top .5s ease-in-out;
-  transition: left .5s ease-in-out;
-}
-
-.playing .palette, .storyboard .palette{
-  top: -4rem;
-  left: -4rem;
 }
 
 .fa-stack-1x{
@@ -145,20 +133,16 @@ label{
   font-size: 1rem;
 }
 
-.buttonbar .colourwell{
+.toolbar .colourwell{
   min-height: 2rem;
   background-color: black;
   color: white;
 }
 
-.buttonbar .clear{
+.toolbar .clear{
   min-height: 2rem;
   max-width: 4rem;
   font-size: 1rem;
-}
-
-.buttonbar .slider{
-  max-width: 4em;
 }
 
 .active{
