@@ -30,6 +30,14 @@
     function svg(name, attrs, children){
         return element(document.createElementNS(SVG_NS, name), attrs, children);
     }
+  
+    function listen(selector, eventlistener){
+      if (Array.isArray(listener)){
+        listener.forEach(l => listen(selector, l));
+      }else{
+        Array.from(document.querySelectorAll(selector)).forEach(e => e.addEventListener(listener));
+      }
+    }
 
     function setAttributes(elem, attributes){
         // keys must be strings
@@ -227,6 +235,7 @@
         element: element,
         html: html,
         svg: svg,
+        listen: listen,
         remove: remove,
         clear: clear,
         insertAfter: insertAfter,

@@ -355,8 +355,9 @@ function swallowClicks(evt){
   evt.stopPropagation();
   // evt.preventDefault();
 }
-document.querySelector('.buttonbar.animation').addEventListener('mousedown', swallowClicks, true);
-document.querySelector('.buttonbar.tools').addEventListener('mousedown', swallowClicks, true);
+dom.listen('.toolbar, .tabbar', [swallowClicks]);
+document.querySelector('#draw-toolbar').addEventListener('mousedown', swallowClicks, true);
+document.querySelector('#draw-').addEventListener('mousedown', swallowClicks, true);
 document.querySelector('.buttonbar.animation').addEventListener('touchstart', swallowClicks, true);
 document.querySelector('.buttonbar.tools').addEventListener('touchstart', swallowClicks, true);
 
