@@ -82,7 +82,7 @@ button .label{
 
 .tabbar{
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
   position: absolute;
   top: 0;
@@ -93,7 +93,7 @@ button .label{
 
 .toolbar{
   display: none;
-  flex-direction: row;
+  flex-direction: column;
   flex-wrap: wrap;
   position: absolute;
   height: 4rem;
@@ -145,9 +145,18 @@ label{
 }
 
 .toolbar .colorwell{
-  max-height: 4rem;
+  max-height: 2rem;
+  min-height: 2rem;
+}
+
+.toolbar .fgcolor{
   background-color: black;
   color: white;
+}
+
+.toolbar .bgcolor{
+  background-color: white;
+  color: black;
 }
 
 .toolbar .clear{

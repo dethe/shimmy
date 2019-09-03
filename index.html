@@ -44,13 +44,12 @@
       <select class="palettechooser js-colorpalette">
       </select>
     </label>
-    <button onclick="colorPopup(this)" title="Pen Colour" class="js-color colorwell"> 
+    <button onclick="colorPopup(this)" title="Pen Colour" class="js-color fgcolor colorwell"> 
       Pen Colour
     </button>
-    <button onclick="colorPopup(this)" title="Background Color" class="js-bgcolor colorwell">
+    <button onclick="colorPopup(this)" title="Background Color" class="js-bgcolor colorwell bgcolor">
       Background
     </button>
-    <div class="colorpalette">
       <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color miniwell" value="#000000" style="background-color: #000000;">
       </button>
       <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color miniwell" value="#FFFFFF" style="background-color: #FFFFFF;">
@@ -67,7 +66,6 @@
       </button>
       <button onclick="selectColor(this)" ondblclick="colorPopup(this)" class="color miniwell js-miniwell">
       </button>
-    </div>
     <button onclick="selectTool(this)" title="Zoom Out" class="js-tool">
     Zoom Out<br>
     <i class="far fa-search-minus"></i>
