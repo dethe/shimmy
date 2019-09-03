@@ -31,16 +31,16 @@
         return element(document.createElementNS(SVG_NS, name), attrs, children);
     }
   
-    function listen(selector, events, listener){
-      if (Array.isArray(events)){
-        events.forEach(e => listen(selector, e, listener));
+    function listen(selector, event, listener){
+      if (Array.isArray(event)){
+        event.forEach(e => listen(selector, e, listener));
       }else if (Array.isArray(listener)){
-        listener.forEach(l => listen(selector, events, l));
+        listener.forEach(l => listen(selector, event, l));
       }else{
         if (selector.nodeName){
-          selector.addEventListener(events, listener);
+          selector.addEventListener(event, listener);
         }else{
-          Array.from(document.querySelectorAll(selector)).forEach(e => e.addEventListener(listener));
+          Array.from(document.querySelectorAll(selector)).forEach(e => e.addEventListener(event, listener));
         }
       }
     }
