@@ -2,7 +2,7 @@
 @import url('https://rsms.me/inter/inter.css');
 html { font-family: 'Inter', sans-serif; }
 @supports (font-variation-settings: normal) {
-  html { font-family: 'Inter var', sans-serif; }
+  html, input, label, button, select, option { font-family: 'Inter var', sans-serif; }
 }
 
 
@@ -41,17 +41,6 @@ body.storyboard{
   min-height: 4rem;
 }
 
-.stepper > button{
-  min-width: 1rem;
-  min-height: 1rem;
-  max-width: 1rem;
-  max-height: 2rem;
-}
-
-.stepper > input{
-  max-width: 2rem;
-  max-height: 2rem;
-}
 
 button i{
   font-size: 2rem;
@@ -125,6 +114,10 @@ button .label{
   text-align: center;
 }
 
+.tabbar .feedback{
+  min-height: 2rem;
+}
+
 .fa-stack-1x{
   font-size: 1rem;
 }
@@ -188,6 +181,7 @@ input[type=checkbox]:checked ~ .unchecked{
 
 .toolbar .half{
   min-height: 2rem;
+  max-height: 2rem;
   max-width: 4rem;
   font-size: 1rem;
 }

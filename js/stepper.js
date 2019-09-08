@@ -5,38 +5,42 @@
 
 const css_rules = `
 .visually-hidden {
- border:0!important;
- clip:rect(0 0 0 0)!important;
- height:1px!important;
- margin:-1px!important;
- overflow:hidden!important;
- padding:0!important;
- position:absolute!important;
- width:1px!important
+ border: 0!important;
+ clip: rect(0 0 0 0)!important;
+ height: 1px!important;
+ margin: -1px!important;
+ overflow: hidden!important;
+ padding: 0!important;
+ position: absolute!important;
+ width: 1px!important
 }
+
 [type=number]{
- width:100%;
- padding:8px;
- font-size:1em;
- line-height:1.25;
- font-family:inherit;
- -webkit-box-sizing:border-box;
- -moz-box-sizing:border-box;
- box-sizing:border-box;
- -webkit-appearance:none;
- appearance:none;
- border:2px solid #222
+ width: 100%;
+ padding: 8px;
+ font-size: 1em;
+ line-height: 1.25;
+ font-family: inherit;
+ -webkit-box-sizing: border-box;
+ -moz-box-sizing: border-box;
+ box-sizing: border-box;
+ -webkit-appearance: none;
+ appearance: none;
+ border: 2px solid #222
 }
+
 @media (min-width:37.5em) {
  [type=number]{
-  font-size:1.125em;
-  line-height:1.38889
+  font-size: 1.125rem;
+  line-height: 1.38889
  }
 }
+
 [type=number]:focus {
- outline:0;
- box-shadow:0 0 1px 4px #ffbf47
+ outline: 0;
+ box-shadow: 0 0 1px 4px #ffbf47
 }
+
 .stepper{
   max-width: 4rem;
   max-height: 2rem;
@@ -73,14 +77,14 @@ const css_rules = `
  border-radius: 10px 0 0 10px;
 }
 .stepper-add-button {
- border-radius:0 10px 10px 0;
+ border-radius: 0 10px 10px 0;
 }
 .stepper input {
  display:inline-block;
  max-width: 2rem;
- text-align:center;
- z-index:2;
- position:relative
+ text-align: center;
+ z-index: 2;
+ position: relative
 }
 .stepper input[type=number]::-webkit-inner-spin-button,
 .stepper input[type=number]::-webkit-outer-spin-button {
