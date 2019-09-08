@@ -122,6 +122,7 @@ button .label{
   min-width: 4rem;
   font-size: 1rem;
   background-color: white;
+  text-align: center;
 }
 
 .fa-stack-1x{
@@ -137,8 +138,25 @@ label{
 }
 
 input[type=checkbox]{
-  min-width: 2rem;
-  min-height: 2rem;
+  display: none;
+}
+
+input[type=checkbox] ~ .checked{
+  display: none;
+  font-size: 2rem;
+}
+
+input[type=checkbox] ~ .unchecked{
+  display: block;
+  font-size: 2rem;
+}
+
+input[type=checkbox]:checked ~ .checked{
+  display: block;
+}
+
+input[type=checkbox]:checked ~ .unchecked{
+  display: none;
 }
 
 .palettechooser{
