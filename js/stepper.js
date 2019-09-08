@@ -46,37 +46,34 @@ const css_rules = `
 }
 
 .stepper button{
- font:inherit;
- border:none;
- -webkit-appearance:none;
- appearance:none;
- font-size:1.5em;
- line-height:1.17em;
- padding:.25rem .5rem;
- background-color:#222;
- vertical-align:bottom;
- color:#fff
+ font: inherit;
+ border: none;
+ -webkit-appearance: none;
+ appearance: none;
+ font-size: 1.5em;
+ line-height: 1.17em;
+ padding: 0;
+ background-color: #222;
+ vertical-align: bottom;
+ text-align: center;
+ color: #fff
 
 }
 @media (min-width:37.5em) {
  .stepper button{
-  font-size:1.125em;
-  line-height:1.38889
+  font-size: 1.125em;
+  line-height: 1.38889
  }
 }
 .stepper button:hover {
- background-color:#000
- color:#ffbf47
+ background-color: #000
+ color: #ffbf47
 }
 .stepper-remove-button {
- border-radius:10px 0 0 10px;
- padding-right:13px;
- padding-left:15px
+ border-radius: 10px 0 0 10px;
 }
 .stepper-add-button {
  border-radius:0 10px 10px 0;
- padding-left:13px;
- padding-right:15px
 }
 .stepper input {
  display:inline-block;
