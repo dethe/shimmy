@@ -39,39 +39,33 @@ const css_rules = `
 }
 .stepper{
   max-width: 4rem;
+  max-height: 2rem;
   display: flex;
   flex-direction: row;
+  flex-wrap: wrap;
 }
-.stepper-add-button,
-.stepper-remove-button {
+
+.stepper button{
  font:inherit;
  border:none;
- appearance:none;
  -webkit-appearance:none;
- font-size:1em;
- line-height:1.5625;
- padding:10px 20px;
- background-color:#222;
- padding-top:10px;
- padding-bottom:10px;
- line-height:1.17em;
+ appearance:none;
  font-size:1.5em;
+ line-height:1.17em;
+ padding:.25rem .5rem;
+ background-color:#222;
  vertical-align:bottom;
  color:#fff
+
 }
 @media (min-width:37.5em) {
- .stepper-add-button,
- .stepper-remove-button {
+ .stepper button{
   font-size:1.125em;
   line-height:1.38889
  }
 }
-.stepper-add-button:hover,
-.stepper-remove-button:hover {
+.stepper button:hover {
  background-color:#000
-}
-.stepper-add-button:hover,
-.stepper-remove-button:hover {
  color:#ffbf47
 }
 .stepper-remove-button {
@@ -86,7 +80,7 @@ const css_rules = `
 }
 .stepper input {
  display:inline-block;
- width:4em;
+ max-width: 2rem;
  text-align:center;
  z-index:2;
  position:relative
