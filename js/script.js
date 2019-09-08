@@ -285,12 +285,12 @@ let currentTool = tools.pen;
 let currentStrokeWidth = 1;
 let currentDoOnionskin = true;
 
-function selectToobar(button){
+function selectToolbar(button){
   let name = button.getAttribute('title').toLowerCase();
   document.querySelector('.js-tab.active').classList.remove('active');
   button.classList.add('active');
   document.querySelector('.toolbar.active').classList.remove('active');
-  document.querySeletor(`#${name}-toolbar`).classList.add('active');
+  document.querySelector(`#${name}-toolbar`).classList.add('active');
 }
 
 function selectTool(button){
