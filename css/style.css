@@ -29,26 +29,26 @@ body.storyboard{
   border-width: 0;
 }
 
-.tabbar button{
+.tabbar > button{
   border-wdith: 1px;
   min-width: 4rem;
   max-height: 2rem;
 }
 
-.toolbar button{
+.toolbar > button{
   border-width: 1px;
   min-width: 4rem;
   min-height: 4rem;
 }
 
-.stepper button{
+.stepper > button{
   min-width: 1rem;
   min-height: 1rem;
   max-width: 1rem;
   max-height: 2rem;
 }
 
-.stepper input{
+.stepper > input{
   max-width: 2rem;
   max-height: 2rem;
 }
@@ -118,8 +118,8 @@ button .label{
 }
 
 .toolbar .feedback{
-  flex: 4 4;
-  min-height: 1.3rem;
+  min-height: 4rem;
+  min-width: 4rem;
   font-size: 1rem;
   background-color: white;
 }
