@@ -37,6 +37,11 @@ const css_rules = `
  outline:0;
  box-shadow:0 0 1px 4px #ffbf47
 }
+.stepper{
+  max-width: 4rem;
+  display: flex;
+  flex-direction: row;
+}
 .stepper-add-button,
 .stepper-remove-button {
  font:inherit;
