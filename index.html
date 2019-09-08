@@ -31,6 +31,9 @@
     <button onclick="selectToolbar(this)" title="About" class="js-tab">
       About
     </button>
+    <span class="feedback framecount">
+      Frame X of Y
+    </span>
   </nav>
   <nav class="toolbar" id="file-toolbar">
     <button onclick="load" title="Load file">
@@ -139,8 +142,8 @@
     </span>
     <span class="feedback onionskin">
       <label>
-        <input type="checkbox" checked onchange="setOnionSkin(this);">
         Onionskin
+        <input type="checkbox" checked onchange="setOnionSkin(this);">
       </label>
     </span>
   </nav>
