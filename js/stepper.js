@@ -129,7 +129,7 @@ function upgrade(input){
     <label for="${id}" id="${id}-label">${labelText}</label>
     <div class="stepper">
       <button type="button" class="stepper-remove-button" aria-label="Decrease" aria-describedby="${id}-label">&minus;</button>
-      <input type="number" class="stepper-input" id="${id}" name="${name}" value="${value}">
+      <input type="number" class="stepper-input" id="${id}" name="${name}" value="${value}" onchange="${onchange}" onblur="${onchange}">
       <button type="button" class="stepper-add-button" aria-label="Increase" aria-describedby="${id}-label">&plus;</button>
       <div class="visually-hidden" role="status" aria-live="polite">${value}</div>
      </div>
