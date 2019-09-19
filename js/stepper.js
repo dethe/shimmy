@@ -146,9 +146,9 @@ function upgrade(input){
   input.outerHTML = `<div class="field">
     <label for="${id}" id="${id}-label">${labelText}</label>
     <div class="stepper">
-      <button type="button" class="stepper-remove-button" aria-label="Decrease" onclick="increment${id}()" aria-describedby="${id}-label">&minus;</button>
+      <button type="button" class="stepper-remove-button" aria-label="Decrease" onclick="decrement${id}()" aria-describedby="${id}-label">&minus;</button>
       <input type="number" class="stepper-input" id="${id}" name="${name}" value="${value}" onchange="onchange${id}(this)" onblur="onchange${id}(this)">
-      <button type="button" class="stepper-add-button" aria-label="Increase" onclick="decrement${id}()" aria-describedby="${id}-label">&plus;</button>
+      <button type="button" class="stepper-add-button" aria-label="Increase" onclick="increment${id}()" aria-describedby="${id}-label">&plus;</button>
       <div id="${id}-status" class="visually-hidden" role="status" aria-live="polite">${value}</div>
      </div>
    </div>
@@ -166,8 +166,7 @@ function upgrade(input){
   if (klass){
     newInput.setAttribute('class', klass);
   }
-  let newOnchange = Function(onchange).bind(newInput);
-  }
+  onchange = Function(onchange).bind(newInput);
 }
 
 Array.from(document.querySelectorAll('input[type=number]')).forEach(upgrade);
