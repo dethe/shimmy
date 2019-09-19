@@ -127,30 +127,28 @@ function upgrade(input){
   }
   
   window['increment' + id] = function(){
-    let input = document.querySelector('#${id}');
-    let output = document.querySelector('#${id}-status');
+    let input = document.querySelector('#' + id);
     let value = parseInt(input.value) + 1;
     input.value = value;
     window['onchange' + id](input);
   }
-  window['decrement' + id](){
-    let input = document.querySelector('#${id}');
-    let output = document.querySelector('#${id}-status');
-    let value = parseInt(input.value) + 1;
+  window['decrement' + id] = function(){
+    let input = document.querySelector('#' + id);
+    let value = parseInt(input.value) - 1;
     input.value = value;
-    onchange${id}(input);
+    window['onchange' + id](input);
   }
-  function onchange${id}(input){
+  window['onchange' + id] = function(input){
+    let output = document.querySelector(`#${id}-status`);
     output.innerText = value;
     onchange(input);
-    
   }
   input.outerHTML = `<div class="field">
     <label for="${id}" id="${id}-label">${labelText}</label>
     <div class="stepper">
-      <button type="button" class="stepper-remove-button" aria-label="Decrease" onclick="increment${id}" aria-describedby="${id}-label">&minus;</button>
-      <input type="number" class="stepper-input" id="${id}" name="${name}" value="${value}" onchange="onchange${id}" onblur="onchange${id}">
-      <button type="button" class="stepper-add-button" aria-label="Increase" onclick="decrement%{id}" aria-describedby="${id}-label">&plus;</button>
+      <button type="button" class="stepper-remove-button" aria-label="Decrease" onclick="increment${id}()" aria-describedby="${id}-label">&minus;</button>
+      <input type="number" class="stepper-input" id="${id}" name="${name}" value="${value}" onchange="onchange${id}(this)" onblur="onchange${id}(this)">
+      <button type="button" class="stepper-add-button" aria-label="Increase" onclick="decrement${id}()" aria-describedby="${id}-label">&plus;</button>
       <div id="${id}-status" class="visually-hidden" role="status" aria-live="polite">${value}</div>
      </div>
    </div>
@@ -168,8 +166,7 @@ function upgrade(input){
   if (klass){
     newInput.setAttribute('class', klass);
   }
-  if (onchange){
-    newInput.setAttribute('onchange', onchange);
+  let newOnchange = Function(onchange).bind(newInput);
   }
 }
 
