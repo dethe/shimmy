@@ -125,13 +125,21 @@ function upgrade(input){
   if (label){
     label.remove();
   }
+  function increment(){
+    let input = document.querySelector('#${id}');
+    let output = docuemnt.querySelector('#${id}-status');
+    let value = parseInt(input.value) + 1;
+    input.value = value;
+    output.innerText = value;
+    onchange();
+  }
   input.outerHTML = `<div class="field">
     <label for="${id}" id="${id}-label">${labelText}</label>
     <div class="stepper">
       <button type="button" class="stepper-remove-button" aria-label="Decrease" aria-describedby="${id}-label">&minus;</button>
       <input type="number" class="stepper-input" id="${id}" name="${name}" value="${value}" onchange="${onchange}" onblur="${onchange}">
       <button type="button" class="stepper-add-button" aria-label="Increase" aria-describedby="${id}-label">&plus;</button>
-      <div class="visually-hidden" role="status" aria-live="polite">${value}</div>
+      <div id="${id}-status" class="visually-hidden" role="status" aria-live="polite">${value}</div>
      </div>
    </div>
   `;
