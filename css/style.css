@@ -126,6 +126,10 @@ button .label{
   font-size: 2rem;
 }
 
+.field{
+  background-color: white;
+}
+
 
 label{
   font-size: .8rem;

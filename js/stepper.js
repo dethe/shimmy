@@ -54,8 +54,8 @@ const css_rules = `
  border: none;
  -webkit-appearance: none;
  appearance: none;
- font-size: 1.5em;
- line-height: 1.17em;
+ font-size: 1.5rem;
+ line-height: 1.17rem;
  padding: 0;
  background-color: #222;
  vertical-align: bottom;
