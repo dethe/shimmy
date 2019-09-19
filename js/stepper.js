@@ -65,8 +65,9 @@ const css_rules = `
 }
 @media (min-width:37.5em) {
  .stepper button{
-  font-size: 1.125em;
-  line-height: 1.38889
+  font-size: 1.125rem;
+  line-height: 1.38889;
+  max-height: 2rem;
  }
 }
 .stepper button:hover {
@@ -82,6 +83,7 @@ const css_rules = `
 .stepper input {
  display:inline-block;
  max-width: 2rem;
+ max-height: 2rem;
  text-align: center;
  z-index: 2;
  position: relative
@@ -104,7 +106,6 @@ function addCSS(){
 addCSS();
 
 function upgrade(input){
-  console.log('upgrading %s', input.id);
   let id = input.id;
   let name = input.getAttribute('name') || input.id;
   let value = input.value;
