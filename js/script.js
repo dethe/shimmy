@@ -775,20 +775,32 @@ function frameToImage(frame, x, y, width, height, callback){
     return c.canvas;
 }
 
-function displayAsStoryboard(evt){
+let currentDisplay = 'drawingboard';
+
+function toggleDisplay(evt){
   evt.preventDefault();
   evt.stopPropagation();
+  if (currentDisplay === 'drawingboard'){
+    currentDisplay = 'storyboard';
+    displayAsStoryboard();
+  }else{
+    currentDisplay = 'drawingboard';
+    displayAsDrawingboard();
+  }
+}
+
+function displayAsStoryboard(){
   let {x,y,width,height} = getAnimationBBox();
   let frames = Array.from(document.querySelectorAll('.frame')).map(frame => frameToImage(frame, x, y, width, height));
   frames.forEach(f => document.body.appendChild(f));
   document.body.classList.add('storyboard');
-  // canvas.style.display = 'none';
+  canvas.style.display = 'none';
 }
 
-function displayAsDrawingboard(evt){
+function displayAsDrawingboard(){
   Array.from(document.querySelectorAll('.storyboard-frame')).map( f => f.remove());
   document.body.classList.remove('storyboard');
-  // canvas.style.display = 'block';
+  canvas.style.display = 'block';
 }
 
 function hotkeys(evt){
@@ -802,11 +814,10 @@ function hotkeys(evt){
     case 'g': saveAsGIF(evt); break;
     case 'm': saveAsMovie(evt); break;
     case 'o': openSVG(evt); break;
-    case 'b': displayAsStoryboard(evt); break;
-    case 'd': displayAsDrawingboard(evt); break;
+    case 'd': toggleDisplay(evt); break;
   }
 }
-console.log('n new | s save | f save frame | g gif | m movie | o open | b storyboard | d drawingboard');
+console.log('n new | s save | f save frame | g gif | m movie | o open | d toggle display');
 
 function keydownHandler(evt){
   if ((evt.key || evt.keyIdentifier) === 'Control'){
