@@ -18,13 +18,13 @@
       canvas.dataset.doOnionSkin = currentDoOnionSkin;
       canvas.dataset.color = currentColor;
       canvas.dataset.frameDelay = currentFrameDelay;
-      if (canvas.style.backgroundColor){
-        canvas.dataset.bgcolor = canvas.style.backgroundColor;
-      }
+      canvas.dataset.bgcolor = canvas.style.backgroundColor;
       // TODO:
       // palette
       // toolbar
-      // 
+      // palette colors
+      // NOT options: those can be stored directly in localStorage
+      // restoring all of this in UI
     }
 
     function saveFormat(){
