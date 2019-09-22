@@ -60,6 +60,7 @@ function setPalette(evt){
 
 class Pen{
   constructor(){
+    this.name = 'pen';
     this.drawing = false;
     this.currentPath = null;
   }
@@ -126,6 +127,7 @@ class Pen{
 
 class Pan{
   constructor(){
+    this.name = 'pan';
     this.dragging = false;
     this.px = 0;
     this.py = 0;
@@ -175,6 +177,7 @@ function dist(dx, dy){
 
 class Rotate{
   constructor(){
+    this.name = 'rotate';
     this.dragging = false;
     this.px = 0;
     this.py = 0;
@@ -232,7 +235,7 @@ const ZOOMOUT = 1 / ZOOMIN;
 
 class ZoomIn{
   constructor(){
-    // do nothing
+    this.name = 'zoomin';
   }
   
   start(evt){
@@ -259,7 +262,7 @@ class ZoomIn{
 
 class ZoomOut{
   constructor(){
-    // do nothing
+    this.name = 'zoomout';
   }
   
   start(evt){
