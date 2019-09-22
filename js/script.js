@@ -287,10 +287,21 @@ let currentDoOnionskin = true;
 
 function selectToolbar(button){
   let name = button.getAttribute('title').toLowerCase();
-  document.querySelector('.js-tab.active').classList.remove('active');
-  button.classList.add('active');
-  document.querySelector('.toolbar.active').classList.remove('active');
-  document.querySelector(`#${name}-toolbar`).classList.add('active');
+  if (button.classList.contains('active')){
+    button.classList.remove('active');
+    document.querySelector('.toolbar.active').classList.remove('active');
+  }else{
+    let activeTab = document.querySelector('.js-tab.active');
+    if (activeTab){
+      activeTab.classList.remove('active');
+    }
+    button.classList.add('active');
+    let activeToolbar = document.querySelector('.toolbar.active');
+    if (activeToolbar){
+      activeToolbar.classList.remove('active');
+    }
+    document.querySelector(`#${name}-toolbar`).classList.add('active');
+  }
 }
 
 function selectTool(button){
@@ -783,7 +794,7 @@ function displayAsDrawingboard(evt){
 function hotkeys(evt){
   if (evt.altKey) return;
   if (evt.shiftKey) return;
-  if (!evt.ctrlKey) return;
+  if (evt.ctrlKey) return;
   switch(evt.key){
     case 'n': newAnimation(evt); break;
     case 's': saveAsSVG(evt); break;
