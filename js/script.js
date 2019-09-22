@@ -178,6 +178,7 @@ class Rotate{
     this.dragging = false;
     this.px = 0;
     this.py = 0;
+    this.originalAngle = null;
   }
   
   start(evt){
@@ -199,7 +200,7 @@ class Rotate{
     let dx = x - px;
     let dy = y - py;
     if (dist(dx, dy) < 20){ return; } // don't pick starting angle until we've moved a little from the starting point
-    if (this.originalAngle){
+    if (this.originalAngle !== null){
       let transform = this.origTransform;
       let angle = degrees(Math.atan2(dy, dx)) - this.originalAngle;
       currentFrame().setAttribute('transform', `${transform} rotate(${angle} ${px} ${py})`);      
@@ -214,6 +215,7 @@ class Rotate{
     this.py = 0;
     this.dragging = false;
     this.origTransform = '';
+    this.originalAngle = null;
     currentMatrix = null;
   }
   

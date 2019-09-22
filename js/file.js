@@ -9,9 +9,16 @@
     function saveLocal(){ 
         localStorage._currentWork = saveFormat(); 
     }
+  
+    // This function utterly breaks the generality of file.js
+    // because it is intimately tied to drawingboard
+    function updateSavedState(){
+      canvas.data
+    }
 
     function saveFormat(){
       if (canvas){
+        updateSavedState();
         return canvas.outerHTML;
       }else{
         return '';
