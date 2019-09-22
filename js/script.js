@@ -169,6 +169,10 @@ class Pan{
   
 }
 
+function dist(dx, dy){
+  return Math.sqrt(dx*dx + dy*dy);
+}
+
 class Rotate{
   constructor(){
     this.dragging = false;
@@ -194,9 +198,14 @@ class Rotate{
     let py = this.py;
     let dx = x - px;
     let dy = y - py;
-    let transform = this.origTransform;
-    let angle = degrees(Math.atan2(dy, dx));
-    currentFrame().setAttribute('transform', `${transform} rotate(${angle} ${px} ${py})`);
+    if (dist(dx, dy) < 20){ return; } // don't pick starting angle until we've moved a little from the starting point
+    if (this.originalAngle){
+      let transform = this.origTransform;
+      let angle = degrees(Math.atan2(dy, dx)) - this.originalAngle;
+      currentFrame().setAttribute('transform', `${transform} rotate(${angle} ${px} ${py})`);      
+    }else{
+      this.originalAngle = degrees(Math.atan2(dy, dx));
+    }
   }
   
   stop(evt){
