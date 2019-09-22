@@ -1,4 +1,4 @@
-/* globals dom file KellyColorPicker palettes toDataURL canvas */
+  /* globals dom file KellyColorPicker palettes toDataURL canvas */
 
 // Initialization of canvas happens in file.js
 const colorpaletteselect = document.querySelector('.palettechooser');
