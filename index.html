@@ -58,7 +58,7 @@
       </label>
     </span>
     <label>Palette<br>
-      <select class="palettechooser js-colorpalette select-css">
+      <select id="colorpalette" class="palettechooser js-colorpalette select-css">
       </select>
     </label>
     <button onclick="colorPopup(this)" title="Pen Colour" value="#000000" class="js-color fgcolor colorwell"> 
@@ -146,7 +146,7 @@
     <span class="feedback onionskin">
       <label>
         Onionskin
-        <input type="checkbox" checked onchange="setOnionSkin(this);">
+        <input type="checkbox" checked id="doonionskin" onchange="setOnionSkin(this);">
         <i class="unchecked far fa-square"></i>
         <i class="checked far fa-check-square"></i>
       </label>

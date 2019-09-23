@@ -26,7 +26,7 @@ let currentDoOnionskin = true;
 function getState(){
   return {
     tool: currentTool.name,
-    strokeWidth: document.querySelector('#',
+    strokeWidth: document.querySelector('#').value,
     doOnionskin: currentDoOnionskin,
     color: currentColor,
     bgcolor: canvas.style.backgroundColor,
