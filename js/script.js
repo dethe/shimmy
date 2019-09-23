@@ -24,28 +24,41 @@ let currentDoOnionskin = true;
 
 
 function getState(){
+  let currentTab = document.querySelector('.js-tab.active');
   return {
+    tab: currentTab ? currentTab.id : null,
     tool: currentTool.name,
-    strokeWidth: document.querySelector('#pensize').value,
-    doOnionskin: document.querySelector('#doonionskin').checked,
-    fps: document.querySelector('#framerate').value,
-    palette: document.querySelector('#colorpalette').selected.value,
-    color: document.querySelector('#pencolor').value,
-    bgcolor: document.querySelector('#backgroundColor').value,
-    color1: document.querySelector('#color1').value,
-    color2: document.querySelector('#color2').value,
-    color3: document.querySelector('#color3').value,
-    color4: document.querySelector('#color4').value,
-    color5: document.querySelector('#color5').value,
-    color6: document.querySelector('#color6').value,
-    color7: document.querySelector('#color7').value,
-    color8: document.querySelector('#color8').value
+    strokeWidth: document.getElementById('pensize').value,
+    doOnionskin: document.getElementById('doonionskin').checked,
+    fps: document.getElementById('framerate').value,
+    palette: document.getElementById('colorpalette').selected.value,
+    color: document.getElementById('pencolor').value,
+    bgcolor: document.getElementById('backgroundColor').value,
+    color1: document.getElementById('color1').value,
+    color2: document.getElementById('color2').value,
+    color3: document.getElementById('color3').value,
+    color4: document.getElementById('color4').value,
+    color5: document.getElementById('color5').value,
+    color6: document.getElementById('color6').value,
+    color7: document.getElementById('color7').value,
+    color8: document.getElementById('color8').value
   }
 }
 
 function setState(state){
-  selectTool(document.querySelector('#' + state.tool));
-  
+  let currentTab = document.querySelector('.js-tab.active');
+  if (currentTab){
+    selectToolbar(currentTab); // turn off currentTab, if any
+  }
+  if (state.tab !== 'null'){
+    selectToolbar(document.getElementById(state.tab));
+  }
+  selectTool(document.getElementById(state.tool));
+  currentStrokeWidth = parseInt(state.pensize);
+  document.getElementById('pensize').value = state.pensize;
+  currentDoOnionskin = state.doOnionskin === 'true';
+  document.getElementById('doonionskin').checked = currentD;
+  document.
 }
 
 // Initialization of canvas happens in file.js
