@@ -1,5 +1,50 @@
   /* globals dom file KellyColorPicker palettes toDataURL canvas */
 
+
+const mouse = {};
+
+const DEG = 180 / Math.PI;
+const degrees = rads => rads * DEG;
+const radians = degs => degs / DEG;
+const ZOOMIN = 1.2;
+const ZOOMOUT = 1 / ZOOMIN;
+
+
+let currentColor = '#000000';
+let currentFrameDelay = 30; // milliseconds
+let currentMatrix = null;
+let WIDTH = document.body.clientWidth;
+let HEIGHT = document.body.clientHeight;
+let _lastFrameTime = 0;
+let _frameDelay = 0;
+let currentDisplay = 'drawingboard';
+
+
+function getState(){
+  return {
+    too: currentTool,
+    strokeWidth: currentStrokeWidth,
+    doOnionSkin: 
+    color: currentColor,
+      canvas.dataset.strokeWidth = currentStrokeWidth;
+      canvas.dataset.doOnionSkin = currentDoOnionSkin;
+      canvas.dataset.color = currentColor;
+      canvas.dataset.frameDelay = currentFrameDelay;
+      canvas.dataset.bgcolor = canvas.style.backgroundColor;
+      // TODO:
+      // palette
+      // toolbar
+      // palette colors
+      // NOT options: those can be stored directly in localStorage
+      // restoring all of this in UI
+
+  }
+}
+
+function setState(state){
+  
+}
+
 // Initialization of canvas happens in file.js
 const colorpaletteselect = document.querySelector('.palettechooser');
 palettes.forEach((p,i) => {
@@ -43,12 +88,6 @@ const colorpicker = new KellyColorPicker(
   }
   });
 setPalette({target: colorpaletteselect});
-
-const mouse = {};
-
-const DEG = 180 / Math.PI;
-const degrees = rads => rads * DEG;
-const radians = degs => degs / DEG;
 
 function setPalette(evt){
   let palette = palettes[parseInt(evt.target.value)];
@@ -230,9 +269,6 @@ class Rotate{
   }
 }
 
-const ZOOMIN = 1.2;
-const ZOOMOUT = 1 / ZOOMIN;
-
 class ZoomIn{
   constructor(){
     this.name = 'zoomin';
@@ -332,10 +368,6 @@ function selectTool(button){
   }
 }
 
-let currentColor = '#000000';
-let currentFrameDelay = 30; // milliseconds
-let currentMatrix = null;
-
 function setFrameRate(input){
   currentFrameDelay = Math.floor(1000 / Number(input.value));
 }
@@ -397,10 +429,6 @@ function selectColor(input){
   }
 }
 
-
-var drawing = false;
-var WIDTH = document.body.clientWidth;
-var HEIGHT = document.body.clientHeight;
 
 // Prevent control clicks from passing through to svg
 function swallowClicks(evt){
@@ -533,7 +561,7 @@ function cloneFrame(){
 }
 
 function deleteFrame(){
-  var frameToDelete = currentFrame();
+  let frameToDelete = currentFrame();
   if (frameToDelete.nextElementSibling){
       incrementFrame();
   }else if (frameToDelete.previousElementSibling){
@@ -567,8 +595,8 @@ function toggleOnionskin(){
 }
 
 function incrementFrame(){
-  var curr = currentFrame();
-  var next = dom.next(curr, '.frame');
+  let curr = currentFrame();
+  let next = dom.next(curr, '.frame');
   if (next){
       curr.classList.remove('selected');
       next.classList.add('selected');
@@ -578,8 +606,8 @@ function incrementFrame(){
 }
 
 function decrementFrame(){
-  var curr = currentFrame();
-  var prev = dom.previous(curr, '.frame');
+  let curr = currentFrame();
+  let prev = dom.previous(curr, '.frame');
   if (prev){
       curr.classList.remove('selected');
       prev.classList.add('selected');
@@ -602,9 +630,6 @@ function gotoLastFrame(){
   dom.addClass(dom.previous(currentFrame(), '.frame'), 'onionskin');
   updateFrameCount();
 }
-
-var _lastFrameTime = 0;
-var _frameDelay = 0;
 
 function getAnimationBBox(show){
   let frames = Array.from(document.querySelectorAll('.frame'));
@@ -671,12 +696,12 @@ function stop(){
 
 
 function playNextFrame(){
-  var time = Date.now();
+  let time = Date.now();
   if ((time - _lastFrameTime) < _frameDelay){
       requestAnimationFrame(playNextFrame);
       return;            
   }
-  var currFrame = playingFrame();
+  let currFrame = playingFrame();
   _lastFrameTime = time;
   let next = dom.next(currFrame, '.frame');
   if (next){
@@ -690,8 +715,8 @@ function playNextFrame(){
 
 function updateFrameCount(){
   try{
-      var frames = Array.from(document.querySelectorAll('.frame'));
-      var index = frames.indexOf(currentFrame()) + 1;
+      let frames = Array.from(document.querySelectorAll('.frame'));
+      let index = frames.indexOf(currentFrame()) + 1;
       document.querySelector('.framecount').textContent = 'Frame ' + index + ' of ' + frames.length;
   }catch(e){
       // wait for the file to load, probably
@@ -788,8 +813,6 @@ function frameToImage(frame, x, y, width, height, callback){
     let c = new SVGCanvas(frame, x, y, width, height);
     return c.canvas;
 }
-
-let currentDisplay = 'drawingboard';
 
 function toggleDisplay(evt){
   evt.preventDefault();

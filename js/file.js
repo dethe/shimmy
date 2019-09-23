@@ -1,4 +1,4 @@
-/* globals ajax app dom listenCanvas canvas currentTool currentStrokeWidth currentDoOnionSkin currentColor currentFrameDelay */
+/* globals ajax app dom listenCanvas canvas getState setState */
 
 (function(global){
     'use strict';
@@ -13,18 +13,10 @@
     // This function utterly breaks the generality of file.js
     // because it is intimately tied to drawingboard
     function updateSavedState(){
-      canvas.dataset.tool = currentTool;
-      canvas.dataset.strokeWidth = currentStrokeWidth;
-      canvas.dataset.doOnionSkin = currentDoOnionSkin;
-      canvas.dataset.color = currentColor;
-      canvas.dataset.frameDelay = currentFrameDelay;
-      canvas.dataset.bgcolor = canvas.style.backgroundColor;
-      // TODO:
-      // palette
-      // toolbar
-      // palette colors
-      // NOT options: those can be stored directly in localStorage
-      // restoring all of this in UI
+      let state = getState();
+      for (let key in state){
+        canvas.dataset[key] = state[key];
+      }
     }
 
     function saveFormat(){
