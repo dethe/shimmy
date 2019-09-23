@@ -29,6 +29,7 @@ function getState(){
     strokeWidth: document.querySelector('#pensize').value,
     doOnionskin: document.querySelector('#doonionskin').checked,
     fps: document.querySelector('#framerate').value,
+    palette: document.querySelector('#colorpalette').selected.value,
     color: document.querySelector('#pencolor').value,
     bgcolor: document.querySelector('#backgroundColor').value,
     color1: document.querySelector('#color1').value,
@@ -43,6 +44,7 @@ function getState(){
 }
 
 function setState(state){
+  selectTool(document.querySelector('#' + state.tool));
   
 }
 
@@ -335,7 +337,11 @@ currentTool = tools.pen;
 
 function selectToolbar(button){
   let name;
-  let name = button.getAttribute('title').toLowerCase();
+  if (typeof button === 'string'){
+    name = button;
+  }else{
+    name = button.getAttribute('title').toLowerCase();
+  }
   if (button.classList.contains('active')){
     button.classList.remove('active');
     document.querySelector('.toolbar.active').classList.remove('active');
@@ -354,15 +360,15 @@ function selectToolbar(button){
 }
 
 function selectTool(button){
-  let name = button.getAttribute('title').toLowerCase();
+  let name = button.getAttribute('id');
   document.querySelector('.js-tool.active').classList.remove('active');
   button.classList.add('active');
   switch(name){
     case 'pen': currentTool = tools.pen; break;
     case 'pan': currentTool = tools.pan; break;
     case 'rotate': currentTool = tools.rotate; break;
-    case 'zoom in':  currentTool = tools.zoomin; break;
-    case 'zoom out': currentTool = tools.zoomout; break;
+    case 'zoomin':  currentTool = tools.zoomin; break;
+    case 'zoomout': currentTool = tools.zoomout; break;
     default: console.error('unrecognized tool name: %s', name);
   }
 }

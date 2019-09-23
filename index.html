@@ -14,22 +14,22 @@
     <i class="far fa-palette"></i>
   </button>
   <nav class="tabbar">
-    <button onclick="selectToolbar(this)" title="File" class="js-tab">
+    <button onclick="selectToolbar(this)" id="file" title="File" class="js-tab">
       File
     </button>
-    <button onclick="selectToolbar(this)" title="Draw" class="js-tab active">
+    <button onclick="selectToolbar(this)" id="draw" title="Draw" class="js-tab active">
       Draw
     </button>
-    <button onclick="selectToolbar(this)" title="Animate" class="js-tab">
+    <button onclick="selectToolbar(this)" id="animate" title="Animate" class="js-tab">
       Animate
     </button>
-    <button onclick="selectToolbar(this)" title="Options" class="js-tab">
+    <button onclick="selectToolbar(this)" id="options" title="Options" class="js-tab">
       Options
     </button>
-    <button onclick="selectToolbar(this)" title="Help" class="js-tab">
+    <button onclick="selectToolbar(this)" id="help" title="Help" class="js-tab">
       Help
     </button>
-    <button onclick="selectToolbar(this)" title="About" class="js-tab">
+    <button onclick="selectToolbar(this)" id="about" title="About" class="js-tab">
       About
     </button>
     <span class="feedback framecount">
@@ -48,7 +48,7 @@
     </button>
   </nav>
   <nav class="toolbar active" id="draw-toolbar">
-    <button onclick="selectTool(this)" title="Pen" class="js-tool active">
+    <button onclick="selectTool(this)" id="pen" title="Pen" class="js-tool active">
       Pen<br>
       <i class="far fa-pen"></i>
     </button>
@@ -83,19 +83,19 @@
       </button>
       <button onclick="selectColor(this)" ondblclick="colorPopup(this)" id="color8" class="color miniwell js-miniwell">
       </button>
-    <button onclick="selectTool(this)" title="Zoom Out" class="js-tool">
+    <button onclick="selectTool(this)" id="zoomout" title="Zoom Out" class="js-tool">
     Zoom Out<br>
     <i class="far fa-search-minus"></i>
     </button>
-    <button onclick="selectTool(this)" title="Zoom In" class="js-tool">
+    <button onclick="selectTool(this)" id="zoomin" title="Zoom In" class="js-tool">
       Zoom In<br>
       <i class="far fa-search-plus"></i>
     </button>
-    <button onclick="selectTool(this)" title="Pan" class="js-tool">
+    <button onclick="selectTool(this)" id="pan" title="Pan" class="js-tool">
       Pan<br>
       <i class="far fa-arrows"></i>
     </button>
-    <button onclick="selectTool(this)" title="Rotate" class="js-tool">
+    <button onclick="selectTool(this)" id="rotate" title="Rotate" class="js-tool">
       Rotate<br>
       <i class="far fa-sync"></i>
     </button>
