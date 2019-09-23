@@ -54,11 +54,11 @@ function setState(state){
     selectToolbar(document.getElementById(state.tab));
   }
   selectTool(document.getElementById(state.tool));
-  currentStrokeWidth = parseInt(state.pensize);
-  document.getElementById('pensize').value = state.pensize;
+  currentStrokeWidth = parseInt(state.strokeWidth);
+  document.getElementById('pensize').value = state.strokeWidth;
   currentDoOnionskin = state.doOnionskin === 'true';
   document.getElementById('doonionskin').checked = currentDoOnionskin;
-  currentFrameDelay = 1000 / Number(state.fps);
+  currentFrameDelay = 1000 / new Number(state.fps);
   document.getElementById('framerate').value = state.fps;
   let palette = document.getElementById('colorpalette');
   palette.selectedIndex = state.palette;
