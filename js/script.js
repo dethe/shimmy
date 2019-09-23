@@ -33,7 +33,7 @@ function getState(){
     fps: document.getElementById('framerate').value,
     palette: document.getElementById('colorpalette').selectedIndex,
     color: document.getElementById('pencolor').value,
-    bgcolor: document.getElementById('backgroundColor').value,
+    bgcolor: document.getElementById('backgroundcolor').value,
     color1: document.getElementById('color1').value,
     color2: document.getElementById('color2').value,
     color3: document.getElementById('color3').value,
@@ -64,8 +64,16 @@ function setState(state){
   palette.selectedIndex = state.palette;
   setPalette({target: palette.options[state.palette]});
   currentColor = state.color;
-  colorButton(document.getElementById('pencolor'), state.color)
-  document.getElementById('')
+  colorButton(document.getElementById('pencolor'), state.color);
+  colorButton(document.getElementById('backgroundcolor'), state.bgcolor);
+  colorButton(document.getElementById('color1'), state.color1);
+  colorButton(document.getElementById('color2'), state.color2);
+  colorButton(document.getElementById('color3'), state.color3);
+  colorButton(document.getElementById('color4'), state.color4);
+  colorButton(document.getElementById('color5'), state.color5);
+  colorButton(document.getElementById('color6'), state.color6);
+  colorButton(document.getElementById('color7'), state.color7);
+  colorButton(document.getElementById('color8'), state.color8);
 }
 
 // Initialization of canvas happens in file.js

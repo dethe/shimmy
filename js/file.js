@@ -10,14 +10,20 @@
         localStorage._currentWork = saveFormat(); 
     }
   
-    // This function utterly breaks the generality of file.js
-    // because it is intimately tied to drawingboard
     function updateSavedState(){
       let state = getState();
       for (let key in state){
         canvas.dataset[key] = state[key];
       }
     }
+  
+  function restoreSavedState(){
+    let state = {};
+    for (let key in canvas.dataset){
+      state[key] = canvas.dataset[key];
+    }
+    setState(state);
+  }
 
     function saveFormat(){
       if (canvas){
@@ -49,6 +55,7 @@
       //   canvas.prepend(defaultStyle);
       // }
       listenCanvas();
+      restoreSavedState();
     }
 
     function restore(){
