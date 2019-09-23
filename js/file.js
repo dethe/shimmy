@@ -98,7 +98,16 @@
         reader.readAsDataURL(file);
     }
   
-    function saveAs()
+    const filetypes = {
+      'svg': 'image/svg+xml',
+      'png': 'image/png',
+      'gif': 'image/gif'
+    }
+  
+    function saveAs(data, filename){
+      let ext = filename.split('.').pop();
+      let filetype = filetypes[ext];
+    }
 
     function readFile(file){
         var fileName = file.name;
