@@ -12,6 +12,7 @@
   
     function updateSavedState(){
       let state = getState();
+      console.log('saving state: \n%s', JSON.stringify(state, null, 2));
       for (let key in state){
         canvas.dataset[key] = state[key];
       }
@@ -22,6 +23,7 @@
     for (let key in canvas.dataset){
       state[key] = canvas.dataset[key];
     }
+    console.log('restoring state: \n%s', JSON.stringify(state, null, 2));
     setState(state);
   }
 
