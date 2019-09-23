@@ -31,7 +31,7 @@ function getState(){
     strokeWidth: document.getElementById('pensize').value,
     doOnionskin: document.getElementById('doonionskin').checked,
     fps: document.getElementById('framerate').value,
-    palette: document.getElementById('colorpalette').selected.value,
+    palette: document.getElementById('colorpalette').selectedIndex,
     color: document.getElementById('pencolor').value,
     bgcolor: document.getElementById('backgroundColor').value,
     color1: document.getElementById('color1').value,
@@ -57,8 +57,15 @@ function setState(state){
   currentStrokeWidth = parseInt(state.pensize);
   document.getElementById('pensize').value = state.pensize;
   currentDoOnionskin = state.doOnionskin === 'true';
-  document.getElementById('doonionskin').checked = currentD;
-  document.
+  document.getElementById('doonionskin').checked = currentDoOnionskin;
+  currentFrameDelay = 1000 / Number(state.fps);
+  document.getElementById('framerate').value = state.fps;
+  let palette = document.getElementById('colorpalette');
+  palette.selectedIndex = state.palette;
+  setPalette({target: palette.options[state.palette]});
+  currentColor = state.color;
+  colorButton(document.getElementById('pencolor'), state.color)
+  document.getElementById('')
 }
 
 // Initialization of canvas happens in file.js
