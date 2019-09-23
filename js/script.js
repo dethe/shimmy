@@ -26,18 +26,19 @@ let currentDoOnionskin = true;
 function getState(){
   return {
     tool: currentTool.name,
-    strokeWidth: document.querySelector('#').value,
-    doOnionskin: currentDoOnionskin,
-    color: currentColor,
-    bgcolor: canvas.style.backgroundColor,
-    frameDelay: currentFrameDelay
-      // TODO:
-      // palette
-      // toolbar
-      // palette colors
-      // NOT options: those can be stored directly in localStorage
-      // restoring all of this in UI
-
+    strokeWidth: document.querySelector('#pensize').value,
+    doOnionskin: document.querySelector('#doonionskin').checked,
+    fps: document.querySelector('#framerate').value,
+    color: document.querySelector('#pencolor').value,
+    bgcolor: document.querySelector('#backgroundColor').value,
+    color1: document.querySelector('#color1').value,
+    color2: document.querySelector('#color2').value,
+    color3: document.querySelector('#color3').value,
+    color4: document.querySelector('#color4').value,
+    color5: document.querySelector('#color5').value,
+    color6: document.querySelector('#color6').value,
+    color7: document.querySelector('#color7').value,
+    color8: document.querySelector('#color8').value
   }
 }
 
@@ -333,6 +334,7 @@ let tools = {
 currentTool = tools.pen;
 
 function selectToolbar(button){
+  let name;
   let name = button.getAttribute('title').toLowerCase();
   if (button.classList.contains('active')){
     button.classList.remove('active');
