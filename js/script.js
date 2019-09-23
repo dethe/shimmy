@@ -16,21 +16,21 @@ let currentMatrix = null;
 let WIDTH = document.body.clientWidth;
 let HEIGHT = document.body.clientHeight;
 let _lastFrameTime = 0;
-let _frameDelay = 0;
 let currentDisplay = 'drawingboard';
+let currentTool = tools.pen;
+let currentStrokeWidth = 1;
+let currentDoOnionskin = true;
+
 
 
 function getState(){
   return {
-    too: currentTool,
+    tool: currentTool,
     strokeWidth: currentStrokeWidth,
-    doOnionSkin: 
+    doOnionskin: currentDoOnionskin,
     color: currentColor,
-      canvas.dataset.strokeWidth = currentStrokeWidth;
-      canvas.dataset.doOnionSkin = currentDoOnionSkin;
-      canvas.dataset.color = currentColor;
-      canvas.dataset.frameDelay = currentFrameDelay;
-      canvas.dataset.bgcolor = canvas.style.backgroundColor;
+    bgcolor: canvas.style.backgroundColor,
+    frameDelay: currentFrameDelay
       // TODO:
       // palette
       // toolbar
@@ -330,10 +330,6 @@ let tools = {
   zoomin: new ZoomIn(canvas),
   zoomout: new ZoomOut(canvas)
 }
-
-let currentTool = tools.pen;
-let currentStrokeWidth = 1;
-let currentDoOnionskin = true;
 
 function selectToolbar(button){
   let name = button.getAttribute('title').toLowerCase();
@@ -674,7 +670,6 @@ function play(){
   // Unless looping, call stop() when animation is finished
   // How much of this can I do by adding "playing" class to body?
   setTimeout(function(){
-      _frameDelay = currentFrameDelay;
       _lastFrameTime = Date.now();
       requestAnimationFrame(playNextFrame);
   }, 500);
@@ -697,7 +692,7 @@ function stop(){
 
 function playNextFrame(){
   let time = Date.now();
-  if ((time - _lastFrameTime) < _frameDelay){
+  if ((time - _lastFrameTime) < currentFrameDelay){
       requestAnimationFrame(playNextFrame);
       return;            
   }
