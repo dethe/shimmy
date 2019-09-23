@@ -97,6 +97,8 @@
         };
         reader.readAsDataURL(file);
     }
+  
+    function saveAs()
 
     function readFile(file){
         var fileName = file.name;
