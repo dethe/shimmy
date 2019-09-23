@@ -17,7 +17,7 @@ let WIDTH = document.body.clientWidth;
 let HEIGHT = document.body.clientHeight;
 let _lastFrameTime = 0;
 let currentDisplay = 'drawingboard';
-let currentTool = tools.pen;
+let currentTool;
 let currentStrokeWidth = 1;
 let currentDoOnionskin = true;
 
@@ -25,8 +25,8 @@ let currentDoOnionskin = true;
 
 function getState(){
   return {
-    tool: currentTool,
-    strokeWidth: currentStrokeWidth,
+    tool: currentTool.name,
+    strokeWidth: document.querySelector('#',
     doOnionskin: currentDoOnionskin,
     color: currentColor,
     bgcolor: canvas.style.backgroundColor,
@@ -330,6 +330,7 @@ let tools = {
   zoomin: new ZoomIn(canvas),
   zoomout: new ZoomOut(canvas)
 }
+currentTool = tools.pen;
 
 function selectToolbar(button){
   let name = button.getAttribute('title').toLowerCase();
