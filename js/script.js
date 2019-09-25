@@ -1,4 +1,4 @@
-  /* globals dom file KellyColorPicker palettes toDataURL canvas */
+  /* globals dom file KellyColorPicker palettes toDataURL canvas saveAs*/
 
 
 const mouse = {};
@@ -858,9 +858,13 @@ function toggleDisplay(evt){
   }
 }
 
-function displayAsStoryboard(){
+function animationToImages(){
   let {x,y,width,height} = getAnimationBBox();
-  let frames = Array.from(document.querySelectorAll('.frame')).map(frame => frameToImage(frame, x, y, width, height));
+  return Array.from(document.querySelectorAll('.frame')).map(frame => frameToImage(frame, x, y, width, height));  
+}
+
+function displayAsStoryboard(){
+  let frames = animationToImages();
   frames.forEach(f => document.body.appendChild(f));
   document.body.classList.add('storyboard');
   canvas.style.display = 'none';

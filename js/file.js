@@ -87,15 +87,7 @@
         }
         var title = prompt("Save file as: ");
         if (!title){ return; }
-        var file = new Blob([saveFormat()], {type: 'image/svg+xml'}); // change for non-svg
-        var reader = new FileReader();
-        reader.onloadend = function(){
-            var a = dom.html('a', {'href': reader.result, 'download': title + '.svg', target: '_blank'}); // change for non-svg
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-        };
-        reader.readAsDataURL(file);
+        saveAs(saveFormat(), `${title}.svg`);
     }
   
     const filetypes = {
@@ -107,6 +99,15 @@
     function saveAs(data, filename){
       let ext = filename.split('.').pop();
       let filetype = filetypes[ext];
+      var file = new Blob([data], {type: filetype});
+      var reader = new FileReader();
+      reader.onloadend = function(){
+          var a = dom.html('a', {'href': reader.result, 'download': filename, target: '_blank'});
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+      };
+      reader.readAsDataURL(file);
     }
 
     function readFile(file){
