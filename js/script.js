@@ -778,9 +778,12 @@ function saveFrameAsPNG(evt){
 function saveAsGIF(evt){
   var gif = new GIF({
     workers: 2,
-    quality: 10
+    quality: 10,
+    workerScript: 'li/gif.worker.js'
   });
-  animationToImages().forEach(img => gif.addFrame(img));
+  let images = animationToImages();
+  console.log(images);
+  images.forEach(img => gif.addFrame(img));
   gif.on('finished', function(blob) {
     console.log('gif completed');
     saveBlob(blob, 'animation.gif');
@@ -818,7 +821,6 @@ class SVGCanvas{
   }
   
   translate(x,y){
-    console.log('translate(%s, %s)', x, y);
     this.ctx.translate(x,y);
   }
   
@@ -827,7 +829,6 @@ class SVGCanvas{
   }
   
   rotate(angle, cx, cy){
-    console.log('rotate(angle=%s, x=%s, y=%s)', angle, cx, cy);
     this.ctx.translate(cx, cy);
     this.ctx.rotate(radians(angle));
     this.ctx.translate(-cx, -cy);
