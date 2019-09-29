@@ -52,15 +52,17 @@
       Pen<br>
       <i class="far fa-pen"></i>
     </button>
-    <span class="feeback pensize">
+    <span class="feedback pensize">
       <label class="pensize">Pen Size
         <input id="pensize" onchange="currentStrokeWidth = Number(this.value);" type="number" min="1" max="30" value="2" title="Pen Size">
       </label>
     </span>
-    <label>Palette<br>
-      <select id="colorpalette" class="palettechooser js-colorpalette select-css">
-      </select>
-    </label>
+    <span class="feedback palette">
+      <label>Palette<br>
+        <select id="colorpalette" class="palettechooser js-colorpalette select-css">
+        </select>
+      </label>
+    </span>
     <button onclick="colorPopup(this)" title="Pen Colour" id="pencolor" value="#000000" class="js-color fgcolor colorwell"> 
       Pen Colour
     </button>
