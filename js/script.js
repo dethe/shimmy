@@ -782,10 +782,10 @@ function saveAsGIF(evt){
   });
   animationToImages().forEach(img => gif.addFrame(img));
   gif.on('finished', function(blob) {
-    window.open(URL.createObjectURL(blob));
+    console.log('gif completed');
+    saveBlob(blob, 'animation.gif');
   });
-
-gif.render();}
+  gif.render();}
 
 function saveAsMovie(evt){
   console.log('save as movie');
