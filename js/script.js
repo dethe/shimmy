@@ -1,4 +1,4 @@
-  /* globals dom file KellyColorPicker palettes toDataURL canvas saveAs saveBlob GIF*/
+  /* globals dom file KellyColorPicker palettes toDataURL canvas GIF*/
 
 
 const mouse = {};
@@ -779,14 +779,15 @@ function saveAsGIF(evt){
   var gif = new GIF({
     workers: 2,
     quality: 10,
-    workerScript: 'li/gif.worker.js'
+    workerScript: 'lib/gif.worker.js',
+    background: document.getElementById('backgroundcolor').value
   });
   let images = animationToImages();
-  console.log(images);
-  images.forEach(img => gif.addFrame(img));
+  images.forEach(img => gif.addFrame(img, {delay: currentFrameDelay}));
   gif.on('finished', function(blob) {
     console.log('gif completed');
-    saveBlob(blob, 'animation.gif');
+    file.saveBlob(blob, 'animation.gif');
+    window.open(URL.createObjectURL(blob));
   });
   gif.render();}
 

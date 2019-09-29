@@ -184,7 +184,9 @@
         'new': newFile,
         clear: clear,
         loadFile,
-        saveFile
+        saveFile,
+        saveBlob,
+        saveAs
     };
 
     // document.querySelector('#new').addEventListener('click', newFile, false);
