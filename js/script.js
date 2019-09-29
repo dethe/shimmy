@@ -1,4 +1,4 @@
-  /* globals dom file KellyColorPicker palettes toDataURL canvas saveAs*/
+  /* globals dom file KellyColorPicker palettes toDataURL canvas saveAs saveBlob GIF*/
 
 
 const mouse = {};
@@ -776,8 +776,16 @@ function saveFrameAsPNG(evt){
 }
 
 function saveAsGIF(evt){
-  console.log('save as GIF');
-}
+  var gif = new GIF({
+    workers: 2,
+    quality: 10
+  });
+  animationToImages().forEach(img => gif.addFrame(img));
+  gif.on('finished', function(blob) {
+    window.open(URL.createObjectURL(blob));
+  });
+
+gif.render();}
 
 function saveAsMovie(evt){
   console.log('save as movie');

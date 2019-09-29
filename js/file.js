@@ -100,6 +100,10 @@
       let ext = filename.split('.').pop();
       let filetype = filetypes[ext];
       var file = new Blob([data], {type: filetype});
+      saveBlob(file, filename);
+    }
+  
+  function saveBlob(blob, filename){
       var reader = new FileReader();
       reader.onloadend = function(){
           var a = dom.html('a', {'href': reader.result, 'download': filename, target: '_blank'});
@@ -107,8 +111,8 @@
           a.click();
           document.body.removeChild(a);
       };
-      reader.readAsDataURL(file);
-    }
+      reader.readAsDataURL(blob);
+  }
 
     function readFile(file){
         var fileName = file.name;
