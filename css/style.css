@@ -29,6 +29,12 @@ body.storyboard{
   border-width: 0;
 }
 
+button{
+  /* fix for iPad */
+  border-radius: 0;
+  background: white;
+}
+
 .tabbar > button{
   border-wdith: 1px;
   min-width: 4rem;

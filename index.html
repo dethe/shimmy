@@ -50,9 +50,8 @@
       <i class="far fa-pen"></i>
     </button>
     <span class="feedback pensize">
-      <label class="pensize">Pen Size
+      <label class="pensize">Pen Size</label>
         <input id="pensize" onchange="currentStrokeWidth = Number(this.value);" type="number" min="1" max="30" value="2" title="Pen Size">
-      </label>
     </span>
     <span class="feedback palette">
       <label>Palette<br>
@@ -140,10 +139,12 @@
       <i class="far fa-photo-video"></i>
     </button>
     <span class="feedback framerate">
-      <label title="Frames Per Second">FPS<input id="framerate" type="number" value="10" onchange="setFrameRate(this);"></label>
+      <label title="Frames Per Second">FPS</label>
+      <input id="framerate" type="number" value="10" onchange="setFrameRate(this);">
     </span>
     <span class="feedback framecount">
-      <label>Frame</label><output>X of Y</output>
+      <label>Frame</label>
+      <output>X of Y</output>
     </span>
     <span class="feedback onionskin">
       <label>
