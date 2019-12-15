@@ -23,18 +23,15 @@
     <button onclick="selectToolbar(this)" id="animate" title="Animate" class="js-tab">
       Animate
     </button>
-    <button onclick="selectToolbar(this)" id="options" title="Options" class="js-tab">
+    <!--button onclick="selectToolbar(this)" id="options" title="Options" class="js-tab">
       Options
-    </button>
-    <button onclick="selectToolbar(this)" id="help" title="Help" class="js-tab">
+    </button-->
+    <!--button onclick="selectToolbar(this)" id="help" title="Help" class="js-tab">
       Help
-    </button>
-    <button onclick="selectToolbar(this)" id="about" title="About" class="js-tab">
+    </button-->
+    <!--button onclick="selectToolbar(this)" id="about" title="About" class="js-tab">
       About
-    </button>
-    <span class="feedback framecount">
-      Frame X of Y
-    </span>
+    </button-->
   </nav>
   <nav class="toolbar" id="file-toolbar">
     <button onclick="load" title="Load file">
@@ -144,6 +141,9 @@
     </button>
     <span class="feedback framerate">
       <label title="Frames Per Second">FPS<input id="framerate" type="number" value="10" onchange="setFrameRate(this);"></label>
+    </span>
+    <span class="feedback framecount">
+      <label>Frame</label><output>X of Y</output>
     </span>
     <span class="feedback onionskin">
       <label>
