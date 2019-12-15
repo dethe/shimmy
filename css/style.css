@@ -61,9 +61,7 @@ button .label{
 
 #canvas{
   position: absolute;
-  transition: margin-left 500ms ease-in-out,
-              margin-top 500ms ease-in-out,
-              width: 500ms ease-in-out,
+  transition: margin-left 500ms ease-in-out, margin-top 500ms ease-in-out, width: 500ms ease-in-out,
               height: 500ms ease-in-out;
   z-value: -1;
 }
