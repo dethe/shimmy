@@ -36,9 +36,8 @@ button{
 }
 
 .tabbar > button{
-  border-wdith: 1px;
-  min-width: 4rem;
-  max-height: 2rem;
+  border-width: 1px;
+  flex: 1;
 }
 
 .toolbar > button{
@@ -78,26 +77,24 @@ button .label{
   display: none;
 }
 
-.tabbar{
+header{
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 2rem;
-  transition: top 0.5s ease-in-out;
+}
+
+.tabbar{
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  flex: 0
 }
 
 .toolbar{
   display: none;
   flex-direction: column;
   flex-wrap: wrap;
-  position: absolute;
   height: 4rem;
-  left: 0;
-  top: 2rem;
-  transition: top 0.5s ease-in-out;
 }
 
 .toolbar.active{
