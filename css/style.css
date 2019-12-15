@@ -137,6 +137,10 @@ label{
   font-size: .8rem;
 }
 
+.feedback label{
+  flex: 1;
+}
+
 input[type=checkbox]{
   display: none;
 }

@@ -374,10 +374,6 @@ function selectToolbar(button){
     button.classList.remove('active');
     document.querySelector('.toolbar.active').classList.remove('active');
   }else{
-    let activeTab = document.querySelector('.js-tab.active');
-    if (activeTab){
-      activeTab.classList.remove('active');
-    }
     button.classList.add('active');
     let activeToolbar = document.querySelector('.toolbar.active');
     if (activeToolbar){

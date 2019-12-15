@@ -114,17 +114,6 @@ function upgrade(input){
   let step = input.getAttribute('step');
   let klass= input.getAttribute('class');
   let onchange = input.getAttribute('onchange');
-  let label = document.querySelector(`label[for=${id}]`);
-  if (!label){
-    if (input.parentElement.tagName === 'LABEL'){
-      label = input.parentElement;
-      label.parentElement.insertBefore(input, label);
-    }
-  }
-  let labelText = label ? label.innerText : `${id} input`;
-  if (label){
-    label.remove();
-  }
   
   window['increment' + id] = function(){
     let input = document.querySelector('#' + id);
@@ -144,7 +133,6 @@ function upgrade(input){
     onchange(input);
   }
   input.outerHTML = `<div class="field">
-    <label for="${id}" id="${id}-label">${labelText}</label>
     <div class="stepper">
       <button type="button" class="stepper-remove-button" aria-label="Decrease" onclick="decrement${id}()" aria-describedby="${id}-label">&minus;</button>
       <input type="number" class="stepper-input" id="${id}" name="${name}" value="${value}" oninput="onchange${id}(this)">

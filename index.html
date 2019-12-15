@@ -124,6 +124,12 @@
     <button onclick="gotoLastFrame()" title="Last Frame">
       <i class="far fa-fast-forward"></i>
     </button>
+    <button onclick="deleteFrame()" title="Delete Frame">
+      <span class="fa-stack fa-2x">
+        <i class="fas fa-film-alt fa-stack-2x"></i>
+        <i class="far fa-minus fa-stack-1x fa-inverse"></i>
+      </span>
+    </button>
     <button onclick="addFrame()" title="Add Frame">
       <span class="fa-stack fa-2x">
         <i class="fas fa-film-alt fa-stack-2x"></i>
@@ -132,12 +138,6 @@
     </button>
     <button onclick="cloneFrame()" title="Copy Frame">
       <i class="far fa-photo-video"></i>
-    </button>
-    <button onclick="deleteFrame()" title="Delete Frame">
-      <span class="fa-stack fa-2x">
-        <i class="fas fa-film-alt fa-stack-2x"></i>
-        <i class="far fa-minus fa-stack-1x fa-inverse"></i>
-      </span>
     </button>
     <span class="feedback framerate">
       <label title="Frames Per Second">FPS<input id="framerate" type="number" value="10" onchange="setFrameRate(this);"></label>
