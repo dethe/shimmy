@@ -749,7 +749,7 @@ function updateFrameCount(){
   try{
       let frames = Array.from(document.querySelectorAll('.frame'));
       let index = frames.indexOf(currentFrame()) + 1;
-      document.querySelector('.framecount').textContent = 'Frame ' + index + ' of ' + frames.length;
+      document.querySelector('.framecount output').textContent = index + ' of ' + frames.length;
   }catch(e){
       // wait for the file to load, probably
   }
