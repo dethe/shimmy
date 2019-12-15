@@ -40,6 +40,8 @@ button {
   /* fix for iPad */
   border-radius: 0;
   background: white;
+  display: flex;
+  flex-direction: column;
 }
 
 .tabbar > button {
@@ -55,15 +57,16 @@ button {
 
 button i {
   font-size: 2rem;
+  top: 0;
+  left: 0;
 }
 
-button .label{
+button label{
   flex: 1;
 }
 
 #canvas {
   position: absolute;
-  z-index: -1;
 }
 
 .playing svg {
@@ -79,6 +82,7 @@ header {
   flex-direction: row;
   flex-wrap: wrap;
   min-height: 4rem;
+  position: relative;
 }
 
 .tabbar {
