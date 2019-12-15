@@ -1,179 +1,288 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-	<meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">	<title>Drawing Board</title>
-	<link href="css/fontawesome.css" rel="stylesheet">
-  <link href="css/regular.css" rel="stylesheet">
-  <link href="css/solid.css" rel="stylesheet">
-	<link rel="stylesheet" href="css/style.css">
-  <link rel="stylesheet" href="css/select-css.css">
-</head>
-<body>
-  <button class="palette">
-    <i class="far fa-palette"></i>
-  </button>
-  <nav class="tabbar">
-    <button onclick="selectToolbar(this)" id="file" title="File" class="js-tab">
-      File
-    </button>
-    <button onclick="selectToolbar(this)" id="draw" title="Draw" class="js-tab active">
-      Draw
-    </button>
-    <button onclick="selectToolbar(this)" id="animate" title="Animate" class="js-tab">
-      Animate
-    </button>
-    <!--button onclick="selectToolbar(this)" id="options" title="Options" class="js-tab">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Drawing Board</title>
+    <link href="css/fontawesome.css" rel="stylesheet" />
+    <link href="css/regular.css" rel="stylesheet" />
+    <link href="css/solid.css" rel="stylesheet" />
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/select-css.css" />
+  </head>
+  <body>
+    <header>
+      <button class="palette">
+        <i class="far fa-palette"></i>
+      </button>
+      <nav class="tabbar">
+        <button
+          onclick="selectToolbar(this)"
+          id="file"
+          title="File"
+          class="js-tab"
+        >
+          File
+        </button>
+        <button
+          onclick="selectToolbar(this)"
+          id="draw"
+          title="Draw"
+          class="js-tab active"
+        >
+          Draw
+        </button>
+        <button
+          onclick="selectToolbar(this)"
+          id="animate"
+          title="Animate"
+          class="js-tab"
+        >
+          Animate
+        </button>
+        <!--button onclick="selectToolbar(this)" id="options" title="Options" class="js-tab">
       Options
     </button-->
-    <!--button onclick="selectToolbar(this)" id="help" title="Help" class="js-tab">
+        <!--button onclick="selectToolbar(this)" id="help" title="Help" class="js-tab">
       Help
     </button-->
-    <!--button onclick="selectToolbar(this)" id="about" title="About" class="js-tab">
+        <!--button onclick="selectToolbar(this)" id="about" title="About" class="js-tab">
       About
     </button-->
-  </nav>
-  <nav class="toolbar" id="file-toolbar">
-    <button onclick="load" title="Load file">
-      Load
-    </button>
-    <button onclick="save()" title="Save file">
-      Save
-    </button>
-    <button onclick="file.new()" title="New file">
-      New
-    </button>
-  </nav>
-  <nav class="toolbar active" id="draw-toolbar">
-    <button onclick="selectTool(this)" id="pen" title="Pen" class="js-tool active">
-      Pen<br>
-      <i class="far fa-pen"></i>
-    </button>
-    <span class="feedback pensize">
-      <label class="pensize">Pen Size</label>
-        <input id="pensize" onchange="currentStrokeWidth = Number(this.value);" type="number" min="1" max="30" value="2" title="Pen Size">
-    </span>
-    <span class="feedback palette">
-      <label>Palette<br>
-        <select id="colorpalette" class="palettechooser js-colorpalette select-css">
-        </select>
-      </label>
-    </span>
-    <button onclick="colorPopup(this)" title="Pen Colour" id="pencolor" value="#000000" class="js-color fgcolor colorwell"> 
-      Pen Colour
-    </button>
-    <button onclick="colorPopup(this)" title="Background Color" value="#FFFFFF" class="js-bgcolor colorwell bgcolor" id="backgroundcolor">
-      Background
-    </button>
-      <button onclick="selectColor(this)" ondblclick="colorPopup(this)" id="color1" class="color miniwell" value="#000000" style="background-color: #000000;">
-      </button>
-      <button onclick="selectColor(this)" ondblclick="colorPopup(this)" id="color2" class="color miniwell" value="#FFFFFF" style="background-color: #FFFFFF;">
-      </button>
-      <button onclick="selectColor(this)" ondblclick="colorPopup(this)" id="color3" class="color miniwell" value="#666666" style="background-color: #666666;">
-      </button>
-      <button onclick="selectColor(this)" ondblclick="colorPopup(this)" id="color4" class="color miniwell js-miniwell">
-      </button>
-      <button onclick="selectColor(this)" ondblclick="colorPopup(this)" id="color5" class="color miniwell js-miniwell">
-      </button>
-      <button onclick="selectColor(this)" ondblclick="colorPopup(this)" id="color6" class="color miniwell js-miniwell">
-    </button>
-      <button onclick="selectColor(this)" ondblclick="colorPopup(this)" id="color7" class="color miniwell js-miniwell">
-      </button>
-      <button onclick="selectColor(this)" ondblclick="colorPopup(this)" id="color8" class="color miniwell js-miniwell">
-      </button>
-    <button onclick="selectTool(this)" id="zoomout" title="Zoom Out" class="js-tool">
-    Zoom Out<br>
-    <i class="far fa-search-minus"></i>
-    </button>
-    <button onclick="selectTool(this)" id="zoomin" title="Zoom In" class="js-tool">
-      Zoom In<br>
-      <i class="far fa-search-plus"></i>
-    </button>
-    <button onclick="selectTool(this)" id="pan" title="Pan" class="js-tool">
-      Pan<br>
-      <i class="far fa-arrows"></i>
-    </button>
-    <button onclick="selectTool(this)" id="rotate" title="Rotate" class="js-tool">
-      Rotate<br>
-      <i class="far fa-sync"></i>
-    </button>
-    <button onclick="_clear();" title="Clear" class="half">
-      Clear
-    </button>
-    <button onclick="file.new()" title="New" class="half">
-      New
-    </button>
-  </nav>
-  <nav class="toolbar" id="animate-toolbar">
-    <button onclick="gotoFirstFrame()" title="First Frame">
-      <i class="far fa-fast-backward"></i>
-    </button>
-    <button onclick="decrementFrame()" title="Previous Frame">
-      <i class="far fa-step-backward"></i>
-    </button>
-    <button onclick="play()" title="Play">
-      <i class="far fa-play"></i>
-    </button>
-    <button title="Stop" hidden>
-      <i class="far fa-stop"></i>
-    </button>
-    <button onclick="incrementFrame()" title="Next Frame">
-      <i class="far fa-step-forward"></i>
-    </button>
-    <button onclick="gotoLastFrame()" title="Last Frame">
-      <i class="far fa-fast-forward"></i>
-    </button>
-    <button onclick="deleteFrame()" title="Delete Frame">
-      <span class="fa-stack fa-2x">
-        <i class="fas fa-film-alt fa-stack-2x"></i>
-        <i class="far fa-minus fa-stack-1x fa-inverse"></i>
-      </span>
-    </button>
-    <button onclick="addFrame()" title="Add Frame">
-      <span class="fa-stack fa-2x">
-        <i class="fas fa-film-alt fa-stack-2x"></i>
-        <i class="far fa-plus fa-stack-1x fa-inverse"></i>
-      </span>
-    </button>
-    <button onclick="cloneFrame()" title="Copy Frame">
-      <i class="far fa-photo-video"></i>
-    </button>
-    <span class="feedback framerate">
-      <label title="Frames Per Second">FPS</label>
-      <input id="framerate" type="number" value="10" onchange="setFrameRate(this);">
-    </span>
-    <span class="feedback framecount">
-      <label>Frame</label>
-      <output>X of Y</output>
-    </span>
-    <span class="feedback onionskin">
-      <label>
-        Onionskin
-        <input type="checkbox" checked id="doonionskin" onchange="setOnionSkin(this);">
-        <i class="unchecked far fa-square"></i>
-        <i class="checked far fa-check-square"></i>
-      </label>
-    </span>
-  </nav>
-  <nav class="toolbar" id="options-toolbar">
-    Put options here...
-  </nav>
-  <nav class="toolbar" id="help-toolbar">
-    Put help here...
-  </nav>
-  <nav class="toolbar" id="about-toolbar">
-    Put about here...
-  </nav>
-  <div class="popup-color">
-  </div>
-  <script src="lib/svgToDataURL.js"></script>
-  <script src="lib/gif.js"></script>
-  <script src="lib/html5-color-picker.js"></script>
-  <script src="lib/simplify.js"></script>
-  <script src="js/palettes.js"></script>
-  <script src="js/dom.js"></script>
-  <script src="js/file.js"></script>
-	<script src="js/script.js"></script>
-  <script src="js/stepper.js"></script>
-</body>
+      </nav>
+      <nav class="toolbar" id="file-toolbar">
+        <button onclick="load" title="Load file">
+          Load
+        </button>
+        <button onclick="save()" title="Save file">
+          Save
+        </button>
+        <button onclick="file.new()" title="New file">
+          New
+        </button>
+      </nav>
+      <nav class="toolbar active" id="draw-toolbar">
+        <button
+          onclick="selectTool(this)"
+          id="pen"
+          title="Pen"
+          class="js-tool active"
+        >
+          Pen<br />
+          <i class="far fa-pen"></i>
+        </button>
+        <span class="feedback pensize">
+          <label class="pensize">Pen Size</label>
+          <input
+            id="pensize"
+            onchange="currentStrokeWidth = Number(this.value);"
+            type="number"
+            min="1"
+            max="30"
+            value="2"
+            title="Pen Size"
+          />
+        </span>
+        <span class="feedback palette">
+          <label
+            >Palette<br />
+            <select
+              id="colorpalette"
+              class="palettechooser js-colorpalette select-css"
+            >
+            </select>
+          </label>
+        </span>
+        <button
+          onclick="colorPopup(this)"
+          title="Pen Colour"
+          id="pencolor"
+          value="#000000"
+          class="js-color fgcolor colorwell"
+        >
+          Pen Colour
+        </button>
+        <button
+          onclick="colorPopup(this)"
+          title="Background Color"
+          value="#FFFFFF"
+          class="js-bgcolor colorwell bgcolor"
+          id="backgroundcolor"
+        >
+          Background
+        </button>
+        <button
+          onclick="selectColor(this)"
+          ondblclick="colorPopup(this)"
+          id="color1"
+          class="color miniwell"
+          value="#000000"
+          style="background-color: #000000;"
+        ></button>
+        <button
+          onclick="selectColor(this)"
+          ondblclick="colorPopup(this)"
+          id="color2"
+          class="color miniwell"
+          value="#FFFFFF"
+          style="background-color: #FFFFFF;"
+        ></button>
+        <button
+          onclick="selectColor(this)"
+          ondblclick="colorPopup(this)"
+          id="color3"
+          class="color miniwell"
+          value="#666666"
+          style="background-color: #666666;"
+        ></button>
+        <button
+          onclick="selectColor(this)"
+          ondblclick="colorPopup(this)"
+          id="color4"
+          class="color miniwell js-miniwell"
+        ></button>
+        <button
+          onclick="selectColor(this)"
+          ondblclick="colorPopup(this)"
+          id="color5"
+          class="color miniwell js-miniwell"
+        ></button>
+        <button
+          onclick="selectColor(this)"
+          ondblclick="colorPopup(this)"
+          id="color6"
+          class="color miniwell js-miniwell"
+        ></button>
+        <button
+          onclick="selectColor(this)"
+          ondblclick="colorPopup(this)"
+          id="color7"
+          class="color miniwell js-miniwell"
+        ></button>
+        <button
+          onclick="selectColor(this)"
+          ondblclick="colorPopup(this)"
+          id="color8"
+          class="color miniwell js-miniwell"
+        ></button>
+        <button
+          onclick="selectTool(this)"
+          id="zoomout"
+          title="Zoom Out"
+          class="js-tool"
+        >
+          Zoom Out<br />
+          <i class="far fa-search-minus"></i>
+        </button>
+        <button
+          onclick="selectTool(this)"
+          id="zoomin"
+          title="Zoom In"
+          class="js-tool"
+        >
+          Zoom In<br />
+          <i class="far fa-search-plus"></i>
+        </button>
+        <button onclick="selectTool(this)" id="pan" title="Pan" class="js-tool">
+          Pan<br />
+          <i class="far fa-arrows"></i>
+        </button>
+        <button
+          onclick="selectTool(this)"
+          id="rotate"
+          title="Rotate"
+          class="js-tool"
+        >
+          Rotate<br />
+          <i class="far fa-sync"></i>
+        </button>
+        <button onclick="_clear();" title="Clear" class="half">
+          Clear
+        </button>
+        <button onclick="file.new()" title="New" class="half">
+          New
+        </button>
+      </nav>
+      <nav class="toolbar" id="animate-toolbar">
+        <button onclick="gotoFirstFrame()" title="First Frame">
+          <i class="far fa-fast-backward"></i>
+        </button>
+        <button onclick="decrementFrame()" title="Previous Frame">
+          <i class="far fa-step-backward"></i>
+        </button>
+        <button onclick="play()" title="Play">
+          <i class="far fa-play"></i>
+        </button>
+        <button title="Stop" hidden>
+          <i class="far fa-stop"></i>
+        </button>
+        <button onclick="incrementFrame()" title="Next Frame">
+          <i class="far fa-step-forward"></i>
+        </button>
+        <button onclick="gotoLastFrame()" title="Last Frame">
+          <i class="far fa-fast-forward"></i>
+        </button>
+        <button onclick="deleteFrame()" title="Delete Frame">
+          <span class="fa-stack fa-2x">
+            <i class="fas fa-film-alt fa-stack-2x"></i>
+            <i class="far fa-minus fa-stack-1x fa-inverse"></i>
+          </span>
+        </button>
+        <button onclick="addFrame()" title="Add Frame">
+          <span class="fa-stack fa-2x">
+            <i class="fas fa-film-alt fa-stack-2x"></i>
+            <i class="far fa-plus fa-stack-1x fa-inverse"></i>
+          </span>
+        </button>
+        <button onclick="cloneFrame()" title="Copy Frame">
+          <i class="far fa-photo-video"></i>
+        </button>
+        <span class="feedback framerate">
+          <label title="Frames Per Second">FPS</label>
+          <input
+            id="framerate"
+            type="number"
+            value="10"
+            onchange="setFrameRate(this);"
+          />
+        </span>
+        <span class="feedback framecount">
+          <label>Frame</label>
+          <output>X of Y</output>
+        </span>
+        <span class="feedback onionskin">
+          <label>
+            Onionskin
+            <input
+              type="checkbox"
+              checked
+              id="doonionskin"
+              onchange="setOnionSkin(this);"
+            />
+            <i class="unchecked far fa-square"></i>
+            <i class="checked far fa-check-square"></i>
+          </label>
+        </span>
+      </nav>
+      <nav class="toolbar" id="options-toolbar">
+        Put options here...
+      </nav>
+      <nav class="toolbar" id="help-toolbar">
+        Put help here...
+      </nav>
+      <nav class="toolbar" id="about-toolbar">
+        Put about here...
+      </nav>
+      <div class="popup-color"></div>
+    </header>
+    <script src="lib/svgToDataURL.js"></script>
+    <script src="lib/gif.js"></script>
+    <script src="lib/html5-color-picker.js"></script>
+    <script src="lib/simplify.js"></script>
+    <script src="js/palettes.js"></script>
+    <script src="js/dom.js"></script>
+    <script src="js/file.js"></script>
+    <script src="js/script.js"></script>
+    <script src="js/stepper.js"></script>
+  </body>
 </html>
