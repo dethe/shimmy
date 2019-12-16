@@ -39,6 +39,7 @@ body.storyboard {
 button {
   /* fix for iPad */
   border-radius: 0;
+  border: 1px solid black;
   background: white;
   display: flex;
   flex-direction: column;
@@ -101,7 +102,10 @@ header {
 
 .toolbar .stack {
   display: flex;
+  flex: auto;
   flex-direction: column;
+  flex-wrap: wrap;
+  min-width: 12rem;
   max-height: 4rem;
 }
 
@@ -184,15 +188,14 @@ output {
 }
 
 .toolbar .miniwell {
-  min-width: 2rem;
-  min-height: 2rem;
-  max-width: 2rem;
-  max-height: 2rem;
+  flex: 0 0 2rem;
+  width: 2rem;
+  height: 2rem;
 }
 
 .toolbar .colorwell {
-  max-height: 2rem;
-  min-height: 2rem;
+  flex: 0 0 2rem;
+  max-width: 4rem;
 }
 
 .toolbar .fgcolor {

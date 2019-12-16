@@ -186,12 +186,14 @@
           Rotate<br />
           <i class="far fa-sync"></i>
         </button>
-        <button onclick="_clear();" title="Clear" class="half">
-          Clear
-        </button>
-        <button onclick="file.new()" title="New" class="half">
-          New
-        </button>
+        <div class="stack">
+          <button onclick="_clear();" title="Clear" class="half">
+            Clear
+          </button>
+          <button onclick="file.new()" title="New" class="half">
+            New
+          </button>
+        </div>
       </nav>
       <nav class="toolbar" id="animate-toolbar">
         <button onclick="gotoFirstFrame()" title="First Frame">
