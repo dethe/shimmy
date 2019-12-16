@@ -402,18 +402,18 @@ function selectToolbar(button) {
   let name;
   if (typeof button === "string") {
     name = button;
+    button = document.getElementById(name);
   } else {
-    name = button.getAttribute("title").toLowerCase();
+    name = button.id;
   }
+  console.log('%s: %s', name, )
+  let toolbar = document.querySelector(`#${name}-toolbar`);
   if (button.classList.contains("active")) {
     button.classList.remove("active");
-    let activeToolbar = document.querySelector(".toolbar.active");
-    if (activeToolbar) {
-      activeToolbar.classList.remove("active");
-    }
+    toolbar.classList.remove("active");
   } else {
     button.classList.add("active");
-    document.querySelector(`#${name}-toolbar`).classList.add("active");
+    toolbar.classList.add("active");
   }
 }
 

@@ -2,7 +2,7 @@
 
 (function(global){
     'use strict';
-    var defaultCanvas = '<svg id="canvas"><g class="frame selected"></g></svg>';
+    var defaultCanvas = `<svg id="canvas" width="2560px" height="1116px" data-tool="pen" data-stroke-width="2" data-do-onionskin="true" data-fps="10" data-palette="0" data-color="#000000" data-bgcolor="#FFFFFF" data-color1="#000000" data-color2="#FFFFFF" data-color3="#666666" data-color4="#69D2E7" data-color5="#A7DBD8" data-color6="#E0E4CC" data-color7="#F38630" data-color8="#FA6900" data-tab_file="false" data-tab_draw="true" data-tab_animate="true"><g class="frame selected"></g></svg>`;
 
     function saveLocal(){ 
         localStorage._currentWork = saveFormat(); 
