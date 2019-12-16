@@ -46,30 +46,30 @@ function setState(state) {
   let currentTabs = document.querySelectorAll(".js-tab.active");
   currentTabs.forEach(selectToolbar); // turn off any active tabs
   ['file', 'draw', 'animate'].forEach(tabid => {
-    if (state[`tab-${tabid}`] !== "true") {
+    if (state[`tab-${tabid}`] !== "false") {
     selectToolbar(document.getElementById(tabid));
   }});
-  selectTool(document.getElementById(state.tool) || );
-  currentStrokeWidth = parseInt(state.strokeWidth);
+  selectTool(document.getElementById(state.tool || 'pen'));
+  currentStrokeWidth = parseInt(state.strokeWidth || 2);
   document.getElementById("pensize").value = state.strokeWidth;
-  currentDoOnionskin = state.doOnionskin === "true";
+  currentDoOnionskin = state.doOnionskin !== "false";
   document.getElementById("doonionskin").checked = currentDoOnionskin;
-  currentFrameDelay = 1000 / new Number(state.fps);
+  currentFrameDelay = 1000 / new Number(state.fps || 10);
   document.getElementById("framerate").value = state.fps;
   let palette = document.getElementById("colorpalette");
-  palette.selectedIndex = state.palette;
-  setPalette({ target: palette.options[state.palette] });
-  currentColor = state.color;
-  colorButton(document.getElementById("pencolor"), state.color);
-  colorButton(document.getElementById("backgroundcolor"), state.bgcolor);
-  colorButton(document.getElementById("color1"), state.color1);
-  colorButton(document.getElementById("color2"), state.color2);
-  colorButton(document.getElementById("color3"), state.color3);
-  colorButton(document.getElementById("color4"), state.color4);
-  colorButton(document.getElementById("color5"), state.color5);
-  colorButton(document.getElementById("color6"), state.color6);
-  colorButton(document.getElementById("color7"), state.color7);
-  colorButton(document.getElementById("color8"), state.color8);
+  palette.selectedIndex = state.palette || 0;
+  setPalette({ target: palette.options[state.palette || 0] });
+  currentColor = state.color || '#000000';
+  colorButton(document.getElementById("pencolor"), currentColor);
+  colorButton(document.getElementById("backgroundcolor"), state.bgcolor || '#FFFFFF');
+  colorButton(document.getElementById("color1"), state.color1 || '#000000');
+  colorButton(document.getElementById("color2"), state.color2 || '#FFFFFF');
+  colorButton(document.getElementById("color3"), state.color3 || '#666666');
+  colorButton(document.getElementById("color4"), state.color4 || '#69D2E7');
+  colorButton(document.getElementById("color5"), state.color5 || '#A7DBD8');
+  colorButton(document.getElementById("color6"), state.color6 || '#E0E4CC');
+  colorButton(document.getElementById("color7"), state.color7 || '#F38630');
+  colorButton(document.getElementById("color8"), state.color8 || '#FA6900');
 }
 
 // Initialization of canvas happens in file.js
