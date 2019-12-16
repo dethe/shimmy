@@ -50,10 +50,6 @@
       app.updateFrameCount();
       canvas.setAttribute('width', document.body.clientWidth + 'px');
       canvas.setAttribute('height', document.body.clientHeight + 'px');
-      // let style = canvas.querySelector('style');
-      // if (!style){
-      //   canvas.prepend(defaultStyle);
-      // }
       listenCanvas();
       restoreSavedState();
     }
