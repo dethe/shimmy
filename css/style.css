@@ -45,6 +45,8 @@ button {
   background: white;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .tabbar > button {
@@ -140,6 +142,8 @@ header {
   display: flex;
   border: 1px solid black;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
 
 .tabbar .feedback {
