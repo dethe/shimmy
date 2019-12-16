@@ -20,9 +20,8 @@ let currentStrokeWidth = 1;
 let currentDoOnionskin = true;
 
 function getState() {
-  let currentTab = document.querySelector(".js-tab.active");
-  return {
-    tab: currentTab ? currentTab.id : null,
+  let tabs = document.querySelectorAll(".js-tab");
+  let state = {
     tool: currentTool.name,
     strokeWidth: document.getElementById("pensize").value,
     doOnionskin: document.getElementById("doonionskin").checked,
@@ -39,14 +38,14 @@ function getState() {
     color7: document.getElementById("color7").value,
     color8: document.getElementById("color8").value
   };
+  tabs.forEach(button => state[`tab-${button.id}`] = button.matches('.active'));
 }
 
 function setState(state) {
-  let currentTab = document.querySelector(".js-tab.active");
-  if (currentTab) {
-    selectToolbar(currentTab); // turn off currentTab, if any
-  }
-  if (state.tab !== "null") {
+  let currentTabs = document.querySelectorAll(".js-tab.active");
+  currentTabs.forEach(selectToolbar); // turn off any active tabs
+  ['file', 'draw', 'animate'].forEach(tabid => {
+    if (state[`tab-${tabid}`] !== "null") {
     selectToolbar(document.getElementById(state.tab));
   }
   selectTool(document.getElementById(state.tool));
