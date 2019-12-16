@@ -38,7 +38,7 @@ function getState() {
     color7: document.getElementById("color7").value,
     color8: document.getElementById("color8").value
   };
-  tabs.forEach(button => state[`tab-${button.id}`] = button.matches('.active'));
+  tabs.forEach(button => state[`tab_${button.id}`] = button.matches('.active'));
   return state;
 }
 
@@ -46,7 +46,7 @@ function setState(state) {
   let currentTabs = document.querySelectorAll(".js-tab.active");
   currentTabs.forEach(selectToolbar); // turn off any active tabs
   ['file', 'draw', 'animate'].forEach(tabid => {
-    if (state[`tab-${tabid}`] !== "false") {
+    if (state[`tab_${tabid}`] !== "false") {
     selectToolbar(document.getElementById(tabid));
   }});
   selectTool(document.getElementById(state.tool || 'pen'));

@@ -11,6 +11,7 @@
     function updateSavedState(){
       let state = getState();
       for (let key in state){
+        console.log('key: %s', key);
         canvas.dataset[key] = state[key];
       }
     }
@@ -180,6 +181,7 @@
         loadFile,
         saveFile,
         saveBlob,
+        saveLocal,
         saveAs
     };
 
