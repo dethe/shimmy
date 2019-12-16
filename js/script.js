@@ -495,9 +495,7 @@ function hexToValue(hex) {
 
 function selectColor(input) {
   let popup = document.querySelector(".popup-color");
-  console.log(popup);
   let colorwell = document.querySelector(".js-color");
-  console.log(colorwell);
   if (popup.style.display === "block") {
     let color = colorpicker.getCurColorHex();
     colorButton(colorwell, color);
