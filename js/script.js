@@ -39,6 +39,7 @@ function getState() {
     color8: document.getElementById("color8").value
   };
   tabs.forEach(button => state[`tab-${button.id}`] = button.matches('.active'));
+  return state;
 }
 
 function setState(state) {
@@ -48,7 +49,7 @@ function setState(state) {
     if (state[`tab-${tabid}`] !== "true") {
     selectToolbar(document.getElementById(tabid));
   }});
-  selectTool(document.getElementById(state.tool));
+  selectTool(document.getElementById(state.tool) || );
   currentStrokeWidth = parseInt(state.strokeWidth);
   document.getElementById("pensize").value = state.strokeWidth;
   currentDoOnionskin = state.doOnionskin === "true";
@@ -417,7 +418,7 @@ function selectToolbar(button) {
 }
 
 function selectTool(button) {
-  let name = button.getAttribute("id");
+  let name = button.id;
   document.querySelector(".js-tool.active").classList.remove("active");
   button.classList.add("active");
   switch (name) {

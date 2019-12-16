@@ -2,8 +2,6 @@
 
 (function(global){
     'use strict';
-
-    var defaultStyle = '<style>path{stroke-linecap: round; stroke-linejoin: round; pointer-events: none; fill: none;}</style>';
     var defaultCanvas = '<svg id="canvas"><g class="frame selected"></g></svg>';
 
     function saveLocal(){ 
