@@ -17,9 +17,11 @@ html {
 
 html,
 body {
-  width: 100%;
-  height: 100%;
   -webkit-overflow-scrolling: auto;
+}
+
+body{
+  height: 100vh;
 }
 
 body.playing {
@@ -105,8 +107,15 @@ header {
   flex: auto;
   flex-direction: column;
   flex-wrap: wrap;
-  min-width: 12rem;
   max-height: 4rem;
+}
+
+.stack.colors{
+  min-width: 12rem;
+}
+
+.stack.actions{
+  min-width: 4rem;
 }
 
 .toolbar.active {
