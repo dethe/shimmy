@@ -20,7 +20,7 @@ body {
   -webkit-overflow-scrolling: auto;
 }
 
-body{
+body {
   height: 100vh;
 }
 
@@ -64,7 +64,7 @@ button i {
   left: 0;
 }
 
-button label{
+button label {
   flex: 1;
 }
 
@@ -110,11 +110,11 @@ header {
   max-height: 4rem;
 }
 
-.stack.colors{
+.stack.colors {
   min-width: 12rem;
 }
 
-.stack.actions{
+.stack.actions {
   min-width: 4rem;
 }
 
