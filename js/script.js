@@ -45,9 +45,9 @@ function setState(state) {
   let currentTabs = document.querySelectorAll(".js-tab.active");
   currentTabs.forEach(selectToolbar); // turn off any active tabs
   ['file', 'draw', 'animate'].forEach(tabid => {
-    if (state[`tab-${tabid}`] !== "null") {
-    selectToolbar(document.getElementById(state.tab));
-  }
+    if (state[`tab-${tabid}`] !== "true") {
+    selectToolbar(document.getElementById(tabid));
+  }});
   selectTool(document.getElementById(state.tool));
   currentStrokeWidth = parseInt(state.strokeWidth);
   document.getElementById("pensize").value = state.strokeWidth;
@@ -471,6 +471,11 @@ function colorPopup(input) {
     }
     popup.style.display = "none";
   }
+}
+
+function setBackgroundColor(color){
+  colorButton(document.getElementById('backgroundcolor'), color);
+  canvas.style.backgroundColor = color;
 }
 
 function colorButton(button, color) {
