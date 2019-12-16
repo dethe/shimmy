@@ -94,9 +94,15 @@ header {
 
 .toolbar {
   display: none;
-  flex-direction: column;
+  flex-direction: row;
   flex-wrap: wrap;
   height: 4rem;
+}
+
+.toolbar .stack {
+  display: flex;
+  flex-direction: column;
+  max-height: 4rem;
 }
 
 .toolbar.active {
@@ -119,6 +125,7 @@ header {
   background-color: white;
   text-align: center;
   display: flex;
+  border: 1px solid black;
   flex-direction: column;
 }
 
