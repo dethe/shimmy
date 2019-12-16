@@ -113,7 +113,7 @@ const colorpicker = new KellyColorPicker({
     // }
   }
 });
-setPalette({ target: colorpaletteselect });
+console.log(colorpicker);
 
 function setPalette(evt) {
   let palette = palettes[parseInt(evt.target.value)];
@@ -122,6 +122,7 @@ function setPalette(evt) {
     colorButton(wells[i], "#" + palette.colors[i]);
   }
 }
+setPalette({ target: colorpaletteselect });
 
 class Pen {
   constructor() {
