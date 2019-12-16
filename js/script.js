@@ -165,19 +165,19 @@ class Pen{
 
   move(evt){
     if (!this.drawing) return;
-    let {x,y,err} = getXY(evt);
+    let {x,y,wx,wy,err} = getXY(evt);
     if (err){ return; }
-    if (inBounds(x,y)){
+    if (inBounds(wx,wy)){
       this.appendToPath(x,y);
     }
   }
 
   stop(evt){
     if (!this.drawing) return;
-    let {x,y,err} = getXY(evt);
+    let {x,y,wx,wy,err} = getXY(evt);
     if (err){ return; }
     if (this.currentPath){
-      if (inBounds(x,y) && this.sx === x && this.sy === y){
+      if (inBounds(wx,wy) && this.sx === x && this.sy === y){
         this.appendToPath(x,y);
       }
       //dom.simplifyPath(currentPath);
@@ -372,7 +372,10 @@ function selectToolbar(button){
   }
   if (button.classList.contains('active')){
     button.classList.remove('active');
-    document.querySelector('.toolbar.active').classList.remove('active');
+    let activeToolbar = document.querySelector('.toolbar.active');
+    if (activeToolbar){
+      activeToolbar.classList.remove('active');
+    }
   }else{
     button.classList.add('active');
     document.querySelector(`#${name}-toolbar`).classList.add('active');
@@ -501,7 +504,7 @@ function getXY(evt){
     }
     // if the frame has been translated, rotated, or scaled, we need to map the point to the current matrix
     let {x:tx, y:ty} = transformPoint(x,y);
-    return {x: tx, y: ty, err: false};
+    return {x: tx, y: ty, wx: x, wy: y, err: false};
 }
 
 function transformPoint(x,y){
