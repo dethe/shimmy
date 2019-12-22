@@ -182,6 +182,9 @@
   function queryMoat(){
     fetch(MOAT_URL + 'programs').then(response => console.log(response));
   }
+  if (USE_MOAT){
+    queryMoat();
+  }
 
     window.file = {
         onChange: onChange,
