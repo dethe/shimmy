@@ -843,7 +843,9 @@ function newAnimation(evt) {
 function setMoatUI(list){
   let moat = document.getElementById('moat');
   if (list.length){
-    moat.append(dom.html('option', {value: ''}, 'C'))
+    if (list.length > 1){
+      moat.append(dom.html('option', {value: ''}, 'Choose a Program'));
+    }
     list.forEach(item => moat.append(dom.html('option', {value: item.url}, item.name)));
   }else{
     moat.appendChild(dom.html('option', {value: ''}, 'No Moat Programs Found'));
