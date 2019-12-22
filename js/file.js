@@ -16,7 +16,6 @@
     function updateSavedState(){
       let state = getState();
       for (let key in state){
-        console.log('key: %s', key);
         canvas.dataset[key] = state[key];
       }
     }
@@ -180,7 +179,7 @@
     }
   
   function queryMoat(){
-    fetch(MOAT_URL + 'programs').then(response => console.log(response));
+    fetch(MOAT_URL + 'programs', {mode: 'no-cors', method: 'GET'}).then(response => console.log(response));
   }
   if (USE_MOAT){
     queryMoat();

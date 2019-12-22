@@ -113,7 +113,6 @@ const colorpicker = new KellyColorPicker({
     // }
   }
 });
-console.log(colorpicker);
 
 function setPalette(evt) {
   let palette = palettes[parseInt(evt.target.value)];
