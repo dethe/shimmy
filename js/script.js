@@ -762,6 +762,10 @@ function play() {
   // temporarily turn off onionskin (remember state)
   // start at beginning of document (remember state)
   let { x, y, width, height } = getAnimationBBox();
+  let onion = document.querySelector('.onionskin');
+  if (onion){
+    onion.classList.replace('onionskin', 'nskin');
+  }
   document.body.classList.add("playing");
   document.querySelector(".frame").classList.add("play-frame");
   canvas.setAttribute("width", width + "px");
@@ -786,6 +790,10 @@ function stop() {
   // turn stop button into play button
   dom.removeClass(playingFrame(), "play-frame");
   document.body.classList.remove("playing");
+  let onion = document.querySelector('.nskin');
+  if (onion){
+    onion.classList.replace('nskin', 'onionskin');
+  }
   canvas.removeAttribute("viewBox");
   canvas.removeAttribute("style");
   canvas.setAttribute("width", document.body.clientWidth + "px");

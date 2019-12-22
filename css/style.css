@@ -278,16 +278,12 @@ path {
   display: inline;
 }
 
-:not(.playing) .frame.onionskin {
+.frame.onionskin {
   display: inline;
   pointer-events: none;
   opacity: 0.5;
 }
 
-/* .playing .frame.onionskin {
-  display: auto;
-}
- */
 .storyboard-frame {
   border: 1px solid #666;
   padding: 10px;
