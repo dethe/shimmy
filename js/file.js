@@ -96,8 +96,11 @@
     function saveAs(data, filename){
       let ext = filename.split('.').pop();
       let filetype = filetypes[ext];
-      var file = new Blob([data], {type: filetype});
-      saveBlob(file, filename);
+      if (data.toBlob){ // ex: canvas.toBlob()
+        data.toBlob(blob => saveBlob(blob, filename), filetype);
+      }else{
+        saveBlob(new Blob([data], {type: filetype}), filename);
+      }
     }
   
   function saveBlob(blob, filename){

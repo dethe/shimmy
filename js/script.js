@@ -997,7 +997,7 @@ function animationToSpritesheet(){
   frames.forEach((frame, idx) => {
     context.drawImage(frameToImage(frame, x, y, width, height), 0, height * idx);
   });
-  
+  file.saveAs(canvas, 'image.png');
 }
 
 function displayAsStoryboard() {
