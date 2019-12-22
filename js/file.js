@@ -1,4 +1,4 @@
-/* globals ajax app dom listenCanvas canvas getState setState */
+/* globals ajax app dom listenCanvas canvas getState setState setMoatUI*/
 
 (function(global){
     'use strict';
@@ -178,11 +178,11 @@
         }
     }
   
-  function queryMoat(){
-    fetch(MOAT_URL + 'programs').then(response => console.log(response));
+  function queryMoat(cb){
+    fetch(MOAT_URL + 'programs').then(response => response.body.json().then(cb));
   }
   if (USE_MOAT){
-    queryMoat();
+    queryMoat(setMoatUI);
   }
 
     window.file = {

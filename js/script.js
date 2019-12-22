@@ -838,6 +838,12 @@ function newAnimation(evt) {
   updateFrameCount();
 }
 
+/* FILE Functions */
+
+function setMoatUI(json){
+  
+}
+
 function saveAsSVG(evt) {
   file.saveFile();
 }
