@@ -840,8 +840,17 @@ function newAnimation(evt) {
 
 /* FILE Functions */
 
-function setMoatUI(json){
-  
+function setMoatUI(list){
+  let moat = document.getElementById('moat');
+  if (list.length){
+    list.forEach(item => moat.append(dom.html('option', {value: item.url}, item.name)));
+  }else{
+    list.forEach(item => moat.append(dom.html('option', {value: ''}, 'No Moat Programs Found')))
+  }
+}
+
+function clearMoatUI(){
+  document.getElementById('moat-container').remove();
 }
 
 function saveAsSVG(evt) {
