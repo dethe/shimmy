@@ -182,7 +182,7 @@
     fetch(MOAT_URL + 'programs').then(response => response.body.json().then(cb));
   }
   if (USE_MOAT){
-    queryMoat(setMoatUI);
+    window.addEventListener('onload', e => queryMoat(setMoatUI), true);
   }
 
     window.file = {
