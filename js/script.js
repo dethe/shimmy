@@ -860,7 +860,12 @@ function clearMoatUI(){
 
 function saveToMoat(){
   let moat = document.getElementById('moat');
-  console.log('moat.value')
+  console.log('moat.value');
+  if (!moat.value){
+    alert('You have to choose a Moat program first');
+    return;
+  }
+  
 }
 
 function saveAsSVG(evt) {
