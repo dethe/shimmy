@@ -846,7 +846,7 @@ function setMoatUI(list){
     if (list.length > 1){
       moat.append(dom.html('option', {value: ''}, 'Choose a Program'));
     }
-    list.forEach(item => moat.append(dom.html('option', {value: item.url}, item.name)));
+    list.forEach(item => moat.append(dom.html('option', {value: item.id}, item.name)));
   }else{
     moat.appendChild(dom.html('option', {value: ''}, 'No Moat Programs Found'));
     moat.disabled = true;
@@ -856,6 +856,11 @@ function setMoatUI(list){
 
 function clearMoatUI(){
   document.getElementById('moat-container').remove();
+}
+
+function saveToMoat(){
+  let moat = document.getElementById('moat');
+  console.log('moat.value')
 }
 
 function saveAsSVG(evt) {
