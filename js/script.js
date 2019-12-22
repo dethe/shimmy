@@ -843,10 +843,12 @@ function newAnimation(evt) {
 function setMoatUI(list){
   let moat = document.getElementById('moat');
   if (list.length){
+    moat.append(dom.html('option', {value: ''}, 'C'))
     list.forEach(item => moat.append(dom.html('option', {value: item.url}, item.name)));
   }else{
-    console.log(dom.html('option', {value: ''}, 'No Moat Programs Found'));
-    list.forEach(item => moat.append(dom.html('option', {value: ''}, 'No Moat Programs Found')))
+    moat.appendChild(dom.html('option', {value: ''}, 'No Moat Programs Found'));
+    moat.disabled = true;
+    document.getElementById('save-moat').disabled = true;
   }
 }
 

@@ -2,7 +2,10 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, user-scalable=no"
+    />
     <title>Drawing Board</title>
     <link href="css/fontawesome.css" rel="stylesheet" />
     <link href="css/regular.css" rel="stylesheet" />
@@ -49,14 +52,10 @@
           New
         </button>
         <span class="feedback moat" id="moat-container">
-          <label
-            >Save to Moat<br />
-            <select
-              id="moat"
-              class="js-moat select-css"
-            >
-            </select>
-          </label>
+          <button id="save-moat" onclick="saveToMoat()">
+            Save to Moat
+          </button>
+          <select id="moat" class="js-moat select-css"> </select>
         </span>
       </nav>
       <nav class="toolbar active" id="draw-toolbar">
