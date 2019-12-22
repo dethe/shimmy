@@ -179,7 +179,7 @@
     }
   
   function queryMoat(cb){
-    fetch(MOAT_URL + 'programs').then(response => response.json().then(cb));
+    fetch(MOAT_URL + 'programs/?integration=shimmy').then(response => response.json().then(cb));
   }
   if (USE_MOAT){
     window.addEventListener('load', e => queryMoat(setMoatUI), true);
