@@ -986,6 +986,20 @@ function animationToImages() {
   );
 }
 
+function animationToSpritesheet(){
+  let {x, y, width, height } = getAnimationBBox();
+  let frames = document.querySelectorAll('.frame');
+  let canvas = dom.html("canvas", {
+      width: width,
+      height: height * frames.length
+    });
+  let ctx = canvas.getContext('2D');
+  frames.forEach((frame, idx) => {
+    context.drawImage(frameToImage(frame, x, y, width, height), 0, height * idx);
+  });
+  
+}
+
 function displayAsStoryboard() {
   let frames = animationToImages();
   frames.forEach(f => document.body.appendChild(f));
