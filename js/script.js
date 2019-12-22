@@ -845,7 +845,7 @@ function setMoatUI(list){
   if (list.length){
     list.forEach(item => moat.append(dom.html('option', {value: item.url}, item.name)));
   }else{
-    console.log('moat: %s', moat);
+    console.log(dom.html('option', {value: ''}, 'No Moat Programs Found'));
     list.forEach(item => moat.append(dom.html('option', {value: ''}, 'No Moat Programs Found')))
   }
 }

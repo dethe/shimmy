@@ -179,10 +179,10 @@
     }
   
   function queryMoat(cb){
-    fetch(MOAT_URL + 'programs').then(response => response.body.json().then(cb));
+    fetch(MOAT_URL + 'programs').then(response => response.json().then(cb));
   }
   if (USE_MOAT){
-    window.addEventListener('onload', e => queryMoat(setMoatUI), true);
+    window.addEventListener('load', e => queryMoat(setMoatUI), true);
   }
 
     window.file = {
