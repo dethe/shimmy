@@ -105,11 +105,16 @@
     }
   
   function sendToMoat(progid){
-    saveToCallback(saveFormat(), )
+    saveToCallback(saveFormat(), 'shimmy.svg', (blob, filename) => sendToMoatCB(blob, filename, progid));
   }
   
-  function sendToMoatCB(blob, filename){
+  function sendToMoatCB(blob, filename, progid){
     let formData = new FormData();
+    formData.append('program', progid);
+    formData.append('file', blob, filename);
+    let request = new XMLHttpRequest();
+    request.open("POST", "/file/create");
+    request.send(formData);
   }
   
   function saveAs(data, filename){
