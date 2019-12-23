@@ -115,6 +115,13 @@
     let request = new XMLHttpRequest();
     request.open("POST", "/file/create");
     request.send(formData);
+    request.onLoad = showFilePage;
+    request.onError = handleError;
+    
+  }
+  
+  function showFilePage(){
+    
   }
   
   function saveAs(data, filename){
