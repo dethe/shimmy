@@ -129,7 +129,10 @@
   }
   
   function showFilePage(){
-    
+    let dialog = dom.html('dialog');
+    document.body.append(dialog);
+    dialog.append(this.responseXML.querySelector('main'));
+    dialog.showModal();
   }
   
   function saveAs(data, filename){
