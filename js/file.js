@@ -117,7 +117,15 @@
     request.send(formData);
     request.onLoad = showFilePage;
     request.onError = handleError;
-    
+    request.onTimeout = () => handleTimeout();
+  }
+  
+  function handleError(){
+    alert('Error uploading to Moat, please try again.');
+  }
+  
+  function handleTimeout(){
+    alert('Timeout uploading to Moat, please try again.');
   }
   
   function showFilePage(){
