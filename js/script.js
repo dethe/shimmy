@@ -868,17 +868,17 @@ function saveToMoat(){
   
 }
 
-function saveAsSVG(evt) {
+function saveAsSvg(evt) {
   file.saveFile();
 }
 
-function saveFrameAsPNG(evt) {
+function saveFrameAsPng(evt) {
   let { x, y, width, height } = getAnimationBBox();
   let img = frameToImage(currentFrame(), x, y, width, height);
   // FIXME: save the image
 }
 
-function saveAsGIF(evt) {
+function saveAsGif(evt) {
   var gif = new GIF({
     workers: 2,
     quality: 10,
@@ -899,7 +899,7 @@ function saveAsMovie(evt) {
   console.log("save as movie");
 }
 
-function openSVG(evt) {
+function openSvg(evt) {
   file.loadFile();
 }
 
@@ -986,7 +986,7 @@ function animationToImages() {
   );
 }
 
-function animationToSpritesheet(){
+function saveAsSpritesheet(){
   let {x, y, width, height } = getAnimationBBox();
   let frames = document.querySelectorAll('.frame');
   let canvas = dom.html("canvas", {
@@ -995,7 +995,7 @@ function animationToSpritesheet(){
     });
   let ctx = canvas.getContext('2D');
   frames.forEach((frame, idx) => {
-    context.drawImage(frameToImage(frame, x, y, width, height), 0, height * idx);
+    ctx.drawImage(frameToImage(frame, x, y, width, height), 0, height * idx);
   });
   file.saveAs(canvas, 'image.png');
 }
