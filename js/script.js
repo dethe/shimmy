@@ -993,7 +993,7 @@ function saveAsSpritesheet(){
       width: width,
       height: height * frames.length
     });
-  let ctx = canvas.getContext('2D');
+  let ctx = canvas.getContext('2d');
   frames.forEach((frame, idx) => {
     ctx.drawImage(frameToImage(frame, x, y, width, height), 0, height * idx);
   });
