@@ -93,7 +93,8 @@
       'gif': 'image/gif'
     }
   
-    function saveAs(data, filename){
+    function saveToCallback(data, filename, cb){
+      // Callback is shaped cb(blob, filename);
       let ext = filename.split('.').pop();
       let filetype = filetypes[ext];
       if (data.toBlob){ // ex: canvas.toBlob()
@@ -103,6 +104,18 @@
       }
     }
   
+  function sendToMoat(progid){
+    saveToCallback(saveFormat(), )
+  }
+  
+  function sendToMoatCB(blob, filename){
+    let formData = new FormData();
+  }
+  
+  function saveAs(data, filename){
+    saveToCallback(data, filename, saveBlob);
+  }
+    
   function saveBlob(blob, filename){
       var reader = new FileReader();
       reader.onloadend = function(){
