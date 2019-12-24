@@ -97,6 +97,7 @@
 
   function saveToCallback(data, filename, cb) {
     // Callback is shaped cb(blob, filename);
+    console.log('saveToCallback(%s)', filename);
     let ext = filename.split(".").pop();
     let filetype = filetypes[ext];
     if (data.toBlob) {
@@ -108,17 +109,19 @@
   }
 
   function sendToMoat(progid) {
+    console.log('sendToMoat(%s)', progid);
     saveToCallback(saveFormat(), "shimmy.svg", (blob, filename) =>
       sendToMoatCB(blob, filename, progid)
     );
   }
 
   function sendToMoatCB(blob, filename, progid) {
+    console.log('sendToMoatCB(%s)', filename);
     let formData = new FormData();
     formData.append("program", progid);
     formData.append("file", blob, filename);
     let request = new XMLHttpRequest();
-    request.open("POST", "/file/create");
+    request.open("POST", "http://sd-moat.glitch.me/file/create");
     request.send(formData);
     request.onLoad = showFilePage;
     request.onError = handleError;
@@ -134,8 +137,10 @@
   }
 
   function showFilePage() {
+    console.log('showFilePage');
     let dialog = dom.html("dialog");
     document.body.append(dialog);
+    console.log(this.responseXML);
     dialog.append(this.responseXML.querySelector("main"));
     dialog.showModal();
   }
