@@ -114,6 +114,16 @@
       sendToMoatCB(blob, filename, progid)
     );
   }
+  
+  function sendToMoatPreflight(blob, filename, progid){
+    console.log('sendToMoatPreflight(%s)', filename);
+    let request = new XMLHttpRequest();
+    request.open('OPTIONS', MOAT_URL + 'file/create');
+    request.send();
+    request.onLoad = () => sendToMoatCB(blob, filename, progid);
+    request.onError = () => handleError('preflight');
+    request.onTimeout = () => handleTimeout('preflight');
+  }
 
   function sendToMoatCB(blob, filename, progid) {
     console.log('sendToMoatCB(%s)', filename);
@@ -121,19 +131,19 @@
     formData.append("program", progid);
     formData.append("file", blob, filename);
     let request = new XMLHttpRequest();
-    request.open("POST", "http://sd-moat.glitch.me/file/create");
+    request.open("POST", MOAT_URL + 'file/create');
     request.send(formData);
-    request.onLoad = showFilePage;
-    request.onError = handleError;
-    request.onTimeout = () => handleTimeout();
+    request.onLoad = () => showFilePage;
+    request.onError = () => handleError('send file');
+    request.onTimeout = () => handleTimeout('send file');
   }
 
-  function handleError() {
-    alert("Error uploading to Moat, please try again.");
+  function handleError(step) {
+    alert("Error uploading to Moat during " + step + " step, please try again.");
   }
 
-  function handleTimeout() {
-    alert("Timeout uploading to Moat, please try again.");
+  function handleTimeout(step) {
+    alert("Timeout uploading to Moat during " + step + ", please try again.");
   }
 
   function showFilePage() {
