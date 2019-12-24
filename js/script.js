@@ -860,12 +860,11 @@ function clearMoatUI(){
 
 function saveToMoat(){
   let moat = document.getElementById('moat');
-  console.log('moat.value');
   if (!moat.value){
     alert('You have to choose a Moat program first');
     return;
   }
-  
+  file.sendToMoat(moat);
 }
 
 function saveAsSvg(evt) {
