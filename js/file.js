@@ -111,7 +111,7 @@
   function sendToMoat(progid) {
     console.log('sendToMoat(%s)', progid);
     saveToCallback(saveFormat(), "shimmy.svg", (blob, filename) =>
-      sendToMoatCB(blob, filename, progid)
+      sendToMoatPreflight(blob, filename, progid)
     );
   }
   
