@@ -132,7 +132,7 @@
     formData.append("file", blob, filename);
     let request = new XMLHttpRequest();
     request.open("POST", MOAT_URL + 'file/create');
-    request.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+    request.setRequestHeader('X-Requested-With', 'XMLHTTPRequest');
     request.send(formData);
     request.onLoad = () => showFilePage;
     request.onError = () => handleError('send file');
