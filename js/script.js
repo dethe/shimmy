@@ -1,4 +1,4 @@
-/* globals dom file KellyColorPicker palettes toDataURL canvas GIF*/
+/* globals dom file KellyColorPicker palettes toDataURL canvas GIF */
 
 const mouse = {};
 
