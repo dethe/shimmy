@@ -139,7 +139,7 @@
     request.open("POST", MOAT_URL + 'file/create');
     request.setRequestHeader('X-Requested-With', 'XMLHTTPRequest');
     request.send(formData);
-    request.onload = () => showFilePage(request.xml);
+    request.onload = () => showFilePage(request.response);
     request.onerror = () => handleError('send file');
     request.ontimeout = () => handleTimeout('send file');
   }
@@ -152,9 +152,9 @@
     alert("Timeout uploading to Moat during " + step + ", please try again.");
   }
 
-  function showFilePage(html) {
-    console.log('showFilePage');
-    dialog.innerHTML = html.outerHTML;
+  function showFilePage(res) {
+    dialog.innerHTML = res;
+    dialog.append()
     dialog.showModal();
   }
 
