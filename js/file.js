@@ -154,7 +154,7 @@
 
   function showFilePage(res) {
     dialog.innerHTML = res;
-    dialog.append()
+    dialog.append(dom.html('button', {onClick: 'this.parentElement.close()'}, 'OK'));
     dialog.showModal();
   }
 
