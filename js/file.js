@@ -134,9 +134,9 @@
     request.open("POST", MOAT_URL + 'file/create');
     request.setRequestHeader('X-Requested-With', 'XMLHTTPRequest');
     request.send(formData);
-    request.onLoad = () => showFilePage(request.xml);
-    request.onError = () => handleError('send file');
-    request.onTimeout = () => handleTimeout('send file');
+    request.onload = () => showFilePage(request.xml);
+    request.onerror = () => handleError('send file');
+    request.ontimeout = () => handleTimeout('send file');
   }
 
   function handleError(step) {
@@ -153,6 +153,7 @@
     document.body.append(dialog);
     console.log(html);
     dialog.append(html);
+    console.log(dialog);
     dialog.showModal();
   }
 
