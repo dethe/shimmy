@@ -1071,12 +1071,12 @@ document.addEventListener("keydown", hotkeys, false);
 
 // disable default Safari iOS double-tap to zoom and pinch to zoom
 
-document.addEventListener('touchmove', function (event) {
+document.body.addEventListener('touchmove', function (event) {
   if (event.scale !== 1) { event.preventDefault();  event.stopPropagation();}
   if (event.touches.length > 1){
     event.preventDefault(); event.stopPropagation();
   }
-}, false);
+}, true);
 
 var lastTouchEnd = 0;
 document.addEventListener('touchend', function (event) {
