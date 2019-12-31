@@ -864,7 +864,7 @@ function saveToMoat(){
     alert('You have to choose a Moat program first');
     return;
   }
-  file.sendToMoat(moat);
+  file.sendToMoat(moat.value);
 }
 
 function saveAsSvg(evt) {

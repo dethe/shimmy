@@ -120,16 +120,6 @@
     );
   }
   
-  // function sendToMoatPreflight(blob, filename, progid){
-  //   console.log('sendToMoatPreflight(%s)', filename);
-  //   let request = new XMLHttpRequest();
-  //   request.open('OPTIONS', MOAT_URL + 'file/create');
-  //   request.send();
-  //   request.onLoad = () => sendToMoatCB(blob, filename, progid);
-  //   request.onError = () => handleError('preflight');
-  //   request.onTimeout = () => handleTimeout('preflight');
-  // }
-
   function sendToMoatCB(blob, filename, progid) {
     console.log('sendToMoatCB(%s)', filename);
     let formData = new FormData();
