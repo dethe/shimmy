@@ -1073,10 +1073,10 @@ document.addEventListener("keydown", hotkeys, false);
 
 document.body.addEventListener('touchmove', function (event) {
   if (event.scale !== 1) { event.preventDefault();  event.stopPropagation();}
-  if (event.touches.length > 1){
+  if (event.changedTouches.length > 1){
     event.preventDefault(); event.stopPropagation();
   }
-}, true);
+}, false);
 
 var lastTouchEnd = 0;
 document.addEventListener('touchend', function (event) {
