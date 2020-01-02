@@ -20,16 +20,19 @@
 //   evt.docRedo = nameOfDocRedo or null;
 // }
 
-(function(){
+function UndoRedo(frame){
   const documentUndoStack = [];
   const documentRedoStack = [];
   const framesUndoStack = new Map();
   const frameRedoStack = new Map();
-  let currentFrame = null;
+  let currentFrame = frame;
   
-  const init = (frame) => 
+  const sendEvent()
   
   const pushUndo = (name, type, applyFn, restoreFn) => {
+    if (type === 'document'){
+      document
+    }
     
   };
   
@@ -41,11 +44,9 @@
     
   }
   
-  window.undoredo = {
-    init(currentFrame);
+  return{
     undo,
     redo,
     pushUndo
-  }
-  
-})();
+  }; 
+}
