@@ -41,8 +41,19 @@ function UndoRedo(frame){
     document.dispatchEvent(evt);
   }
   
-  const pushDocUndo = (name, type, applyFn, restoreFn) => {
+  const pushDocUndo = (name, frameTarget, currentFrame, applyFn, restoreFn) => {
       // NOTE: 'document' type actions can change the currentFrame
+    switch(name){
+      case 'New Frame':
+        // add 
+        break;
+      case 'Copy Frame':
+        break;
+      case 'Delete Frame':
+        break
+      default:
+        break;
+    }
   };
   
   const pushFrameUndo = (name, applyFn, restorFn) => {
