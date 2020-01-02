@@ -31,6 +31,9 @@ function UndoRedo(frame){
   // look at the top item of a stack
   const peek = (stack) => stack.length ? stack[stack.length -1].name : null;
   
+  // for map copying a stack
+  const copy = (item) => item.cloneNode ? item.cloneNode(true) : item;
+  
   const sendEvent = () => {
     let evt = new CustomEvent('shimmy-undo-change', {detail: {
       frameUndo: peek(frameUndoStack[currentFrame]),
@@ -45,9 +48,14 @@ function UndoRedo(frame){
       // NOTE: 'document' type actions can change the currentFrame
     switch(name){
       case 'New Frame':
-        // add 
+        // add a frame to the frameUndoStack and frameRedoStack
+        // frameTarget and currentFrame should be the same
+        frameUndoStack.set(frameTarget, []);
         break;
       case 'Copy Frame':
+        // add a frame to the frameUndoStack and frameRedoStack
+        // frameTarget should be the frame being copied, frame        
+        frameUndoStack.set(frameTarget, [])
         break;
       case 'Delete Frame':
         break
