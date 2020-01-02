@@ -50,14 +50,18 @@ function UndoRedo(frame){
       case 'New Frame':
         // add a frame to the frameUndoStack and frameRedoStack
         // frameTarget and currentFrame should be the same
-        frameUndoStack.set(frameTarget, []);
+        frameUndoStack.set(currentFrame, []);
+        frameRedoStack.set(currentFrame, []);
         break;
       case 'Copy Frame':
         // add a frame to the frameUndoStack and frameRedoStack
+        // copy undo stack and redo stack from old frame to new frame
         // frameTarget should be the frame being copied, frame        
-        frameUndoStack.set(frameTarget, [])
+        frameUndoStack.set(currentFrame, frameUndoStack[frameTarget].map(copy));
+        frameRedoStack.set(currentFrame, frameRedoStack[frameTarget].map(copy));
         break;
       case 'Delete Frame':
+        frameUndoSta
         break
       default:
         break;
