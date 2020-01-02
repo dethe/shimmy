@@ -27,7 +27,15 @@ function UndoRedo(frame){
   const frameRedoStack = new Map();
   let currentFrame = frame;
   
-  const sendEvent()
+  // look at the top item of a stack
+  const peek = (stack) => return stack.length ? stack[stack.length -1].name : null;
+  
+  const sendEvent = () => {
+    let evt = new Event('shimmy-undo-change');
+    evt.frameUndo = peek(framesUndoStack[currentFrame]);
+    evt.frameRedo = peek(framesRedoStack[])
+    
+  }
   
   const pushUndo = (name, type, applyFn, restoreFn) => {
     if (type === 'document'){
