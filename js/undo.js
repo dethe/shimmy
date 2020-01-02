@@ -14,32 +14,35 @@
 // Use events for enabling/disabling buttons and changing button labels
 // Events: document.addEventListener('shimmy-undo-change', handler, true);
 // function undoHandler(evt){
-//   evt.frameUndo = nameOfFrameUndo or null;
-//   evt.frameRedo = nameOfFrameRedo or null;
-//   evt.docUndo = nameOfDocUndo or null;
-//   evt.docRedo = nameOfDocRedo or null;
+//   evt.detail.frameUndo = nameOfFrameUndo or null;
+//   evt.detail.frameRedo = nameOfFrameRedo or null;
+//   evt.detail.docUndo = nameOfDocUndo or null;
+//   evt.detail.docRedo = nameOfDocRedo or null;
 // }
 
 function UndoRedo(frame){
   const documentUndoStack = [];
   const documentRedoStack = [];
-  const framesUndoStack = new Map();
+  const frameUndoStack = new Map();
   const frameRedoStack = new Map();
   let currentFrame = frame;
   
   // look at the top item of a stack
-  const peek = (stack) => return stack.length ? stack[stack.length -1].name : null;
+  const peek = (stack) => stack.length ? stack[stack.length -1].name : null;
   
   const sendEvent = () => {
-    let evt = new Event('shimmy-undo-change');
-    evt.frameUndo = peek(framesUndoStack[currentFrame]);
-    evt.frameRedo = peek(framesRedoStack[])
-    
+    let evt = new CustomEvent('shimmy-undo-change', {detail: {
+      frameUndo: peek(frameUndoStack[currentFrame]),
+      frameRedo: peek(frameRedoStack[currentFrame]),
+      docUndo: peek(documentUndoStack),
+      docRedo: peek(documentRedoStack)
+    }});
+    document.dispatchEvent(evt);
   }
   
   const pushUndo = (name, type, applyFn, restoreFn) => {
     if (type === 'document'){
-      document
+      // NOTE: 'document' type actions can change the currentFrame
     }
     
   };
