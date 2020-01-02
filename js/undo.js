@@ -5,7 +5,8 @@
 // name: name of action: Draw, Pan, Rotate, Zoom, Clear, New Frame, Copy Frame, Delete Frame
 // type: frame or document
 //
-// pushUndo(name, type, applyFn, restoreFn);
+// pushDocUndo(name, frameTarget, currentFrame, applyFn, restoreFn);
+// pushFrameUndo(name, applyFn, restoreFn);
 // undo(type); pops the relevant undo stack
 // redo(type); pops the relevant redo stack
 // switchFrame(newFrame); // because most undo is frame-based
@@ -40,24 +41,35 @@ function UndoRedo(frame){
     document.dispatchEvent(evt);
   }
   
-  const pushUndo = (name, type, applyFn, restoreFn) => {
-    if (type === 'document'){
+  const pushDocUndo = (name, type, applyFn, restoreFn) => {
       // NOTE: 'document' type actions can change the currentFrame
-    }
+  };
+  
+  const pushFrameUndo = (name, applyFn, restorFn) => {
+  };
+  
+  const docUndo = () => {
     
   };
   
-  const undo = (type) => {
+  const docRedo = () => {
+  
+  };
+  
+  const frameUndo = () => {
     
-  }
+  };
   
   const redo = (type) => {
     
   }
   
   return{
-    undo,
-    redo,
-    pushUndo
+    frameUndo,
+    frameRedo,
+    docUndo,
+    docRedo,
+    pushFrameUndo,
+    pushDocumentUndo
   }; 
 }
