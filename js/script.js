@@ -1023,19 +1023,19 @@ function hotkeys(evt) {
       newAnimation(evt);
       break;
     case "s":
-      saveAsSVG(evt);
+      saveAsSvg(evt);
       break;
-    case "f":
-      saveFrameAsPNG(evt);
-      break;
+    // case "f":
+    //   saveFrameAsPNG(evt); // not implemented
+    //   break;
     case "g":
-      saveAsGIF(evt);
+      saveAsGif(evt);
       break;
     case "m":
       saveAsMovie(evt);
       break;
     case "o":
-      openSVG(evt);
+      openSvg(evt);
       break;
     case "d":
       toggleDisplay(evt);
@@ -1069,15 +1069,16 @@ document.addEventListener("keydown", keydownHandler, false);
 document.addEventListener("keyup", keyupHandler, false);
 document.addEventListener("keydown", hotkeys, false);
 
-// disable default Safari iOS double-tap to zoom and pinch to zoom
+// Attempt to disable default Safari iOS pinch to zoom (failed)
 
-document.body.addEventListener('touchmove', function (event) {
-  if (event.scale !== 1) { event.preventDefault();  event.stopPropagation();}
-  if (event.changedTouches.length > 1){
-    event.preventDefault(); event.stopPropagation();
-  }
-}, false);
+// document.body.addEventListener('touchmove', function (event) {
+//   if (event.scale !== 1) { event.preventDefault();  event.stopPropagation();}
+//   if (event.changedTouches.length > 1){
+//     event.preventDefault(); event.stopPropagation();
+//   }
+// }, false);
 
+// Disable default Safari iOS double-tap to zoom
 var lastTouchEnd = 0;
 document.addEventListener('touchend', function (event) {
   var now = (new Date()).getTime();
