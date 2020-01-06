@@ -19,12 +19,14 @@
       <button onclick="hideUI()" id="shimmy" title="shimmy">
         <i class="far fa-palette fa-3x"></i>
       </button>
+      
+      <!-- FILE -->
       <nav class="toolbar" id="file-toolbar">
         <button
           onclick="selectToolbar(this)"
           id="file"
           title="File"
-          class="js-tab"
+          class="js-tab tab"
         >
           <span>File</span>
         </button>
@@ -59,9 +61,9 @@
           onclick="selectToolbar(this)"
           id="draw"
           title="Draw"
-          class="js-tab active"
+          class="tab js-tab active"
         >
-          Draw
+          <span>Draw</span>
         </button>
         <button
           onclick="selectTool(this)"
@@ -217,9 +219,9 @@
           onclick="selectToolbar(this)"
           id="animate"
           title="Animate"
-          class="js-tab"
+          class="js-tab tab"
         >
-          Animate
+          <span>Animate</span>
         </button>
         <button onclick="gotoFirstFrame()" title="First Frame">
           <i class="far fa-fast-backward"></i>

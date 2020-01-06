@@ -118,6 +118,18 @@ header {
   height: 5rem;
 }
 
+.toolbar > * {
+  display: none;
+}
+
+.toolbar > .tab{
+  display: flex;
+}
+
+.toolbar.active > * {
+  display: flex;
+}
+
 .toolbar .stack {
   display: flex;
   flex: 1 1 auto;
@@ -136,10 +148,6 @@ header {
 
 .stack.actions {
   min-width: 4rem;
-}
-
-.toolbar.active {
-  display: flex;
 }
 
 
