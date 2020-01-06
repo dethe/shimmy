@@ -1014,10 +1014,10 @@ function displayAsDrawingboard() {
 function hideUI(button){
   if (button.matches('.active')){
     button.classList.remove('active');
-    document.querySelectorAll('.toolbar').map(tb => tb.removeAttribute('hidden'));
+    document.querySelectorAll('.toolbar').forEach(tb => tb.style.display = 'flex');
   }else{
     button.classList.add('active');
-    document.querySelectorAll('.toolbar').map(tb => tb.setAttribute('hidden', 'hidden'));
+    document.querySelectorAll('.toolbar').forEach(tb => tb.style.display = 'none');
   }
 }
 
