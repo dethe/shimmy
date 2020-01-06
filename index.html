@@ -52,7 +52,17 @@
           <select id="moat" class="js-moat select-css"> </select>
         </span>
       </nav>
+
+      <!-- DRAW -->
       <nav class="toolbar active" id="draw-toolbar">
+        <button
+          onclick="selectToolbar(this)"
+          id="draw"
+          title="Draw"
+          class="js-tab active"
+        >
+          Draw
+        </button>
         <button
           onclick="selectTool(this)"
           id="pen"
@@ -200,15 +210,16 @@
           </button>
         </div>
       </nav>
-      /* ANIMATE */
+
+      <!-- ANIMATE -->
       <nav class="toolbar" id="animate-toolbar">
         <button
           onclick="selectToolbar(this)"
-          id="draw"
-          title="Draw"
-          class="js-tab active"
+          id="animate"
+          title="Animate"
+          class="js-tab"
         >
-          Draw
+          Animate
         </button>
         <button onclick="gotoFirstFrame()" title="First Frame">
           <i class="far fa-fast-backward"></i>
