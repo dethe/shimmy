@@ -18,8 +18,8 @@ html {
 :root{
   --bw: 4rem; /* button width */
   --bh: 4rem; /* button-height */
-  --bw2: 2rem; // half button width
-  --bh2: 2rem; // half button height
+  --bw2: 2rem; /* half button width */
+  --bh2: 2rem; /* half button height */
 }
 
 /* Tools */
@@ -66,8 +66,8 @@ button {
 
 .toolbar > button {
   border-width: 1px;
-  min-width: var(--bw);
-  min-height: var(--bh);
+  width: var(--bw);
+  height: var(--bh);
 }
 
 button i {
@@ -118,8 +118,7 @@ header {
 }
 
 .toolbar button.tab{
-  max-width: var(--bw2);
-  min-width: var(--bw2);
+  width: var(--bw2);
 }
 
 .tab span{
@@ -156,7 +155,7 @@ header {
 .feedback {
   min-height: var(--bh);
   min-width: var(--bw);
-  /*   font-size: .8rem; */
+    font-size: .8rem;
   background-color: white;
   text-align: center;
   display: flex;
