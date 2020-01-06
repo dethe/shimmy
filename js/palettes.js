@@ -1,3 +1,5 @@
+/* Palettes mostly from https://www.color-hex.com/ with some tweaking and curating */
+
 const palettes = [
   {
     "name": "Primary",
@@ -50,6 +52,16 @@ const palettes = [
     ]
   },
   {
+    "name": "Winter",
+    "colors": [
+      "4ca6ae",
+      "81c9ce",
+      "98d9de",
+      "b1e9e9",
+      "c3eef2"
+    ]
+  },
+  {
     "name": "Spring",
     "colors": [
       "54a54c",
@@ -58,9 +70,20 @@ const palettes = [
       "e9ea91",
       "ff54ef"
     ]
+  },
+  {
+    "name": "Summer",
+    "colors": [
+      "b85a5b",
+      "cc8d80",
+      "a8b9bd",
+      "f2ddc3",
+      "f6cc47"
+    ]
   }
 ];
 
+/* These are from the top 100 palettes, but I found them to be too much, too weirdly named, and have too much use of white, black, and grey */
 const pallettes = [
     {
         "name": "Giant Goldfish",
