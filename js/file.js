@@ -7,7 +7,7 @@
   const USE_MOAT = true;
   const MOAT_URL = "https://sd-moat.glitch.me/";
 
-  var defaultCanvas = `<svg id="canvas" width="2560px" height="1116px" data-tool="pen" data-stroke-width="2" data-do-onionskin="true" data-fps="10" data-palette="0" data-color="#000000" data-bgcolor="#FFFFFF" data-color1="#000000" data-color2="#FFFFFF" data-color3="#666666" data-color4="#69D2E7" data-color5="#A7DBD8" data-color6="#E0E4CC" data-color7="#000000" data-color8="#FFFFFF" data-tab_file="false" data-tab_draw="true" data-tab_animate="true"><g class="frame selected"></g></svg>`;
+  var defaultCanvas = `<svg id="canvas" width="2560px" height="1116px" data-tool="pen" data-stroke-width="2" data-do-onionskin="true" data-fps="10" data-palette="0" data-color="#000000" data-bgcolor="#FFFFFF" data-color1="#FF0000" data-color2="#FFFF00" data-color3="#00FF00" data-color4="#00FFFF" data-color5="#0000FF" data-color6="#666666" data-color7="#000000" data-color8="#FFFFFF" data-tab_file="false" data-tab_draw="true" data-tab_animate="true"><g class="frame selected"></g></svg>`;
 
   // polyfill for dialog
   const dialog = document.querySelector('dialog');

@@ -19,33 +19,15 @@
       <button onclick="hideUI()" id="shimmy" title="shimmy">
         <i class="far fa-palette fa-3x"></i>
       </button>
-      <nav class="tabbar">
+      <nav class="toolbar" id="file-toolbar">
         <button
           onclick="selectToolbar(this)"
           id="file"
           title="File"
           class="js-tab"
         >
-          File
+          <span>File</span>
         </button>
-        <button
-          onclick="selectToolbar(this)"
-          id="draw"
-          title="Draw"
-          class="js-tab active"
-        >
-          Draw
-        </button>
-        <button
-          onclick="selectToolbar(this)"
-          id="animate"
-          title="Animate"
-          class="js-tab"
-        >
-          Animate
-        </button>
-      </nav>
-      <nav class="toolbar" id="file-toolbar">
         <button onclick="openSvg()" title="Load file">
           Load
         </button>
@@ -218,7 +200,16 @@
           </button>
         </div>
       </nav>
+      /* ANIMATE */
       <nav class="toolbar" id="animate-toolbar">
+        <button
+          onclick="selectToolbar(this)"
+          id="draw"
+          title="Draw"
+          class="js-tab active"
+        >
+          Draw
+        </button>
         <button onclick="gotoFirstFrame()" title="First Frame">
           <i class="far fa-fast-backward"></i>
         </button>
