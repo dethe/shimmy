@@ -122,16 +122,13 @@ header {
 }
 
 .stack.actions {
-  min-width: 4rem;
+  min-width: 5rem;
 }
 
 .toolbar.active {
   display: flex;
 }
 
-.toolbar .fa-stack {
-  font-size: 0.8rem;
-}
 
 .playing .toolbar,
 .storyboard .toolbar {
@@ -139,8 +136,8 @@ header {
 }
 
 .feedback {
-  min-height: 4rem;
-  min-width: 4rem;
+  min-height: 5rem;
+  min-width: 5rem;
   /*   font-size: .8rem; */
   background-color: white;
   text-align: center;
@@ -152,11 +149,7 @@ header {
 }
 
 .tabbar .feedback {
-  min-height: 2rem;
-}
-
-.fa-stack-1x {
-  font-size: 1rem;
+  min-height: 2.5rem;
 }
 
 .fa-stack-2x {
@@ -165,10 +158,6 @@ header {
 
 .field {
   background-color: white;
-}
-
-label {
-  font-size: 0.8rem;
 }
 
 .feedback label {
@@ -208,11 +197,11 @@ output {
 .toolbar .miniwell {
   flex: 0 0 2rem;
   width: 2rem;
-  height: 2rem;
+  height: 2.5rem;
 }
 
 .toolbar .colorwell {
-  flex: 0 0 2rem;
+  flex: 0 0 2.5rem;
   max-width: 4rem;
 }
 
@@ -227,10 +216,9 @@ output {
 }
 
 .toolbar .half {
-  min-height: 2rem;
-  max-height: 2rem;
+  min-height: 2.5rem;
+  max-height: 2.5rem;
   max-width: 4rem;
-  font-size: 1rem;
 }
 
 .active {
@@ -241,7 +229,7 @@ output {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  height: 4rem;
+  height: 5rem;
   width: 8rem;
 }
 
