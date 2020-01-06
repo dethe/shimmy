@@ -57,6 +57,7 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+  font-size: .8rem;
 }
 
 #shimmy{
@@ -106,15 +107,15 @@ header {
 }
 
 .toolbar > * {
-  display: none;
+  display: none !important;
 }
 
 .toolbar > .tab{
-  display: flex;
+  display: flex !important;
 }
 
 .toolbar.active > * {
-  display: flex;
+  display: flex !important;
 }
 
 .toolbar button.tab{
@@ -126,7 +127,7 @@ header {
   transform: rotate(-90deg);
 }
 
-.toolbar .stack {
+.stack {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
@@ -155,7 +156,7 @@ header {
 .feedback {
   min-height: var(--bh);
   min-width: var(--bw);
-    font-size: .8rem;
+  font-size: .8rem;
   background-color: white;
   text-align: center;
   display: flex;
