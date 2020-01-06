@@ -12,9 +12,31 @@ const palettes = [
   {
     "name": "Blues",
     "colors": [
-      "0000FF",
-      "#6c9ad8",
-      
+      "6c9ad8",
+      "7dc1ff",
+      "a0d3ff",
+      "b6f0ff",
+      "d2fffe",
+    ]
+  },
+  {
+    "name": "Greens",
+    "colors": [
+      "0b4443",
+      "21753d",
+      "2e9551",
+      "40b33f",
+      "78d12f"
+    ]
+  },
+    {
+    "name": "Pinks",
+    "colors": [
+      "0b4443",
+      "21753d",
+      "2e9551",
+      "40b33f",
+      "78d12f"
     ]
   }
 ];

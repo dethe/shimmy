@@ -75,10 +75,7 @@ function setState(state) {
 // Initialization of canvas happens in file.js
 const colorpaletteselect = document.querySelector(".palettechooser");
 palettes.forEach((p, i) => {
-  let opt = dom.html("option", {});
-  opt.setAttribute("value", i);
-  opt.innerText = p.name;
-  colorpaletteselect.append(opt);
+  colorpaletteselect.append(dom.html("option", {value: i}, p.name));
 });
 colorpaletteselect.addEventListener("change", setPalette);
 
