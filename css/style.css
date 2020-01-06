@@ -117,8 +117,9 @@ header {
   display: flex;
 }
 
-.toolbar .button.tab{
+.toolbar button.tab{
   max-width: var(--bw2);
+  min-width: var(--bw2);
 }
 
 .tab span{
