@@ -1011,6 +1011,16 @@ function displayAsDrawingboard() {
   canvas.style.display = "block";
 }
 
+function hideUI(button){
+  if (button.matches('.active')){
+    button.classList.remove('active');
+    document.querySelectorAll('.toolbar').map(tb => tb.removeAttribute('hidden'));
+  }else{
+    button.classList.add('active');
+    document.querySelectorAll('.toolbar').map(tb => tb.setAttribute('hidden', 'hidden'));
+  }
+}
+
 function hotkeys(evt) {
   if (evt.altKey) return;
   if (evt.shiftKey) return;
