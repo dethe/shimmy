@@ -32,11 +32,31 @@ const palettes = [
     {
     "name": "Pinks",
     "colors": [
-      "0b4443",
-      "21753d",
-      "2e9551",
-      "40b33f",
-      "78d12f"
+      "7b1b70",
+      "ff2fa2",
+      "ff54b3",
+      "ff8acb",
+      "ffabd9"
+    ]
+  },
+  {
+    "name": "Autumn",
+    "colors": [
+      "5e002b",
+      "906500",
+      "a30052",
+      "a54300",
+      "a72200"
+    ]
+  },
+  {
+    "name": "Spring",
+    "colors": [
+      "54a54c",
+      "6bb24f",
+      "add060",
+      "e9ea91",
+      "ff54ef"
     ]
   }
 ];
