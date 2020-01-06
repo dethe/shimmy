@@ -1,4 +1,25 @@
 const palettes = [
+  {
+    "name": "Primary",
+    "colors": [
+      "FF0000",
+      "FFFF00",
+      "00FF00",
+      "00FFFF",
+      "0000FF"
+    ]
+  },
+  {
+    "name": "Blues",
+    "colors": [
+      "0000FF",
+      "#6c9ad8",
+      
+    ]
+  }
+];
+
+const pallettes = [
     {
         "name": "Giant Goldfish",
         "colors": [
