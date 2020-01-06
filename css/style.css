@@ -60,18 +60,14 @@ button {
 }
 
 #shimmy{
-  width: 4rem;
-  height: 5rem;
-}
-
-.tabbar > button {
-  border-width: 1px;
+  width: var(--bw);
+  height: var(--bh);
 }
 
 .toolbar > button {
   border-width: 1px;
-  min-width: 4rem;
-  min-height: 4rem;
+  min-width: var(--bw);
+  min-height: var(--bh);
 }
 
 button i {
@@ -98,21 +94,12 @@ header {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  min-height: 5rem;
+  min-height: var(--bh);
   position: relative;
 }
 
-.tabbar {
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  flex: 0 1 calc(5rem / 3);
-  justify-items: stretch;
-  max-height: 5rem;
-}
-
 .toolbar {
-  display: none;
+  display: flex;
   flex-direction: row;
   flex-wrap: wrap;
   height: 5rem;
@@ -128,6 +115,15 @@ header {
 
 .toolbar.active > * {
   display: flex;
+}
+
+.toolbar .button.tab{
+  max-width: var(--bw2);
+}
+
+.tab span{
+  width: var(--bw);
+  transform: rotate(-90deg);
 }
 
 .toolbar .stack {
@@ -169,9 +165,6 @@ header {
   justify-content: center;
 }
 
-.tabbar .feedback {
-  min-height: 2.5rem;
-}
 
 .fa-stack-2x {
   font-size: 2rem;
@@ -241,7 +234,7 @@ output {
   max-width: 4rem;
 }
 
-.active {
+.active, .active .tab{
   background-color: lightblue;
 }
 
