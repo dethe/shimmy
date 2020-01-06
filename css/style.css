@@ -18,8 +18,8 @@ html {
 :root{
   --bw: 4rem; /* button width */
   --bh: 4rem; /* button-height */
-  --bw2: calc(--var(--button-width) / 2); // half button width
-  --bh2: calc(--var(--button-height) / 2); // half button height
+  --bw2: 2rem; // half button width
+  --bh2: 2rem; // half button height
 }
 
 /* Tools */
@@ -102,7 +102,7 @@ header {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  height: 5rem;
+  height: var(--bh);
 }
 
 .toolbar > * {
@@ -131,11 +131,11 @@ header {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  max-height: 5rem;
+  max-height: var(--bh);
 }
 
 .stack.colors {
-  min-width: 4rem;
+  min-width: var(--bw);
 }
 
 .stack.colors.quickcolors{
@@ -144,7 +144,7 @@ header {
 }
 
 .stack.actions {
-  min-width: 4rem;
+  min-width: var(--bw);
 }
 
 
@@ -206,17 +206,17 @@ output {
 }
 
 .palettechooser {
-  max-width: 4rem;
+  max-width: var(--bw);
 }
 
 .toolbar .miniwell {
-  flex: 0 0 2.5rem;
-  width: 2rem;
+  flex: 0 0 var(--bh2);
+  width: var(--bw2);
 }
 
 .toolbar .colorwell {
-  flex: 0 0 2.5rem;
-  max-width: 4rem;
+  flex: 0 0 var(--bh);
+  max-width: var(--bw);
 }
 
 .toolbar .fgcolor {
@@ -230,9 +230,9 @@ output {
 }
 
 .toolbar .half {
-  min-height: 2.5rem;
-  max-height: 2.5rem;
-  max-width: 4rem;
+  min-height: var(--bh2);
+  max-height: var(--bh2);
+  max-width: var(-bw);
 }
 
 .active, .active .tab{
