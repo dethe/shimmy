@@ -107,14 +107,18 @@ header {
 
 .toolbar .stack {
   display: flex;
-  flex: auto;
+  flex: 1 1 auto;
   flex-direction: column;
-  flex-wrap: wrap;
   max-height: 4rem;
 }
 
 .stack.colors {
-  min-width: 12rem;
+  min-width: 4rem;
+}
+
+.stack.colors.quickcolors{
+  min-width: 8rem;
+  flex-wrap: wrap;
 }
 
 .stack.actions {
