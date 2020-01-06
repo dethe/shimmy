@@ -87,7 +87,7 @@ header {
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
-  min-height: 4rem;
+  min-height: 5rem;
   position: relative;
 }
 
@@ -102,18 +102,18 @@ header {
   display: none;
   flex-direction: row;
   flex-wrap: wrap;
-  height: 4rem;
+  height: 5rem;
 }
 
 .toolbar .stack {
   display: flex;
   flex: 1 1 auto;
   flex-direction: column;
-  max-height: 4rem;
+  max-height: 5rem;
 }
 
 .stack.colors {
-  min-width: 4rem;
+  min-width: 5rem;
 }
 
 .stack.colors.quickcolors{
