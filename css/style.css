@@ -154,8 +154,8 @@ header {
 }
 
 .feedback {
-  min-height: 5rem;
-  min-width: 5rem;
+  min-height: var(--bh);
+  min-width: var(--bw);
   /*   font-size: .8rem; */
   background-color: white;
   text-align: center;
@@ -215,7 +215,7 @@ output {
 }
 
 .toolbar .colorwell {
-  flex: 0 0 var(--bh);
+  flex: 0 0 var(--bh2);
   max-width: var(--bw);
 }
 
@@ -243,7 +243,7 @@ output {
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
-  height: 5rem;
+  height: var(--bh);
   width: 8rem;
 }
 
