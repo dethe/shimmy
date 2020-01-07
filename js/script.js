@@ -45,7 +45,7 @@ function getState() {
 function setState(state) {
   let currentTabs = document.querySelectorAll(".js-tab.active");
   currentTabs.forEach(selectToolbar); // turn off any active tabs
-  ['file', 'draw', 'animate'].forEach(tabid => {
+  ['file', 'draw', 'frames', 'animate'].forEach(tabid => {
     if (state[`tab_${tabid}`] !== "false") {
     selectToolbar(document.getElementById(tabid));
   }});

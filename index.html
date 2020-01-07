@@ -205,41 +205,7 @@
         </div>
       </nav>
 
-      <!-- ANIMATE -->
-      <nav class="toolbar" id="animate-toolbar">
-        <button
-          onclick="selectToolbar(this)"
-          id="animate"
-          title="Animate"
-          class="js-tab tab"
-        >
-          <span>Animate</span>
-        </button>
-        <button onclick="gotoFirstFrame()" title="First Frame">
-          Start<br>
-          <i class="far fa-fast-backward"></i>
-        </button>
-        <button onclick="decrementFrame()" title="Previous Frame">
-          Fi<br>
-          <i class="far fa-step-backward"></i>
-        </button>
-        <button onclick="play()" title="Play">
-          Play<br>
-          <i class="far fa-play"></i>
-        </button>
-        <button title="Stop" hidden>
-          Stop<br>
-          <i class="far fa-stop"></i>
-        </button>
-        <button onclick="incrementFrame()" title="Next Frame">
-          Next<br>
-          <i class="far fa-step-forward"></i>
-        </button>
-        <button onclick="gotoLastFrame()" title="Last Frame">
-          Last<br>
-          <i class="far fa-fast-forward"></i>
-        </button>
-      </nav>
+      <!-- FRAMES -->
       <nav class="toolbar" id="frames-toolbar">
         <button
           onclick="selectToolbar(this)"
@@ -293,6 +259,41 @@
             <i class="checked far fa-check-square"></i>
           </label>
         </span>
+      </nav>
+      <!-- ANIMATE -->
+      <nav class="toolbar" id="animate-toolbar">
+        <button
+          onclick="selectToolbar(this)"
+          id="animate"
+          title="Animate"
+          class="js-tab tab"
+        >
+          <span>Animate</span>
+        </button>
+        <button onclick="gotoFirstFrame()" title="First Frame">
+          First<br>
+          <i class="far fa-fast-backward"></i>
+        </button>
+        <button onclick="decrementFrame()" title="Previous Frame">
+          Back<br>
+          <i class="far fa-step-backward"></i>
+        </button>
+        <button onclick="play()" title="Play">
+          Play<br>
+          <i class="far fa-play"></i>
+        </button>
+        <button title="Stop" hidden>
+          Stop<br>
+          <i class="far fa-stop"></i>
+        </button>
+        <button onclick="incrementFrame()" title="Next Frame">
+          Next<br>
+          <i class="far fa-step-forward"></i>
+        </button>
+        <button onclick="gotoLastFrame()" title="Last Frame">
+          Last<br>
+          <i class="far fa-fast-forward"></i>
+        </button>
       </nav>
     </header>
     <div class="popup-color"></div>
