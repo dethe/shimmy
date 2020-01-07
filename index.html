@@ -19,7 +19,7 @@
       <button onclick="hideUI(this)" id="shimmy" title="shimmy">
         <i class="far fa-palette fa-3x"></i>
       </button>
-      
+
       <!-- FILE -->
       <nav class="toolbar" id="file-toolbar">
         <button
@@ -64,6 +64,37 @@
           class="tab js-tab active"
         >
           <span>Draw</span>
+        </button>
+        <button
+          onclick="selectTool(this)"
+          id="zoomout"
+          title="Zoom Out"
+          class="js-tool"
+        >
+          Zoom Out<br />
+          <i class="far fa-search-minus"></i>
+        </button>
+        <button
+          onclick="selectTool(this)"
+          id="zoomin"
+          title="Zoom In"
+          class="js-tool"
+        >
+          Zoom In<br />
+          <i class="far fa-search-plus"></i>
+        </button>
+        <button onclick="selectTool(this)" id="pan" title="Pan" class="js-tool">
+          Pan<br />
+          <i class="far fa-arrows"></i>
+        </button>
+        <button
+          onclick="selectTool(this)"
+          id="rotate"
+          title="Rotate"
+          class="js-tool"
+        >
+          Rotate<br />
+          <i class="far fa-sync"></i>
         </button>
         <button
           onclick="selectTool(this)"
@@ -172,45 +203,6 @@
             style="background-color: #FFFFFF;"
           ></button>
         </div>
-        <button
-          onclick="selectTool(this)"
-          id="zoomout"
-          title="Zoom Out"
-          class="js-tool"
-        >
-          Zoom Out<br />
-          <i class="far fa-search-minus"></i>
-        </button>
-        <button
-          onclick="selectTool(this)"
-          id="zoomin"
-          title="Zoom In"
-          class="js-tool"
-        >
-          Zoom In<br />
-          <i class="far fa-search-plus"></i>
-        </button>
-        <button onclick="selectTool(this)" id="pan" title="Pan" class="js-tool">
-          Pan<br />
-          <i class="far fa-arrows"></i>
-        </button>
-        <button
-          onclick="selectTool(this)"
-          id="rotate"
-          title="Rotate"
-          class="js-tool"
-        >
-          Rotate<br />
-          <i class="far fa-sync"></i>
-        </button>
-        <div class="stack actions">
-          <button onclick="_clear();" title="Clear" class="half">
-            Clear
-          </button>
-          <button onclick="file.new()" title="New" class="half">
-            New
-          </button>
-        </div>
       </nav>
 
       <!-- ANIMATE -->
@@ -224,22 +216,38 @@
           <span>Animate</span>
         </button>
         <button onclick="gotoFirstFrame()" title="First Frame">
+          Start<br>
           <i class="far fa-fast-backward"></i>
         </button>
         <button onclick="decrementFrame()" title="Previous Frame">
+          Fi<br>
           <i class="far fa-step-backward"></i>
         </button>
         <button onclick="play()" title="Play">
+          Play<br>
           <i class="far fa-play"></i>
         </button>
         <button title="Stop" hidden>
+          Stop<br>
           <i class="far fa-stop"></i>
         </button>
         <button onclick="incrementFrame()" title="Next Frame">
+          Next<br>
           <i class="far fa-step-forward"></i>
         </button>
         <button onclick="gotoLastFrame()" title="Last Frame">
+          Last<br>
           <i class="far fa-fast-forward"></i>
+        </button>
+      </nav>
+      <nav class="toolbar" id="frames-toolbar">
+        <button
+          onclick="selectToolbar(this)"
+          id="frames"
+          title="Frames"
+          class="js-tab tab"
+        >
+          <span>Frames</span>
         </button>
         <button onclick="deleteFrame()" title="Delete Frame">
           <span class="fa-stack fa-2x">
@@ -255,6 +263,9 @@
         </button>
         <button onclick="cloneFrame()" title="Copy Frame">
           <i class="far fa-photo-video"></i>
+        </button>
+        <button onclick="_clear();" title="Clear">
+          Clear
         </button>
         <span class="feedback framerate">
           <label title="Frames Per Second">FPS</label>
