@@ -296,7 +296,8 @@ path {
   padding: 10px;
 }
 
-.select.far option{
+.select-css.far, .select-css.far option{
   font-family: 'Font Awesome 5 Pro';
   font-weight: 900;
+  font-size: 1rem;
 }
