@@ -105,6 +105,16 @@
           Pen<br />
           <i class="far fa-pen"></i>
         </button>
+        <span class="feedback tools">
+          <label>Tool<br />
+            <select id="toolpicker" class="tools select-css" onchange="selectTooL(this)">
+              <option value="draw" selected>Draw</option>
+              <option value="rotate">Rotate</option>
+              <option value="zoomin">Zoom In</option>
+              <option value="zoomout">Zoom Out</option>
+            </select>
+          </label>
+        </span>
         <span class="feedback pensize">
           <label class="pensize">Pen Size</label>
           <input
