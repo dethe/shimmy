@@ -19,6 +19,24 @@
       <button onclick="hideUI(this)" id="shimmy" title="shimmy">
         <i class="far fa-palette fa-3x"></i>
       </button>
+      <!-- Always visible, no toggle -->
+      <nav class="toolbar" id="always">
+        <span class="feedback framecount">
+          <label>Frame</label>
+          <output>X of Y</output>
+        </span>
+        <span class="feedback undo">
+          <label>Undo</label>
+          <button title="Frame Undo" id="frameundo">
+          </button>
+          <button title="Document Undo" id="docundo">
+          </button>
+        </span>
+        <span class="feedback redo">
+          <label>Redo</label>
+          <button title="Frame "
+        </span>
+      </nav>
 
       <!-- FILE -->
       <nav class="toolbar" id="file-toolbar">
@@ -66,8 +84,13 @@
           <span>Draw</span>
         </button>
         <span class="feedback tools">
-          <label>Tool<br />
-            <select id="toolpicker" class="tools select-css far" onchange="selectTool(this)">
+          <label
+            >Tool<br />
+            <select
+              id="toolpicker"
+              class="tools select-css far"
+              onchange="selectTool(this)"
+            >
               <option value="pen" selected>&#xf304; Pen</option>
               <option value="rotate">&#xf021; Rotate</option>
               <option value="pan">&#xf047; Pan</option>
@@ -187,21 +210,21 @@
           <span>Frames</span>
         </button>
         <button onclick="deleteFrame()" title="Delete Frame">
-          Delete<br>
+          Delete<br />
           <span class="fa-stack fa-2x">
             <i class="fas fa-film-alt fa-stack-2x"></i>
             <i class="far fa-minus fa-stack-1x fa-inverse"></i>
           </span>
         </button>
         <button onclick="addFrame()" title="Add Frame">
-          Add<br>
+          Add<br />
           <span class="fa-stack fa-2x">
             <i class="fas fa-film-alt fa-stack-2x"></i>
             <i class="far fa-plus fa-stack-1x fa-inverse"></i>
           </span>
         </button>
         <button onclick="cloneFrame()" title="Copy Frame">
-          Copy<br>
+          Copy<br />
           <i class="far fa-photo-video"></i>
         </button>
         <button onclick="_clear();" title="Clear">
@@ -215,10 +238,6 @@
             value="10"
             onchange="setFrameRate(this);"
           />
-        </span>
-        <span class="feedback framecount">
-          <label>Frame</label>
-          <output>X of Y</output>
         </span>
         <span class="feedback onionskin">
           <label>
@@ -245,27 +264,27 @@
           <span>Animate</span>
         </button>
         <button onclick="gotoFirstFrame()" title="First Frame">
-          First<br>
+          First<br />
           <i class="far fa-fast-backward"></i>
         </button>
         <button onclick="decrementFrame()" title="Previous Frame">
-          Back<br>
+          Back<br />
           <i class="far fa-step-backward"></i>
         </button>
         <button onclick="play()" title="Play">
-          Play<br>
+          Play<br />
           <i class="far fa-play"></i>
         </button>
         <button title="Stop" hidden>
-          Stop<br>
+          Stop<br />
           <i class="far fa-stop"></i>
         </button>
         <button onclick="incrementFrame()" title="Next Frame">
-          Next<br>
+          Next<br />
           <i class="far fa-step-forward"></i>
         </button>
         <button onclick="gotoLastFrame()" title="Last Frame">
-          Last<br>
+          Last<br />
           <i class="far fa-fast-forward"></i>
         </button>
       </nav>
