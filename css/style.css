@@ -24,6 +24,10 @@ html {
 
 /* Tools */
 
+html{
+  height: 100%;
+}
+
 html,
 body {
   -webkit-overflow-scrolling: auto;
