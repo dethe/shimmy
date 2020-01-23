@@ -49,7 +49,7 @@ function setState(state) {
     if (state[`tab_${tabid}`] !== "false") {
     selectToolbar(document.getElementById(tabid));
   }});
-  selectTool(document.getElementById(state.tool || 'pen'));
+  selectTool({value: state.tool || 'pen'});
   currentStrokeWidth = parseInt(state.strokeWidth || 2);
   document.getElementById("pensize").value = state.strokeWidth;
   currentDoOnionskin = state.doOnionskin !== "false";
@@ -401,6 +401,7 @@ function selectToolbar(button) {
     name = button;
     button = document.getElementById(name);
   } else {
+    console.log('selectToolbar(%o)', button);
     name = button.id;
   }
   let toolbar = document.querySelector(`#${name}-toolbar`);
@@ -414,12 +415,11 @@ function selectToolbar(button) {
 }
 
 function enablePenSize(flag){
-  document.querySelectorAll('.pensize .stepper > *').forEach(d => d.disabled = flag);
+  document.querySelectorAll('.pensize .stepper > *').forEach(d => d.disabled = !flag);
 }
 
 function selectTool(sel){
   let name = sel.value;
-  console.log('selectTool(%s)', name);
   switch(name){
     case "pen":
       currentTool = tools.pen;
@@ -440,31 +440,6 @@ function selectTool(sel){
     case "zoomout":
       currentTool = tools.zoomout;
       enablePenSize(false);
-      break;
-    default:
-      console.error("unrecognized tool name: %s", name);
-  }
-}
-
-function old_selectTool(button) {
-  let name = button.id;
-  document.querySelector(".js-tool.active").classList.remove("active");
-  button.classList.add("active");
-  switch (name) {
-    case "pen":
-      currentTool = tools.pen;
-      break;
-    case "pan":
-      currentTool = tools.pan;
-      break;
-    case "rotate":
-      currentTool = tools.rotate;
-      break;
-    case "zoomin":
-      currentTool = tools.zoomin;
-      break;
-    case "zoomout":
-      currentTool = tools.zoomout;
       break;
     default:
       console.error("unrecognized tool name: %s", name);
