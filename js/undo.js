@@ -61,14 +61,18 @@ function UndoRedo(frame){
         frameRedoStack.set(currentFrame, frameRedoStack[frameTarget].map(copy));
         break;
       case 'Delete Frame':
-        frameUndoSta
+        // FIXME
         break
       default:
         break;
     }
   };
   
-  const pushFrameUndo = (name, applyFn, restorFn) => {
+  const pushFrameUndo = (name, applyFn, restoreFn) => {
+  };
+  
+  const pushDocumentUndo = (name, applyFn, restoreFn) => {
+    
   };
   
   const docUndo = () => {
@@ -83,7 +87,7 @@ function UndoRedo(frame){
     
   };
   
-  const redo = (type) => {
+  const frameRedo = () => {
     
   }
   

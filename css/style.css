@@ -305,3 +305,15 @@ path {
 /*   font-weight: 900; */
   font-size: .9rem;
 }
+
+button.primary{
+  font-style: italic;
+  width: var(--bw);
+  height: var(--bh2);
+}
+button.secondary{
+  font-style: italic;
+  width: var(--bw);
+  height: var(--bh2);
+  font-size: .8rem;
+}

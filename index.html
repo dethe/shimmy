@@ -27,20 +27,20 @@
         </span>
         <span class="feedback undo">
           <label>Undo</label>
-          <button class="primary" title="Frame Undo" id="frameundo" onclick="">
-            Undo Draw
+          <button class="primary" title="Frame Undo" id="frameundo" onclick="undo.frameUndo()">
+            Draw
           </button>
-          <button title="Document Undo" id="docundo">
-            Undo Add Frame
+          <button class="secondary" title="Document Undo" id="docundo" onclick="undo.docUndo()">
+            Add Frame
           </button>
         </span>
         <span class="feedback redo">
           <label>Redo</label>
-          <button title="Frame Redo" id="frameredo">
-            Redo Zoom Out
+          <button class="primary" title="Frame Redo" id="frameredo" onclick="undo.frameRedo()">
+            Zoom Out
           </button>
-          <button title="Document Redo" id="docredo">
-            Redo Clear
+          <button class="secondary" title="Document Redo" id="docredo" onclick="undo.docRedo()">
+            Clear
           </button>
         </span>
       </nav>
