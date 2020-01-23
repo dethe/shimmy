@@ -57,57 +57,9 @@
 
       <!-- DRAW -->
       <nav class="toolbar active" id="draw-toolbar">
-        <button
-          onclick="selectToolbar(this)"
-          id="draw"
-          title="Draw"
-          class="tab js-tab active"
-        >
-          <span>Draw</span>
-        </button>
-        <button
-          onclick="selectTool(this)"
-          id="zoomout"
-          title="Zoom Out"
-          class="js-tool"
-        >
-          Zoom Out<br />
-          <i class="far fa-search-minus"></i>
-        </button>
-        <button
-          onclick="selectTool(this)"
-          id="zoomin"
-          title="Zoom In"
-          class="js-tool"
-        >
-          Zoom In<br />
-          <i class="far fa-search-plus"></i>
-        </button>
-        <button onclick="selectTool(this)" id="pan" title="Pan" class="js-tool">
-          Pan<br />
-          <i class="far fa-arrows"></i>
-        </button>
-        <button
-          onclick="selectTool(this)"
-          id="rotate"
-          title="Rotate"
-          class="js-tool"
-        >
-          Rotate<br />
-          <i class="far fa-sync"></i>
-        </button>
-        <button
-          onclick="selectTool(this)"
-          id="pen"
-          title="Pen"
-          class="js-tool active"
-        >
-          Pen<br />
-          <i class="far fa-pen"></i>
-        </button>
         <span class="feedback tools">
           <label>Tool<br />
-            <select id="toolpicker" class="tools select-css far" onchange="selectTooL(this)">
+            <select id="toolpicker" class="tools select-css far" onchange="selectTool(this)">
               <option value="pen" selected>&#xf304; Pen</option>
               <option value="rotate">&#xf021; Rotate</option>
               <option value="pan">&#xf047; Pan</option>
