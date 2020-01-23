@@ -413,7 +413,40 @@ function selectToolbar(button) {
   }
 }
 
-function selectTool(button) {
+function enablePenSize(flag){
+  document.querySelectorAll('.pensize .stepper > *').forEach(d => d.disabled = flag);
+}
+
+function selectTool(sel){
+  let name = sel.value;
+  console.log('selectTool(%s)', name);
+  switch(name){
+    case "pen":
+      currentTool = tools.pen;
+      enablePenSize(true);
+      break;
+    case "pan":
+      currentTool = tools.pan;
+      enablePenSize(false);
+      break;
+    case "rotate":
+      currentTool = tools.rotate;
+      enablePenSize(false);
+      break;
+    case "zoomin":
+      currentTool = tools.zoomin;
+      enablePenSize(false);
+      break;
+    case "zoomout":
+      currentTool = tools.zoomout;
+      enablePenSize(false);
+      break;
+    default:
+      console.error("unrecognized tool name: %s", name);
+  }
+}
+
+function old_selectTool(button) {
   let name = button.id;
   document.querySelector(".js-tool.active").classList.remove("active");
   button.classList.add("active");
