@@ -57,6 +57,14 @@
 
       <!-- DRAW -->
       <nav class="toolbar active" id="draw-toolbar">
+        <button
+          onclick="selectToolbar(this)"
+          id="draw"
+          title="Draw"
+          class="js-tab tab"
+        >
+          <span>Draw</span>
+        </button>
         <span class="feedback tools">
           <label>Tool<br />
             <select id="toolpicker" class="tools select-css far" onchange="selectTool(this)">
