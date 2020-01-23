@@ -20,21 +20,28 @@
         <i class="far fa-palette fa-3x"></i>
       </button>
       <!-- Always visible, no toggle -->
-      <nav class="toolbar" id="always">
+      <nav class="toolbar active" id="always">
         <span class="feedback framecount">
           <label>Frame</label>
           <output>X of Y</output>
         </span>
         <span class="feedback undo">
           <label>Undo</label>
-          <button title="Frame Undo" id="frameundo">
+          <button class="primary" title="Frame Undo" id="frameundo" onclick="">
+            Undo Draw
           </button>
           <button title="Document Undo" id="docundo">
+            Undo Add Frame
           </button>
         </span>
         <span class="feedback redo">
           <label>Redo</label>
-          <button title="Frame "
+          <button title="Frame Redo" id="frameredo">
+            Redo Zoom Out
+          </button>
+          <button title="Document Redo" id="docredo">
+            Redo Clear
+          </button>
         </span>
       </nav>
 
