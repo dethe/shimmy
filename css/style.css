@@ -76,6 +76,7 @@ button {
 }
 
 button i {
+  /* FIXME: This is breaking the add-frame and delete-frame icons */
   font-size: 2rem;
 }
 
@@ -307,13 +308,14 @@ path {
 }
 
 button.primary{
-  font-style: italic;
+  font-style: bold;
   width: var(--bw);
-  height: var(--bh2);
+  font-size: .8rem;
+  flex: 2;
 }
 button.secondary{
   font-style: italic;
   width: var(--bw);
-  height: var(--bh2);
-  font-size: .8rem;
+  flex: 1;
+  font-size: .5rem;
 }
