@@ -44,21 +44,24 @@ function UndoRedo(frame){
     document.dispatchEvent(evt);
   }
   
-  const pushDocUndo = (name, frameTarget, currentFrame, applyFn, restoreFn) => {
+  const pushDocUndo = (name, frameTarget, newCurrentFrame, undoFn, redoFn) => {
       // NOTE: 'document' type actions can change the currentFrame
+    currentFrame = newCurrentFrame;
     switch(name){
       case 'New Frame':
         // add a frame to the frameUndoStack and frameRedoStack
         // frameTarget and currentFrame should be the same
-        frameUndoStack.set(currentFrame, []);
-        frameRedoStack.set(currentFrame, []);
+        frameUndoStack.set(newCurrentFrame, []);
+        frameRedoStack.set(newCurrentFrame, []);
+        docUndoStack.push({name, frameTarget, currentFrame: newCurrentFrame, undoFn, redoFn})
+        sendEvent()
         break;
       case 'Copy Frame':
         // add a frame to the frameUndoStack and frameRedoStack
         // copy undo stack and redo stack from old frame to new frame
-        // frameTarget should be the frame being copied, frame        
-        frameUndoStack.set(currentFrame, frameUndoStack[frameTarget].map(copy));
-        frameRedoStack.set(currentFrame, frameRedoStack[frameTarget].map(copy));
+        // frameTarget should be the frame being copied, frame
+        frameUndoStack.set(newCurrentFrame, frameUndoStack[frameTarget].map(copy));
+        frameRedoStack.set(newCurrentFrame, frameRedoStack[frameTarget].map(copy));
         break;
       case 'Delete Frame':
         // FIXME
@@ -84,7 +87,8 @@ function UndoRedo(frame){
   };
   
   const docUndo = () => {
-    
+    let action = docUndoStack.pop();
+    action.
   };
   
   const docRedo = () => {

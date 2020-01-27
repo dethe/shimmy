@@ -1120,7 +1120,7 @@ function updateUndo(evt){
   ['frameUndo', 'docUndo', 'frameRedo', 'docRedo'].forEach(key => {
     if (evt.detail[key]){
       undoButtons[key].disabled = false;
-      undoButtons[key].innerText = (key.endsWith('Undo') ? 'Undo ' : 'Redo ') + evt.detail[key]
+      undoButtons[key].innerText = (key.endsWith('Undo') ? 'Undo ' : 'Redo ') + evt.detail[key].name;
     }else{
       undoButtons[key].disabled = true;
       undoButtons[key].innnerText = '';
