@@ -69,10 +69,18 @@ function UndoRedo(frame){
   };
   
   const pushFrameUndo = (name, applyFn, restoreFn) => {
-  };
-  
-  const pushDocumentUndo = (name, applyFn, restoreFn) => {
-    
+    switch(name){
+      case 'Draw':
+        break;
+      case 'Pan':
+        break;
+      case 'Rotate':
+        break;
+      case 'Zoom':
+        break;
+      case 'Clear':
+        break;
+    }
   };
   
   const docUndo = () => {
@@ -91,12 +99,15 @@ function UndoRedo(frame){
     
   }
   
+  const switchFrame = (frame) =>  currentFrame = frame;
+  
   return{
     frameUndo,
     frameRedo,
     docUndo,
     docRedo,
     pushFrameUndo,
-    pushDocumentUndo
+    pushDocUndo,
+    switchFrame
   }; 
 }
