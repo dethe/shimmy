@@ -75,10 +75,10 @@ button {
   height: var(--bh);
 }
 
-button i {
-  /* FIXME: This is breaking the add-frame and delete-frame icons */
+/* button i {
   font-size: 2rem;
 }
+*/
 
 button label {
   flex: 1;
@@ -160,6 +160,7 @@ header {
 
 .feedback {
   min-height: var(--bh);
+  max-height: var(--bh);
   min-width: var(--bw);
   font-size: .8rem;
   background-color: white;
@@ -308,14 +309,16 @@ path {
 }
 
 button.primary{
-  font-style: bold;
   width: var(--bw);
   font-size: .8rem;
   flex: 2;
+  border-radius: 5px;
+  line-height: auto;
 }
 button.secondary{
-  font-style: italic;
   width: var(--bw);
   flex: 1;
   font-size: .5rem;
+  border-radius: 5px;
+  line-height: auto;
 }

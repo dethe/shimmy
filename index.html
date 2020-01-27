@@ -21,28 +21,26 @@
       </button>
       <!-- Always visible, no toggle -->
       <nav class="toolbar active" id="always">
-        <span class="feedback framecount">
+        <div class="feedback framecount">
           <label>Frame</label>
           <output>X of Y</output>
-        </span>
-        <span class="feedback undo">
-          <label>Undo</label>
+        </div>
+        <div class="feedback undo">
           <button class="primary" title="Frame Undo" id="frameundo" onclick="undo.frameUndo()">
-            Undo Draw
+            Undo <i>Draw</i>
           </button>
           <button class="secondary" title="Document Undo" id="docundo" onclick="undo.docUndo()">
-            Undo Add Frame
+            Undo <i>Add Frame</i>
           </button>
-        </span>
-        <span class="feedback redo">
-          <label>Redo</label>
+        </div>
+        <div class="feedback redo">
           <button class="primary" title="Frame Redo" id="frameredo" onclick="undo.frameRedo()">
-            Undo Zoom Out
+            Undo <i>Zoom Out</i>
           </button>
           <button class="secondary" title="Document Redo" id="docredo" onclick="undo.docRedo()">
-            Undo <Clear
+            Undo <i>Clear</i>
           </button>
-        </span>
+        </div>
       </nav>
 
       <!-- FILE -->
@@ -72,12 +70,12 @@
         <button onclick="file.new()" title="New file">
           New
         </button>
-        <span class="feedback moat" id="moat-container">
+        <div class="feedback moat" id="moat-container">
           <button id="save-moat" onclick="saveToMoat()">
             Save to Moat
           </button>
           <select id="moat" class="js-moat select-css"> </select>
-        </span>
+        </div>
       </nav>
 
       <!-- DRAW -->
@@ -90,7 +88,7 @@
         >
           <span>Draw</span>
         </button>
-        <span class="feedback tools">
+        <div class="feedback tools">
           <label
             >Tool<br />
             <select
@@ -105,8 +103,8 @@
               <option value="zoomout">&#xf010; Zoom Out</option>
             </select>
           </label>
-        </span>
-        <span class="feedback pensize">
+        </div>
+        <div class="feedback pensize">
           <label class="pensize">Pen Size</label>
           <input
             id="pensize"
@@ -117,8 +115,8 @@
             value="2"
             title="Pen Size"
           />
-        </span>
-        <span class="feedback palette">
+        </div>
+        <div class="feedback palette">
           <label
             >Palette<br />
             <select
@@ -127,7 +125,7 @@
             >
             </select>
           </label>
-        </span>
+        </div>
         <div class="stack colors">
           <button
             onclick="colorPopup(this)"
@@ -237,7 +235,7 @@
         <button onclick="_clear();" title="Clear">
           Clear
         </button>
-        <span class="feedback framerate">
+        <div class="feedback framerate">
           <label title="Frames Per Second">FPS</label>
           <input
             id="framerate"
@@ -245,8 +243,8 @@
             value="10"
             onchange="setFrameRate(this);"
           />
-        </span>
-        <span class="feedback onionskin">
+        </div>
+        <div class="feedback onionskin">
           <label>
             Onionskin
             <input
@@ -258,7 +256,7 @@
             <i class="unchecked far fa-square"></i>
             <i class="checked far fa-check-square"></i>
           </label>
-        </span>
+        </div>
       </nav>
       <!-- ANIMATE -->
       <nav class="toolbar" id="animate-toolbar">
