@@ -20,8 +20,6 @@ html {
   --bh: 4rem; /* button-height */
   --bw2: 2rem; /* half button width */
   --bh2: 2rem; /* half button height */
-  --bh13: calc(4rem / 3);
-  --bh23: calc(var(--bh13) * 2);
 }
 
 /* Tools */
@@ -313,14 +311,14 @@ path {
 button.primary{
   width: var(--bw);
   font-size: .8rem;
-  flex: 2 0 var(--bh23);
+  flex: 60%;
   border-radius: 5px;
-  line-height: auto;
+  line-height: 1.2;
 }
 button.secondary{
   width: var(--bw);
-  flex: 1 0 var(--bh13);
+  flex: 40%;
   font-size: .5rem;
   border-radius: 5px;
-  line-height: auto;
+  line-height: 1;
 }
