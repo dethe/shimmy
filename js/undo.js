@@ -1,8 +1,8 @@
 // UNDO - REDO functionality
-// 
+//
 // API
-// 
-// name: name of action: Draw, Pan, Rotate, Zoom, Clear, New Frame, Copy Frame, Delete Frame
+//
+// name: name of action: Draw, Pan, Rotate, Zoom, Clear, New Frame, Copy Frame, Delete Frame, Change Frame
 // type: frame or document
 //
 // pushDocUndo(name, frameTarget, currentFrame, applyFn, restoreFn);
@@ -21,101 +21,132 @@
 //   evt.detail.docRedo = nameOfDocRedo or null;
 // }
 
-function UndoRedo(frame){
+function UndoRedo(frame) {
   const documentUndoStack = [];
   const documentRedoStack = [];
   const frameUndoStack = new Map();
   const frameRedoStack = new Map();
   let currentFrame = frame;
-  
+
   // look at the top item of a stack
-  const peek = (stack) => stack.length ? stack[stack.length -1].name : null;
-  
+  const peek = stack => (stack.length ? stack[stack.length - 1].name : null);
+
   // for map copying a stack
-  const copy = (item) => item.cloneNode ? item.cloneNode(true) : item;
-  
+  const copy = item => (item.cloneNode ? item.cloneNode(true) : item);
+
   const sendEvent = () => {
-    let evt = new CustomEvent('shimmy-undo-change', {detail: {
-      frameUndo: peek(frameUndoStack[currentFrame]),
-      frameRedo: peek(frameRedoStack[currentFrame]),
-      docUndo: peek(documentUndoStack),
-      docRedo: peek(documentRedoStack)
-    }});
+    let evt = new CustomEvent("shimmy-undo-change", {
+      detail: {
+        frameUndo: peek(frameUndoStack[currentFrame]),
+        frameRedo: peek(frameRedoStack[currentFrame]),
+        docUndo: peek(documentUndoStack),
+        docRedo: peek(documentRedoStack)
+      }
+    });
     document.dispatchEvent(evt);
-  }
-  
-  const pushDocUndo = (name, frameTarget, newCurrentFrame, undoFn, redoFn) => {
-      // NOTE: 'document' type actions can change the currentFrame
+  };
+
+  const pushDocUndo = (name, targetFrame, newCurrentFrame, undoFn, redoFn) => {
+    // NOTE: 'document' type actions can change the currentFrame
     currentFrame = newCurrentFrame;
-    switch(name){
-      case 'New Frame':
+    // Special handling for particular events
+    switch (name) {
+      case "New Frame":
         // add a frame to the frameUndoStack and frameRedoStack
         // frameTarget and currentFrame should be the same
         frameUndoStack.set(newCurrentFrame, []);
         frameRedoStack.set(newCurrentFrame, []);
         break;
-      case 'Copy Frame':
+      case "Copy Frame":
         // add a frame to the frameUndoStack and frameRedoStack
         // copy undo stack and redo stack from old frame to new frame
         // frameTarget should be the frame being copied, frame
-        frameUndoStack.set(newCurrentFrame, frameUndoStack[frameTarget].map(copy));
-        frameRedoStack.set(newCurrentFrame, frameRedoStack[frameTarget].map(copy));
+        frameUndoStack.set(
+          newCurrentFrame,
+          frameUndoStack[targetFrame].map(copy)
+        );
+        frameRedoStack.set(
+          newCurrentFrame,
+          frameRedoStack[targetFrame].map(copy)
+        );
         break;
-      case 'Delete Frame':
+      case "Delete Frame":
         // Target frame has been removed. Save undo and redo stacks in case it is restored.
         undoFn.undoStack = frameUndoStack.get(targetFrame);
         undoFn.redoStack = frameRedoStack.get(targetFrame);
         frameUndoStack.delete(targetFrame);
         frameRedoStack.delete(targetFrame);
-        break
+        break;
+      case "Change Frame":
+        // Do Nothing
+        break; 
       default:
-        console.error('We should not get here => pushDocUndo unknown type: %s', name);
+        console.error(
+          "We should not get here => pushDocUndo unknown type: %s",
+          name
+        );
         return;
         break;
     }
-        docUndoStack.push({name, frameTarget, currentFrame: newCurrentFrame, undoFn, redoFn});
-    sendEvent()
+    documentUndoStack.push({
+      name,
+      targetFrame,
+      currentFrame: newCurrentFrame,
+      undoFn,
+      redoFn
+    });
+    sendEvent();
   };
-  
+
   const pushFrameUndo = (name, applyFn, restoreFn) => {
-    switch(name){
-      case 'Draw':
+    // Special handling for particular events
+    switch (name) {
+      case "Draw":
         break;
-      case 'Pan':
+      case "Pan":
         break;
-      case 'Rotate':
+      case "Rotate":
         break;
-      case 'Zoom':
+      case "Zoom":
         break;
-      case 'Clear':
+      case "Clear":
         break;
     }
+    frameUndoStack[currentFrame].push({name, applyFn, restoreFn});
+    sendEvent();
   };
-  
+
   const docUndo = () => {
     let action = documentUndoStack.pop();
     action.undoFn();
-    if (action.undoStack){
-      
+    if (action.undoStack) {
+      frameUndoStack[action.targetFrame] = action.undoStack;
+      frameRedoStack[action.targetFrame] = action.redoStack;
     }
     documentRedoStack.push(action);
   };
-  
+
   const docRedo = () => {
-  
+    let action = documentRedoStack.pop();
+    action.redoFn();
+    documentUndoStack.push(action);
   };
-  
+
   const frameUndo = () => {
-    
+    let action = frameUndoStack[currentFrame].pop();
+    action.undoFn();
+    frameRedoStack[currentFrame].push(action);
   };
-  
+
   const frameRedo = () => {
-    
-  }
-  
-  const switchFrame = (frame) =>  currentFrame = frame;
-  
-  return{
+    let action = frameRedoStack[currentFrame].pop();
+    action.undoFn();
+    frameRedoStack[currentFrame].push(action);
+  };
+
+  const switchFrame = frame => (currentFrame = frame);
+
+  return {
     frameUndo,
     frameRedo,
     docUndo,
@@ -123,5 +154,5 @@ function UndoRedo(frame){
     pushFrameUndo,
     pushDocUndo,
     switchFrame
-  }; 
+  };
 }
