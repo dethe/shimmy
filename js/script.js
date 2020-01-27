@@ -631,11 +631,14 @@ function updateOnionskin() {
 }
 
 function addFrame() {
-  dom.insertAfter(dom.svg("g", { class: "frame selected" }), currentFrame());
+  let prev = currentFrame();
+  let frame = dom.svg('g', {class: "frame selected"});
+  dom.insertAfter(frame, prev);
   currentFrame().classList.remove("selected");
   updateOnionskin();
   updateFrameCount();
   file.onChange();
+  undo.pushDocUndo('New Frame', prev, frame, deleteFrame, addFrame)
 }
 updateFrameCount();
 
