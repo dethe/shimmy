@@ -1122,6 +1122,5 @@ function updateUndo(evt){
     }
   });
 }
-const undo = new UndoRedo(currentFrame());
 document.addEventListener('shimmy-undo-change', updateUndo, false);
 
