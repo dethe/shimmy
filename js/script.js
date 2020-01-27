@@ -1104,8 +1104,23 @@ document.addEventListener('touchend', function (event) {
 }, false);
 
 /* Initialize Undo */
+const undoButtons = {
+  frameUndo: document.querySelector('#frameundo'),
+  docUndo: document.querySelector('#docundo'),
+  frameRedo: document.querySelector('#frameredo'),
+  docRedo: document.querySelector('#docredo')
+};
+
 function updateUndo(evt){
-  
+  ['frameUndo', 'docUndo', 'frameRedo', 'docRedo'].forEach(key => {
+    if (evt.detail[key]){
+      undoButtons[key].disabled = false;
+      undoButtons[key].innerText = key.endsWith('Undo') ? 'Undo'
+    }else{
+      undoButtons[key].disabled = true;
+      undoButtons[key].innnerText = '';
+    }
+  });
 }
 const undo = new UndoRedo(currentFrame());
 document.addEventListener('shimmy-undo-change', updateUndo, false);
