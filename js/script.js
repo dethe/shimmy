@@ -606,6 +606,8 @@ function currentFrame() {
   return frame;
 }
 
+const undo = new UndoRedo(currentFrame());
+
 function playingFrame() {
   return document.querySelector(".frame.play-frame");
 }
@@ -638,7 +640,7 @@ function addFrame() {
   updateOnionskin();
   updateFrameCount();
   file.onChange();
-  undo.pushDocUndo('New Frame', prev, frame, deleteFrame, addFrame)
+  undo.pushDocUndo('New Frame', prev, frame, deleteFrame, addFrame);
 }
 updateFrameCount();
 
