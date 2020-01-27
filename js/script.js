@@ -1,4 +1,4 @@
-/* globals dom file KellyColorPicker palettes toDataURL canvas GIF */
+/* globals dom file KellyColorPicker palettes toDataURL canvas GIF UndoRedo*/
 
 const mouse = {};
 
@@ -1102,4 +1102,11 @@ document.addEventListener('touchend', function (event) {
   }
   lastTouchEnd = now;
 }, false);
+
+/* Initialize Undo */
+function updateUndo(evt){
+  
+}
+const undo = new UndoRedo(currentFrame());
+document.addEventListener('shimmy-undo-change', updateUndo, false);
 
