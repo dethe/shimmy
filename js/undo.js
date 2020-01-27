@@ -53,8 +53,6 @@ function UndoRedo(frame){
         // frameTarget and currentFrame should be the same
         frameUndoStack.set(newCurrentFrame, []);
         frameRedoStack.set(newCurrentFrame, []);
-        docUndoStack.push({name, frameTarget, currentFrame: newCurrentFrame, undoFn, redoFn})
-        sendEvent()
         break;
       case 'Copy Frame':
         // add a frame to the frameUndoStack and frameRedoStack
@@ -64,11 +62,19 @@ function UndoRedo(frame){
         frameRedoStack.set(newCurrentFrame, frameRedoStack[frameTarget].map(copy));
         break;
       case 'Delete Frame':
-        // FIXME
+        // Target frame has been removed. Save undo and redo stacks in case it is restored.
+        undoFn.undoStack = frameUndoStack.get(targetFrame);
+        undoFn.redoStack = frameRedoStack.get(targetFrame);
+        frameUndoStack.delete(targetFrame);
+        frameRedoStack.delete(targetFrame);
         break
       default:
+        console.error('We should not get here => pushDocUndo unknown type: %s', name);
+        return;
         break;
     }
+        docUndoStack.push({name, frameTarget, currentFrame: newCurrentFrame, undoFn, redoFn});
+    sendEvent()
   };
   
   const pushFrameUndo = (name, applyFn, restoreFn) => {
@@ -87,8 +93,12 @@ function UndoRedo(frame){
   };
   
   const docUndo = () => {
-    let action = docUndoStack.pop();
-    action.
+    let action = documentUndoStack.pop();
+    action.undoFn();
+    if (action.undoStack){
+      
+    }
+    documentRedoStack.push(action);
   };
   
   const docRedo = () => {
