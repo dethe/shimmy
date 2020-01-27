@@ -185,6 +185,9 @@ class Pen {
     }
     this.drawing = false;
     currentMatrix = null;
+    let path = this.currentPath;
+    let parent = this.currentPath.parentNode;
+    undo.pushFrameUndo('Draw', () => path.remove(), () => parent.appendChild(path));
   }
 
   cancel() {

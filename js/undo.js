@@ -95,6 +95,7 @@ function UndoRedo(frame) {
       undoFn,
       redoFn
     });
+    documentRedoStack.clear();
     sendEvent();
   };
 
@@ -113,6 +114,7 @@ function UndoRedo(frame) {
         break;
     }
     frameUndoStack[currentFrame].push({name, applyFn, restoreFn});
+    frameRedoStack[currentFrame].clear();
     sendEvent();
   };
 
