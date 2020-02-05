@@ -728,7 +728,7 @@ function deleteFrame(suppressUndo) {
   if (frameToDelete.parentNode.children.length > 1) {
     dom.remove(frameToDelete);
     if (!suppressUndo) {
-      undo.pushDocUndo("Delete Frame", curr, frameToDelete, () =>
+      undo.pushDocUndo("Delete Frame", frameToDelete, curr, () =>
         insertFrame(prev, curr), () => deleteFrame(true)
       );
     }
