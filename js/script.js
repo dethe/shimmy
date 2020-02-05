@@ -701,7 +701,7 @@ function incrementFrame() {
   let next = dom.next(curr, ".frame");
   if (next) {
     goToFrame(curr, next);
-    pushDo
+    undo.pushDocUndo('Switch Frame', curr, next, () => goToFrame(next, curr), () => goToFrame(curr, next))
   }
 }
 
@@ -713,24 +713,23 @@ function decrementFrame() {
     prev.classList.add("selected");
     updateOnionskin();
     updateFrameCount();
+    goToFrame(curr, prev);
+    undo.pushDocUndo('Switch Frame', curr, prev, () => goToFrame(prev, curr), () => goToFrame(curr, prev));
   }
 }
 
 function gotoFirstFrame() {
-  currentFrame().classList.remove("selected");
-  document.querySelector(".frame").classList.add("selected");
-  dom.removeClass(currentOnionskinFrame(), "onionskin");
-  updateFrameCount();
+  let curr = currentFrame();
+  let first = document.querySelector('.frame');
+  goToFrame(curr, first);
+  undo.pushDocUndo('Switch Frame', curr, first, () => goToFrame(first, curr), () => goToFrame(curr, first));
 }
 
 function gotoLastFrame() {
-  const prevFrame = currentFrame();
-  currentFrame().classList.remove("selected");
-  document.querySelector(".frame:last-child").classList.add("selected");
-  dom.removeClass(currentOnionskinFrame(), "onionskin");
-  dom.addClass(dom.previous(currentFrame(), ".frame"), "onionskin");
-  updateFrameCount();
-  pushDocUndo('Switch Frame', )
+  const curr = currentFrame();
+  const last = document.querySelector(".frame:last-child");
+  goToFrame(curr, last);
+  undo.pushDocUndo('Switch Frame', curr, last, () => goToFrame(last, curr), () => goToFrame(curr, last));
 }
 
 function getAnimationBBox(show) {
