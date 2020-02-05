@@ -27,19 +27,16 @@ function UndoRedo(frame) {
   const frameUndoStack = new Map();
   const frameRedoStack = new Map();
   let currentFrame = frame;
-  console.log('currentFrame: %o', frame);
-  console.log('parent: %o', frame.parentElement);
-  console.log('frames: %o', [...currentFrame.parentElement.children]);
   [...currentFrame.parentElement.children].forEach(frame => {
-    console.log('adding to stacks');
     frameUndoStack.set(frame, []);
     frameRedoStack.set(frame, []);
   });
-  console.log('Undo stack: %o', frameUndoStack.entries.length);
-  console.log('Redo stack: %o', frameRedoStack.entries.length);
 
   // look at the top item of a stack
-  const peek = stack => (stack.length ? stack[stack.length - 1].name : null);
+  const peek = stack => {
+    console.log('peek(%o)', stack);
+    return (stack.length ? stack[stack.length - 1].name : null);
+  };
 
   // for map copying a stack
   const copy = item => (item.cloneNode ? item.cloneNode(true) : item);
