@@ -125,29 +125,34 @@ function UndoRedo(frame) {
   const docUndo = () => {
     let action = documentUndoStack.pop();
     action.undoFn();
+    // handle special case of copying a frame, which copies undo/redo stacks of the frame
     if (action.undoStack) {
       frameUndoStack.set(action.targetFrame, action.undoStack);
       frameRedoStack.set(action.targetFrame,  action.redoStack);
     }
     documentRedoStack.push(action);
+    sendEvent();
   };
 
   const docRedo = () => {
     let action = documentRedoStack.pop();
     action.redoFn();
     documentUndoStack.push(action);
+    sendEvent();
   };
 
   const frameUndo = () => {
     let action = frameUndoStack.get(currentFrame).pop();
     action.undoFn();
     frameRedoStack.get(currentFrame).push(action);
+    sendEvent();
   };
 
   const frameRedo = () => {
     let action = frameRedoStack.get(currentFrame).pop();
-    action.undoFn();
-    frameRedoStack.get(currentFrame).push(action);
+    action.redoFn();
+    frameUndoStack.get(currentFrame).push(action);
+    sendEvent();
   };
 
   const switchFrame = frame => (currentFrame = frame);

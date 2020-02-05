@@ -146,7 +146,7 @@ class Pen {
         fill: "none"
       })
     );
-    console.log('currentPath: %o', this.currentPath);
+    // console.log('currentPath: %o', this.currentPath);
     file.onChange();
   }
 
