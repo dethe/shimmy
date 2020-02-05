@@ -689,14 +689,19 @@ function toggleOnionskin() {
   }
 }
 
+function goToFrame(prev, next){
+  prev.classList.remove('selected');
+  next.classList.add('selected');
+  updateOnionskin();
+  updateFrameCount();
+}
+
 function incrementFrame() {
   let curr = currentFrame();
   let next = dom.next(curr, ".frame");
   if (next) {
-    curr.classList.remove("selected");
-    next.classList.add("selected");
-    updateOnionskin();
-    updateFrameCount();
+    goToFrame(curr, next);
+    pushDo
   }
 }
 
@@ -719,11 +724,13 @@ function gotoFirstFrame() {
 }
 
 function gotoLastFrame() {
+  const prevFrame = currentFrame();
   currentFrame().classList.remove("selected");
   document.querySelector(".frame:last-child").classList.add("selected");
   dom.removeClass(currentOnionskinFrame(), "onionskin");
   dom.addClass(dom.previous(currentFrame(), ".frame"), "onionskin");
   updateFrameCount();
+  pushDocUndo('Switch Frame', )
 }
 
 function getAnimationBBox(show) {
