@@ -146,6 +146,7 @@ class Pen {
         fill: "none"
       })
     );
+    console.log('currentPath: %o', this.currentPath);
     file.onChange();
   }
 
@@ -184,6 +185,8 @@ class Pen {
     if (err) {
       return;
     }
+    let path = this.currentPath;
+    let parent = currentFrame();
     if (this.currentPath) {
       if (inBounds(wx, wy) && this.sx === x && this.sy === y) {
         this.appendToPath(x, y);
@@ -193,8 +196,6 @@ class Pen {
     }
     this.drawing = false;
     currentMatrix = null;
-    let path = this.currentPath;
-    let parent = this.currentPath.parentNode;
     undo.pushFrameUndo(
       "Draw",
       () => path.remove(),
