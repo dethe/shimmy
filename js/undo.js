@@ -31,11 +31,12 @@ function UndoRedo(frame) {
   console.log('parent: %o', frame.parentElement);
   console.log('frames: %o', [...currentFrame.parentElement.children]);
   [...currentFrame.parentElement.children].forEach(frame => {
-    frameUndoStack[frame] = [];
-    frameRedoStack[frame] = [];
+    console.log('adding to stacks');
+    frameUndoStack.set(frame, []);
+    frameRedoStack.set(frame, []);
   });
-  console.log(frameUndoStack.entries.length);
-  console.log(frameRedoStack.entries.length);
+  console.log('Undo stack: %o', frameUndoStack.entries.length);
+  console.log('Redo stack: %o', frameRedoStack.entries.length);
 
   // look at the top item of a stack
   const peek = stack => (stack.length ? stack[stack.length - 1].name : null);
@@ -46,8 +47,8 @@ function UndoRedo(frame) {
   const sendEvent = () => {
     let evt = new CustomEvent("shimmy-undo-change", {
       detail: {
-        frameUndo: peek(frameUndoStack[currentFrame]),
-        frameRedo: peek(frameRedoStack[currentFrame]),
+        frameUndo: peek(frameUndoStack.get(currentFrame)),
+        frameRedo: peek(frameRedoStack.get(currentFrame)),
         docUndo: peek(documentUndoStack),
         docRedo: peek(documentRedoStack)
       }
@@ -72,11 +73,11 @@ function UndoRedo(frame) {
         // frameTarget should be the frame being copied, frame
         frameUndoStack.set(
           newCurrentFrame,
-          frameUndoStack[targetFrame].map(copy)
+          frameUndoStack.get(targetFrame).map(copy)
         );
         frameRedoStack.set(
           newCurrentFrame,
-          frameRedoStack[targetFrame].map(copy)
+          frameRedoStack.get(targetFrame).map(copy)
         );
         break;
       case "Delete Frame":
@@ -122,8 +123,8 @@ function UndoRedo(frame) {
       case "Clear":
         break;
     }
-    frameUndoStack[currentFrame].push({name, applyFn, restoreFn});
-    frameRedoStack[currentFrame].clear();
+    frameUndoStack.get(currentFrame).push({name, applyFn, restoreFn});
+    frameRedoStack.get(currentFrame).clear();
     sendEvent();
   };
 
@@ -131,8 +132,8 @@ function UndoRedo(frame) {
     let action = documentUndoStack.pop();
     action.undoFn();
     if (action.undoStack) {
-      frameUndoStack[action.targetFrame] = action.undoStack;
-      frameRedoStack[action.targetFrame] = action.redoStack;
+      frameUndoStack.set(action.targetFrame, action.undoStack);
+      frameRedoStack.set(action.targetFrame,  action.redoStack);
     }
     documentRedoStack.push(action);
   };
@@ -144,15 +145,15 @@ function UndoRedo(frame) {
   };
 
   const frameUndo = () => {
-    let action = frameUndoStack[currentFrame].pop();
+    let action = frameUndoStack.get(currentFrame).pop();
     action.undoFn();
-    frameRedoStack[currentFrame].push(action);
+    frameRedoStack.get(currentFrame).push(action);
   };
 
   const frameRedo = () => {
-    let action = frameRedoStack[currentFrame].pop();
+    let action = frameRedoStack.get(currentFrame).pop();
     action.undoFn();
-    frameRedoStack[currentFrame].push(action);
+    frameRedoStack.get(currentFrame).push(action);
   };
 
   const switchFrame = frame => (currentFrame = frame);
