@@ -17,7 +17,6 @@ const css_rules = `
 
 [type=number]{
  width: 100%;
- padding: 8px;
  font-size: 1em;
  line-height: 1.25;
  font-family: inherit;
