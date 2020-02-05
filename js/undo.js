@@ -124,7 +124,7 @@ function UndoRedo(frame) {
         break;
     }
     frameUndoStack.get(currentFrame).push({name, applyFn, restoreFn});
-    frameRedoStack.get(currentFrame).clear();
+    frameRedoStack.get(currentFrame).length = 1;
     sendEvent();
   };
 
