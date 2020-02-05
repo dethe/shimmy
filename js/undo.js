@@ -31,7 +31,6 @@ function UndoRedo(frame) {
     frameUndoStack.set(frame, []);
     frameRedoStack.set(frame, []);
   });
-  sendEvent();
 
   // look at the top item of a stack
   const peek = stack => (stack.length ? stack[stack.length - 1].name : null);
@@ -156,7 +155,14 @@ function UndoRedo(frame) {
     sendEvent();
   };
 
-  const switchFrame = frame => (currentFrame = frame);
+  const switchFrame = frame => {
+    currentFrame = frame;
+    sendEvent();
+  };
+    
+  
+  // clear buttons on when new doc is created
+  sendEvent();
 
   return {
     frameUndo,

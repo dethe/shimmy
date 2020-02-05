@@ -77,7 +77,7 @@ function setState(state) {
   colorButton(document.getElementById("color6"), state.color6 || "#E0E4CC");
   colorButton(document.getElementById("color7"), state.color7 || "#F38630");
   colorButton(document.getElementById("color8"), state.color8 || "#FA6900");
-  undo = new UndoRedo(currentFrame());
+  undo = UndoRedo(currentFrame());
 }
 
 function newFile(){
@@ -264,7 +264,7 @@ class Pan {
     let newTransform = curr.getAttribute("transform");
     undo.pushFrameUndo(
       "Pan",
-      () => curr.setAtribute("transform", oldTransform),
+      () => curr.setAttribute("transform", oldTransform),
       () => curr.setAttribute("transform", newTransform)
     );
   }
@@ -344,7 +344,7 @@ class Rotate {
     let newTransform = curr.getAttribute("transform");
     undo.pushFrameUndo(
       "Rotate",
-      () => curr.setAtribute("transform", oldTransform),
+      () => curr.setAttribute("transform", oldTransform),
       () => curr.setAttribute("transform", newTransform)
     );
   }
@@ -375,7 +375,7 @@ class ZoomIn {
     currentMatrix = null;
     undo.pushFrameUndo(
       "Zoom In",
-      () => curr.setAtribute("transform", oldTransform),
+      () => curr.setAttribute("transform", oldTransform),
       () => curr.setAttribute("transform", newTransform)
     );
   }
@@ -414,7 +414,7 @@ class ZoomOut {
     currentMatrix = null;
     undo.pushFrameUndo(
       "Zoom Out",
-      () => curr.setAtribute("transform", oldTransform),
+      () => curr.setAttribute("transform", oldTransform),
       () => curr.setAttribute("transform", newTransform)
     );
   }
@@ -772,6 +772,7 @@ function goToFrame(prev, next) {
   next.classList.add("selected");
   updateOnionskin();
   updateFrameCount();
+  undo.switchFrame(next);
 }
 
 function incrementFrame(suppressUndo) {
@@ -1255,8 +1256,8 @@ function updateUndo(evt) {
       undoButtons[key].innerText =
         (key.endsWith("Undo") ? "Undo " : "Redo ") + evt.detail[key];
     } else {
+      undoButtons[key].innerText = "";
       undoButtons[key].disabled = true;
-      undoButtons[key].innnerText = "";
     }
   });
 }
