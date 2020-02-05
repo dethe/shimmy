@@ -227,11 +227,14 @@ class Pan {
     }
     let dx = x - this.px;
     let dy = y - this.py;
-    let transform = this.origTransform;
-    currentFrame().setAttribute(
+    let oldTransform = this.origTransform;
+    let newTransform = `${oldTransform} translate(${dx} ${dy})`;
+    let curr = currentFrame();
+    curr.setAttribute(
       "transform",
-      `${transform} translate(${dx} ${dy})`
+      newTransform
     );
+    undo.pushFrameUndo('Pan', () => curr.setAtribute('transform', oldTranso))
   }
 
   stop(evt) {
@@ -669,11 +672,11 @@ function deleteFrame(suppressUndo) {
     decrementFrame(true);
   }
   let curr = currentFrame();
-  let prev = frameToDelete.previousElementSibling);
+  let prev = frameToDelete.previousElementSibling;
   if (frameToDelete.parentNode.children.length > 1) {
     dom.remove(frameToDelete);
     if (!suppressUndo){
-      undo.pushDocUndo('Delete Frame', curr, frameToDelete, () => insertFrame(curr))
+      undo.pushDocUndo('Delete Frame', curr, frameToDelete, () => insertFrame(prev, curr))
     }
   } else {
    // FIXME: disable the delete button for last frame vs. switching to clear()
