@@ -649,26 +649,34 @@ function addFrame(suppressUndo) {
     undo.pushDocUndo('New Frame', curr, frame, () => deleteFrame(false), () => insertFrame(curr, frame));
   }
 }
-updateFrameCount();
 
-function cloneFrame() {
-  dom.insertAfter(currentFrame().cloneNode(true), currentFrame());
-  currentFrame().classList.remove("selected");
-  updateOnionskin();
-  updateFrameCount();
-  file.onChange();
+function cloneFrame(suppressUndo) {
+  let curr = currentFrame();
+  let frame = insertFrame(curr, curr.cloneNode(true));
+  if (!suppressUndo){
+    undo.pushDocUndo('Copy Frame', curr, frame, () => deleteFrame(false), () => insertFrame(curr, frame));
+  }
 }
 
-function deleteFrame() {
+function removeFrame(frame){
+}
+
+function deleteFrame(suppressUndo) {
   let frameToDelete = currentFrame();
   if (frameToDelete.nextElementSibling) {
     incrementFrame(true);
   } else if (frameToDelete.previousElementSibling) {
     decrementFrame(true);
   }
+  let curr = currentFrame();
+  let prev = frameToDelete.previousElementSibling);
   if (frameToDelete.parentNode.children.length > 1) {
     dom.remove(frameToDelete);
+    if (!suppressUndo){
+      undo.pushDocUndo('Delete Frame', curr, frameToDelete, () => insertFrame(curr))
+    }
   } else {
+   // FIXME: disable the delete button for last frame vs. switching to clear()
     _clear(); // don't delete the last frame, just its children
   }
   file.onChange();
