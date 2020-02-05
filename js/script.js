@@ -708,9 +708,10 @@ function cloneFrame(suppressUndo) {
       curr,
       frame,
       () => deleteFrame(false),
-      () => insertFrame(curr, frame)
+      () => cloneFrame(false)
     );
   }
+  goToFrame(curr, frame);
 }
 
 function removeFrame(frame) {}
@@ -728,9 +729,10 @@ function deleteFrame(suppressUndo) {
     dom.remove(frameToDelete);
     if (!suppressUndo) {
       undo.pushDocUndo("Delete Frame", curr, frameToDelete, () =>
-        insertFrame(prev, curr)
+        insertFrame(prev, curr), () => deleteFrame(true)
       );
     }
+    goToFrame(frameToDelete, curr);
   } else {
     // FIXME: disable the delete button for last frame vs. switching to clear()
     _clear(); // don't delete the last frame, just its children
