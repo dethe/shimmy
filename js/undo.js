@@ -27,10 +27,15 @@ function UndoRedo(frame) {
   const frameUndoStack = new Map();
   const frameRedoStack = new Map();
   let currentFrame = frame;
+  console.log('currentFrame: %o', frame);
+  console.log('parent: %o', frame.parentElement);
+  console.log('frames: %o', [...currentFrame.parentElement.children]);
   [...currentFrame.parentElement.children].forEach(frame => {
     frameUndoStack[frame] = [];
     frameRedoStack[frame] = [];
   });
+  console.log(frameUndoStack.entries.length);
+  console.log(frameRedoStack.entries.length);
 
   // look at the top item of a stack
   const peek = stack => (stack.length ? stack[stack.length - 1].name : null);
