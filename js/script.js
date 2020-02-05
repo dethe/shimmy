@@ -38,18 +38,21 @@ function getState() {
     color7: document.getElementById("color7").value,
     color8: document.getElementById("color8").value
   };
-  tabs.forEach(button => state[`tab_${button.id}`] = button.matches('.active'));
+  tabs.forEach(
+    button => (state[`tab_${button.id}`] = button.matches(".active"))
+  );
   return state;
 }
 
 function setState(state) {
   let currentTabs = document.querySelectorAll(".js-tab.active");
   currentTabs.forEach(selectToolbar); // turn off any active tabs
-  ['file', 'draw', 'frames', 'animate'].forEach(tabid => {
+  ["file", "draw", "frames", "animate"].forEach(tabid => {
     if (state[`tab_${tabid}`] !== "false") {
-    selectToolbar(document.getElementById(tabid));
-  }});
-  selectTool({value: state.tool || 'pen'});
+      selectToolbar(document.getElementById(tabid));
+    }
+  });
+  selectTool({ value: state.tool || "pen" });
   currentStrokeWidth = parseInt(state.strokeWidth || 2);
   document.getElementById("pensize").value = state.strokeWidth;
   currentDoOnionskin = state.doOnionskin !== "false";
@@ -59,23 +62,26 @@ function setState(state) {
   let palette = document.getElementById("colorpalette");
   palette.selectedIndex = state.palette || 0;
   setPalette({ target: palette.options[state.palette || 0] });
-  currentColor = state.color || '#000000';
+  currentColor = state.color || "#000000";
   colorButton(document.getElementById("pencolor"), currentColor);
-  colorButton(document.getElementById("backgroundcolor"), state.bgcolor || '#FFFFFF');
-  colorButton(document.getElementById("color1"), state.color1 || '#000000');
-  colorButton(document.getElementById("color2"), state.color2 || '#FFFFFF');
-  colorButton(document.getElementById("color3"), state.color3 || '#666666');
-  colorButton(document.getElementById("color4"), state.color4 || '#69D2E7');
-  colorButton(document.getElementById("color5"), state.color5 || '#A7DBD8');
-  colorButton(document.getElementById("color6"), state.color6 || '#E0E4CC');
-  colorButton(document.getElementById("color7"), state.color7 || '#F38630');
-  colorButton(document.getElementById("color8"), state.color8 || '#FA6900');
+  colorButton(
+    document.getElementById("backgroundcolor"),
+    state.bgcolor || "#FFFFFF"
+  );
+  colorButton(document.getElementById("color1"), state.color1 || "#000000");
+  colorButton(document.getElementById("color2"), state.color2 || "#FFFFFF");
+  colorButton(document.getElementById("color3"), state.color3 || "#666666");
+  colorButton(document.getElementById("color4"), state.color4 || "#69D2E7");
+  colorButton(document.getElementById("color5"), state.color5 || "#A7DBD8");
+  colorButton(document.getElementById("color6"), state.color6 || "#E0E4CC");
+  colorButton(document.getElementById("color7"), state.color7 || "#F38630");
+  colorButton(document.getElementById("color8"), state.color8 || "#FA6900");
 }
 
 // Initialization of canvas happens in file.js
 const colorpaletteselect = document.querySelector(".palettechooser");
 palettes.forEach((p, i) => {
-  colorpaletteselect.append(dom.html("option", {value: i}, p.name));
+  colorpaletteselect.append(dom.html("option", { value: i }, p.name));
 });
 colorpaletteselect.addEventListener("change", setPalette);
 
@@ -187,7 +193,11 @@ class Pen {
     currentMatrix = null;
     let path = this.currentPath;
     let parent = this.currentPath.parentNode;
-    undo.pushFrameUndo('Draw', () => path.remove(), () => parent.appendChild(path));
+    undo.pushFrameUndo(
+      "Draw",
+      () => path.remove(),
+      () => parent.appendChild(path)
+    );
   }
 
   cancel() {
@@ -227,14 +237,10 @@ class Pan {
     }
     let dx = x - this.px;
     let dy = y - this.py;
-    let oldTransform = this.origTransform;
-    let newTransform = `${oldTransform} translate(${dx} ${dy})`;
-    let curr = currentFrame();
-    curr.setAttribute(
+    currentFrame().setAttribute(
       "transform",
-      newTransform
+      `${this.origTransform} translate(${dx} ${dy})`
     );
-    undo.pushFrameUndo('Pan', () => curr.setAtribute('transform', oldTranso))
   }
 
   stop(evt) {
@@ -244,8 +250,16 @@ class Pan {
     this.px = 9;
     this.py = 0;
     this.dragging = false;
+    let oldTransform = this.origTransform;
     this.origTransform = "";
     currentMatrix = null;
+    let curr = currentFrame();
+    let newTransform = curr.getAttribute("transform");
+    undo.pushFrameUndo(
+      "Pan",
+      () => curr.setAtribute("transform", oldTransform),
+      () => curr.setAttribute("transform", newTransform)
+    );
   }
 
   cancel() {
@@ -315,9 +329,17 @@ class Rotate {
     this.px = 9;
     this.py = 0;
     this.dragging = false;
+    let oldTransform = this.origTransform;
     this.origTransform = "";
     this.originalAngle = null;
     currentMatrix = null;
+    let curr = currentFrame();
+    let newTransform = curr.getAttribute("transform");
+    undo.pushFrameUndo(
+      "Rotate",
+      () => curr.setAtribute("transform", oldTransform),
+      () => curr.setAttribute("transform", newTransform)
+    );
   }
 
   cancel(evt) {
@@ -339,12 +361,16 @@ class ZoomIn {
     if (err) {
       return;
     }
-    let transform = currentFrame().getAttribute("transform") || "";
-    currentFrame().setAttribute(
-      "transform",
-      `${transform} translate(${x} ${y}) scale(${ZOOMIN}) translate(-${x}, -${y})`
-    );
+    let curr = currentFrame();
+    let oldTransform = curr.getAttribute("transform") || "";
+    let newTransform = `${oldTransform} translate(${x} ${y}) scale(${ZOOMIN}) translate(-${x}, -${y})`;
+    currentFrame().setAttribute("transform", newTransform);
     currentMatrix = null;
+    undo.pushFrameUndo(
+      "Zoom In",
+      () => curr.setAtribute("transform", oldTransform),
+      () => curr.setAttribute("transform", newTransform)
+    );
   }
 
   move(evt) {
@@ -371,12 +397,19 @@ class ZoomOut {
     if (err) {
       return;
     }
-    let transform = currentFrame().getAttribute("transform") || "";
+    let curr = currentFrame();
+    let oldTransform = curr.getAttribute("transform") || "";
+    let newTransform = `${oldTransform} translate(${x} ${y}) scale(${ZOOMOUT}) translate(-${x}, -${y})`;
     currentFrame().setAttribute(
       "transform",
-      `${transform} translate(${x} ${y}) scale(${ZOOMOUT}) translate(-${x}, -${y})`
+      newTransform
     );
     currentMatrix = null;
+    undo.pushFrameUndo(
+      "Zoom Out",
+      () => curr.setAtribute("transform", oldTransform),
+      () => curr.setAttribute("transform", newTransform)
+    );
   }
 
   move(evt) {
@@ -407,7 +440,7 @@ function selectToolbar(button) {
     name = button;
     button = document.getElementById(name);
   } else {
-    console.log('selectToolbar(%o)', button);
+    console.log("selectToolbar(%o)", button);
     name = button.id;
   }
   let toolbar = document.querySelector(`#${name}-toolbar`);
@@ -420,13 +453,15 @@ function selectToolbar(button) {
   }
 }
 
-function enablePenSize(flag){
-  document.querySelectorAll('.pensize .stepper > *').forEach(d => d.disabled = !flag);
+function enablePenSize(flag) {
+  document
+    .querySelectorAll(".pensize .stepper > *")
+    .forEach(d => (d.disabled = !flag));
 }
 
-function selectTool(sel){
+function selectTool(sel) {
   let name = sel.value;
-  switch(name){
+  switch (name) {
     case "pen":
       currentTool = tools.pen;
       enablePenSize(true);
@@ -484,8 +519,8 @@ function colorPopup(input) {
   }
 }
 
-function setBackgroundColor(color){
-  colorButton(document.getElementById('backgroundcolor'), color);
+function setBackgroundColor(color) {
+  colorButton(document.getElementById("backgroundcolor"), color);
   canvas.style.backgroundColor = color;
 }
 
@@ -638,7 +673,7 @@ function updateOnionskin() {
   dom.addClass(dom.previous(currentFrame(), ".frame"), "onionskin");
 }
 
-function insertFrame(before, frame){
+function insertFrame(before, frame) {
   dom.insertAfter(frame, before);
   goToFrame(before, frame);
   file.onChange();
@@ -647,22 +682,33 @@ function insertFrame(before, frame){
 
 function addFrame(suppressUndo) {
   let curr = currentFrame();
-  let frame = insertFrame(curr, dom.svg('g', {class: "frame"}));
-  if (!suppressUndo){
-    undo.pushDocUndo('New Frame', curr, frame, () => deleteFrame(false), () => insertFrame(curr, frame));
+  let frame = insertFrame(curr, dom.svg("g", { class: "frame" }));
+  if (!suppressUndo) {
+    undo.pushDocUndo(
+      "New Frame",
+      curr,
+      frame,
+      () => deleteFrame(false),
+      () => insertFrame(curr, frame)
+    );
   }
 }
 
 function cloneFrame(suppressUndo) {
   let curr = currentFrame();
   let frame = insertFrame(curr, curr.cloneNode(true));
-  if (!suppressUndo){
-    undo.pushDocUndo('Copy Frame', curr, frame, () => deleteFrame(false), () => insertFrame(curr, frame));
+  if (!suppressUndo) {
+    undo.pushDocUndo(
+      "Copy Frame",
+      curr,
+      frame,
+      () => deleteFrame(false),
+      () => insertFrame(curr, frame)
+    );
   }
 }
 
-function removeFrame(frame){
-}
+function removeFrame(frame) {}
 
 function deleteFrame(suppressUndo) {
   let frameToDelete = currentFrame();
@@ -675,11 +721,13 @@ function deleteFrame(suppressUndo) {
   let prev = frameToDelete.previousElementSibling;
   if (frameToDelete.parentNode.children.length > 1) {
     dom.remove(frameToDelete);
-    if (!suppressUndo){
-      undo.pushDocUndo('Delete Frame', curr, frameToDelete, () => insertFrame(prev, curr))
+    if (!suppressUndo) {
+      undo.pushDocUndo("Delete Frame", curr, frameToDelete, () =>
+        insertFrame(prev, curr)
+      );
     }
   } else {
-   // FIXME: disable the delete button for last frame vs. switching to clear()
+    // FIXME: disable the delete button for last frame vs. switching to clear()
     _clear(); // don't delete the last frame, just its children
   }
   file.onChange();
@@ -702,9 +750,9 @@ function toggleOnionskin() {
   }
 }
 
-function goToFrame(prev, next){
-  prev.classList.remove('selected');
-  next.classList.add('selected');
+function goToFrame(prev, next) {
+  prev.classList.remove("selected");
+  next.classList.add("selected");
   updateOnionskin();
   updateFrameCount();
 }
@@ -714,8 +762,14 @@ function incrementFrame(suppressUndo) {
   let next = dom.next(curr, ".frame");
   if (next) {
     goToFrame(curr, next);
-    if (!suppressUndo){
-      undo.pushDocUndo('Switch Frame', curr, next, () => goToFrame(next, curr), () => goToFrame(curr, next));
+    if (!suppressUndo) {
+      undo.pushDocUndo(
+        "Switch Frame",
+        curr,
+        next,
+        () => goToFrame(next, curr),
+        () => goToFrame(curr, next)
+      );
     }
   }
 }
@@ -729,18 +783,30 @@ function decrementFrame(suppressUndo) {
     updateOnionskin();
     updateFrameCount();
     goToFrame(curr, prev);
-    if (!suppressUndo){
-      undo.pushDocUndo('Switch Frame', curr, prev, () => goToFrame(prev, curr), () => goToFrame(curr, prev));
+    if (!suppressUndo) {
+      undo.pushDocUndo(
+        "Switch Frame",
+        curr,
+        prev,
+        () => goToFrame(prev, curr),
+        () => goToFrame(curr, prev)
+      );
     }
   }
 }
 
 function gotoFirstFrame(suppressUndo) {
   let curr = currentFrame();
-  let first = document.querySelector('.frame');
+  let first = document.querySelector(".frame");
   goToFrame(curr, first);
-  if (!suppressUndo){
-    undo.pushDocUndo('Switch Frame', curr, first, () => goToFrame(first, curr), () => goToFrame(curr, first));
+  if (!suppressUndo) {
+    undo.pushDocUndo(
+      "Switch Frame",
+      curr,
+      first,
+      () => goToFrame(first, curr),
+      () => goToFrame(curr, first)
+    );
   }
 }
 
@@ -748,8 +814,14 @@ function gotoLastFrame(suppressUndo) {
   const curr = currentFrame();
   const last = document.querySelector(".frame:last-child");
   goToFrame(curr, last);
-  if (!suppressUndo){
-    undo.pushDocUndo('Switch Frame', curr, last, () => goToFrame(last, curr), () => goToFrame(curr, last));
+  if (!suppressUndo) {
+    undo.pushDocUndo(
+      "Switch Frame",
+      curr,
+      last,
+      () => goToFrame(last, curr),
+      () => goToFrame(curr, last)
+    );
   }
 }
 
@@ -801,9 +873,9 @@ function play() {
   // temporarily turn off onionskin (remember state)
   // start at beginning of document (remember state)
   let { x, y, width, height } = getAnimationBBox();
-  let onion = document.querySelector('.onionskin');
-  if (onion){
-    onion.classList.replace('onionskin', 'nskin');
+  let onion = document.querySelector(".onionskin");
+  if (onion) {
+    onion.classList.replace("onionskin", "nskin");
   }
   document.body.classList.add("playing");
   document.querySelector(".frame").classList.add("play-frame");
@@ -829,9 +901,9 @@ function stop() {
   // turn stop button into play button
   dom.removeClass(playingFrame(), "play-frame");
   document.body.classList.remove("playing");
-  let onion = document.querySelector('.nskin');
-  if (onion){
-    onion.classList.replace('nskin', 'onionskin');
+  let onion = document.querySelector(".nskin");
+  if (onion) {
+    onion.classList.replace("nskin", "onionskin");
   }
   canvas.removeAttribute("viewBox");
   canvas.removeAttribute("style");
@@ -880,28 +952,32 @@ function newAnimation(evt) {
 
 /* FILE Functions */
 
-function setMoatUI(list){
-  let moat = document.getElementById('moat');
-  if (list.length){
-    if (list.length > 1){
-      moat.append(dom.html('option', {value: ''}, 'Choose a Program'));
+function setMoatUI(list) {
+  let moat = document.getElementById("moat");
+  if (list.length) {
+    if (list.length > 1) {
+      moat.append(dom.html("option", { value: "" }, "Choose a Program"));
     }
-    list.forEach(item => moat.append(dom.html('option', {value: item.id}, item.name)));
-  }else{
-    moat.appendChild(dom.html('option', {value: ''}, 'No Moat Programs Found'));
+    list.forEach(item =>
+      moat.append(dom.html("option", { value: item.id }, item.name))
+    );
+  } else {
+    moat.appendChild(
+      dom.html("option", { value: "" }, "No Moat Programs Found")
+    );
     moat.disabled = true;
-    document.getElementById('save-moat').disabled = true;
+    document.getElementById("save-moat").disabled = true;
   }
 }
 
-function clearMoatUI(){
-  document.getElementById('moat-container').remove();
+function clearMoatUI() {
+  document.getElementById("moat-container").remove();
 }
 
-function saveToMoat(){
-  let moat = document.getElementById('moat');
-  if (!moat.value){
-    alert('You have to choose a Moat program first');
+function saveToMoat() {
+  let moat = document.getElementById("moat");
+  if (!moat.value) {
+    alert("You have to choose a Moat program first");
     return;
   }
   file.sendToMoat(moat.value);
@@ -1025,18 +1101,18 @@ function animationToImages() {
   );
 }
 
-function saveAsSpritesheet(){
-  let {x, y, width, height } = getAnimationBBox();
-  let frames = document.querySelectorAll('.frame');
+function saveAsSpritesheet() {
+  let { x, y, width, height } = getAnimationBBox();
+  let frames = document.querySelectorAll(".frame");
   let canvas = dom.html("canvas", {
-      width: width,
-      height: height * frames.length
-    });
-  let ctx = canvas.getContext('2d');
+    width: width,
+    height: height * frames.length
+  });
+  let ctx = canvas.getContext("2d");
   frames.forEach((frame, idx) => {
     ctx.drawImage(frameToImage(frame, x, y, width, height), 0, height * idx);
   });
-  file.saveAs(canvas, 'image.png');
+  file.saveAs(canvas, "image.png");
 }
 
 function displayAsStoryboard() {
@@ -1054,13 +1130,17 @@ function displayAsDrawingboard() {
   canvas.style.display = "block";
 }
 
-function hideUI(button){
-  if (button.matches('.active')){
-    button.classList.remove('active');
-    document.querySelectorAll('.toolbar').forEach(tb => tb.style.display = 'flex');
-  }else{
-    button.classList.add('active');
-    document.querySelectorAll('.toolbar').forEach(tb => tb.style.display = 'none');
+function hideUI(button) {
+  if (button.matches(".active")) {
+    button.classList.remove("active");
+    document
+      .querySelectorAll(".toolbar")
+      .forEach(tb => (tb.style.display = "flex"));
+  } else {
+    button.classList.add("active");
+    document
+      .querySelectorAll(".toolbar")
+      .forEach(tb => (tb.style.display = "none"));
   }
 }
 
@@ -1130,32 +1210,36 @@ document.addEventListener("keydown", hotkeys, false);
 
 // Disable default Safari iOS double-tap to zoom
 var lastTouchEnd = 0;
-document.addEventListener('touchend', function (event) {
-  var now = (new Date()).getTime();
-  if (now - lastTouchEnd <= 300) {
-    event.preventDefault();
-  }
-  lastTouchEnd = now;
-}, false);
+document.addEventListener(
+  "touchend",
+  function(event) {
+    var now = new Date().getTime();
+    if (now - lastTouchEnd <= 300) {
+      event.preventDefault();
+    }
+    lastTouchEnd = now;
+  },
+  false
+);
 
 /* Initialize Undo */
 const undoButtons = {
-  frameUndo: document.querySelector('#frameundo'),
-  docUndo: document.querySelector('#docundo'),
-  frameRedo: document.querySelector('#frameredo'),
-  docRedo: document.querySelector('#docredo')
+  frameUndo: document.querySelector("#frameundo"),
+  docUndo: document.querySelector("#docundo"),
+  frameRedo: document.querySelector("#frameredo"),
+  docRedo: document.querySelector("#docredo")
 };
 
-function updateUndo(evt){
-  ['frameUndo', 'docUndo', 'frameRedo', 'docRedo'].forEach(key => {
-    if (evt.detail[key]){
+function updateUndo(evt) {
+  ["frameUndo", "docUndo", "frameRedo", "docRedo"].forEach(key => {
+    if (evt.detail[key]) {
       undoButtons[key].disabled = false;
-      undoButtons[key].innerText = (key.endsWith('Undo') ? 'Undo ' : 'Redo ') + evt.detail[key].name;
-    }else{
+      undoButtons[key].innerText =
+        (key.endsWith("Undo") ? "Undo " : "Redo ") + evt.detail[key].name;
+    } else {
       undoButtons[key].disabled = true;
-      undoButtons[key].innnerText = '';
+      undoButtons[key].innnerText = "";
     }
   });
 }
-document.addEventListener('shimmy-undo-change', updateUndo, false);
-
+document.addEventListener("shimmy-undo-change", updateUndo, false);
