@@ -1,4 +1,4 @@
-/* globals ajax app dom listenCanvas canvas getState setState setMoatUI dialogPolyfill*/
+/* globals ajax updateFrameCount dom listenCanvas canvas getState setState setMoatUI dialogPolyfill*/
 
 (function(global) {
   "use strict";
@@ -45,7 +45,7 @@
   window.canvas = null;
 
   function restoreFormat(savetext) {
-    canvas = document.querySelector("#canvas");
+    window.canvas = document.querySelector("#canvas");
     if (!canvas) {
       canvas = dom.svg("svg");
       document.body.prepend(canvas);
@@ -55,7 +55,7 @@
     }
     canvas.outerHTML = savetext;
     canvas = document.querySelector("#canvas");
-    app.updateFrameCount();
+    updateFrameCount();
     canvas.setAttribute("width", document.body.clientWidth + "px");
     canvas.setAttribute("height", document.body.clientHeight + "px");
     listenCanvas();

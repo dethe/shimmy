@@ -18,6 +18,7 @@ let currentDisplay = "drawingboard";
 let currentTool;
 let currentStrokeWidth = 1;
 let currentDoOnionskin = true;
+let undo = null;
 
 function getState() {
   let tabs = document.querySelectorAll(".js-tab");
@@ -76,6 +77,7 @@ function setState(state) {
   colorButton(document.getElementById("color6"), state.color6 || "#E0E4CC");
   colorButton(document.getElementById("color7"), state.color7 || "#F38630");
   colorButton(document.getElementById("color8"), state.color8 || "#FA6900");
+  undo = new UndoRedo(currentFrame());
 }
 
 // Initialization of canvas happens in file.js
@@ -647,7 +649,6 @@ function currentFrame() {
   return frame;
 }
 
-const undo = new UndoRedo(currentFrame());
 
 function playingFrame() {
   return document.querySelector(".frame.play-frame");
