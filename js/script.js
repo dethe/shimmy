@@ -733,8 +733,20 @@ function deleteFrame(suppressUndo) {
   file.onChange();
 }
 
+function restore(node, children, transform){
+  if (transform){
+    node.setAttribute('transform', transform);
+  }
+  children.forEach(child => node.appendChild(child));
+  return node;
+}
+
 function _clear() {
-  dom.clear(currentFrame());
+  let curr = currentFrame();
+  let oldTransform = curr.getAttribute('transform') || '';
+  let children = [...curr.children];
+  dom.clear(curr);
+  undo.pushFrameUndo('Clear', () => restore(curr, children, oldTransform), () => dom.clear(curr));
 }
 
 function setOnionSkin(input) {
