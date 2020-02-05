@@ -80,6 +80,10 @@ function setState(state) {
   undo = new UndoRedo(currentFrame());
 }
 
+function newFile(){
+  file.new();
+}
+
 // Initialization of canvas happens in file.js
 const colorpaletteselect = document.querySelector(".palettechooser");
 palettes.forEach((p, i) => {
