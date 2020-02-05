@@ -680,7 +680,6 @@ function updateOnionskin() {
 
 function insertFrame(before, frame) {
   dom.insertAfter(frame, before);
-  goToFrame(before, frame);
   file.onChange();
   return frame;
 }
@@ -694,9 +693,10 @@ function addFrame(suppressUndo) {
       curr,
       frame,
       () => deleteFrame(false),
-      () => insertFrame(curr, frame)
+      () => addFrame(false)
     );
   }
+  goToFrame(curr, frame);
 }
 
 function cloneFrame(suppressUndo) {
