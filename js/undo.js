@@ -5,8 +5,8 @@
 // name: name of action: Draw, Pan, Rotate, Zoom, Clear, New Frame, Copy Frame, Delete Frame, Change Frame
 // type: frame or document
 //
-// pushDocUndo(name, frameTarget, currentFrame, applyFn, restoreFn);
-// pushFrameUndo(name, applyFn, restoreFn);
+// pushDocUndo(name, frameTarget, currentFrame, undoFn, redoFn);
+// pushFrameUndo(name, undoFn, redoFn);
 // undo(type); pops the relevant undo stack
 // redo(type); pops the relevant redo stack
 // switchFrame(newFrame); // because most undo is frame-based
@@ -33,10 +33,7 @@ function UndoRedo(frame) {
   });
 
   // look at the top item of a stack
-  const peek = stack => {
-    console.log('peek(%o)', stack);
-    return (stack.length ? stack[stack.length - 1].name : null);
-  };
+  const peek = stack => (stack.length ? stack[stack.length - 1].name : null);
 
   // for map copying a stack
   const copy = item => (item.cloneNode ? item.cloneNode(true) : item);
@@ -102,11 +99,11 @@ function UndoRedo(frame) {
       undoFn,
       redoFn
     });
-    documentRedoStack.clear();
+    documentRedoStack.length = 0;
     sendEvent();
   };
 
-  const pushFrameUndo = (name, applyFn, restoreFn) => {
+  const pushFrameUndo = (name, undoFn, redoFn) => {
     // Special handling for particular events
     switch (name) {
       case "Draw":
@@ -120,8 +117,8 @@ function UndoRedo(frame) {
       case "Clear":
         break;
     }
-    frameUndoStack.get(currentFrame).push({name, applyFn, restoreFn});
-    frameRedoStack.get(currentFrame).length = 1;
+    frameUndoStack.get(currentFrame).push({name, undoFn, redoFn});
+    frameRedoStack.get(currentFrame).length = 0;
     sendEvent();
   };
 

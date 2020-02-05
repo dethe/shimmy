@@ -443,7 +443,6 @@ function selectToolbar(button) {
     name = button;
     button = document.getElementById(name);
   } else {
-    console.log("selectToolbar(%o)", button);
     name = button.id;
   }
   let toolbar = document.querySelector(`#${name}-toolbar`);
@@ -1245,11 +1244,12 @@ const undoButtons = {
 };
 
 function updateUndo(evt) {
+  console.log('updateUndo(%o)', evt.detail);
   ["frameUndo", "docUndo", "frameRedo", "docRedo"].forEach(key => {
     if (evt.detail[key]) {
       undoButtons[key].disabled = false;
       undoButtons[key].innerText =
-        (key.endsWith("Undo") ? "Undo " : "Redo ") + evt.detail[key].name;
+        (key.endsWith("Undo") ? "Undo " : "Redo ") + evt.detail[key];
     } else {
       undoButtons[key].disabled = true;
       undoButtons[key].innnerText = "";
