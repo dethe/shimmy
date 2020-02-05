@@ -635,15 +635,19 @@ function updateOnionskin() {
   dom.addClass(dom.previous(currentFrame(), ".frame"), "onionskin");
 }
 
-function addFrame() {
-  let prev = currentFrame();
-  let frame = dom.svg('g', {class: "frame selected"});
-  dom.insertAfter(frame, prev);
-  currentFrame().classList.remove("selected");
-  updateOnionskin();
-  updateFrameCount();
+function insertFrame(before, frame){
+  dom.insertAfter(frame, before);
+  goToFrame(before, frame);
   file.onChange();
-  undo.pushDocUndo('New Frame', prev, frame, deleteFrame, addFrame);
+  return frame;
+}
+
+function addFrame(suppressUndo) {
+  let curr = currentFrame();
+  let frame = insertFrame(curr, dom.svg('g', {class: "frame"}));
+  if (!suppressUndo){
+    undo.pushDocUndo('New Frame', curr, frame, () => deleteFrame(false), () => insertFrame(curr, frame));
+  }
 }
 updateFrameCount();
 
@@ -658,17 +662,15 @@ function cloneFrame() {
 function deleteFrame() {
   let frameToDelete = currentFrame();
   if (frameToDelete.nextElementSibling) {
-    incrementFrame();
+    incrementFrame(true);
   } else if (frameToDelete.previousElementSibling) {
-    decrementFrame();
+    decrementFrame(true);
   }
   if (frameToDelete.parentNode.children.length > 1) {
     dom.remove(frameToDelete);
   } else {
     _clear(); // don't delete the last frame, just its children
   }
-  updateOnionskin();
-  updateFrameCount();
   file.onChange();
 }
 
@@ -696,16 +698,18 @@ function goToFrame(prev, next){
   updateFrameCount();
 }
 
-function incrementFrame() {
+function incrementFrame(suppressUndo) {
   let curr = currentFrame();
   let next = dom.next(curr, ".frame");
   if (next) {
     goToFrame(curr, next);
-    undo.pushDocUndo('Switch Frame', curr, next, () => goToFrame(next, curr), () => goToFrame(curr, next))
+    if (!suppressUndo){
+      undo.pushDocUndo('Switch Frame', curr, next, () => goToFrame(next, curr), () => goToFrame(curr, next));
+    }
   }
 }
 
-function decrementFrame() {
+function decrementFrame(suppressUndo) {
   let curr = currentFrame();
   let prev = dom.previous(curr, ".frame");
   if (prev) {
@@ -714,22 +718,28 @@ function decrementFrame() {
     updateOnionskin();
     updateFrameCount();
     goToFrame(curr, prev);
-    undo.pushDocUndo('Switch Frame', curr, prev, () => goToFrame(prev, curr), () => goToFrame(curr, prev));
+    if (!suppressUndo){
+      undo.pushDocUndo('Switch Frame', curr, prev, () => goToFrame(prev, curr), () => goToFrame(curr, prev));
+    }
   }
 }
 
-function gotoFirstFrame() {
+function gotoFirstFrame(suppressUndo) {
   let curr = currentFrame();
   let first = document.querySelector('.frame');
   goToFrame(curr, first);
-  undo.pushDocUndo('Switch Frame', curr, first, () => goToFrame(first, curr), () => goToFrame(curr, first));
+  if (!suppressUndo){
+    undo.pushDocUndo('Switch Frame', curr, first, () => goToFrame(first, curr), () => goToFrame(curr, first));
+  }
 }
 
-function gotoLastFrame() {
+function gotoLastFrame(suppressUndo) {
   const curr = currentFrame();
   const last = document.querySelector(".frame:last-child");
   goToFrame(curr, last);
-  undo.pushDocUndo('Switch Frame', curr, last, () => goToFrame(last, curr), () => goToFrame(curr, last));
+  if (!suppressUndo){
+    undo.pushDocUndo('Switch Frame', curr, last, () => goToFrame(last, curr), () => goToFrame(curr, last));
+  }
 }
 
 function getAnimationBBox(show) {
