@@ -16,7 +16,6 @@ const css_rules = `
 }
 
 [type=number]{
- width: 100%;
  font-size: 1em;
  line-height: 1.25;
  font-family: inherit;
@@ -85,7 +84,8 @@ const css_rules = `
  max-height: 2rem;
  text-align: center;
  z-index: 2;
- position: relative
+ position: relative;
+ border-radius: ;
 }
 .stepper input[type=number]::-webkit-inner-spin-button,
 .stepper input[type=number]::-webkit-outer-spin-button {
