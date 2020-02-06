@@ -2,7 +2,7 @@
 //
 // API
 //
-// name: name of action: Draw, Pan, Rotate, Zoom, Clear, New Frame, Copy Frame, Delete Frame, Change Frame
+// name: name of action: Draw, Move, Rotate, Zoom, Clear, New Frame, Copy Frame, Delete Frame, Change Frame
 // type: frame or document
 //
 // pushDocUndo(name, frameTarget, currentFrame, undoFn, redoFn);
@@ -108,7 +108,7 @@ function UndoRedo(frame) {
     switch (name) {
       case "Draw":
         break;
-      case "Pan":
+      case "Move":
         break;
       case "Rotate":
         break;

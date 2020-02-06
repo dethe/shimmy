@@ -214,9 +214,9 @@ class Pen {
   }
 }
 
-class Pan {
+class Move {
   constructor() {
-    this.name = "pan";
+    this.name = "move";
     this.dragging = false;
     this.px = 0;
     this.py = 0;
@@ -263,7 +263,7 @@ class Pan {
     let curr = currentFrame();
     let newTransform = curr.getAttribute("transform");
     undo.pushFrameUndo(
-      "Pan",
+      "Move",
       () => curr.setAttribute("transform", oldTransform),
       () => curr.setAttribute("transform", newTransform)
     );
@@ -434,7 +434,7 @@ class ZoomOut {
 
 let tools = {
   pen: new Pen(canvas),
-  pan: new Pan(canvas),
+  move: new Move(canvas),
   rotate: new Rotate(canvas),
   zoomin: new ZoomIn(canvas),
   zoomout: new ZoomOut(canvas)
@@ -472,8 +472,8 @@ function selectTool(sel) {
       currentTool = tools.pen;
       enablePenSize(true);
       break;
-    case "pan":
-      currentTool = tools.pan;
+    case "move":
+      currentTool = tools.move;
       enablePenSize(false);
       break;
     case "rotate":
