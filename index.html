@@ -49,11 +49,17 @@
         >
           <span>File</span>
         </button>
+        <button onclick="file.new()" title="New file">
+          New<br />
+          <i class="far fa-2x fa-file-alt"></i>
+        </button>
         <button onclick="openSvg()" title="Load file">
-          Load
+          Load<br />
+          <i class="far fa-2x fa-upload"></i>
         </button>
         <button onclick="saveAsSvg()" title="Save file">
-          Save
+          Save<br />
+          <i class="far fa-2x fa-download"></i>
         </button>
         <div class="stack">
           <button onclick="saveAsGif()" title="Save as GIF">
@@ -63,9 +69,6 @@
             Save as Spritesheet
           </button>
         </div>
-        <button onclick="file.new()" title="New file">
-          New
-        </button>
         <div class="feedback moat" id="moat-container">
           <button id="save-moat" onclick="saveToMoat()">
             Save to Moat
@@ -229,7 +232,24 @@
           <i class="far fa-photo-video fa-2x"></i>
         </button>
         <button onclick="_clear();" title="Clear">
-          Clear
+          Clear<br/>
+          <i class="far fa-2x fa-sparkles"></i>
+        </button>
+        <button onclick="gotoFirstFrame()" title="First Frame">
+          First<br />
+          <i class="far fa-2x fa-fast-backward"></i>
+        </button>
+        <button onclick="decrementFrame()" title="Previous Frame">
+          Back<br />
+          <i class="far fa-2x fa-step-backward"></i>
+        </button>
+        <button onclick="incrementFrame()" title="Next Frame">
+          Next<br />
+          <i class="far fa-2x fa-step-forward"></i>
+        </button>
+        <button onclick="gotoLastFrame()" title="Last Frame">
+          Last<br />
+          <i class="far fa-2x fa-fast-forward"></i>
         </button>
         <div class="feedback onionskin">
           <label>
@@ -255,14 +275,6 @@
         >
           <span>Animate</span>
         </button>
-        <button onclick="gotoFirstFrame()" title="First Frame">
-          First<br />
-          <i class="far fa-2x fa-fast-backward"></i>
-        </button>
-        <button onclick="decrementFrame()" title="Previous Frame">
-          Back<br />
-          <i class="far fa-2x fa-step-backward"></i>
-        </button>
         <button onclick="play()" title="Play">
           Play<br />
           <i class="far fa-2x fa-play"></i>
@@ -271,14 +283,16 @@
           Stop<br />
           <i class="far fa-2x fa-stop"></i>
         </button>
-        <button onclick="incrementFrame()" title="Next Frame">
-          Next<br />
-          <i class="far fa-2x fa-step-forward"></i>
-        </button>
-        <button onclick="gotoLastFrame()" title="Last Frame">
-          Last<br />
-          <i class="far fa-2x fa-fast-forward"></i>
-        </button>
+        <div class="feedback framerate" 
+>         <label title="Frames Per Second">FPS</label>
+          <input
+            id="framerate"
+            type="number"
+            value="10"
+            onchange="setFrameRate(this);"
+          />
+        </div>
+
       </nav>
     </header>
     <div class="popup-color"></div>
