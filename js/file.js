@@ -1,4 +1,4 @@
-/* globals ajax updateFrameCount dom listenCanvas canvas getState setState setMoatUI dialogPolyfill*/
+/* globals ajax updateFrameCount dom listenCanvas canvas getState setState setMoatUI dialogPolyfill QRCode timeago*/
 
 (function(global) {
   "use strict";
@@ -141,10 +141,38 @@
   function handleTimeout(step) {
     alert("Timeout uploading to Moat during " + step + ", please try again.");
   }
+  
+  function showQRCode(){
+  if (document.querySelector('#qrcode')){
+      let qrcode = new QRCode("qrcode", {
+          text: "{{urlbase}}/file/{{id}}",
+          width: 128,
+          height: 128,
+          colorDark: "#000000",
+          colorLight: "#ffffff",
+          correctLevel: QRCode.CorrectLevel.H
+        });
+  }
+}
+
+function updateExpires(){
+  let expires = document.querSelector('.expires');
+  if (expires.length){
+    expires.forEach(e => e.innerText = timeago.format(e.getAttribute('timestamp')));
+    setTimeout(updateExpires, 1000);
+  }
+}
+
+function updateDialog(){
+  showQRCode();
+  updateExpires();
+}
+
 
   function showFilePage(res) {
     dialog.innerHTML = res;
     dialog.append(dom.html('button', {onClick: 'this.parentElement.close()'}, 'OK'));
+    updateDialog();
     dialog.showModal();
   }
 
