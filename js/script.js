@@ -1266,5 +1266,3 @@ function updateUndo(evt) {
 document.addEventListener("shimmy-undo-change", updateUndo, false);
 
 // If we don't explicitly request moat integration, hide it
-let params = new URLSearchParams(new URL(window.location).search);
-if (!params.has('moat'))
