@@ -156,7 +156,7 @@
 }
 
 function updateExpires(){
-  let expires = document.querySelector('.expires');
+  let expires = document.querySelectorAll('.expires');
   if (expires.length){
     expires.forEach(e => e.innerText = timeago.format(e.getAttribute('timestamp')));
     setTimeout(updateExpires, 1000);
