@@ -8,7 +8,8 @@
 
   const USE_MOAT = params.has('moat');
 
-  const MOAT_URL = window.location.host.includes('glitch') ? "https://sd-moat.glitch.me/": "http://launchpad.yourlibrary.com:34071";
+  const MOAT_URL = window.location.host.includes('glitch') ? "https://sd-moat.glitch.me/": "https://launchpad.yourlibrary.com/moat";
+  console.log(MOAT_URL);
 
   var defaultCanvas = `<svg id="canvas" width="2560px" height="1116px" data-tool="pen" data-stroke-width="2" data-do-onionskin="true" data-fps="10" data-palette="0" data-color="#000000" data-bgcolor="#FFFFFF" data-color1="#FF0000" data-color2="#FFFF00" data-color3="#00FF00" data-color4="#00FFFF" data-color5="#0000FF" data-color6="#666666" data-color7="#000000" data-color8="#FFFFFF" data-tab_file="false" data-tab_draw="true" data-tab_frames="true" data-tab_animate="false"><g class="frame selected"></g></svg>`;
 
