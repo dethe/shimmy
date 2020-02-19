@@ -1228,6 +1228,13 @@ document.addEventListener("keydown", hotkeys, false);
 //   }
 // }, false);
 
+// Attempt again to disable default Safari iOS pinch to zoom and replace with our own zoom
+function gestureChange(event) {
+    // Disable browser zoom
+    event.preventDefault();
+    // need centre point between fingers to zoom from and amount to zoom
+}
+
 // Disable default Safari iOS double-tap to zoom
 var lastTouchEnd = 0;
 document.addEventListener(
