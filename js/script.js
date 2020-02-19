@@ -590,7 +590,7 @@ function getXY(evt) {
     // left button is 0, for touch events button will be undefined
     return { x: 0, y: 0, err: true };
   }
-  if (evt.changedTouches && evt.changedTouches.length > 1) {
+  if (evt.touches && evt.touches.length > 1) {
     // don't interfere with multi-touch
     return { x: 0, y: 0, err: true };
   }
