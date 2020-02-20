@@ -1213,8 +1213,6 @@ window.app = {
   play: play
 };
 
-// document.querySelector('#canvas-undo').addEventListener('click', undoLine, false);
-// document.querySelector('#canvas-onionskin').addEventListener('change', toggleOnionskin, false);
 document.addEventListener("keydown", keydownHandler, false);
 document.addEventListener("keyup", keyupHandler, false);
 document.addEventListener("keydown", hotkeys, false);
@@ -1228,12 +1226,26 @@ document.addEventListener("keydown", hotkeys, false);
 //   }
 // }, false);
 
+
 // Attempt again to disable default Safari iOS pinch to zoom and replace with our own zoom
+function gestureStart(event){
+  
+}
+
 function gestureChange(event) {
     // Disable browser zoom
     event.preventDefault();
     // need centre point between fingers to zoom from and amount to zoom
 }
+
+function gestureEnd(event){
+  
+}
+
+
+document.documentElement.addEventListener("gesturestart", gestureStart, false);
+document.documentElement.addEventListener("gesturechange", gestureChange, false);
+document.documentElement.addEventListener("gestureend", gestureEnd, false);
 
 // Disable default Safari iOS double-tap to zoom
 var lastTouchEnd = 0;
