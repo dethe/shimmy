@@ -21,6 +21,9 @@
       </button>
       <!-- Always visible, no toggle -->
       <nav class="toolbar active" id="always">
+        <button onclick="showAbout()" id="about" title="About Shimmy">
+          About<br>Shimmy
+        </button>
         <div class="feedback framecount">
           <label>Frame</label>
           <output>X of Y</output>
@@ -294,7 +297,14 @@
       </nav>
     </header>
     <div class="popup-color"></div>
-    <dialog></dialog>
+    <dialog id="aboutShimmy">
+      <h3>
+        About Shimmy
+      </h3>
+      <p>
+        Shimmy is a simple sketch-based animation tool for flipbook-style animation. You can save your animations as animated GIFs, PNGs containing all the frames, or SVG.
+      </p>
+    </dialog>
     <script src="lib/dialog-polyfill.js"></script>
     <script src="lib/svgToDataURL.js"></script>
     <script src="lib/gif.js"></script>
