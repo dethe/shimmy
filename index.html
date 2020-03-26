@@ -38,23 +38,39 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <!-- Always visible, no toggle -->
       <nav class="toolbar active" id="always">
         <button onclick="showAbout()" id="about" title="About Shimmy">
-          About<br>Shimmy
+          About<br />Shimmy
         </button>
         <div class="feedback framecount">
           <label>Frame</label>
           <output>X of Y</output>
         </div>
         <div class="feedback undo">
-          <button class="primary" title="Frame Undo" id="frameundo" onclick="undo.frameUndo()">
-          </button>
-          <button class="secondary" title="Document Undo" id="docundo" onclick="undo.docUndo()">
-          </button>
+          <button
+            class="primary"
+            title="Frame Undo"
+            id="frameundo"
+            onclick="undo.frameUndo()"
+          ></button>
+          <button
+            class="secondary"
+            title="Document Undo"
+            id="docundo"
+            onclick="undo.docUndo()"
+          ></button>
         </div>
         <div class="feedback redo">
-          <button class="primary" title="Frame Redo" id="frameredo" onclick="undo.frameRedo()">
-          </button>
-          <button class="secondary" title="Document Redo" id="docredo" onclick="undo.docRedo()">
-          </button>
+          <button
+            class="primary"
+            title="Frame Redo"
+            id="frameredo"
+            onclick="undo.frameRedo()"
+          ></button>
+          <button
+            class="secondary"
+            title="Document Redo"
+            id="docredo"
+            onclick="undo.docRedo()"
+          ></button>
         </div>
       </nav>
 
@@ -80,12 +96,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           Save<br />
           <i class="far fa-2x fa-download"></i>
         </button>
-          <button onclick="saveAsGif()" title="Save as GIF">
-            Save as GIF
-          </button>
-          <button onclick="saveAsSpritesheet()" title="Save as PNG">
-            Save as PNG
-          </button>
+        <button onclick="saveAsGif()" title="Save as GIF">
+          Save as GIF
+        </button>
+        <button onclick="saveAsSpritesheet()" title="Save as PNG">
+          Save as PNG
+        </button>
         <div class="feedback moat" id="moat-container">
           <button id="save-moat" onclick="saveToMoat()">
             Save to Moat
@@ -249,7 +265,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           <i class="far fa-photo-video fa-2x"></i>
         </button>
         <button onclick="_clear();" title="Clear">
-          Clear<br/>
+          Clear<br />
           <i class="far fa-2x fa-sparkles"></i>
         </button>
         <button onclick="gotoFirstFrame()" title="First Frame">
@@ -300,8 +316,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           Stop<br />
           <i class="far fa-2x fa-stop"></i>
         </button>
-        <div class="feedback framerate" 
->         <label title="Frames Per Second">FPS</label>
+        <div class="feedback framerate">
+          <label title="Frames Per Second">FPS</label>
           <input
             id="framerate"
             type="number"
@@ -309,7 +325,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             onchange="setFrameRate(this);"
           />
         </div>
-
       </nav>
     </header>
     <div class="popup-color"></div>
@@ -318,14 +333,31 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         About Shimmy
       </h3>
       <p>
-        Shimmy is a simple sketch-based animation tool for flipbook-style animation. You can save your animations as animated GIFs, PNGs containing all the frames, or SVG.
+        Shimmy is a simple sketch-based animation tool for flipbook-style
+        animation. You can save your animations as animated GIFs, PNGs
+        containing all the frames, or SVG.
       </p>
       <p>
-        Shimmy code is &copy; 2020 Richond Public Library.<br>
-        Individual works made with Shimmy are owned by the individual authors.
+        <a href="https://rpl.yourlibrary.ca/"
+          ><img
+            src="https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Frpl-logo.png?v=1585240223184"
+        /></a>
+        Shimmy code is &copy; 2020 Richond Public Library.<br />
+        Individual works made with Shimmy are owned by the individual authors.<br/>
+        Code libraries under <code>/lib</code> is external to Shimmy and copyrights/licenses are controlled by the authors of each such library.
       </p>
       <p>
-        Shimmy code is licensed 
+        Shimmy code is open-source under the
+        <a rel="license" href="LICENSE">General Public License</a>.<br />
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"
+          ><img
+            alt="Creative Commons License"
+            style="border-width:0"
+            src="https://i.creativecommons.org/l/by/4.0/88x31.png"/></a
+        ><br />himmy documentation, tutorials, and examples are licensed under a
+        <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"
+          >Creative Commons Attribution 4.0 International License</a
+        >.
       </p>
     </dialog>
     <script src="lib/dialog-polyfill.js"></script>
