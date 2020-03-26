@@ -36,6 +36,12 @@ let currentStrokeWidth = 1;
 let currentDoOnionskin = true;
 let undo = null;
 
+let aboutShimmyDialog = document.querySelector('#aboutShimmy');
+
+function showAbout(){
+  aboutShimmyDialog.open ? aboutShimmyDialog.close(): aboutShimmyDialog.showModal();
+}
+
 function getState() {
   let tabs = document.querySelectorAll(".js-tab");
   let state = {

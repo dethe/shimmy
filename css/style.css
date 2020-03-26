@@ -339,3 +339,19 @@ button.secondary{
   border-radius: 5px;
   line-height: 1;
 }
+
+dialog{
+  width: 50%;
+}
+
+dialog p{
+  margin-bottom: 1rem;
+}
+
+dialog .logo{
+  height: 4rem;
+}
+
+dialog .close{
+  margin-right: 2rem;
+}
