@@ -1307,6 +1307,10 @@ function updateUndo(evt) {
 document.addEventListener("shimmy-undo-change", updateUndo, false);
 
 // Show About dialogue the first time someone visits.
-if (!local)
+if (!localStorage.hasSeenAbout){
+  localStorage.hasSeenAbout = true;
+  aboutShimmyDialog.showModal();
+  setTimeout(() => aboutShimmyDialog.close(), 3000);
+}
 
 // If we don't explicitly request moat integration, hide it
