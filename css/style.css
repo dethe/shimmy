@@ -352,6 +352,13 @@ dialog .logo{
   height: 4rem;
 }
 
+dialog form{
+  display: flex;
+  justify-content: flex-end;
+}
+
 dialog .close{
-  margin-right: 2rem;
+  font-size: 1rem;
+  font-weight: bold;
+  padding: 1rem;
 }

@@ -39,7 +39,7 @@ let undo = null;
 let aboutShimmyDialog = document.querySelector('#aboutShimmy');
 
 function showAbout(){
-  aboutShimmyDialog.open ? aboutShimmyDialog.close(): aboutShimmyDialog.showModal();
+  aboutShimmyDialog.showModal();
 }
 
 function getState() {
@@ -1305,5 +1305,8 @@ function updateUndo(evt) {
   });
 }
 document.addEventListener("shimmy-undo-change", updateUndo, false);
+
+// Show About dialogue the first time someone visits.
+if (!local)
 
 // If we don't explicitly request moat integration, hide it
