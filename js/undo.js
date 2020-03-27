@@ -1,4 +1,4 @@
-// Copyright (C) 2020 Dethe Elza
+// Copyright (C) 2020 Richmond Public Library
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -80,14 +80,8 @@ function UndoRedo(frame) {
         // add a frame to the frameUndoStack and frameRedoStack
         // copy undo stack and redo stack from old frame to new frame
         // frameTarget should be the frame being copied, frame
-        frameUndoStack.set(
-          newCurrentFrame,
-          frameUndoStack.get(targetFrame).map(copy)
-        );
-        frameRedoStack.set(
-          newCurrentFrame,
-          frameRedoStack.get(targetFrame).map(copy)
-        );
+        frameUndoStack.set(newCurrentFrame, []);
+        frameRedoStack.set(newCurrentFrame, []);
         break;
       case "Delete Frame":
         // Target frame has been removed. Save undo and redo stacks in case it is restored.
@@ -98,7 +92,7 @@ function UndoRedo(frame) {
         break;
       case "Change Frame":
         // Do Nothing
-        break; 
+        break;
       default:
         console.error(
           "We should not get here => pushDocUndo unknown type: %s",
@@ -132,7 +126,7 @@ function UndoRedo(frame) {
       case "Clear":
         break;
     }
-    frameUndoStack.get(currentFrame).push({name, undoFn, redoFn});
+    frameUndoStack.get(currentFrame).push({ name, undoFn, redoFn });
     frameRedoStack.get(currentFrame).length = 0;
     sendEvent();
   };
@@ -143,7 +137,7 @@ function UndoRedo(frame) {
     // handle special case of copying a frame, which copies undo/redo stacks of the frame
     if (action.undoStack) {
       frameUndoStack.set(action.targetFrame, action.undoStack);
-      frameRedoStack.set(action.targetFrame,  action.redoStack);
+      frameRedoStack.set(action.targetFrame, action.redoStack);
     }
     documentRedoStack.push(action);
     sendEvent();
@@ -174,8 +168,7 @@ function UndoRedo(frame) {
     currentFrame = frame;
     sendEvent();
   };
-    
-  
+
   // clear buttons on when new doc is created
   sendEvent();
 
