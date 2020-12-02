@@ -454,6 +454,89 @@ class ZoomOut {
   }
 }
 
+class Eraser {
+  constructor() {
+    this.name = "eraser";
+    this.drawing = false;
+    this.currentPath = null;
+  }
+
+  startPath(x, y) {
+    // FIXME: Switching between drawing and erasing in a frame creates a stack of contexts. Each drawing context has at most one erasing contex
+    this.currentPath = currentFrame().appendChild(
+      dom.svg("path", {
+        d: "M " + x + "," + y,
+        stroke: currentColor,
+        "stroke-width": currentStrokeWidth,
+        "stroke-linejoin": "round",
+        "stroke-linecap": "round",
+        fill: "none"
+      })
+    );
+    // console.log('currentPath: %o', this.currentPath);
+    file.onChange();
+  }
+
+  appendToPath(x, y) {
+    let path = this.currentPath;
+    let d = path.getAttribute("d");
+    path.setAttribute("d", `${d} L${x}, ${y}`);
+  }
+
+  start(evt) {
+    saveMatrix();
+    let { x, y, err } = getXY(evt);
+    if (err) {
+      return;
+    }
+    this.sx = x;
+    this.sy = y;
+    this.startPath(x, y);
+    this.drawing = true;
+  }
+
+  move(evt) {
+    if (!this.drawing) return;
+    let { x, y, wx, wy, err } = getXY(evt);
+    if (err) {
+      return;
+    }
+    if (inBounds(wx, wy)) {
+      this.appendToPath(x, y);
+    }
+  }
+
+  stop(evt) {
+    if (!this.drawing) return;
+    let { x, y, wx, wy, err } = getXY(evt);
+    if (err) {
+      return;
+    }
+    let path = this.currentPath;
+    let parent = currentFrame();
+    if (this.currentPath) {
+      if (inBounds(wx, wy) && this.sx === x && this.sy === y) {
+        this.appendToPath(x, y);
+      }
+      //dom.simplifyPath(currentPath);
+      this.currentPath = null;
+    }
+    this.drawing = false;
+    currentMatrix = null;
+    undo.pushFrameUndo(
+      "Draw",
+      () => path.remove(),
+      () => parent.appendChild(path)
+    );
+  }
+
+  cancel() {
+    this.currentPath.remove();
+    this.currentPath = null;
+    currentMatrix = null;
+  }
+}
+
 let tools = {
   pen: new Pen(canvas),
   move: new Move(canvas),
