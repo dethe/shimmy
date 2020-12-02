@@ -462,7 +462,7 @@ class Eraser {
   }
 
   startPath(x, y) {
-    // FIXME: Switching between drawing and erasing in a frame creates a stack of contexts. Each drawing context has at most one erasing contex
+    // FIXME: Switching between drawing and erasing in a frame creates a stack of contexts. Each drawing context has at most one erasing context that precedes it and has a unique ID
     this.currentPath = currentFrame().appendChild(
       dom.svg("path", {
         d: "M " + x + "," + y,
