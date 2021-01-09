@@ -33,6 +33,7 @@ let _lastFrameTime = 0;
 let currentDisplay = "drawingboard";
 let currentTool;
 let currentStrokeWidth = 1;
+let currentEraserWidth = 5;
 let currentDoOnionskin = true;
 let undo = null;
 
@@ -457,8 +458,6 @@ class ZoomOut {
 class Eraser {
   constructor() {
     this.name = "eraser";
-    this.drawing = false;
-    this.currentPath = null;
   }
 
   startPath(x, y) {
