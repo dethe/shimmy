@@ -566,8 +566,23 @@ function selectToolbar(button) {
 
 function enablePenSize(flag) {
   document
+    .querySelector(".feedback.pensize")
+    .removeAttribute("hidden");
+   document
+     .querySelector(".feedback.erasersize")
+    .setAttribute("hidden", "");
+  document
     .querySelectorAll(".pensize .stepper > *")
     .forEach(d => (d.disabled = !flag));
+}
+
+function enableEraserSize(){
+  document
+    .querySelector(".feedback.erasersize")
+    .removeAttribute("hidden");
+   document
+     .querySelector(".feedback.pensize")
+    .setAttribute("hidden", "");
 }
 
 function selectTool(sel) {
