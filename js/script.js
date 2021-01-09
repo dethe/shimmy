@@ -593,6 +593,10 @@ function selectTool(sel) {
       currentTool = tools.zoomout;
       enablePenSize(false);
       break;
+    case "eraser":
+      currentTool = tools.eraser;
+      enableEraserSize();
+      break;
     default:
       console.error("unrecognized tool name: %s", name);
   }
