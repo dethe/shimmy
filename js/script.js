@@ -542,7 +542,8 @@ let tools = {
   move: new Move(canvas),
   rotate: new Rotate(canvas),
   zoomin: new ZoomIn(canvas),
-  zoomout: new ZoomOut(canvas)
+  zoomout: new ZoomOut(canvas),
+  eraser: new Eraser(canvas)
 };
 currentTool = tools.pen;
 
