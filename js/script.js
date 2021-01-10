@@ -164,8 +164,8 @@ class Pen {
 
   startPath(x, y) {
     this.currentPath = currentFrame().appendChild(
-      dom.svg("path", {
-        d: "M " + x + "," + y,
+      dom.svg("polyline", {
+        points: `${x},${y}`,
         stroke: currentColor,
         "stroke-width": currentStrokeWidth,
         "stroke-linejoin": "round",
@@ -179,8 +179,7 @@ class Pen {
 
   appendToPath(x, y) {
     let path = this.currentPath;
-    let d = path.getAttribute("d");
-    path.setAttribute("d", `${d} L${x}, ${y}`);
+    path.appendItem(new DOMPoint(x,y));
   }
 
   start(evt) {
@@ -458,28 +457,6 @@ class ZoomOut {
 class Eraser {
   constructor() {
     this.name = "eraser";
-  }
-
-  startPath(x, y) {
-    // FIXME: Switching between drawing and erasing in a frame creates a stack of contexts. Each drawing context has at most one erasing context that precedes it and has a unique ID
-    this.currentPath = currentFrame().appendChild(
-      dom.svg("path", {
-        d: "M " + x + "," + y,
-        stroke: currentColor,
-        "stroke-width": currentStrokeWidth,
-        "stroke-linejoin": "round",
-        "stroke-linecap": "round",
-        fill: "none"
-      })
-    );
-    // console.log('currentPath: %o', this.currentPath);
-    file.onChange();
-  }
-
-  appendToPath(x, y) {
-    let path = this.currentPath;
-    let d = path.getAttribute("d");
-    path.setAttribute("d", `${d} L${x}, ${y}`);
   }
 
   start(evt) {
