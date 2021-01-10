@@ -179,7 +179,7 @@ class Pen {
 
   appendToPath(x, y) {
     let path = this.currentPath;
-    path.appendItem(new DOMPoint(x,y));
+    path.points.appendItem(new SVGPoint(x,y));
   }
 
   start(evt) {
