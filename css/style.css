@@ -32,7 +32,7 @@ html {
 
 /* Variables */
 
-:root{
+:root {
   --bw: 4rem; /* button width */
   --bh: 4rem; /* button-height */
   --bw2: 2rem; /* half button width */
@@ -41,7 +41,7 @@ html {
 
 /* Tools */
 
-html{
+html {
   height: 100%;
 }
 
@@ -78,10 +78,10 @@ button {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: .8rem;
+  font-size: 0.8rem;
 }
 
-#shimmy{
+#shimmy {
   width: var(--bw);
   height: var(--bh);
 }
@@ -128,11 +128,11 @@ header {
   height: var(--bh);
 }
 
-.toolbar > * {
+.toolbar > * , .toolbar.active > [hidden]{
   display: none !important;
 }
 
-.toolbar > .tab{
+.toolbar > .tab {
   display: flex !important;
 }
 
@@ -140,11 +140,11 @@ header {
   display: flex !important;
 }
 
-.toolbar button.tab{
+.toolbar button.tab {
   width: var(--bw2);
 }
 
-.tab span{
+.tab span {
   width: var(--bw);
   transform: rotate(-90deg);
 }
@@ -160,7 +160,7 @@ header {
   min-width: var(--bw);
 }
 
-.stack.colors.quickcolors{
+.stack.colors.quickcolors {
   min-width: 8rem;
   flex-wrap: wrap;
 }
@@ -168,7 +168,6 @@ header {
 .stack.actions {
   min-width: var(--bw);
 }
-
 
 .playing .toolbar,
 .storyboard .toolbar {
@@ -179,7 +178,7 @@ header {
   min-height: var(--bh);
   max-height: var(--bh);
   min-width: var(--bw);
-  font-size: .8rem;
+  font-size: 0.8rem;
   background-color: white;
   text-align: center;
   display: flex;
@@ -188,7 +187,6 @@ header {
   align-items: center;
   justify-content: center;
 }
-
 
 .fa-stack-2x {
   font-size: 2rem;
@@ -258,7 +256,8 @@ output {
   max-width: var(-bw);
 }
 
-.active, .active .tab{
+.active,
+.active .tab {
   background-color: lightblue;
 }
 
@@ -319,45 +318,46 @@ path {
   padding: 10px;
 }
 
-.select-css.far, .select-css.far option{
-  font-family: 'Font Awesome 5 Pro';
-/*   font-weight: 900; */
-  font-size: .9rem;
+.select-css.far,
+.select-css.far option {
+  font-family: "Font Awesome 5 Pro";
+  /*   font-weight: 900; */
+  font-size: 0.9rem;
 }
 
-button.primary{
+button.primary {
   width: var(--bw);
-  font-size: .8rem;
+  font-size: 0.8rem;
   flex: 60%;
   border-radius: 5px;
   line-height: 1.2;
 }
-button.secondary{
+button.secondary {
   width: var(--bw);
   flex: 40%;
-  font-size: .5rem;
+  font-size: 0.5rem;
   border-radius: 5px;
   line-height: 1;
 }
 
-dialog{
+dialog {
   width: 50%;
 }
 
-dialog p{
+dialog p {
   margin-bottom: 1rem;
 }
 
-dialog .logo{
+dialog .logo {
   height: 4rem;
 }
 
-dialog form{
+dialog form {
   display: flex;
   justify-content: flex-end;
 }
 
-dialog .close{
+dialog .close {
   font-size: 1rem;
   font-weight: bold;
   padding: 1rem;
