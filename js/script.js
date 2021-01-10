@@ -460,28 +460,6 @@ class Eraser {
     this.name = "eraser";
   }
 
-  startPath(x, y) {
-    // FIXME: Switching between drawing and erasing in a frame creates a stack of contexts. Each drawing context has at most one erasing context that precedes it and has a unique ID
-    this.currentPath = currentFrame().appendChild(
-      dom.svg("path", {
-        d: "M " + x + "," + y,
-        stroke: currentColor,
-        "stroke-width": currentStrokeWidth,
-        "stroke-linejoin": "round",
-        "stroke-linecap": "round",
-        fill: "none"
-      })
-    );
-    // console.log('currentPath: %o', this.currentPath);
-    file.onChange();
-  }
-
-  appendToPath(x, y) {
-    let path = this.currentPath;
-    let d = path.getAttribute("d");
-    path.setAttribute("d", `${d} L${x}, ${y}`);
-  }
-
   start(evt) {
     saveMatrix();
     let { x, y, err } = getXY(evt);
