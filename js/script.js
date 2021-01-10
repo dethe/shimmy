@@ -1366,20 +1366,18 @@ document.addEventListener(
 /* Initialize Undo */
 const undoButtons = {
   frameUndo: document.querySelector("#frameundo"),
-  docUndo: document.querySelector("#docundo"),
   frameRedo: document.querySelector("#frameredo"),
-  docRedo: document.querySelector("#docredo")
 };
 
 function updateUndo(evt) {
   console.log('updateUndo(%o)', evt.detail);
-  ["frameUndo", "docUndo", "frameRedo", "docRedo"].forEach(key => {
+  ["frameUndo", "frameRedo"].forEach(key => {
     if (evt.detail[key]) {
       undoButtons[key].disabled = false;
       undoButtons[key].innerText =
         (key.endsWith("Undo") ? "Undo " : "Redo ") + evt.detail[key];
     } else {
-      undoButtons[key].innerText = "";
+      undoButtons[key].innerText = (key.endsWith("Undo") ? "Undo" : "Redo");
       undoButtons[key].disabled = true;
     }
   });
