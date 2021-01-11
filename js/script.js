@@ -170,24 +170,22 @@ class Pen {
   }
 
   startPath(x, y) {
-    this.currentPath = currentFrame().appendChild(
-      dom.svg("path", {
-        d: "M " + x + "," + y,
+    let path = dom.svg("polyline", {
         stroke: currentColor,
         "stroke-width": currentStrokeWidth,
         "stroke-linejoin": "round",
         "stroke-linecap": "round",
         fill: "none"
-      })
-    );
+      });
+    path.points.appendItem(getSvgPoint(x,y));
+    this.currentPath = currentFrame().appendChild(path);
     // console.log('currentPath: %o', this.currentPath);
     file.onChange();
   }
 
   appendToPath(x, y) {
     let path = this.currentPath;
-    let d = path.getAttribute("d");
-    path.setAttribute("d", `${d} L${x}, ${y}`);
+    path.points.appendItems(getSvgPoint(x,y));
   }
 
   start(evt) {
@@ -1405,11 +1403,18 @@ function copyAttributes(source, target, names){
 }
 
 function pathToPolyline(path){
-  let points = path.getAttribute('d').split(/[ ,]+/);
+  let points = path.getAttribute('d').split(/[ ,LM]+/).map(Number);
+  // First one is empty
+  points.shift();
+  console.log(points);
   let polyline = dom.svg('polyline');
   while(points.length){
-    polyline.points.addItem(getSvgPoint(points.shift(), points.shift()));
+    polyline.points.appendItem(getSvgPoint(points.shift(), points.shift()));
   }
   copyAttributes(path, polyline, ['stroke', 'stroke-width', 'stroke-linejoin', 'stroke-linecap', 'fill']);
-  path.replaceWith()
+  path.replaceWith(polyline);
+}
+
+function convertToPolylines(){
+  document.querySelectorAll('path').forEach(pathToPolyline);
 }
