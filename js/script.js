@@ -171,21 +171,20 @@ class Pen {
 
   startPath(x, y) {
     let path = dom.svg("polyline", {
+        points: `${x},${y}`,
         stroke: currentColor,
         "stroke-width": currentStrokeWidth,
         "stroke-linejoin": "round",
         "stroke-linecap": "round",
         fill: "none"
       });
-    path.points.appendItem(getSvgPoint(x,y));
     this.currentPath = currentFrame().appendChild(path);
     // console.log('currentPath: %o', this.currentPath);
     file.onChange();
   }
 
   appendToPath(x, y) {
-    let path = this.currentPath;
-    path.points.appendItem(getSvgPoint(x,y));
+    this.currentPath.setAttribute('points', this.currentPath.getAttribute('points') + ` ${x},${y}`);
   }
 
   start(evt) {
@@ -718,6 +717,7 @@ function getXY(evt) {
   }
   // if the frame has been translated, rotated, or scaled, we need to map the point to the current matrix
   let { x: tx, y: ty } = transformPoint(x, y);
+  console.log(`transformed: ${tx},${ty}, world: ${x},${y}`);
   return { x: tx, y: ty, wx: x, wy: y, err: false };
 }
 
