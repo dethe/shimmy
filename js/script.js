@@ -459,9 +459,19 @@ class ZoomOut {
   }
 }
 
+
+
 class Eraser {
   constructor() {
     this.name = "eraser";
+  }
+  
+  collidePaths(x,y){
+    let paths = Array.from(currentFrame().querySelector('path'));
+    // quck check to try to eliminate paths that don't intersect
+    let d = currentFilterWidth / 2;
+    let [left, right, top, bottom] = [x-d,x+d,y-d,y+d];
+    return paths.filter
   }
 
   start(evt) {
@@ -470,10 +480,6 @@ class Eraser {
     if (err) {
       return;
     }
-    this.sx = x;
-    this.sy = y;
-    this.startPath(x, y);
-    this.drawing = true;
   }
 
   move(evt) {
