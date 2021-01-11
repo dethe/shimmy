@@ -202,6 +202,17 @@ function enableEraserSize(){
     .setAttribute("hidden", "");
 }
 
+let tools = {
+  pen: new Pen(canvas),
+  move: new Move(canvas),
+  rotate: new Rotate(canvas),
+  zoomin: new ZoomIn(canvas),
+  zoomout: new ZoomOut(canvas),
+  eraser: new Eraser(canvas)
+};
+currentTool = tools.pen;
+
+
 function selectTool(sel) {
   let name = sel.value;
   switch (name) {

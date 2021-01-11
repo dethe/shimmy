@@ -8,7 +8,7 @@ class Pen {
 
   startPath(x, y) {
     let path = dom.svg("path", {
-        d: `${x},${y}`,
+        d: `M${x},${y}`,
         stroke: currentColor,
         "stroke-width": currentStrokeWidth,
         "stroke-linejoin": "round",
@@ -21,7 +21,7 @@ class Pen {
   }
 
   appendToPath(x, y) {
-    this.currentPath.setAttribute('points', this.currentPath.getAttribute('d') + ` ${x},${y}`);
+    this.currentPath.setAttribute('d', this.currentPath.getAttribute('d') + ` L${x},${y}`);
   }
 
   start(evt) {
@@ -363,12 +363,3 @@ class Eraser {
   }
 }
 
-let tools = {
-  pen: new Pen(canvas),
-  move: new Move(canvas),
-  rotate: new Rotate(canvas),
-  zoomin: new ZoomIn(canvas),
-  zoomout: new ZoomOut(canvas),
-  eraser: new Eraser(canvas)
-};
-currentTool = tools.pen;
