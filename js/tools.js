@@ -306,31 +306,16 @@ class Eraser {
     this.name = "eraser";
   }
 
-  collidePaths(point, paths) {
-    let paths = Array.from(currentFrame().querySelector("path"));
-    // quck check to try to eliminate paths that don't intersect
-    let d = currentEraserWidth / 2;
-    let eraserBox = {
-      x: point.x - d,
-      y: point.y - d,
-      width: currentEraserWidth,
-      height: currentEraserWidth
-    };
-    return paths.filter(path =>
-      collideBox(eraserBox, path.getBBox({ stroke: true }))
-    );
-  }
-
   start(evt) {
-    saveMatrix();
     let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
       return;
     }
-    if (collideCircle({ x, y }, 1, this.prevPoint, 1)) {
-      // too close to previous point to both erasing
-      return;
+    this.prevPoint = {x,y};
+    if (inBounds(wx,wy)){
+      erasePaths(point);
     }
+    
   }
 
   move(evt) {
@@ -339,8 +324,12 @@ class Eraser {
     if (err) {
       return;
     }
-    if (inBounds(wx, wy)) {
-      this.appendToPath(x, y);
+    if (collideCircle({ x, y }, 1, this.prevPoint, 1)) {
+      // too close to previous point to both erasing
+      return;
+    }
+    if (inBounds(wx,wy)){
+      erasePaths(point);
     }
   }
 
@@ -350,26 +339,6 @@ class Eraser {
     if (err) {
       return;
     }
-    let path = this.currentPath;
-    let parent = currentFrame();
-    if (this.currentPath) {
-      if (
-        inBounds(wx, wy) &&
-        this.firstPoint.x === x &&
-        this.firstPoint.y === y
-      ) {
-        // We haven't drawn a line, ending on the same spot, but make a dot anyway.
-        this.appendToPath(x, y);
-      }
-      this.currentPath = null;
-    }
-    this.drawing = false;
-    currentMatrix = null;
-    undo.pushFrameUndo(
-      "Draw",
-      () => path.remove(),
-      () => parent.appendChild(path)
-    );
   }
 
   cancel() {
