@@ -45,10 +45,11 @@ class Pen {
     if (err) {
       return;
     }
-    if (collide({ x, y }, 1, this.prevPoint, 1)) {
-      // too close to previous point to both drawing
-      return;
-    }
+    // if (collideCircle({ x, y }, 1, this.prevPoint, 1)) {
+    //   // too close to previous point to both drawing
+    //   return;
+    // }
+    this.prevPoint = {x,y};
     if (inBounds(wx, wy)) {
       this.appendToPath(x, y);
     }
@@ -308,16 +309,16 @@ class Eraser {
   collidePaths(x, y) {
     let paths = Array.from(currentFrame().querySelector("path"));
     // quck check to try to eliminate paths that don't intersect
-    let d = currentFilterWidth / 2;
-    let [left, right, top, bottom] = [x - d, x + d, y - d, y + d];
-    return paths.filter(path => {
-      let bounds = path.getBBox({stroke: true});
-      if (right < bounds.x){ return false;}
-      if (bottom < bounds.y){ return false; }
-      if (left > (bounds.y + bounds.width)){ return false; }
-      if (top > (bounds.y + bounds.height)){ return false; }
-      return true;
-    });
+    let d = currentEraserWidth / 2;
+    let eraserBox = {
+      x: x - d,
+      y: y - d,
+      width: currentEraserWidth,
+      height: currentEraserWidth
+    };
+    return paths.filter(path =>
+      collideBox(eraserBox, path.getBBox({ stroke: true }))
+    );
   }
 
   start(evt) {
@@ -326,7 +327,7 @@ class Eraser {
     if (err) {
       return;
     }
-    if (collide({ x, y }, 1, this.prevPoint, 1)) {
+    if (collideCircle({ x, y }, 1, this.prevPoint, 1)) {
       // too close to previous point to both erasing
       return;
     }
@@ -394,8 +395,24 @@ function pointsFromPath(path) {
 }
 
 // Because points are actually circles (due to penWidth / eraserWidth) this is a basic circl collision algorithm
-function collide(p1, r1, p2, r2) {
+function collideCircle(p1, r1, p2, r2) {
   return (
     Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2) > Math.pow(r1 + r2, 2)
   );
+}
+
+function collideBox(r1, r2) {
+  if (r1.x + r1.width < r2.x) {
+    return false;
+  }
+  if (r1.y + r1.height < r2.y) {
+    return false;
+  }
+  if (r1.x > r2.y + r2.width) {
+    return false;
+  }
+  if (r1.y > r2.y + r2.height) {
+    return false;
+  }
+  return true;
 }
