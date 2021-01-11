@@ -745,22 +745,3 @@ if (!localStorage.hasSeenAbout){
 
 // If we don't explicitly request moat integration, hide it
 
-function copyAttributes(source, target, names){
-  names.forEach(name => target.setAttribute(name, source.getAttribute(name)));
-}
-
-function pointsFromPath(path){
-  let coords = path.getAttribute('d').split(/[ ,LM]+/).map(Number);
-  // First one is empty
-  let points = [];
-  while(coords.length){
-    points.push((points.shift(), points.shift()));
-  }
-  return points;
-}
-
-// Because points are actually circles (due to penWidth / eraserWidth) this is a basic circl collision algorithm
-function collide(p1, r1, p2, r2){
-  return (Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2)) > (Math.pow(r1 + r2, 2))
-}
-

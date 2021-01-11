@@ -8,20 +8,23 @@ class Pen {
 
   startPath(x, y) {
     let path = dom.svg("path", {
-        d: `M${x},${y}`,
-        stroke: currentColor,
-        "stroke-width": currentStrokeWidth,
-        "stroke-linejoin": "round",
-        "stroke-linecap": "round",
-        fill: "none"
-      });
+      d: `M${x},${y}`,
+      stroke: currentColor,
+      "stroke-width": currentStrokeWidth,
+      "stroke-linejoin": "round",
+      "stroke-linecap": "round",
+      fill: "none"
+    });
     this.currentPath = currentFrame().appendChild(path);
     // console.log('currentPath: %o', this.currentPath);
     file.onChange();
   }
 
   appendToPath(x, y) {
-    this.currentPath.setAttribute('d', this.currentPath.getAttribute('d') + ` L${x},${y}`);
+    this.currentPath.setAttribute(
+      "d",
+      this.currentPath.getAttribute("d") + ` L${x},${y}`
+    );
   }
 
   start(evt) {
@@ -30,8 +33,8 @@ class Pen {
     if (err) {
       return;
     }
-    this.sx = x;
-    this.sy = y;
+    this.firstPoint = { x, y };
+    this.prevPoint = { x, y };
     this.startPath(x, y);
     this.drawing = true;
   }
@@ -40,6 +43,10 @@ class Pen {
     if (!this.drawing) return;
     let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
+      return;
+    }
+    if (collide({ x, y }, 1, this.prevPoint, 1)) {
+      // too close to previous point to both drawing
       return;
     }
     if (inBounds(wx, wy)) {
@@ -271,10 +278,7 @@ class ZoomOut {
     let curr = currentFrame();
     let oldTransform = curr.getAttribute("transform") || "";
     let newTransform = `${oldTransform} translate(${x} ${y}) scale(${ZOOMOUT}) translate(-${x}, -${y})`;
-    currentFrame().setAttribute(
-      "transform",
-      newTransform
-    );
+    currentFrame().setAttribute("transform", newTransform);
     currentMatrix = null;
     undo.pushFrameUndo(
       "Zoom Out",
@@ -296,27 +300,34 @@ class ZoomOut {
   }
 }
 
-
-
 class Eraser {
   constructor() {
     this.name = "eraser";
   }
-  
-  collidePaths(x,y){
-    let paths = Array.from(currentFrame().querySelector('path'));
+
+  collidePaths(x, y) {
+    let paths = Array.from(currentFrame().querySelector("path"));
     // quck check to try to eliminate paths that don't intersect
     let d = currentFilterWidth / 2;
-    let [left, right, top, bottom] = [x-d,x+d,y-d,y+d];
+    let [left, right, top, bottom] = [x - d, x + d, y - d, y + d];
     return paths.filter(path => {
-      let bounds = path.getBBox();
-    })
+      let bounds = path.getBBox({stroke: true});
+      if (right < bounds.x){ return false;}
+      if (bottom < bounds.y){ return false; }
+      if (left > (bounds.y + bounds.width)){ return false; }
+      if (top > (bounds.y + bounds.height)){ return false; }
+      return true;
+    });
   }
 
   start(evt) {
     saveMatrix();
-    let { x, y, err } = getXY(evt);
+    let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
+      return;
+    }
+    if (collide({ x, y }, 1, this.prevPoint, 1)) {
+      // too close to previous point to both erasing
       return;
     }
   }
@@ -341,10 +352,14 @@ class Eraser {
     let path = this.currentPath;
     let parent = currentFrame();
     if (this.currentPath) {
-      if (inBounds(wx, wy) && this.sx === x && this.sy === y) {
+      if (
+        inBounds(wx, wy) &&
+        this.firstPoint.x === x &&
+        this.firstPoint.y === y
+      ) {
+        // We haven't drawn a line, ending on the same spot, but make a dot anyway.
         this.appendToPath(x, y);
       }
-      //dom.simplifyPath(currentPath);
       this.currentPath = null;
     }
     this.drawing = false;
@@ -363,3 +378,24 @@ class Eraser {
   }
 }
 
+// UTILITIES
+
+function pointsFromPath(path) {
+  let coords = path
+    .getAttribute("d")
+    .split(/[ ,LM]+/)
+    .map(Number);
+  // First one is empty
+  let points = [];
+  while (coords.length) {
+    points.push((points.shift(), points.shift()));
+  }
+  return points;
+}
+
+// Because points are actually circles (due to penWidth / eraserWidth) this is a basic circl collision algorithm
+function collide(p1, r1, p2, r2) {
+  return (
+    Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2) > Math.pow(r1 + r2, 2)
+  );
+}
