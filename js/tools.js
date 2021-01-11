@@ -309,19 +309,18 @@ class Eraser {
   start(evt) {
     let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
-      console.error('Houston, we have a problem');
+      console.error("Houston, we have a problem");
       return;
     }
-    this.prevPoint = {x,y};
+    this.prevPoint = { x, y };
     this.isErasing = true;
-    if (inBounds(wx,wy)){
-      erasePaths({x,y});
+    if (inBounds(wx, wy)) {
+      erasePaths({ x, y });
     }
-    
   }
 
   move(evt) {
-    if (!this.isErasing){
+    if (!this.isErasing) {
       return;
     }
     let { x, y, wx, wy, err } = getXY(evt);
@@ -332,9 +331,9 @@ class Eraser {
       // too close to previous point to both erasing
       return;
     }
-    this.prevPoint = {x,y};
-    if (inBounds(wx,wy)){
-      erasePaths({x,y});
+    this.prevPoint = { x, y };
+    if (inBounds(wx, wy)) {
+      erasePaths({ x, y });
     }
   }
 
@@ -358,41 +357,48 @@ function pointsFromPath(path) {
     .map(Number);
   // First one is empty
   coords.shift();
-//  console.log('got %s coordinates', coords.length);
+  //  console.log('got %s coordinates', coords.length);
   let points = [];
   while (coords.length) {
     points.push((coords.shift(), coords.shift()));
   }
- // console.log('testing %s points', points.length);
+  // console.log('testing %s points', points.length);
   return points;
 }
 
-function pointsToPath(points){
-  if (!points.length){return null;}
+function pointsToPath(points) {
+  if (!points.length) {
+    return null;
+  }
   let first = points.shift();
   let rest = points.map(pt => `L${pt.x},${pt.y}`);
   rest.unshift(`M${first.x},${first.y}`);
-  return rest.join(' ');
+  return rest.join(" ");
 }
 
 // Because points are actually circles (due to penWidth / eraserWidth) this is a basic circl collision algorithm
 function collideCircle(p1, r1, p2, r2) {
+  if (r1 > 1) {
+    console.log(
+      `collideCircle({x:${p1.x},y:${p1.y}}, ${r1}, {x:${p2.x},y:${p2.y}}, ${r2})`
+    );
+  }
   return (
     Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2) < Math.pow(r1 + r2, 2)
   );
 }
 
 function collideBox(r1, r2) {
-  if ((r1.x + r1.width) < r2.x) {
+  if (r1.x + r1.width < r2.x) {
     return false;
   }
-  if ((r1.y + r1.height) < r2.y) {
+  if (r1.y + r1.height < r2.y) {
     return false;
   }
-  if (r1.x > (r2.x + r2.width)) {
+  if (r1.x > r2.x + r2.width) {
     return false;
   }
-  if (r1.y > (r2.y + r2.height)) {
+  if (r1.y > r2.y + r2.height) {
     return false;
   }
   return true;
@@ -454,13 +460,22 @@ function transformPoint(x, y) {
   return currentMatrix.transformPoint(new DOMPoint(x, y));
 }
 
-function drawBoundingBox(bbox, color){
-  let r = dom.svg('rect', {x: bbox.x, y: bbox.y, width: bbox.width, height: bbox.height, fill: 'none', stroke: color || '#00F'});
+function drawBoundingBox(bbox, color) {
+  let r = dom.svg("rect", {
+    x: bbox.x,
+    y: bbox.y,
+    width: bbox.width,
+    height: bbox.height,
+    fill: "none",
+    stroke: color || "#00F"
+  });
   currentFrame().appendChild(r);
 }
 
-function erasePaths(point){
-  currentFrame().querySelectorAll('rect').forEach(r => r.remove());
+function erasePaths(point) {
+  currentFrame()
+    .querySelectorAll("rect")
+    .forEach(r => r.remove());
   let candidatePaths = Array.from(currentFrame().querySelectorAll("path"));
   // console.log(`${candidatePaths.length} candidate paths`);
   // candidatePaths.forEach(path => drawBoundingBox(path.getBBox({stroke: true})));
@@ -468,17 +483,20 @@ function erasePaths(point){
   // console.log(`${paths.length} matching paths`);
   // paths.forEach(path => drawBoundingBox(path.getBBox({stroke: true})));
   paths.forEach(path => erasePath(point, path));
-  
 }
 
-function erasePath(pt1, path){
+function erasePath(pt1, path) {
   let r1 = currentEraserWidth;
-  let r2 = Number(path.getAttribute('stroke-width'));
-  let newPath = pointsToPath(pointsFromPath(path).filter(pt2 => collideCircle(pt1, r1, pt2, r2)));
-  if (newPath === null){
+  let r2 = Number(path.getAttribute("stroke-width"));
+  console.log('path: %o', path);
+  console.log('pointsFromPath: %o', pointsFromPath(path));
+  let newPath = pointsToPath(
+    pointsFromPath(path).filter(pt2 => collideCircle(pt1, r1, pt2, r2))
+  );
+  if (newPath === null) {
     path.remove();
-  }else{
-    path.setAttribute('d', newPath);
+  } else {
+    path.setAttribute("d", newPath);
   }
 }
 
