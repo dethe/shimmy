@@ -43,6 +43,13 @@ function showAbout(){
   aboutShimmyDialog.showModal();
 }
 
+function getSvgPoint(x,y){
+  let point = document.querySelector('svg').createSVGPoint();
+  point.x = x;
+  point.y = y;
+  return point;
+}
+
 function getState() {
   let tabs = document.querySelectorAll(".js-tab");
   let state = {
@@ -1393,6 +1400,16 @@ if (!localStorage.hasSeenAbout){
 
 // If we don't explicitly request moat integration, hide it
 
+function copyAttributes(source, target, names){
+  names.forEach(name => target.setAttribute(name, source.getAttribute(name)));
+}
+
 function pathToPolyline(path){
-  points = path.getAttribute('d').split(/[ ,]+/)
+  let points = path.getAttribute('d').split(/[ ,]+/);
+  let polyline = dom.svg('polyline');
+  while(points.length){
+    polyline.points.addItem(getSvgPoint(points.shift(), points.shift()));
+  }
+  copyAttributes(path, polyline, ['stroke', 'stroke-width', 'stroke-linejoin', 'stroke-linecap', 'fill']);
+  path.replaceWith()
 }
