@@ -185,7 +185,7 @@ class Pen {
 
   appendToPath(x, y) {
     let path = this.currentPath;
-    path.points.appendItems(getSvgPoint(x,y));
+    path.points.appendItem(getSvgPoint(x,y));
   }
 
   start(evt) {
@@ -1189,16 +1189,11 @@ class SVGCanvas {
     this.ctx.beginPath();
     this.ctx.lineWidth = Number(line.getAttribute("stroke-width"));
     this.ctx.strokeStyle = line.getAttribute("stroke");
-    let path = line
-      .getAttribute("d")
-      .slice(1)
-      .trim()
-      .split(/\s*L\s*/);
-    let pairs = path.map(p => p.split(/\s*,\s*/).map(Number));
-    let start = pairs.shift();
-    this.ctx.moveTo(...start);
-    pairs.forEach(p => {
-      this.ctx.lineTo(...p);
+    let points = Array.from(line.points);
+    let start = points.shift();
+    this.ctx.moveTo(start.x, start.y);
+    points.forEach(p => {
+      this.ctx.lineTo(p.x, p.y);
     });
     this.ctx.stroke();
   }
