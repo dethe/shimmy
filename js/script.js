@@ -170,8 +170,8 @@ class Pen {
   }
 
   startPath(x, y) {
-    let path = dom.svg("polyline", {
-        points: `${x},${y}`,
+    let path = dom.svg("path", {
+        d: `${x},${y}`,
         stroke: currentColor,
         "stroke-width": currentStrokeWidth,
         "stroke-linejoin": "round",
@@ -184,7 +184,7 @@ class Pen {
   }
 
   appendToPath(x, y) {
-    this.currentPath.setAttribute('points', this.currentPath.getAttribute('points') + ` ${x},${y}`);
+    this.currentPath.setAttribute('points', this.currentPath.getAttribute('d') + ` ${x},${y}`);
   }
 
   start(evt) {
@@ -1397,19 +1397,13 @@ function copyAttributes(source, target, names){
   names.forEach(name => target.setAttribute(name, source.getAttribute(name)));
 }
 
-function pathToPolyline(path){
-  let points = path.getAttribute('d').split(/[ ,LM]+/).map(Number);
+function pointsFromPath(path){
+  let coords = path.getAttribute('d').split(/[ ,LM]+/).map(Number);
   // First one is empty
-  points.shift();
-  console.log(points);
-  let polyline = dom.svg('polyline');
-  while(points.length){
-    polyline.points.appendItem(getSvgPoint(points.shift(), points.shift()));
+  let points = [];
+  while(coords.length){
+    points.push((points.shift(), points.shift()));
   }
-  copyAttributes(path, polyline, ['stroke', 'stroke-width', 'stroke-linejoin', 'stroke-linecap', 'fill']);
-  path.replaceWith(polyline);
+  return points;
 }
 
-function convertToPolylines(){
-  document.querySelectorAll('path').forEach(pathToPolyline);
-}
