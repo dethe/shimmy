@@ -379,6 +379,7 @@ function collideCircle(p1, r1, p2, r2) {
 }
 
 function collideBox(r1, r2) {
+  console.log('comparing %o with %o', r1, r2);
   if (r1.x + r1.width < r2.x) {
     return false;
   }
@@ -458,11 +459,12 @@ function drawBoundingBox(bbox, color){
 function erasePaths(point){
   currentFrame().querySelectorAll('rect').forEach(r => r.remove());
   let candidatePaths = Array.from(currentFrame().querySelectorAll("path"));
-  console.log(`${candidatePaths.length`)
+  // console.log(`${candidatePaths.length} candidate paths`);
+  // candidatePaths.forEach(path => drawBoundingBox(path.getBBox({stroke: true})));
   let paths = collidePaths(point, candidatePaths);
   console.log(`${paths.length} matching paths`);
-  // paths.forEach(drawBoundingBox);
-  paths.forEach(path => erasePath(point, path));
+  paths.forEach(path => drawBoundingBox(path.getBBox({stroke: true})));
+  // paths.forEach(path => erasePath(point, path));
   
 }
 
@@ -482,7 +484,6 @@ function collidePaths(point, paths) {
     height: currentEraserWidth
   };
   drawBoundingBox(eraserBox, '#F00');
-  paths.forEach(drawBoundingBox);
   return paths.filter(path =>
     collideBox(eraserBox, path.getBBox({ stroke: true }))
   );
