@@ -357,12 +357,12 @@ function pointsFromPath(path) {
     .map(Number);
   // First one is empty
   coords.shift();
-  //  console.log('got %s coordinates', coords.length);
+  console.log('got %s coordinates', coords.length);
   let points = [];
   while (coords.length) {
-    points.push((coords.shift(), coords.shift()));
+    points.push({x: coords.shift(), y: coords.shift()});
   }
-  // console.log('testing %s points', points.length);
+  console.log('testing %s points', points.length);
   return points;
 }
 
@@ -491,7 +491,7 @@ function erasePath(pt1, path) {
   console.log('path: %o', path);
   console.log('pointsFromPath: %o', pointsFromPath(path));
   let newPath = pointsToPath(
-    pointsFromPath(path).filter(pt2 => collideCircle(pt1, r1, pt2, r2))
+    pointsFromPath(path).filter(pt2 => !collideCircle(pt1, r1, pt2, r2))
   );
   if (newPath === null) {
     path.remove();
