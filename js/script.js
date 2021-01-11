@@ -1392,3 +1392,7 @@ if (!localStorage.hasSeenAbout){
 }
 
 // If we don't explicitly request moat integration, hide it
+
+function pathToPolyline(path){
+  points = path.getAttribute('d').split(/[ ,]+/)
+}
