@@ -357,14 +357,18 @@ function pointsFromPath(path) {
     .split(/[ ,LM]+/)
     .map(Number);
   // First one is empty
+  coords.shift();
+//  console.log('got %s coordinates', coords.length);
   let points = [];
   while (coords.length) {
-    points.push((points.shift(), points.shift()));
+    points.push((coords.shift(), coords.shift()));
   }
+ // console.log('testing %s points', points.length);
   return points;
 }
 
 function pointsToPath(points){
+  if (!points.length){return null;}
   let first = points.shift();
   let rest = points.map(pt => `L${pt.x},${pt.y}`);
   rest.unshift(`M${first.x},${first.y}`);
@@ -469,8 +473,13 @@ function erasePaths(point){
 
 function erasePath(pt1, path){
   let r1 = currentEraserWidth;
-  let r2 = Number(path.getAttribute('stroke-width'))
-  path.setAttribute('d', pointsToPath(pointsFromPath(path).filter(pt2 => collideCircle(pt1, r1, pt2, r2))));
+  let r2 = Number(path.getAttribute('stroke-width'));
+  let newPath = pointsToPath(pointsFromPath(path).filter(pt2 => collideCircle(pt1, r1, pt2, r2)));
+  if (newPath === null){
+    path.remove();
+  }else{
+    path.setAttribute('d', newPath);
+  }
 }
 
 function collidePaths(point, paths) {
@@ -482,7 +491,7 @@ function collidePaths(point, paths) {
     width: currentEraserWidth,
     height: currentEraserWidth
   };
-  drawBoundingBox(eraserBox, '#F00');
+  // drawBoundingBox(eraserBox, '#F00');
   return paths.filter(path =>
     collideBox(eraserBox, path.getBBox({ stroke: true }))
   );
