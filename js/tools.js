@@ -451,15 +451,15 @@ function transformPoint(x, y) {
 }
 
 function drawBoundingBox(bbox, color){
-  let r = dom.svg('rect', bbox);
-  r.setAttribute('fill', 'none');
-  r.setAttribute('stroke', color || '#00F');
+  let r = dom.svg('rect', {x: bbox.x, y: bbox.y, width: bbox.width, height: bbox.height, fill: 'none', stroke: color || '#00F'});
   currentFrame().appendChild(r);
 }
 
 function erasePaths(point){
   currentFrame().querySelectorAll('rect').forEach(r => r.remove());
-  let paths = collidePaths(point, Array.from(currentFrame().querySelector("path")));
+  let candidatePaths = Array.from(currentFrame().querySelectorAll("path"));
+  console.log(`${candidatePaths.length`)
+  let paths = collidePaths(point, candidatePaths);
   console.log(`${paths.length} matching paths`);
   // paths.forEach(drawBoundingBox);
   paths.forEach(path => erasePath(point, path));
@@ -482,6 +482,7 @@ function collidePaths(point, paths) {
     height: currentEraserWidth
   };
   drawBoundingBox(eraserBox, '#F00');
+  paths.forEach(drawBoundingBox);
   return paths.filter(path =>
     collideBox(eraserBox, path.getBBox({ stroke: true }))
   );
