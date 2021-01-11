@@ -313,7 +313,7 @@ class Eraser {
     }
     this.prevPoint = {x,y};
     if (inBounds(wx,wy)){
-      erasePaths(point);
+      erasePaths({x,y});
     }
     
   }
@@ -329,22 +329,16 @@ class Eraser {
       return;
     }
     if (inBounds(wx,wy)){
-      erasePaths(point);
+      erasePaths({x,y});
     }
   }
 
   stop(evt) {
-    if (!this.drawing) return;
-    let { x, y, wx, wy, err } = getXY(evt);
-    if (err) {
-      return;
-    }
+    this.prevPoint = null;
   }
 
   cancel() {
-    this.currentPath.remove();
-    this.currentPath = null;
-    currentMatrix = null;
+    this.prevPoint = null;
   }
 }
 
@@ -438,7 +432,6 @@ function getXY(evt) {
   }
   // if the frame has been translated, rotated, or scaled, we need to map the point to the current matrix
   let { x: tx, y: ty } = transformPoint(x, y);
-  console.log(`transformed: ${tx},${ty}, world: ${x},${y}`);
   return { x: tx, y: ty, wx: x, wy: y, err: false };
 }
 
@@ -450,8 +443,18 @@ function transformPoint(x, y) {
   return currentMatrix.transformPoint(new DOMPoint(x, y));
 }
 
+function drawBoundingRect(bbox){
+  let r = dom.svg('rect', bbox);
+  r.fill = 'none';
+  r.stroke = '#00F';
+  currentFrame().appendChild(r);
+}
+
 function erasePaths(point){
   let paths = collidePaths(point, Array.from(currentFrame().querySelector("path")));
+  console.log('${paths.length} matching paths');
+  currentFrame().querySelectorAll('rect').forEach(r => r.remove());
+  paths.forEach
   paths.forEach(path => erasePath(point, path));
   
 }
