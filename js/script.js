@@ -471,7 +471,9 @@ class Eraser {
     // quck check to try to eliminate paths that don't intersect
     let d = currentFilterWidth / 2;
     let [left, right, top, bottom] = [x-d,x+d,y-d,y+d];
-    return paths.filter
+    return paths.filter(path => {
+      let bounds = path.getBBox();
+    })
   }
 
   start(evt) {
