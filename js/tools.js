@@ -324,10 +324,10 @@ class Eraser {
     if (err) {
       return;
     }
-    if (collideCircle({ x, y }, 1, this.prevPoint, 1)) {
-      // too close to previous point to both erasing
-      return;
-    }
+    // if (collideCircle({ x, y }, 1, this.prevPoint, 1)) {
+    //   // too close to previous point to both erasing
+    //   return;
+    // }
     if (inBounds(wx,wy)){
       erasePaths({x,y});
     }
@@ -443,18 +443,18 @@ function transformPoint(x, y) {
   return currentMatrix.transformPoint(new DOMPoint(x, y));
 }
 
-function drawBoundingRect(bbox){
+function drawBoundingBox(bbox, color){
   let r = dom.svg('rect', bbox);
-  r.fill = 'none';
-  r.stroke = '#00F';
+  r.setAttribute('fill', 'none');
+  r.setAttribute('stroke', color || '#00F');
   currentFrame().appendChild(r);
 }
 
 function erasePaths(point){
-  let paths = collidePaths(point, Array.from(currentFrame().querySelector("path")));
-  console.log('${paths.length} matching paths');
   currentFrame().querySelectorAll('rect').forEach(r => r.remove());
-  paths.forEach
+  let paths = collidePaths(point, Array.from(currentFrame().querySelector("path")));
+  console.log(`${paths.length} matching paths`);
+  // paths.forEach(drawBoundingBox);
   paths.forEach(path => erasePath(point, path));
   
 }
@@ -474,6 +474,7 @@ function collidePaths(point, paths) {
     width: currentEraserWidth,
     height: currentEraserWidth
   };
+  drawBoundingBox(eraserBox, '#F00');
   return paths.filter(path =>
     collideBox(eraserBox, path.getBBox({ stroke: true }))
   );
