@@ -394,9 +394,11 @@ function pointsFromPath(path) {
   return points;
 }
 
-function pointsToPath(path, points){
+function pointsToPath(points){
   let first = points.shift();
-  let rest = points.map(pt => `L${pt.x},${pt.y}`)
+  let rest = points.map(pt => `L${pt.x},${pt.y}`);
+  rest.unshift(`M${first.x},${first.y}`);
+  return rest.join(' ');
 }
 
 // Because points are actually circles (due to penWidth / eraserWidth) this is a basic circl collision algorithm
@@ -481,7 +483,14 @@ function transformPoint(x, y) {
 
 function erasePaths(point){
   let paths = collidePaths(point, Array.from(currentFrame().querySelector("path")));
+  paths.forEach(path => erasePath(point, path));
   
+}
+
+function erasePath(pt1, path){
+  let r1 = currentEraserWidth;
+  let r2 = Number(path.getAttribute('stroke-width'))
+  path.setAttribute('d', pointsToPath(pointsFromPath(path).filter(pt2 => collideCircle(pt1, r1, pt2, r2))));
 }
 
 function collidePaths(point, paths) {
