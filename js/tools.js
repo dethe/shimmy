@@ -379,17 +379,16 @@ function collideCircle(p1, r1, p2, r2) {
 }
 
 function collideBox(r1, r2) {
-  console.log('comparing %o with %o', r1, r2);
-  if (r1.x + r1.width < r2.x) {
+  if ((r1.x + r1.width) < r2.x) {
     return false;
   }
-  if (r1.y + r1.height < r2.y) {
+  if ((r1.y + r1.height) < r2.y) {
     return false;
   }
-  if (r1.x > r2.y + r2.width) {
+  if (r1.x > (r2.x + r2.width)) {
     return false;
   }
-  if (r1.y > r2.y + r2.height) {
+  if (r1.y > (r2.y + r2.height)) {
     return false;
   }
   return true;
@@ -462,9 +461,9 @@ function erasePaths(point){
   // console.log(`${candidatePaths.length} candidate paths`);
   // candidatePaths.forEach(path => drawBoundingBox(path.getBBox({stroke: true})));
   let paths = collidePaths(point, candidatePaths);
-  console.log(`${paths.length} matching paths`);
-  paths.forEach(path => drawBoundingBox(path.getBBox({stroke: true})));
-  // paths.forEach(path => erasePath(point, path));
+  // console.log(`${paths.length} matching paths`);
+  // paths.forEach(path => drawBoundingBox(path.getBBox({stroke: true})));
+  paths.forEach(path => erasePath(point, path));
   
 }
 
