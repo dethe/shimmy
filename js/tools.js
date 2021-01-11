@@ -309,9 +309,11 @@ class Eraser {
   start(evt) {
     let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
+      console.error('Houston, we have a problem');
       return;
     }
     this.prevPoint = {x,y};
+    this.isErasing = true;
     if (inBounds(wx,wy)){
       erasePaths({x,y});
     }
@@ -319,25 +321,30 @@ class Eraser {
   }
 
   move(evt) {
-    if (!this.drawing) return;
+    if (!this.isErasing){
+      return;
+    }
     let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
       return;
     }
-    // if (collideCircle({ x, y }, 1, this.prevPoint, 1)) {
-    //   // too close to previous point to both erasing
-    //   return;
-    // }
+    if (collideCircle({ x, y }, 1, this.prevPoint, 1)) {
+      // too close to previous point to both erasing
+      return;
+    }
+    this.prevPoint = {x,y};
     if (inBounds(wx,wy)){
       erasePaths({x,y});
     }
   }
 
   stop(evt) {
+    this.isErasing = false;
     this.prevPoint = null;
   }
 
   cancel() {
+    this.isErasing = false;
     this.prevPoint = null;
   }
 }
