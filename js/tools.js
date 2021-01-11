@@ -45,10 +45,10 @@ class Pen {
     if (err) {
       return;
     }
-    // if (collideCircle({ x, y }, 1, this.prevPoint, 1)) {
-    //   // too close to previous point to both drawing
-    //   return;
-    // }
+    if (collideCircle({ x, y }, 1, this.prevPoint, 1)) {
+      // too close to previous point to both drawing
+      return;
+    }
     this.prevPoint = {x,y};
     if (inBounds(wx, wy)) {
       this.appendToPath(x, y);
@@ -397,7 +397,7 @@ function pointsFromPath(path) {
 // Because points are actually circles (due to penWidth / eraserWidth) this is a basic circl collision algorithm
 function collideCircle(p1, r1, p2, r2) {
   return (
-    Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2) > Math.pow(r1 + r2, 2)
+    Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2) < Math.pow(r1 + r2, 2)
   );
 }
 
