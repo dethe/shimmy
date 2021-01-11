@@ -49,7 +49,7 @@ class Pen {
       // too close to previous point to both drawing
       return;
     }
-    this.prevPoint = {x,y};
+    this.prevPoint = { x, y };
     if (inBounds(wx, wy)) {
       this.appendToPath(x, y);
     }
@@ -306,13 +306,13 @@ class Eraser {
     this.name = "eraser";
   }
 
-  collidePaths(x, y) {
+  collidePaths(point, paths) {
     let paths = Array.from(currentFrame().querySelector("path"));
     // quck check to try to eliminate paths that don't intersect
     let d = currentEraserWidth / 2;
     let eraserBox = {
-      x: x - d,
-      y: y - d,
+      x: point.x - d,
+      y: point.y - d,
       width: currentEraserWidth,
       height: currentEraserWidth
     };
@@ -394,6 +394,11 @@ function pointsFromPath(path) {
   return points;
 }
 
+function pointsToPath(path, points){
+  let first = points.shift();
+  let rest = points.map(pt => `L${pt.x},${pt.y}`)
+}
+
 // Because points are actually circles (due to penWidth / eraserWidth) this is a basic circl collision algorithm
 function collideCircle(p1, r1, p2, r2) {
   return (
@@ -415,4 +420,80 @@ function collideBox(r1, r2) {
     return false;
   }
   return true;
+}
+
+function inBounds(x, y) {
+  return !(x < 0 || x > WIDTH || y < 0 || y > HEIGHT);
+}
+
+function saveMatrix() {
+  let matrix = currentFrame().getCTM();
+  if (matrix instanceof SVGMatrix) {
+    matrix = new DOMMatrix([
+      matrix.a,
+      matrix.b,
+      matrix.c,
+      matrix.d,
+      matrix.e,
+      matrix.f
+    ]);
+  }
+  currentMatrix = matrix.inverse();
+}
+
+function getXY(evt) {
+  if (evt.button) {
+    // left button is 0, for touch events button will be undefined
+    return { x: 0, y: 0, err: true };
+  }
+  if (evt.touches && evt.touches.length > 1) {
+    // don't interfere with multi-touch
+    return { x: 0, y: 0, err: true };
+  }
+  if (evt.cancelable) {
+    evt.preventDefault();
+  }
+
+  const rect = this.canvas.getBoundingClientRect();
+  const position = (evt.changedTouches && evt.changedTouches[0]) || evt;
+  let x = position.offsetX;
+  let y = position.offsetY;
+
+  if (typeof x === "undefined") {
+    x = position.clientX - rect.left;
+  }
+  if (typeof y === "undefined") {
+    y = position.clientY - rect.top;
+  }
+  // if the frame has been translated, rotated, or scaled, we need to map the point to the current matrix
+  let { x: tx, y: ty } = transformPoint(x, y);
+  console.log(`transformed: ${tx},${ty}, world: ${x},${y}`);
+  return { x: tx, y: ty, wx: x, wy: y, err: false };
+}
+
+function transformPoint(x, y) {
+  let frame = currentFrame();
+  if (frame.transform.baseVal.length === 0) {
+    return { x, y };
+  }
+  return currentMatrix.transformPoint(new DOMPoint(x, y));
+}
+
+function erasePaths(point){
+  let paths = collidePaths(point, Array.from(currentFrame().querySelector("path")));
+  
+}
+
+function collidePaths(point, paths) {
+  // quck check to try to eliminate paths that don't intersect
+  let d = currentEraserWidth / 2;
+  let eraserBox = {
+    x: point.x - d,
+    y: point.y - d,
+    width: currentEraserWidth,
+    height: currentEraserWidth
+  };
+  return paths.filter(path =>
+    collideBox(eraserBox, path.getBBox({ stroke: true }))
+  );
 }

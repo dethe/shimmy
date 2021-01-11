@@ -318,62 +318,6 @@ function swallowClicks(evt) {
 }
 dom.listen(".toolbar, .tabbar", ["mousedown", "touchstart"], swallowClicks);
 
-function inBounds(x, y) {
-  return !(x < 0 || x > WIDTH || y < 0 || y > HEIGHT);
-}
-
-function saveMatrix() {
-  let matrix = currentFrame().getCTM();
-  if (matrix instanceof SVGMatrix) {
-    matrix = new DOMMatrix([
-      matrix.a,
-      matrix.b,
-      matrix.c,
-      matrix.d,
-      matrix.e,
-      matrix.f
-    ]);
-  }
-  currentMatrix = matrix.inverse();
-}
-
-function getXY(evt) {
-  if (evt.button) {
-    // left button is 0, for touch events button will be undefined
-    return { x: 0, y: 0, err: true };
-  }
-  if (evt.touches && evt.touches.length > 1) {
-    // don't interfere with multi-touch
-    return { x: 0, y: 0, err: true };
-  }
-  if (evt.cancelable) {
-    evt.preventDefault();
-  }
-
-  const rect = this.canvas.getBoundingClientRect();
-  const position = (evt.changedTouches && evt.changedTouches[0]) || evt;
-  let x = position.offsetX;
-  let y = position.offsetY;
-
-  if (typeof x === "undefined") {
-    x = position.clientX - rect.left;
-  }
-  if (typeof y === "undefined") {
-    y = position.clientY - rect.top;
-  }
-  // if the frame has been translated, rotated, or scaled, we need to map the point to the current matrix
-  let { x: tx, y: ty } = transformPoint(x, y);
-  console.log(`transformed: ${tx},${ty}, world: ${x},${y}`);
-  return { x: tx, y: ty, wx: x, wy: y, err: false };
-}
-
-function transformPoint(x, y) {
-  let frame = currentFrame();
-  if (frame.transform.baseVal.length === 0) {
-    return { x, y };
-  }
-  return currentMatrix.transformPoint(new DOMPoint(x, y));
-}
 
 const toolStart = evt => currentTool.start(evt);
 const toolMove = evt => currentTool.move(evt);
