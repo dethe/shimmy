@@ -5,10 +5,13 @@ class Pen {
     this.currentPath = null;
     this.prevPoint = null;
   }
+  
+  select(){
+    document.querySelector("svg").style.cursor = "default";
+  }
 
   startPath(x, y) {
     // TODO: Change cursor to reflect current color and currentStrokeWidth
-    document.querySelector('svg').style.cursor = 'default';
     let path = dom.svg("path", {
       d: `M${x},${y}`,
       stroke: currentColor,
@@ -96,8 +99,12 @@ class Move {
     this.py = 0;
   }
 
+  select(){
+    document.querySelector("svg").style.cursor = "move";    
+  }
+  
   start(evt) {
-    document.querySelector('svg').style.cursor = 'move';
+    document.querySelector("svg").style.cursor = "move";
     saveMatrix();
     let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
@@ -164,9 +171,13 @@ class Rotate {
     this.py = 0;
     this.originalAngle = null;
   }
+  
+  select(){
+    document.querySelector("svg").style.cursor =
+      "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fsync-alt.svg?v=1610579993973)";
+  }
 
   start(evt) {
-    document.querySelector('svg').style.cursor = 'url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fsync-alt.svg?v=1610579993973)';
     saveMatrix();
     let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
@@ -237,6 +248,11 @@ class ZoomIn {
   constructor() {
     this.name = "zoomin";
   }
+  
+  select(){
+    document.querySelector("svg").style.cursor =
+      "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fexpand-arrows-alt.svg?v=1610580263035)";    
+  }
 
   start(evt) {
     saveMatrix();
@@ -273,6 +289,10 @@ class ZoomOut {
   constructor() {
     this.name = "zoomout";
   }
+  
+  select(){
+    document.querySelector('svg').style.cursor = "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fcompress-arrows-alt.svg?v=1610580226634)";    
+  }
 
   start(evt) {
     saveMatrix();
@@ -308,6 +328,10 @@ class ZoomOut {
 class Eraser {
   constructor() {
     this.name = "eraser";
+  }
+  
+  select(){
+    document.querySelector('svg').style.cursor = "url()";
   }
 
   start(evt) {
@@ -355,11 +379,14 @@ class Eraser {
 
 // UTILITIES
 
-function pointFromText(t){
+function pointFromText(t) {
   // expects t to be in the form of M124,345 or L23,345, i.e. an absolute move or lineTo followed by x,y coordinates
   let cmd = t[0];
-  let [x,y] = t.slice(1).split(',').map(Number);
-  return {cmd, x, y};
+  let [x, y] = t
+    .slice(1)
+    .split(",")
+    .map(Number);
+  return { cmd, x, y };
 }
 
 function pointsFromPath(path) {
@@ -492,32 +519,32 @@ function erasePath(pt1, path) {
   // instead of filtering, make two passes:
   // First pass, delete any points which collide and make the point which follows (if any) a Move cmd
   let points = pointsFromPath(path);
-  for (let i = points.length - 1; i > -1; i--){
+  for (let i = points.length - 1; i > -1; i--) {
     let pt2 = points[i];
-    if (collideCircle(pt1, r1, pt2, r2)){
+    if (collideCircle(pt1, r1, pt2, r2)) {
       deletions = true;
-      points.splice(i,1); // remove the current element
-      if (points[i]){
-        points[i].cmd = 'M'; // change the following element to be a move, if it exists
+      points.splice(i, 1); // remove the current element
+      if (points[i]) {
+        points[i].cmd = "M"; // change the following element to be a move, if it exists
       }
     }
   }
-  if (!deletions){
+  if (!deletions) {
     return; // Nothing changed, we're done here
   }
-  // Second pass, delete any move commands that precede other move commands  
-  for (let i = 0; i < points.length; i++){
+  // Second pass, delete any move commands that precede other move commands
+  for (let i = 0; i < points.length; i++) {
     let p = points[i];
-    if (p.cmd === 'M'){
-      if (!points[i+1] || points[i+1].cmd === 'M'){
-        points.splice[i,1]; // Don't need two moves in a row, or a trailing move
+    if (p.cmd === "M") {
+      if (!points[i + 1] || points[i + 1].cmd === "M") {
+        points.splice[(i, 1)]; // Don't need two moves in a row, or a trailing move
       }
     }
   }
   // Finally, if there is only a single move and no other points, delete the whole path
-  if (!points.length){
+  if (!points.length) {
     path.remove();
-  }else{
+  } else {
     path.setAttribute("d", pointsToPath(points));
   }
 }
