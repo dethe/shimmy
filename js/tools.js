@@ -7,7 +7,8 @@ class Pen {
   }
 
   startPath(x, y) {
-    document.querySelector('svg').style.cur
+    // TODO: Change cursor to reflect current color and currentStrokeWidth
+    document.querySelector('svg').style.cursor = 'default';
     let path = dom.svg("path", {
       d: `M${x},${y}`,
       stroke: currentColor,
@@ -96,6 +97,7 @@ class Move {
   }
 
   start(evt) {
+    document.querySelector('svg').style.cursor = 'move';
     saveMatrix();
     let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
@@ -164,6 +166,7 @@ class Rotate {
   }
 
   start(evt) {
+    document.querySelector('svg').style.cursor = 'url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fsync-alt.svg?v=1610579993973)';
     saveMatrix();
     let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
