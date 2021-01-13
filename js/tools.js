@@ -369,8 +369,6 @@ function pointsToPath(points) {
     return null;
   }
   return points.map(pt => `${pt.cmd}${pt.x},${pt.y}`).join(" ");
-  rest.unshift(`M${first.x},${first.y}`);
-  return rest.join(" ");
 }
 
 // Because points are actually circles (due to penWidth / eraserWidth) this is a basic circl collision algorithm
@@ -485,8 +483,10 @@ function erasePaths(point) {
 function erasePath(pt1, path) {
   let r1 = currentEraserWidth;
   let r2 = Number(path.getAttribute("stroke-width"));
-  console.log('path: %o', path);
-  console.log('pointsFromPath: %o', pointsFromPath(path));
+  // instead of filtering, make two passes:
+  // First pass, delete any points which collide and make the point which follows (if any) a Move cmd
+  // Second pass, delete any move commands that precede other move commands
+  // Finally, if there is only a single move and no other points, delete the whole path
   let newPath = pointsToPath(
     pointsFromPath(path).filter(pt2 => !collideCircle(pt1, r1, pt2, r2))
   );
