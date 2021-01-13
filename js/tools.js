@@ -350,28 +350,25 @@ class Eraser {
 
 // UTILITIES
 
+function pointFromText(t){
+  // expects t to be in the form of M124,345 or L23,345, i.e. an absolute move or lineTo followed by x,y coordinates
+  let cmd = t[0];
+  let [x,y] = t.slice(1).split(',').map(Number);
+  return {cmd, x, y};
+}
+
 function pointsFromPath(path) {
-  let coords = path
+  return path
     .getAttribute("d")
-    .split(/[ ,LM]+/)
-    .map(Number);
-  // First one is empty
-  coords.shift();
-  console.log('got %s coordinates', coords.length);
-  let points = [];
-  while (coords.length) {
-    points.push({x: coords.shift(), y: coords.shift()});
-  }
-  console.log('testing %s points', points.length);
-  return points;
+    .split(/[ ]+/)
+    .map(pointFromText);
 }
 
 function pointsToPath(points) {
   if (!points.length) {
     return null;
   }
-  let first = points.shift();
-  let rest = points.map(pt => `L${pt.x},${pt.y}`);
+  return points.map(pt => `${pt.cmd}${pt.x},${pt.y}`).join(" ");
   rest.unshift(`M${first.x},${first.y}`);
   return rest.join(" ");
 }
