@@ -71,23 +71,23 @@ function play() {
   }, 500);
 }
 
-function stop() {
-  // remove SMIL animation
-  // re-enable all controls
-  // return to the frame we were on
-  // re-enable onionskin if needed
-  // turn stop button into play button
-  dom.removeClass(playingFrame(), "play-frame");
-  document.body.classList.remove("playing");
-  let onion = document.querySelector(".nskin");
-  if (onion) {
-    onion.classList.replace("nskin", "onionskin");
-  }
-  canvas.removeAttribute("viewBox");
-  canvas.removeAttribute("style");
-  canvas.setAttribute("width", document.body.clientWidth + "px");
-  canvas.setAttribute("height", document.body.clientHeight + "px");
-}
+// function stop() {
+//   // remove SMIL animation
+//   // re-enable all controls
+//   // return to the frame we were on
+//   // re-enable onionskin if needed
+//   // turn stop button into play button
+//   dom.removeClass(playingFrame(), "play-frame");
+//   document.body.classList.remove("playing");
+//   let onion = document.querySelector(".nskin");
+//   if (onion) {
+//     onion.classList.replace("nskin", "onionskin");
+//   }
+//   canvas.removeAttribute("viewBox");
+//   canvas.removeAttribute("style");
+//   canvas.setAttribute("width", document.body.clientWidth + "px");
+//   canvas.setAttribute("height", document.body.clientHeight + "px");
+// }
 
 function playNextFrame() {
   let time = Date.now();

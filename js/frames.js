@@ -117,41 +117,19 @@ function goToFrame(prev, next) {
   undo.switchFrame(next);
 }
 
-function incrementFrame(suppressUndo) {
+function incrementFrame() {
   let curr = currentFrame();
   let next = dom.next(curr, ".frame");
   if (next) {
     goToFrame(curr, next);
-    if (!suppressUndo) {
-      undo.pushDocUndo(
-        "Switch Frame",
-        curr,
-        next,
-        () => goToFrame(next, curr),
-        () => goToFrame(curr, next)
-      );
-    }
   }
 }
 
-function decrementFrame(suppressUndo) {
+function decrementFrame() {
   let curr = currentFrame();
   let prev = dom.previous(curr, ".frame");
   if (prev) {
-    curr.classList.remove("selected");
-    prev.classList.add("selected");
-    updateOnionskin();
-    updateFrameCount();
     goToFrame(curr, prev);
-    if (!suppressUndo) {
-      undo.pushDocUndo(
-        "Switch Frame",
-        curr,
-        prev,
-        () => goToFrame(prev, curr),
-        () => goToFrame(curr, prev)
-      );
-    }
   }
 }
 
@@ -159,28 +137,10 @@ function gotoFirstFrame(suppressUndo) {
   let curr = currentFrame();
   let first = document.querySelector(".frame");
   goToFrame(curr, first);
-  if (!suppressUndo) {
-    undo.pushDocUndo(
-      "Switch Frame",
-      curr,
-      first,
-      () => goToFrame(first, curr),
-      () => goToFrame(curr, first)
-    );
-  }
 }
 
 function gotoLastFrame(suppressUndo) {
   const curr = currentFrame();
   const last = document.querySelector(".frame:last-child");
   goToFrame(curr, last);
-  if (!suppressUndo) {
-    undo.pushDocUndo(
-      "Switch Frame",
-      curr,
-      last,
-      () => goToFrame(last, curr),
-      () => goToFrame(curr, last)
-    );
-  }
 }
