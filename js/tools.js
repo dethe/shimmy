@@ -488,7 +488,7 @@ function erasePath(pt1, path) {
   // First pass, delete any points which collide and make the point which follows (if any) a Move cmd
   let points = pointsFromPath(path);
   for (let i = points.length - 1; i > -1; i--){
-    let pt2 = points[pt2];
+    let pt2 = points[i];
     if (collideCircle(pt1, r1, pt2, r2)){
       deletions = true;
       points.splice(i,1); // remove the current element
@@ -498,19 +498,22 @@ function erasePath(pt1, path) {
     }
   }
   if (!deletions){
-    return; // 
+    return; // Nothing changed, we're done here
   }
-  // Second pass, delete any move commands that precede other move commands
-  
-  for (let i = points)
-  let newPath = pointsToPath(
-    pointsFromPath(path).filter(pt2 => !collideCircle(pt1, r1, pt2, r2))
-  );
+  // Second pass, delete any move commands that precede other move commands  
+  for (let i = 0; i < points.length; i++){
+    let p = points[i];
+    if (p.cmd === 'M'){
+      if (!points[i+1] || points[i+1].cmd === 'M'){
+        points.splice[i,1]; // Don't need two moves in a row, or a trailing move
+      }
+    }
+  }
   // Finally, if there is only a single move and no other points, delete the whole path
-  if (newPath === null) {
+  if (!points.length){
     path.remove();
-  } else {
-    path.setAttribute("d", newPath);
+  }else{
+    path.setAttribute("d", pointsToPath(points));
   }
 }
 
