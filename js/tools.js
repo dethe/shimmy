@@ -7,6 +7,7 @@ class Pen {
   }
 
   startPath(x, y) {
+    document.querySelector('svg').style.cur
     let path = dom.svg("path", {
       d: `M${x},${y}`,
       stroke: currentColor,
