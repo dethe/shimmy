@@ -29,7 +29,7 @@ class Pen {
 
   start(evt) {
     saveMatrix();
-    let { x, y, err } = getXY(evt);
+    let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
       return;
     }
@@ -96,7 +96,7 @@ class Move {
 
   start(evt) {
     saveMatrix();
-    let { x, y, err } = getXY(evt);
+    let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
       return;
     }
@@ -110,7 +110,7 @@ class Move {
     if (!this.dragging) {
       return;
     }
-    let { x, y, err } = getXY(evt);
+    let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
       return;
     }
@@ -164,7 +164,7 @@ class Rotate {
 
   start(evt) {
     saveMatrix();
-    let { x, y, err } = getXY(evt);
+    let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
       return;
     }
@@ -178,7 +178,7 @@ class Rotate {
     if (!this.dragging) {
       return;
     }
-    let { x, y, err } = getXY(evt);
+    let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
       return;
     }
@@ -236,7 +236,7 @@ class ZoomIn {
 
   start(evt) {
     saveMatrix();
-    let { x, y, err } = getXY(evt);
+    let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
       return;
     }
@@ -272,7 +272,7 @@ class ZoomOut {
 
   start(evt) {
     saveMatrix();
-    let { x, y, err } = getXY(evt);
+    let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
       return;
     }
@@ -307,6 +307,7 @@ class Eraser {
   }
 
   start(evt) {
+    saveMatrix();
     let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
       console.error("Houston, we have a problem");
