@@ -100,7 +100,7 @@ class Move {
   }
 
   select(){
-    document.querySelector("svg").style.cursor = "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Farrows.svg?v=1610663226271) 32 32, auto";    
+    document.querySelector("svg").style.cursor = "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Farrows.svg?v=1610663226271) 16 16, auto";    
   }
   
   start(evt) {
