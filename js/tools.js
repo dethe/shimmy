@@ -7,7 +7,7 @@ class Pen {
   }
   
   select(){
-    document.querySelector("svg").style.cursor = "default";
+    document.querySelector("svg").style.cursor = "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fpen.svg?v=1610663218987) 4 28, auto";
   }
 
   startPath(x, y) {
@@ -100,7 +100,7 @@ class Move {
   }
 
   select(){
-    document.querySelector("svg").style.cursor = "move";    
+    document.querySelector("svg").style.cursor = "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Farrows.svg?v=1610663226271) 32 32, auto";    
   }
   
   start(evt) {
@@ -330,7 +330,7 @@ class Eraser {
   }
   
   select(){
-    document.querySelector('svg').style.cursor = "auto";
+    document.querySelector('svg').style.cursor = "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Feraser.svg?v=1610663229150) 16 28, auto";
   }
 
   start(evt) {
