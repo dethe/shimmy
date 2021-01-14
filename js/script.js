@@ -243,6 +243,7 @@ function selectTool(sel) {
     default:
       console.error("unrecognized tool name: %s", name);
   }
+  currentTool.select();
 }
 
 function setFrameRate(input) {
