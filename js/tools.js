@@ -7,7 +7,7 @@ class Pen {
   }
   
   select(){
-    document.querySelector("svg").style.cursor = "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fpen.svg?v=1610663218987) 4 28, auto";
+    document.querySelector("svg").style.cursor = "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fpen.svg?v=1610663218987) 1 31, auto";
   }
 
   startPath(x, y) {
