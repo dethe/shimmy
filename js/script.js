@@ -55,6 +55,7 @@ function getState() {
   let state = {
     tool: currentTool.name,
     strokeWidth: document.getElementById("pensize").value,
+    eraserWidth: document.getElementById("erasersize").value,
     doOnionskin: document.getElementById("doonionskin").checked,
     fps: document.getElementById("framerate").value,
     palette: document.getElementById("colorpalette").selectedIndex,
@@ -85,7 +86,9 @@ function setState(state) {
   });
   selectTool({ value: state.tool || "pen" });
   currentStrokeWidth = parseInt(state.strokeWidth || 2);
+  currentEraserWidth = parseInt(state.eraserWidth || 5);
   document.getElementById("pensize").value = state.strokeWidth;
+  document.getElementById("erasersize").value = state.eraserWidth;
   currentDoOnionskin = state.doOnionskin !== "false";
   document.getElementById("doonionskin").checked = currentDoOnionskin;
   currentFrameDelay = 1000 / new Number(state.fps || 10);
