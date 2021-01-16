@@ -41,6 +41,8 @@ function UndoRedo(frame) {
   const documentRedoStack = [];
   const frameUndoStack = new Map();
   const frameRedoStack = new Map();
+  const mess = new Mess(); // toast-style popups for document-level undo messages
+  mess.init();
   let currentFrame = frame;
   [...currentFrame.parentElement.children].forEach(frame => {
     frameUndoStack.set(frame, []);
