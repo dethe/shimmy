@@ -335,6 +335,7 @@ class Eraser {
 
   start(evt) {
     saveMatrix();
+    this.before = currentFrame.innerHtml;
     let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
       console.error("Houston, we have a problem");
@@ -368,6 +369,16 @@ class Eraser {
   stop(evt) {
     this.isErasing = false;
     this.prevPoint = null;
+    let before = this.before;
+    let curr = currentFrame();
+    let after = curr.innerHTML;
+    undo.pushFrameUndo(
+      "Erase",
+      () => curr.innerHTML = before,
+      () => curr.innerHTML = after
+    );
+    this.before = null;
+
   }
 
   cancel() {
