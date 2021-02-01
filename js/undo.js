@@ -128,6 +128,8 @@ function UndoRedo(frame) {
         break;
       case "Clear":
         break;
+      case "Erase":
+        break;
     }
     frameUndoStack.get(currentFrame).push({ name, undoFn, redoFn });
     frameRedoStack.get(currentFrame).length = 0;
