@@ -1,3 +1,11 @@
+/* global dom file undo
+   ZOOMIN ZOOMOUT degrees WIDTH HEIGHT
+   currentFrame currentColor currentStrokeWidth currentMatrix currentEraserWidth */
+
+const ZOOMIN = 1.2;
+const ZOOMOUT = 1 / ZOOMIN;
+
+
 class Pen {
   constructor() {
     this.name = "pen";
@@ -5,9 +13,10 @@ class Pen {
     this.currentPath = null;
     this.prevPoint = null;
   }
-  
-  select(){
-    document.querySelector("svg").style.cursor = "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fpen.svg?v=1610663218987) 1 31, auto";
+
+  select() {
+    document.querySelector("svg").style.cursor =
+      "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fpen.svg?v=1610663218987) 1 31, auto";
   }
 
   startPath(x, y) {
@@ -99,10 +108,11 @@ class Move {
     this.py = 0;
   }
 
-  select(){
-    document.querySelector("svg").style.cursor = "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Farrows.svg?v=1610663226271) 16 16, auto";    
+  select() {
+    document.querySelector("svg").style.cursor =
+      "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Farrows.svg?v=1610663226271) 16 16, auto";
   }
-  
+
   start(evt) {
     saveMatrix();
     let { x, y, wx, wy, err } = getXY(evt);
@@ -170,8 +180,8 @@ class Rotate {
     this.py = 0;
     this.originalAngle = null;
   }
-  
-  select(){
+
+  select() {
     document.querySelector("svg").style.cursor =
       "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fsync-alt.svg?v=1610654587602) 16 16, auto";
   }
@@ -247,10 +257,10 @@ class ZoomIn {
   constructor() {
     this.name = "zoomin";
   }
-  
-  select(){
+
+  select() {
     document.querySelector("svg").style.cursor =
-      "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fexpand-arrows-alt.svg?v=1610654585198) 16 16,auto";    
+      "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fexpand-arrows-alt.svg?v=1610654585198) 16 16,auto";
   }
 
   start(evt) {
@@ -288,9 +298,10 @@ class ZoomOut {
   constructor() {
     this.name = "zoomout";
   }
-  
-  select(){
-    document.querySelector('svg').style.cursor = "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fcompress-arrows-alt.svg?v=1610654584652) 16 16, auto";    
+
+  select() {
+    document.querySelector("svg").style.cursor =
+      "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fcompress-arrows-alt.svg?v=1610654584652) 16 16, auto";
   }
 
   start(evt) {
@@ -328,9 +339,10 @@ class Eraser {
   constructor() {
     this.name = "eraser";
   }
-  
-  select(){
-    document.querySelector('svg').style.cursor = "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Feraser.svg?v=1610663229150) 16 28, auto";
+
+  select() {
+    document.querySelector("svg").style.cursor =
+      "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Feraser.svg?v=1610663229150) 16 28, auto";
   }
 
   start(evt) {
@@ -374,11 +386,10 @@ class Eraser {
     let after = curr.innerHTML;
     undo.pushFrameUndo(
       "Erase",
-      () => curr.innerHTML = before,
-      () => curr.innerHTML = after
+      () => (curr.innerHTML = before),
+      () => (curr.innerHTML = after)
     );
     this.before = null;
-
   }
 
   cancel() {

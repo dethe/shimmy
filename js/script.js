@@ -13,16 +13,16 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
-/* globals dom file KellyColorPicker palettes toDataURL canvas GIF UndoRedo*/
+/* globals dom file KellyColorPicker UndoRedo
+           palettes toDataURL canvas GIF
+           
+           Pen Move Rotate ZoomIn ZoomOut Eraser */
 
 const mouse = {};
 
 const DEG = 180 / Math.PI;
 const degrees = rads => rads * DEG;
 const radians = degs => degs / DEG;
-const ZOOMIN = 1.2;
-const ZOOMOUT = 1 / ZOOMIN;
 
 let currentColor = "#000000";
 let currentFrameDelay = 30; // milliseconds
@@ -37,14 +37,14 @@ let currentEraserWidth = 5;
 let currentDoOnionskin = true;
 let undo = null;
 
-let aboutShimmyDialog = document.querySelector('#aboutShimmy');
+let aboutShimmyDialog = document.querySelector("#aboutShimmy");
 
-function showAbout(){
+function showAbout() {
   aboutShimmyDialog.showModal();
 }
 
-function getSvgPoint(x,y){
-  let point = document.querySelector('svg').createSVGPoint();
+function getSvgPoint(x, y) {
+  let point = document.querySelector("svg").createSVGPoint();
   point.x = x;
   point.y = y;
   return point;
@@ -113,7 +113,7 @@ function setState(state) {
   undo = UndoRedo(currentFrame());
 }
 
-function newFile(){
+function newFile() {
   file.new();
 }
 
@@ -165,7 +165,6 @@ function setPalette(evt) {
 }
 setPalette({ target: colorpaletteselect });
 
-
 function selectToolbar(button) {
   let name;
   if (typeof button === "string") {
@@ -185,24 +184,16 @@ function selectToolbar(button) {
 }
 
 function enablePenSize(flag) {
-  document
-    .querySelector(".feedback.pensize")
-    .removeAttribute("hidden");
-   document
-     .querySelector(".feedback.erasersize")
-    .setAttribute("hidden", "");
+  document.querySelector(".feedback.pensize").removeAttribute("hidden");
+  document.querySelector(".feedback.erasersize").setAttribute("hidden", "");
   document
     .querySelectorAll(".pensize .stepper > *")
     .forEach(d => (d.disabled = !flag));
 }
 
-function enableEraserSize(){
-  document
-    .querySelector(".feedback.erasersize")
-    .removeAttribute("hidden");
-   document
-     .querySelector(".feedback.pensize")
-    .setAttribute("hidden", "");
+function enableEraserSize() {
+  document.querySelector(".feedback.erasersize").removeAttribute("hidden");
+  document.querySelector(".feedback.pensize").setAttribute("hidden", "");
 }
 
 let tools = {
@@ -214,7 +205,6 @@ let tools = {
   eraser: new Eraser(canvas)
 };
 currentTool = tools.pen;
-
 
 function selectTool(sel) {
   let name = sel.value;
@@ -322,7 +312,6 @@ function swallowClicks(evt) {
 }
 dom.listen(".toolbar, .tabbar", ["mousedown", "touchstart"], swallowClicks);
 
-
 const toolStart = evt => currentTool.start(evt);
 const toolMove = evt => currentTool.move(evt);
 const toolStop = evt => currentTool.stop(evt);
@@ -353,8 +342,6 @@ function currentFrame() {
   }
   return frame;
 }
-
-
 
 function updateFrameCount() {
   try {
@@ -628,25 +615,23 @@ document.addEventListener("keydown", hotkeys, false);
 //   }
 // }, false);
 
-
 // Attempt again to disable default Safari iOS pinch to zoom and replace with our own zoom
-function gestureStart(event){
-  
-}
+function gestureStart(event) {}
 
 function gestureChange(event) {
-    // Disable browser zoom
-    event.preventDefault();
-    // need centre point between fingers to zoom from and amount to zoom
+  // Disable browser zoom
+  event.preventDefault();
+  // need centre point between fingers to zoom from and amount to zoom
 }
 
-function gestureEnd(event){
-  
-}
-
+function gestureEnd(event) {}
 
 document.documentElement.addEventListener("gesturestart", gestureStart, false);
-document.documentElement.addEventListener("gesturechange", gestureChange, false);
+document.documentElement.addEventListener(
+  "gesturechange",
+  gestureChange,
+  false
+);
 document.documentElement.addEventListener("gestureend", gestureEnd, false);
 
 // Disable default Safari iOS double-tap to zoom
@@ -666,18 +651,18 @@ document.addEventListener(
 /* Initialize Undo */
 const undoButtons = {
   frameUndo: document.querySelector("#frameundo"),
-  frameRedo: document.querySelector("#frameredo"),
+  frameRedo: document.querySelector("#frameredo")
 };
 
 function updateUndo(evt) {
-  console.log('updateUndo(%o)', evt.detail);
+  console.log("updateUndo(%o)", evt.detail);
   ["frameUndo", "frameRedo"].forEach(key => {
     if (evt.detail[key]) {
       undoButtons[key].disabled = false;
       undoButtons[key].innerText =
         (key.endsWith("Undo") ? "Undo " : "Redo ") + evt.detail[key];
     } else {
-      undoButtons[key].innerText = (key.endsWith("Undo") ? "Undo" : "Redo");
+      undoButtons[key].innerText = key.endsWith("Undo") ? "Undo" : "Redo";
       undoButtons[key].disabled = true;
     }
   });
@@ -685,11 +670,10 @@ function updateUndo(evt) {
 document.addEventListener("shimmy-undo-change", updateUndo, false);
 
 // Show About dialogue the first time someone visits.
-if (!localStorage.hasSeenAbout){
+if (!localStorage.hasSeenAbout) {
   localStorage.hasSeenAbout = true;
   aboutShimmyDialog.showModal();
   setTimeout(() => aboutShimmyDialog.close(), 3000);
 }
 
 // If we don't explicitly request moat integration, hide it
-
