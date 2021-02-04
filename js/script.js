@@ -15,7 +15,7 @@
 
 /* globals dom file KellyColorPicker UndoRedo
            palettes toDataURL canvas GIF
-           
+           getAnimationBBox play
            Pen Move Rotate ZoomIn ZoomOut Eraser */
 
 const mouse = {};
@@ -29,7 +29,6 @@ let currentFrameDelay = 30; // milliseconds
 let currentMatrix = null;
 let WIDTH = document.body.clientWidth;
 let HEIGHT = document.body.clientHeight;
-let _lastFrameTime = 0;
 let currentDisplay = "drawingboard";
 let currentTool;
 let currentStrokeWidth = 1;

@@ -13,11 +13,10 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-
 // Intended to enhance UI without being required. Will find any <input type="number" and replace them with this control to provide better visibility and larger targets for the stepper.
 // Based on the Stepper component in Form Design Patterns, by Adam Silver (starts on p. 181)
 
-// CSS 
+// CSS
 
 const css_rules = `
 .visually-hidden {
@@ -113,40 +112,40 @@ const css_rules = `
 }
 `;
 
-function addCSS(){
-  let style = document.createElement('style');
+function addCSS() {
+  let style = document.createElement("style");
   style.innerText = css_rules;
   document.head.append(style);
 }
 addCSS();
 
-function upgrade(input){
+function upgrade(input) {
   let id = input.id;
-  let name = input.getAttribute('name') || input.id;
+  let name = input.getAttribute("name") || input.id;
   let value = input.value;
-  let min = input.getAttribute('min');
-  let max = input.getAttribute('max');
-  let step = input.getAttribute('step');
-  let klass= input.getAttribute('class');
-  let onchange = input.getAttribute('onchange');
-  
-  window['increment' + id] = function(){
-    let input = document.querySelector('#' + id);
+  let min = input.getAttribute("min");
+  let max = input.getAttribute("max");
+  let step = input.getAttribute("step");
+  let klass = input.getAttribute("class");
+  let onchange = input.getAttribute("onchange");
+
+  window["increment" + id] = function() {
+    let input = document.querySelector("#" + id);
     let value = parseInt(input.value) + 1;
     input.value = value;
-    window['onchange' + id](input);
-  }
-  window['decrement' + id] = function(){
-    let input = document.querySelector('#' + id);
+    window["onchange" + id](input);
+  };
+  window["decrement" + id] = function() {
+    let input = document.querySelector("#" + id);
     let value = parseInt(input.value) - 1;
     input.value = value;
-    window['onchange' + id](input);
-  }
-  window['onchange' + id] = function(input){
+    window["onchange" + id](input);
+  };
+  window["onchange" + id] = function(input) {
     let output = document.querySelector(`#${id}-status`);
     output.innerText = value;
     onchange(input);
-  }
+  };
   input.outerHTML = `<div class="field">
     <div class="stepper">
       <button type="button" class="stepper-remove-button" aria-label="Decrease" onclick="decrement${id}()" aria-describedby="${id}-label">&minus;</button>
@@ -157,19 +156,19 @@ function upgrade(input){
    </div>
   `;
   let newInput = document.querySelector(`#${id}`);
-  if (min){
-    newInput.setAttribute('min', min);
+  if (min) {
+    newInput.setAttribute("min", min);
   }
-  if (max){
-    newInput.setAttribute('max', max);
+  if (max) {
+    newInput.setAttribute("max", max);
   }
-  if (step){
-    newInput.setAttribute('step', step);
+  if (step) {
+    newInput.setAttribute("step", step);
   }
-  if (klass){
-    newInput.setAttribute('class', klass);
+  if (klass) {
+    newInput.setAttribute("class", klass);
   }
   onchange = Function(onchange).bind(newInput);
 }
 
-Array.from(document.querySelectorAll('input[type=number]')).forEach(upgrade);
+Array.from(document.querySelectorAll("input[type=number]")).forEach(upgrade);

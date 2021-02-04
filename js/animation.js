@@ -1,7 +1,12 @@
+
+/* global dom
+   canvas currentFrame currentFrameDelay */
+
+let _lastFrameTime = 0;
+
 function playingFrame() {
   return document.querySelector(".frame.play-frame");
 }
-
 
 function getAnimationBBox(show) {
   let frames = Array.from(document.querySelectorAll(".frame"));

@@ -36,6 +36,8 @@
 //   evt.detail.docRedo = nameOfDocRedo or null;
 // }
 
+/* globals Mess */
+
 function UndoRedo(frame) {
   const documentUndoStack = [];
   const documentRedoStack = [];
@@ -111,7 +113,7 @@ function UndoRedo(frame) {
       redoFn
     });
     documentRedoStack.length = 0;
-    mess
+    mess;
     sendEvent();
   };
 

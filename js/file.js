@@ -21,18 +21,19 @@
   // CONFIGURATION
   let params = new URLSearchParams(new URL(window.location).search);
 
-  const USE_MOAT = params.has('moat');
+  const USE_MOAT = params.has("moat");
 
-  const MOAT_URL = window.location.host.includes('glitch') ? "https://sd-moat.glitch.me/": "https://launchpad.yourlibrary.ca/moat/";
+  const MOAT_URL = window.location.host.includes("glitch")
+    ? "https://sd-moat.glitch.me/"
+    : "https://launchpad.yourlibrary.ca/moat/";
   console.log(MOAT_URL);
 
   var defaultCanvas = `<svg id="canvas" width="2560px" height="1116px" data-tool="pen" data-stroke-width="2" data-do-onionskin="true" data-fps="10" data-palette="0" data-color="#000000" data-bgcolor="#FFFFFF" data-color1="#FF0000" data-color2="#FFFF00" data-color3="#00FF00" data-color4="#00FFFF" data-color5="#0000FF" data-color6="#666666" data-color7="#000000" data-color8="#FFFFFF" data-tab_file="false" data-tab_draw="true" data-tab_frames="true" data-tab_animate="false"><g class="frame selected"></g></svg>`;
 
   // polyfill for dialog
-  const dialog = document.querySelector('dialog');
+  const dialog = document.querySelector("dialog");
   dialogPolyfill.registerDialog(dialog);
 
-  
   function saveLocal() {
     localStorage._currentWork = saveFormat();
   }
@@ -121,7 +122,7 @@
 
   function saveToCallback(data, filename, cb) {
     // Callback is shaped cb(blob, filename);
-    console.log('saveToCallback(%s)', filename);
+    console.log("saveToCallback(%s)", filename);
     let ext = filename.split(".").pop();
     let filetype = filetypes[ext];
     if (data.toBlob) {
@@ -133,64 +134,69 @@
   }
 
   function sendToMoat(progid) {
-    console.log('sendToMoat(%s)', progid);
+    console.log("sendToMoat(%s)", progid);
     saveToCallback(saveFormat(), "shimmy.svg", (blob, filename) =>
       sendToMoatCB(blob, filename, progid)
     );
   }
-  
+
   function sendToMoatCB(blob, filename, progid) {
-    console.log('sendToMoatCB(%s)', filename);
+    console.log("sendToMoatCB(%s)", filename);
     let formData = new FormData();
     formData.append("program", progid);
     formData.append("file", blob, filename);
     let request = new XMLHttpRequest();
-    request.open("POST", MOAT_URL + 'file/create');
-    request.setRequestHeader('X-Requested-With', 'XMLHTTPRequest');
+    request.open("POST", MOAT_URL + "file/create");
+    request.setRequestHeader("X-Requested-With", "XMLHTTPRequest");
     request.send(formData);
     request.onload = () => showFilePage(request.response);
-    request.onerror = () => handleError('send file');
-    request.ontimeout = () => handleTimeout('send file');
+    request.onerror = () => handleError("send file");
+    request.ontimeout = () => handleTimeout("send file");
   }
 
   function handleError(step) {
-    alert("Error uploading to Moat during " + step + " step, please try again.");
+    alert(
+      "Error uploading to Moat during " + step + " step, please try again."
+    );
   }
 
   function handleTimeout(step) {
     alert("Timeout uploading to Moat during " + step + ", please try again.");
   }
-  
-  function showQRCode(){
-  if (document.querySelector('#qrcode')){
+
+  function showQRCode() {
+    if (document.querySelector("#qrcode")) {
       let qrcode = new QRCode("qrcode", {
-          text: "{{urlbase}}/file/{{id}}",
-          width: 128,
-          height: 128,
-          colorDark: "#000000",
-          colorLight: "#ffffff",
-          correctLevel: QRCode.CorrectLevel.H
-        });
+        text: "{{urlbase}}/file/{{id}}",
+        width: 128,
+        height: 128,
+        colorDark: "#000000",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
   }
-}
 
-function updateExpires(){
-  let expires = document.querySelectorAll('.expires');
-  if (expires.length){
-    expires.forEach(e => e.innerText = timeago.format(e.getAttribute('timestamp')));
-    setTimeout(updateExpires, 1000);
+  function updateExpires() {
+    let expires = document.querySelectorAll(".expires");
+    if (expires.length) {
+      expires.forEach(
+        e => (e.innerText = timeago.format(e.getAttribute("timestamp")))
+      );
+      setTimeout(updateExpires, 1000);
+    }
   }
-}
 
-function updateDialog(){
-  showQRCode();
-  updateExpires();
-}
-
+  function updateDialog() {
+    showQRCode();
+    updateExpires();
+  }
 
   function showFilePage(res) {
     dialog.innerHTML = res;
-    dialog.append(dom.html('button', {onClick: 'this.parentElement.close()'}, 'OK'));
+    dialog.append(
+      dom.html("button", { onClick: "this.parentElement.close()" }, "OK")
+    );
     updateDialog();
     dialog.showModal();
   }
@@ -312,8 +318,8 @@ function updateDialog(){
   }
   if (USE_MOAT) {
     window.addEventListener("load", e => queryMoat(setMoatUI), true);
-  }else{
-    document.getElementById('moat-container').remove();
+  } else {
+    document.getElementById("moat-container").remove();
   }
 
   window.file = {
