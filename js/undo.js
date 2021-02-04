@@ -17,7 +17,7 @@
 //
 // API
 //
-// name: name of action: Draw, Move, Rotate, Zoom, Clear, New Frame, Copy Frame, Delete Frame, Change Frame
+// name: name of action: Draw, Move, Rotate, Zoom, Erase, Clear, New Frame, Copy Frame, Delete Frame, Change Frame
 // type: frame or document
 //
 // pushDocUndo(name, frameTarget, currentFrame, undoFn, redoFn);
@@ -89,11 +89,17 @@ function UndoRedo(frame) {
         break;
       case "Delete Frame":
         // Target frame has been removed. Save undo and redo stacks in case it is restored.
-        undoFn.undoStack = frameUndoStack.get(targetFrame);
-        undoFn.redoStack = frameRedoStack.get(targetFrame);
+        let undoStack = frameUndoStack.get(targetFrame);
+        let redoStack = frameRedoStack.get(targetFrame);
         frameUndoStack.delete(targetFrame);
         frameRedoStack.delete(targetFrame);
-        mess.showHTML('You deleted a frame <button>undo</button>', )
+        let oldUndo = undoFn;
+        undoFn = function(){
+          oldUndo();
+          frameUndoStack.set(targetFrame, undoStack);
+          frameRedoStack.set(targetFrame, redoStack);       
+        }
+        mess.showHTML('You deleted a frame <button>undo</button>', undoFn);
         break;
       case "Change Frame":
         // Do Nothing
@@ -143,10 +149,6 @@ function UndoRedo(frame) {
     let action = documentUndoStack.pop();
     action.undoFn();
     // handle special case of copying a frame, which copies undo/redo stacks of the frame
-    if (action.undoStack) {
-      frameUndoStack.set(action.targetFrame, action.undoStack);
-      frameRedoStack.set(action.targetFrame, action.redoStack);
-    }
     documentRedoStack.push(action);
     sendEvent();
   };
