@@ -354,14 +354,14 @@ class Eraser {
       return;
     }
     this.prevPoint = { x, y };
-    this.isErasing = true;
+    this.dragging = true;
     if (inBounds(wx, wy)) {
       erasePaths({ x, y });
     }
   }
 
   move(evt) {
-    if (!this.isErasing) {
+    if (!this.dragging) {
       return;
     }
     let { x, y, wx, wy, err } = getXY(evt);
@@ -379,7 +379,10 @@ class Eraser {
   }
 
   stop(evt) {
-    this.isErasing = false;
+    if (!this.dragging){
+      return;
+    }
+    this.dragging = false;
     this.prevPoint = null;
     let before = this.before;
     let curr = currentFrame();
@@ -393,7 +396,7 @@ class Eraser {
   }
 
   cancel() {
-    this.isErasing = false;
+    this.dragging = false;
     this.prevPoint = null;
   }
 }

@@ -299,8 +299,11 @@
   }
 
   function newFile() {
-    clear();
-    onChange();
+    let forSure = confirm('This will delete your current document, be sure to save first. Delete and start a new document?');
+    if (forSure){
+      clear();
+      onChange();
+    }
   }
 
   function onChange() {
