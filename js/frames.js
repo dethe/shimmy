@@ -67,7 +67,8 @@ function deleteFrame(suppressUndo) {
     decrementFrame(true);
   }
   let curr = currentFrame();
-  let prev = frameToDelete.previousElementSibling;
+  let parent = frameToDelete.parentNode;
+  let next = frameToDelete.nextElementSibling;
   if (frameToDelete.parentNode.children.length > 1) {
     dom.remove(frameToDelete);
     if (!suppressUndo) {
@@ -75,7 +76,7 @@ function deleteFrame(suppressUndo) {
         "Delete Frame",
         frameToDelete,
         curr,
-        () => insertFrame(prev, curr),
+        () => parent.insertBefore(frameToDelete, next),
         () => deleteFrame(true)
       );
     }
