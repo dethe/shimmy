@@ -76,7 +76,10 @@ function deleteFrame(suppressUndo) {
         "Delete Frame",
         frameToDelete,
         curr,
-        () => parent.insertBefore(frameToDelete, next),
+        () => {
+          parent.insertBefore(frameToDelete, next);
+          goToFrame(curr, frameToDelete);
+        },
         () => deleteFrame(true)
       );
     }
