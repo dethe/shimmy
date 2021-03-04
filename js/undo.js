@@ -97,7 +97,8 @@ function UndoRedo(frame) {
         undoFn = function(){
           oldUndo();
           frameUndoStack.set(targetFrame, undoStack);
-          frameRedoStack.set(targetFrame, redoStack);       
+          frameRedoStack.set(targetFrame, redoStack);
+          currentFrame = targetFrame;
         }
         mess.showHtml('You deleted a frame <button>undo</button>', undoFn);
         break;
