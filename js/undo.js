@@ -45,8 +45,8 @@ function UndoRedo(frame) {
   const frameRedoStack = new Map();
   const mess = new Mess(); // toast-style popups for document-level undo messages
   mess.init();
-  let currentFrame = frame;
-  [...currentFrame.parentElement.children].forEach(frame => {
+  let curr = frame;
+  [...curr.parentElement.children].forEach(frame => {
     frameUndoStack.set(frame, []);
     frameRedoStack.set(frame, []);
   });
@@ -60,8 +60,8 @@ function UndoRedo(frame) {
   const sendEvent = () => {
     let evt = new CustomEvent("shimmy-undo-change", {
       detail: {
-        frameUndo: peek(frameUndoStack.get(currentFrame)),
-        frameRedo: peek(frameRedoStack.get(currentFrame)),
+        frameUndo: peek(frameUndoStack.get(curr)),
+        frameRedo: peek(frameRedoStack.get(curr)),
         docUndo: peek(documentUndoStack),
         docRedo: peek(documentRedoStack)
       }
@@ -70,13 +70,13 @@ function UndoRedo(frame) {
   };
 
   const pushDocUndo = (name, targetFrame, newCurrentFrame, undoFn, redoFn) => {
-    // NOTE: 'document' type actions can change the currentFrame
-    currentFrame = newCurrentFrame;
+    // NOTE: 'document' type actions can change the curr (current frame)
+    curr = newCurrentFrame;
     // Special handling for particular events
     switch (name) {
       case "New Frame":
         // add a frame to the frameUndoStack and frameRedoStack
-        // frameTarget and currentFrame should be the same
+        // frameTarget and curr should be the same
         frameUndoStack.set(newCurrentFrame, []);
         frameRedoStack.set(newCurrentFrame, []);
         break;
@@ -89,16 +89,15 @@ function UndoRedo(frame) {
         break;
       case "Delete Frame":
         // Target frame has been removed. Save undo and redo stacks in case it is restored.
-        let undoStack = frameUndoStack.get(targetFrame);
-        let redoStack = frameRedoStack.get(targetFrame);
-        frameUndoStack.delete(targetFrame);
-        frameRedoStack.delete(targetFrame);
+        // Not deleting the stacks will  leak some memory, but we're saving them anyway for undo, at least this might be more reliable?
+        // let undoStack = frameUndoStack.get(targetFrame);
+        // let redoStack = frameRedoStack.get(targetFrame);
+        // frameUndoStack.delete(targetFrame);
+        // frameRedoStack.delete(targetFrame);
         let oldUndo = undoFn;
         undoFn = function(){
           oldUndo();
-          frameUndoStack.set(targetFrame, undoStack);
-          frameRedoStack.set(targetFrame, redoStack);
-          currentFrame = targetFrame;
+          curr = targetFrame;
         }
         mess.showHtml('You deleted a frame <button>undo</button>', undoFn);
         break;
@@ -116,7 +115,7 @@ function UndoRedo(frame) {
     documentUndoStack.push({
       name,
       targetFrame,
-      currentFrame: newCurrentFrame,
+      curr: newCurrentFrame,
       undoFn,
       redoFn
     });
@@ -141,8 +140,8 @@ function UndoRedo(frame) {
       case "Erase":
         break;
     }
-    frameUndoStack.get(currentFrame).push({ name, undoFn, redoFn });
-    frameRedoStack.get(currentFrame).length = 0;
+    frameUndoStack.get(curr).push({ name, undoFn, redoFn });
+    frameRedoStack.get(curr).length = 0;
     sendEvent();
   };
 
@@ -162,21 +161,21 @@ function UndoRedo(frame) {
   };
 
   const frameUndo = () => {
-    let action = frameUndoStack.get(currentFrame).pop();
+    let action = frameUndoStack.get(curr).pop();
     action.undoFn();
-    frameRedoStack.get(currentFrame).push(action);
+    frameRedoStack.get(curr).push(action);
     sendEvent();
   };
 
   const frameRedo = () => {
-    let action = frameRedoStack.get(currentFrame).pop();
+    let action = frameRedoStack.get(curr).pop();
     action.redoFn();
-    frameUndoStack.get(currentFrame).push(action);
+    frameUndoStack.get(curr).push(action);
     sendEvent();
   };
 
   const switchFrame = frame => {
-    currentFrame = frame;
+    curr = frame;
     sendEvent();
   };
 
