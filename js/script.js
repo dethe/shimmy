@@ -654,7 +654,7 @@ const undoButtons = {
 };
 
 function updateUndo(evt) {
-  console.log("updateUndo(%o)", evt.detail);
+  // console.log("updateUndo(%o)", evt.detail);
   ["frameUndo", "frameRedo"].forEach(key => {
     if (evt.detail[key]) {
       undoButtons[key].disabled = false;
@@ -665,6 +665,12 @@ function updateUndo(evt) {
       undoButtons[key].disabled = true;
     }
   });
+  const frameCount = document.querySelectorAll('.frame').length;
+  if (frameCount > 1){
+    document.querySelector('#deleteFrame').removeAttribute('disabled');
+  }else{
+    document.querySelector('#deleteFrame').setAttribute('disabled', 'disabled');
+  }
 }
 document.addEventListener("shimmy-undo-change", updateUndo, false);
 
