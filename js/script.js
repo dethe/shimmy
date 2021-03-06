@@ -111,6 +111,7 @@ function setState(state) {
   colorButton(document.getElementById("color7"), state.color7 || "#F38630");
   colorButton(document.getElementById("color8"), state.color8 || "#FA6900");
   undo = UndoRedo(currentFrame());
+  console.log('undo is initialized: %o', undo);
 }
 
 function newFile() {
@@ -686,11 +687,19 @@ if (!localStorage.hasSeenAbout) {
 
 // keyboard shortcuts
 
-key('⌘+z, ctrl+z', undo.frameUndo);
-key('shift+⌘+z, ctrl+y', undo.frameRedo);
-key('⌘+1, ctrl+1', ()=>selectTool({value:"pen"}));
-key('⌘+2, ctrl+2', ()=>selectTool({value:"rotate"}));
-key('⌘+3, ctrl+3', ()=>selectTool({value:"move"}));
-key('⌘+4, ctrl+4', ()=>selectTool({value:"zoomin"}));
-key('⌘+5, ctrl+5', ()=>selectTool({value:"zoomout"}));
-key('⌘+6, ctrl+6', ()=>selectTool({value:"eraser"}));
+// Undo/Redo
+key('⌘+z, ctrl+z', ()=>{undo.frameUndo(); return false;});
+key('shift+⌘+z, ctrl+y', ()=>{undo.frameRedo(); return false;});
+// Switch tools
+key('⌘+1, ctrl+1', ()=>{selectTool({value:"pen"}); return false;});
+key('⌘+2, ctrl+2', ()=>{selectTool({value:"rotate"}); return false;});
+key('⌘+3, ctrl+3', ()=>{selectTool({value:"move"}); return false;});
+key('⌘+4, ctrl+4', ()=>{selectTool({value:"zoomin"}); return false;});
+key('⌘+5, ctrl+5', ()=>{selectTool({value:"zoomout"}); return false;});
+key('⌘+6, ctrl+6', ()=>{selectTool({value:"eraser"}); return false;});
+// Files
+key('⌘+n, ctrl+n' ()=>{ ; return false;})
+key('⌘+s, ctrl+s' ()=>{ ; return false;})
+key('⌘+o, ctrl+o' ()=>{ ; return false;})
+key('shift+⌘+s, shift+ctrl+' ()=>{ ; return false;})
+key('shift+⌘+n, shift+ctrl+n' ()=>{ ; return false;})
