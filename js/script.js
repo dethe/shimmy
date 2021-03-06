@@ -698,8 +698,8 @@ key('⌘+4, ctrl+4', ()=>{selectTool({value:"zoomin"}); return false;});
 key('⌘+5, ctrl+5', ()=>{selectTool({value:"zoomout"}); return false;});
 key('⌘+6, ctrl+6', ()=>{selectTool({value:"eraser"}); return false;});
 // Files
-key('⌘+n, ctrl+n' ()=>{ ; return false;})
-key('⌘+s, ctrl+s' ()=>{ ; return false;})
-key('⌘+o, ctrl+o' ()=>{ ; return false;})
-key('shift+⌘+s, shift+ctrl+' ()=>{ ; return false;})
-key('shift+⌘+n, shift+ctrl+n' ()=>{ ; return false;})
+key('⌘+n, ctrl+n', ()=>{file.new(); return false;})
+key('⌘+s, ctrl+s', ()=>{saveAsSvg(); return false;})
+key('⌘+o, ctrl+o', ()=>{openSvg(); return false;})
+key('shift+⌘+s, shift+ctrl+', ()=>{saveAsGif(); return false;})
+key('shift+⌘+n, shift+ctrl+n', ()=>{saveAsSpritesheet(); return false;})
