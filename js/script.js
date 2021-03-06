@@ -16,7 +16,8 @@
 /* globals dom file KellyColorPicker UndoRedo
            palettes toDataURL canvas GIF
            getAnimationBBox play
-           Pen Move Rotate ZoomIn ZoomOut Eraser */
+           Pen Move Rotate ZoomIn ZoomOut Eraser 
+           key */
 
 const mouse = {};
 
@@ -682,3 +683,14 @@ if (!localStorage.hasSeenAbout) {
 }
 
 // If we don't explicitly request moat integration, hide it
+
+// keyboard shortcuts
+
+key('⌘+z, ctrl+z', undo.frameUndo);
+key('shift+⌘+z, ctrl+y', undo.frameRedo);
+key('⌘+1, ctrl+1', ()=>selectTool({value:"pen"}));
+key('⌘+2, ctrl+2', ()=>selectTool({value:"rotate"}));
+key('⌘+3, ctrl+3', ()=>selectTool({value:"move"}));
+key('⌘+4, ctrl+4', ()=>selectTool({value:"zoomin"}));
+key('⌘+5, ctrl+5', ()=>selectTool({value:"zoomout"}));
+key('⌘+6, ctrl+6', ()=>selectTool({value:"eraser"}));
