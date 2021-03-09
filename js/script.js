@@ -690,8 +690,8 @@ if (!localStorage.hasSeenAbout) {
 
 var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
 
-addShortcuts(shortcuts, fn, uxid, macHint, pcHint){
-  key(shortcuts, ()=>{fn(), return false;});
+function addShortcuts(shortcuts, fn, uxid, macHint, pcHint){
+  key(shortcuts, ()=>{fn(); return false;});
   let elem = document.querySelector(uxid);
   elem.title = elem.title + ' (' + (isMac ? macHint : pcHint) + ')'; 
 }
@@ -705,10 +705,16 @@ addShortcuts(shortcuts, fn, uxid, macHint, pcHint){
 
 addShortcuts('esc', ()=>document.querySelector('#shimmy').click(), '#shimmy', 'esc', 'esc');
 // Undo/Redo
-addShortcuts('⌘+z, ctrl+z', undo.frameUndo, '#frameundo', '⌘-z', '⌃-z');
-// key('⌘+z, ctrl+z', ()=>{undo.frameUndo(); return false;});
-addShortcuts('shift+⌘+z, ctrl+y', undo.frameRedo, '#frameredo', '⇧+⌘+z', '⌃+y');
-//key('shift+⌘+z, ctrl+y', ()=>{undo.frameRedo(); return false;});
+addShortcuts('⌘+z, ctrl+z', ()=>undo.frameUndo(), '#frameundo', '⌘-z', '⌃-z');
+addShortcuts('shift+⌘+z, ctrl+y', ()=>undo.frameRedo(), '#frameredo', '⇧+⌘+z', '⌃+y');
+// Files
+addShortcuts('⌘+n, ctrl+n', ()=>{file.new(); return false;});
+addShortcuts('⌘+s, ctrl+s', ()=>{saveAsSvg(); return false;});
+addShortcuts('⌘+o, ctrl+o', ()=>{openSvg(); return false;});
+key('shift+⌘+s, shift+ctrl+', ()=>{saveAsGif(); return false;});
+key('shift+⌘+n, shift+ctrl+n', ()=>{saveAsSpritesheet(); return false;});
+
+
 // Switch tools
 key('⌘+1, ctrl+1', ()=>{selectTool({value:"pen"}); return false;});
 key('⌘+2, ctrl+2', ()=>{selectTool({value:"rotate"}); return false;});
@@ -716,12 +722,6 @@ key('⌘+3, ctrl+3', ()=>{selectTool({value:"move"}); return false;});
 key('⌘+4, ctrl+4', ()=>{selectTool({value:"zoomin"}); return false;});
 key('⌘+5, ctrl+5', ()=>{selectTool({value:"zoomout"}); return false;});
 key('⌘+6, ctrl+6', ()=>{selectTool({value:"eraser"}); return false;});
-// Files
-key('⌘+n, ctrl+n', ()=>{file.new(); return false;});
-key('⌘+s, ctrl+s', ()=>{saveAsSvg(); return false;});
-key('⌘+o, ctrl+o', ()=>{openSvg(); return false;});
-key('shift+⌘+s, shift+ctrl+', ()=>{saveAsGif(); return false;});
-key('shift+⌘+n, shift+ctrl+n', ()=>{saveAsSpritesheet(); return false;});
 // Frames
 key('shift+⌘+n, shift+ctrl+n', ()=>{addFrame(); return false;});
 key('shift+⌘+backspace, shift+ctrl+backspace, shift+ctrl+delete', ()=>{deleteFrame(); return false;});
