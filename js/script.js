@@ -670,9 +670,9 @@ function updateUndo(evt) {
   });
   const frameCount = document.querySelectorAll('.frame').length;
   if (frameCount > 1){
-    document.querySelector('#deleteFrame').removeAttribute('disabled');
+    document.querySelector('#framedelete').removeAttribute('disabled');
   }else{
-    document.querySelector('#deleteFrame').setAttribute('disabled', 'disabled');
+    document.querySelector('#framedelete').setAttribute('disabled', 'disabled');
   }
 }
 document.addEventListener("shimmy-undo-change", updateUndo, false);

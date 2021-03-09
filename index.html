@@ -239,41 +239,41 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         >
           <span>Frames</span>
         </button>
-        <button onclick="deleteFrame()" id="deleteFrame" title="Delete Frame" disabled>
+        <button onclick="deleteFrame()" id="framedelete" title="Delete Frame" disabled>
           Delete<br />
           <span class="fa-stack">
             <i class="fas fa-film-alt fa-stack-2x"></i>
             <i class="far fa-minus fa-stack-1x fa-inverse"></i>
           </span>
         </button>
-        <button onclick="addFrame()" title="Add Frame">
+        <button onclick="addFrame()" id="framenew" title="Add Frame">
           Add<br />
           <span class="fa-stack">
             <i class="fas fa-film-alt fa-stack-2x"></i>
             <i class="far fa-plus fa-stack-1x fa-inverse"></i>
           </span>
         </button>
-        <button onclick="cloneFrame()" title="Copy Frame">
+        <button onclick="cloneFrame()" id="framecopy" title="Copy Frame">
           Copy<br />
           <i class="far fa-photo-video fa-2x"></i>
         </button>
-        <button onclick="_clear();" title="Clear">
+        <button onclick="_clear();" id="frameclear" title="Clear">
           Clear<br />
           <i class="far fa-2x fa-sparkles"></i>
         </button>
-        <button onclick="gotoFirstFrame()" title="First Frame">
+        <button onclick="gotoFirstFrame()" id="framefirst" title="First Frame">
           First<br />
           <i class="far fa-2x fa-fast-backward"></i>
         </button>
-        <button onclick="decrementFrame()" title="Previous Frame">
+        <button onclick="decrementFrame()" id="frameprev" title="Previous Frame">
           Back<br />
           <i class="far fa-2x fa-step-backward"></i>
         </button>
-        <button onclick="incrementFrame()" title="Next Frame">
+        <button onclick="incrementFrame()" id="framenext" title="Next Frame">
           Next<br />
           <i class="far fa-2x fa-step-forward"></i>
         </button>
-        <button onclick="gotoLastFrame()" title="Last Frame">
+        <button onclick="gotoLastFrame()" id="framelast" title="Last Frame">
           Last<br />
           <i class="far fa-2x fa-fast-forward"></i>
         </button>
@@ -301,7 +301,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         >
           <span>Animate</span>
         </button>
-        <button onclick="play()" title="Play">
+        <button onclick="play()" id="animateplay" title="Play">
           Play<br />
           <i class="far fa-2x fa-play"></i>
         </button>
