@@ -699,6 +699,9 @@ addShortcuts(shortcuts, fn, uxid, macHint, pcHint){
 // Key shortcuts: Command: ⌘
 //                Control: ⌃
 //                Shift:   ⇧
+//              Backspace: ⌫
+//                Delete:  ⌦
+//                Arrows: ← →
 
 addShortcuts('esc', ()=>document.querySelector('#shimmy').click(), '#shimmy', 'esc', 'esc');
 // Undo/Redo
