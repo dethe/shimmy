@@ -17,7 +17,7 @@
            palettes toDataURL canvas GIF
            getAnimationBBox play
            Pen Move Rotate ZoomIn ZoomOut Eraser 
-           addFrame deleteFrame cloneFrame
+           addFrame deleteFrame cloneFrame _clear
            key */
 
 const mouse = {};
@@ -713,16 +713,17 @@ addShortcuts('⌘+s, ctrl+s', saveAsSvg, '#filesave', '⌘+s', '⌃+s');
 addShortcuts('⌘+o, ctrl+o', openSvg, '#fileopen', '⌘+o', '⌃+o');
 addShortcuts('shift+⌘+s, shift+ctrl+', saveAsGif, '#filegif', '⇧+⌘+s', '⇧+⌃+s');
 addShortcuts('shift+⌘+n, shift+ctrl+n', saveAsSpritesheet, '#filepng', '⇧+⌘+p', '⇧+⌃+p');
-
 // Tools
-key('⌘+1, ctrl+1', ()=>{selectTool({value:"pen"}); return false;});
-key('⌘+2, ctrl+2', ()=>{selectTool({value:"rotate"}); return false;});
-key('⌘+3, ctrl+3', ()=>{selectTool({value:"move"}); return false;});
-key('⌘+4, ctrl+4', ()=>{selectTool({value:"zoomin"}); return false;});
-key('⌘+5, ctrl+5', ()=>{selectTool({value:"zoomout"}); return false;});
-key('⌘+6, ctrl+6', ()=>{selectTool({value:"eraser"}); return false;});
+addShortcuts('⌘+1, ctrl+1', ()=>selectTool({value:"pen"}), '#toolpen', '⌘+1', '⌃+1'); 
+addShortcuts('⌘+2, ctrl+2', ()=>selectTool({value:"rotate"}), '#toolrotate', '⌘+2', '⌃+2');
+addShortcuts('⌘+3, ctrl+3', ()=>selectTool({value:"move"}), '#toolmove', '⌘+3', '⌃+3');
+addShortcuts('⌘+4, ctrl+4', ()=>selectTool({value:"zoomin"}), '#toolzoomin', '⌘+4', '⌃+4');
+addShortcuts('⌘+5, ctrl+5', ()=>selectTool({value:"zoomout"}), '#toolzoomput', '⌘+5', '⌃+5');
+addShortcuts('⌘+6, ctrl+6', ()=>selectTool({value:"eraser"}), '#tooleraser', '⌘+6', '⌃+6');
+addShortcuts('shift+⌘++, shift+ctrl++', increasePenSize)
+// TODO: Add zoomin in/out without switching tools
 // Frames
-key('shift+⌘+n, shift+ctrl+n', ()=>{addFrame(); return false;});
-key('shift+⌘+backspace, shift+ctrl+backspace, shift+ctrl+delete', ()=>{deleteFrame(); return false;});
-key('shift+⌘+c, shift+ctrl+c', ()=>{cloneFrame(); return false;});
-key('shift+⌘+x, shift+ctrl+x', ()=>{_clear(); return false;});
+addShortcuts('shift+⌘+n, shift+ctrl+n', ()=>{addFrame(); return false;});
+addShortcuts('shift+⌘+backspace, shift+ctrl+backspace, shift+ctrl+delete', ()=>{deleteFrame(); return false;});
+addShortcuts('shift+⌘+c, shift+ctrl+c', ()=>{cloneFrame(); return false;});
+addShortcuts('shift+⌘+x, shift+ctrl+x', ()=>{_clear(); return false;});
