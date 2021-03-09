@@ -688,7 +688,13 @@ if (!localStorage.hasSeenAbout) {
 
 // keyboard shortcuts
 
-addShortcut()
+var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
+
+addShortcuts(shortcuts, fn, uxid, macHint, pcHint){
+  key(shortcuts, ()=>{fn(), return false;});
+  let elem = document.querySelector(uxid);
+  elem.title = elem.title + ' (' + (isMac ? macHint : pcHint) + ')'; 
+}
 
 // Undo/Redo
 key('⌘+z, ctrl+z', ()=>{undo.frameUndo(); return false;});
