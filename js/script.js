@@ -696,12 +696,16 @@ addShortcuts(shortcuts, fn, uxid, macHint, pcHint){
   elem.title = elem.title + ' (' + (isMac ? macHint : pcHint) + ')'; 
 }
 
+// Key shortcuts: Command: ⌘
+//                Control: ⌃
+//                Shift:   ⇧
+
 addShortcuts('esc', ()=>document.querySelector('#shimmy').click(), '#shimmy', 'esc', 'esc');
 // Undo/Redo
-addShortcuts('⌘+z, ctrl+z', undo.frameUndo, '#frameundo', '⌘-z', '^-z');
+addShortcuts('⌘+z, ctrl+z', undo.frameUndo, '#frameundo', '⌘-z', '⌃-z');
 // key('⌘+z, ctrl+z', ()=>{undo.frameUndo(); return false;});
-addShortcuts('shift+⌘+z, ctrl+y', undo.frameRedo, '#frameredo', 'shift+⌘+z', '^+y')
-key('shift+⌘+z, ctrl+y', ()=>{undo.frameRedo(); return false;});
+addShortcuts('shift+⌘+z, ctrl+y', undo.frameRedo, '#frameredo', '⇧+⌘+z', '⌃+y');
+//key('shift+⌘+z, ctrl+y', ()=>{undo.frameRedo(); return false;});
 // Switch tools
 key('⌘+1, ctrl+1', ()=>{selectTool({value:"pen"}); return false;});
 key('⌘+2, ctrl+2', ()=>{selectTool({value:"rotate"}); return false;});
@@ -720,4 +724,3 @@ key('shift+⌘+n, shift+ctrl+n', ()=>{addFrame(); return false;});
 key('shift+⌘+backspace, shift+ctrl+backspace, shift+ctrl+delete', ()=>{deleteFrame(); return false;});
 key('shift+⌘+c, shift+ctrl+c', ()=>{cloneFrame(); return false;});
 key('shift+⌘+x, shift+ctrl+x', ()=>{_clear(); return false;});
-key('')
