@@ -708,14 +708,13 @@ addShortcuts('esc', ()=>document.querySelector('#shimmy').click(), '#shimmy', 'e
 addShortcuts('⌘+z, ctrl+z', ()=>undo.frameUndo(), '#frameundo', '⌘-z', '⌃-z');
 addShortcuts('shift+⌘+z, ctrl+y', ()=>undo.frameRedo(), '#frameredo', '⇧+⌘+z', '⌃+y');
 // Files
-addShortcuts('⌘+n, ctrl+n', ()=>{file.new(); return false;});
-addShortcuts('⌘+s, ctrl+s', ()=>{saveAsSvg(); return false;});
-addShortcuts('⌘+o, ctrl+o', ()=>{openSvg(); return false;});
-key('shift+⌘+s, shift+ctrl+', ()=>{saveAsGif(); return false;});
-key('shift+⌘+n, shift+ctrl+n', ()=>{saveAsSpritesheet(); return false;});
+addShortcuts('⌘+n, ctrl+n', file.new, '#filenew', '⌘+n', '⌃+n');
+addShortcuts('⌘+s, ctrl+s', saveAsSvg, '#filesave', '⌘+s', '⌃+s');
+addShortcuts('⌘+o, ctrl+o', openSvg, '#fileopen', '⌘+o', '⌃+o');
+addShortcuts('shift+⌘+s, shift+ctrl+', saveAsGif, '#filegif', '⇧+⌘+s', '⇧+⌃+s');
+addShortcuts('shift+⌘+n, shift+ctrl+n', saveAsSpritesheet, '#filepng', '⇧+⌘+p', '⇧+⌃+p');
 
-
-// Switch tools
+// Tools
 key('⌘+1, ctrl+1', ()=>{selectTool({value:"pen"}); return false;});
 key('⌘+2, ctrl+2', ()=>{selectTool({value:"rotate"}); return false;});
 key('⌘+3, ctrl+3', ()=>{selectTool({value:"move"}); return false;});
