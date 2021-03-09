@@ -698,8 +698,9 @@ addShortcuts(shortcuts, fn, uxid, macHint, pcHint){
 
 addShortcuts('esc', ()=>document.querySelector('#shimmy').click(), '#shimmy', 'esc', 'esc');
 // Undo/Redo
-addShortcuts('⌘+z, ctrl+z', undo.frameUndo)
-key('⌘+z, ctrl+z', ()=>{undo.frameUndo(); return false;});
+addShortcuts('⌘+z, ctrl+z', undo.frameUndo, '#frameundo', '⌘-z', '^-z');
+// key('⌘+z, ctrl+z', ()=>{undo.frameUndo(); return false;});
+addShortcuts('shift+⌘+z, ctrl+y', undo.frameRedo, '#frameredo', 'shift+⌘+z', '^+y')
 key('shift+⌘+z, ctrl+y', ()=>{undo.frameRedo(); return false;});
 // Switch tools
 key('⌘+1, ctrl+1', ()=>{selectTool({value:"pen"}); return false;});
