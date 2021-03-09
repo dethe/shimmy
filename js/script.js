@@ -17,6 +17,7 @@
            palettes toDataURL canvas GIF
            getAnimationBBox play
            Pen Move Rotate ZoomIn ZoomOut Eraser 
+           addFrame deleteFrame cloneFrame
            key */
 
 const mouse = {};
@@ -687,6 +688,8 @@ if (!localStorage.hasSeenAbout) {
 
 // keyboard shortcuts
 
+addShortcut()
+
 // Undo/Redo
 key('⌘+z, ctrl+z', ()=>{undo.frameUndo(); return false;});
 key('shift+⌘+z, ctrl+y', ()=>{undo.frameRedo(); return false;});
@@ -698,8 +701,14 @@ key('⌘+4, ctrl+4', ()=>{selectTool({value:"zoomin"}); return false;});
 key('⌘+5, ctrl+5', ()=>{selectTool({value:"zoomout"}); return false;});
 key('⌘+6, ctrl+6', ()=>{selectTool({value:"eraser"}); return false;});
 // Files
-key('⌘+n, ctrl+n', ()=>{file.new(); return false;})
-key('⌘+s, ctrl+s', ()=>{saveAsSvg(); return false;})
-key('⌘+o, ctrl+o', ()=>{openSvg(); return false;})
-key('shift+⌘+s, shift+ctrl+', ()=>{saveAsGif(); return false;})
-key('shift+⌘+n, shift+ctrl+n', ()=>{saveAsSpritesheet(); return false;})
+key('⌘+n, ctrl+n', ()=>{file.new(); return false;});
+key('⌘+s, ctrl+s', ()=>{saveAsSvg(); return false;});
+key('⌘+o, ctrl+o', ()=>{openSvg(); return false;});
+key('shift+⌘+s, shift+ctrl+', ()=>{saveAsGif(); return false;});
+key('shift+⌘+n, shift+ctrl+n', ()=>{saveAsSpritesheet(); return false;});
+// Frames
+key('shift+⌘+n, shift+ctrl+n', ()=>{addFrame(); return false;});
+key('shift+⌘+backspace, shift+ctrl+backspace, shift+ctrl+delete', ()=>{deleteFrame(); return false;});
+key('shift+⌘+c, shift+ctrl+c', ()=>{cloneFrame(); return false;});
+key('shift+⌘+x, shift+ctrl+x', ()=>{_clear(); return false;});
+key('')
