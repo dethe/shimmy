@@ -696,7 +696,9 @@ addShortcuts(shortcuts, fn, uxid, macHint, pcHint){
   elem.title = elem.title + ' (' + (isMac ? macHint : pcHint) + ')'; 
 }
 
+addShortcuts('esc', ()=>document.querySelector('#shimmy').click(), '#shimmy', 'esc', 'esc');
 // Undo/Redo
+addShortcuts('⌘+z, ctrl+z', undo.frameUndo)
 key('⌘+z, ctrl+z', ()=>{undo.frameUndo(); return false;});
 key('shift+⌘+z, ctrl+y', ()=>{undo.frameRedo(); return false;});
 // Switch tools
