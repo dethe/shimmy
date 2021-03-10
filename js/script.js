@@ -740,9 +740,16 @@ addShortcuts('⌘+6, ctrl+6', ()=>selectTool({value:"eraser"}), '#tooleraser', '
 addShortcuts('shift+⌘++, shift+ctrl++, shift+⌘+-, shift+ctrl+-', changePenOrEraserSize, '#pensize.#erasersize', '⇧+⌘+±', '⇧+⌃+±');
 // TODO: Add zoomin in/out without switching tools
 // colors
-// TODO
+addShortcuts('1', ()=>document.querySelector('#color1').click(), '#color1', '1', '1');
+addShortcuts('2', ()=>document.querySelector('#color2').click(), '#color2', '2', '2');
+addShortcuts('3', ()=>document.querySelector('#color3').click(), '#color3', '3', '3');
+addShortcuts('4', ()=>document.querySelector('#color4').click(), '#color4', '4', '4');
+addShortcuts('5', ()=>document.querySelector('#color5').click(), '#color5', '5', '5');
+addShortcuts('6', ()=>document.querySelector('#color6').click(), '#color6', '6', '6');
+addShortcuts('7', ()=>document.querySelector('#color7').click(), '#color7', '7', '7');
+addShortcuts('8', ()=>document.querySelector('#color8').click(), '#color8', '8', '8');
 // Frames
-addShortcuts('shift+⌘+n, shift+ctrl+n', addFrame, '#framenew', '⇧+⌘+⌫', '⇧+⌃+⌦');
-addShortcuts('shift+⌘+backspace, shift+ctrl+backspace, shift+ctrl+delete', ()=>{deleteFrame(); return false;});
-addShortcuts('shift+⌘+c, shift+ctrl+c', ()=>{cloneFrame(); return false;});
-addShortcuts('shift+⌘+x, shift+ctrl+x', ()=>{_clear(); return false;});
+addShortcuts('shift+⌘+n, shift+ctrl+n', addFrame, '#framenew', '⇧+⌘+n', '⇧+⌃+n');
+addShortcuts('shift+⌘+backspace, shift+ctrl+backspace, shift+ctrl+delete', deleteFrame, '#framedelete', '⇧+⌘+⌫', '⇧+⌃+⌦');
+addShortcuts('shift+⌘+c, shift+ctrl+c', cloneFrame, '#framecopy', '⇧+⌘+c', '⇧+⌃+c');
+addShortcuts('shift+⌘+x, shift+ctrl+x', _clear, '#frameclear', '⇧+⌘+x', '⇧+⌃+x');
