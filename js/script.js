@@ -543,7 +543,7 @@ function saveAsSpritesheet() {
   frames.forEach((frame, idx) => {
     ctx.drawImage(frameToImage(frame, x, y, width, height), 0, height * idx);
   });
-  file.saveAs(canvas, "image.png");
+  file.saveAs(canvas, `${title}.png`);
 }
 
 function displayAsStoryboard() {
