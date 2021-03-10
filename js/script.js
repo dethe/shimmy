@@ -38,6 +38,7 @@ let currentStrokeWidth = 1;
 let currentEraserWidth = 5;
 let currentDoOnionskin = true;
 let undo = null;
+let name = null;
 
 let aboutShimmyDialog = document.querySelector("#aboutShimmy");
 
@@ -55,6 +56,7 @@ function getSvgPoint(x, y) {
 function getState() {
   let tabs = document.querySelectorAll(".js-tab");
   let state = {
+    name: name,
     tool: currentTool.name,
     strokeWidth: document.getElementById("pensize").value,
     eraserWidth: document.getElementById("erasersize").value,
@@ -78,6 +80,11 @@ function getState() {
   return state;
 }
 
+function setName(str){
+  name = str;
+  document.title = 'Shimmy: ' + str;
+}
+
 function setState(state) {
   let currentTabs = document.querySelectorAll(".js-tab.active");
   currentTabs.forEach(selectToolbar); // turn off any active tabs
@@ -87,6 +94,7 @@ function setState(state) {
     }
   });
   selectTool({ value: state.tool || "pen" });
+  setName(state.name);
   currentStrokeWidth = parseInt(state.strokeWidth || 2);
   currentEraserWidth = parseInt(state.eraserWidth || 5);
   document.getElementById("pensize").value = currentStrokeWidth;
@@ -418,7 +426,11 @@ function saveFrameAsPng(evt) {
 }
 
 function saveAsGif(evt) {
-  var gif = new GIF({
+  let title = prompt("Save file as: ", name);
+  if (!title) {
+    return;
+  }
+  let gif = new GIF({
     workers: 2,
     quality: 10,
     workerScript: "lib/gif.worker.js",
@@ -428,7 +440,7 @@ function saveAsGif(evt) {
   images.forEach(img => gif.addFrame(img, { delay: currentFrameDelay }));
   gif.on("finished", function(blob) {
     console.log("gif completed");
-    file.saveBlob(blob, "animation.gif");
+    file.saveBlob(blob, `${title}.gif`);
     window.open(URL.createObjectURL(blob));
   });
   gif.render();
