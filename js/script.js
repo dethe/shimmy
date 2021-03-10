@@ -18,6 +18,7 @@
            getAnimationBBox play
            Pen Move Rotate ZoomIn ZoomOut Eraser 
            addFrame deleteFrame cloneFrame _clear
+           gotoFirstFrame gotoLastFrame incrementFrame decrementFrame
            key */
 
 const mouse = {};
@@ -737,7 +738,7 @@ addShortcuts('⌘+3, ctrl+3', ()=>selectTool({value:"move"}), '#toolmove', '⌘+
 addShortcuts('⌘+4, ctrl+4', ()=>selectTool({value:"zoomin"}), '#toolzoomin', '⌘+4', '⌃+4');
 addShortcuts('⌘+5, ctrl+5', ()=>selectTool({value:"zoomout"}), '#toolzoomput', '⌘+5', '⌃+5');
 addShortcuts('⌘+6, ctrl+6', ()=>selectTool({value:"eraser"}), '#tooleraser', '⌘+6', '⌃+6');
-addShortcuts('shift+⌘++, shift+ctrl++, shift+⌘+-, shift+ctrl+-', changePenOrEraserSize, '#pensize.#erasersize', '⇧+⌘+±', '⇧+⌃+±');
+addShortcuts('shift+⌘++, shift+ctrl++, shift+⌘+-, shift+ctrl+-', changePenOrEraserSize, '#pensize,#erasersize', '⇧+⌘+±', '⇧+⌃+±');
 // TODO: Add zoomin in/out without switching tools
 // colors
 addShortcuts('1', ()=>document.querySelector('#color1').click(), '#color1', '1', '1');
@@ -757,5 +758,7 @@ addShortcuts('shift+⌘+left, shift+ctrl+left', '#framefirst', gotoFirstFrame, '
 addShortcuts('⌘+left, ctrl+left', decrementFrame, '#frameprev', '⌘+←', '⌃+←');
 addShortcuts('⌘+right, ctrl+right', incrementFrame, '#framenext', '⌘+→', '⌃+→');
 addShortcuts('shift+⌘+right, shift+ctrl+right', '#framelast', gotoLastFrame, '⇧+⌘+→', '⇧+⌃+→');
-addShortcuts('⌘+k, ctrl+k', ()=>document.querySelector('#doonionskin').click()), '#doonionskin', '⌘+k', '⌃+k');
+addShortcuts('⌘+k, ctrl+k', ()=>document.querySelector('#doonionskin').click(), '#doonionskin', '⌘+k', '⌃+k');
+// Animate
+addShortcuts('⌘+r, ctrl+r, F5', play, 'animateplay', '⌘+r', 'F5');
 
