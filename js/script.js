@@ -663,6 +663,9 @@ var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
 
 function addShortcuts(shortcuts, fn, uxid, macHint, pcHint){
   key(shortcuts, (evt, handler)=>{fn(evt, handler); return false;});
+  if (!uxid){
+    return;
+  }
   let elems = document.querySelectorAll(uxid);
   elems.forEach(elem => elem.title = elem.title + ' (' + (isMac ? macHint : pcHint) + ')'); 
 }
@@ -693,6 +696,7 @@ function changePenOrEraserSize(evt, handler){
 //                Arrows: ← →
 
 addShortcuts('esc', ()=>document.querySelector('#shimmy').click(), '#shimmy', 'esc', 'esc');
+addShortcuts('d', toggleDisplay, '', 'd', 'd');
 // Undo/Redo
 addShortcuts('⌘+z, ctrl+z', ()=>undo.frameUndo(), '#frameundo', '⌘-z', '⌃-z');
 addShortcuts('shift+⌘+z, ctrl+y', ()=>undo.frameRedo(), '#frameredo', '⇧+⌘+z', '⌃+y');
@@ -702,7 +706,6 @@ addShortcuts('⌘+s, ctrl+s', saveAsSvg, '#filesave', '⌘+s', '⌃+s');
 addShortcuts('⌘+o, ctrl+o', openSvg, '#fileopen', '⌘+o', '⌃+o');
 addShortcuts('g', saveAsGif, '#filegif', 'g', 'g');
 addShortcuts('p', saveAsSpritesheet, '#filepng', 'p', 'p');
-addShortcuts('d', toggleDisplay, '', 'd', 'd');
 // Tools
 addShortcuts('shift+1', ()=>selectTool({value:"pen"}), '#toolpen', '⇧+1', '⇧+1'); 
 addShortcuts('shift+2', ()=>selectTool({value:"rotate"}), '#toolrotate', '⇧+2', '⇧+2');
@@ -730,7 +733,7 @@ addShortcuts('shift+left', gotoFirstFrame, '#framefirst', '⇧+←', '⇧+←');
 addShortcuts('left', decrementFrame, '#frameprev', '←', '←');
 addShortcuts('right', incrementFrame, '#framenext', '→', '→');
 addShortcuts('shift+right', gotoLastFrame, '#framelast', gotoLastFrame, '⇧+→', '⇧+→');
-addShortcuts('k', ()=>document.querySelector('#doonionskin').click(), '#doonionskin', '⌘+k', '⌃+k');
+addShortcuts('k', ()=>document.querySelector('#doonionskin').click(), '#doonionskin', 'k', 'k');
 // Animate
 addShortcuts('p', play, 'animateplay', 'p', 'p');
 
