@@ -758,5 +758,3 @@ addShortcuts('k', ()=>document.querySelector('#doonionskin').click(), '#doonions
 // Animate
 addShortcuts('p', play, 'animateplay', 'p', 'p');
 
-setInterval(()=>document.body.focus(), 1000);
-

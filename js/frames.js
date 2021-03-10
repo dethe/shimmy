@@ -57,8 +57,6 @@ function cloneFrame(suppressUndo) {
   goToFrame(curr, frame);
 }
 
-function removeFrame(frame) {}
-
 function deleteFrame(suppressUndo) {
   let frameToDelete = currentFrame();
   if (frameToDelete.nextElementSibling) {
