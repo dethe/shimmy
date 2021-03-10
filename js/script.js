@@ -692,27 +692,23 @@ var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
 
 function addShortcuts(shortcuts, fn, uxid, macHint, pcHint){
   key(shortcuts, ()=>{fn(); return false;});
-  let elem = document.querySelector(uxid);
-  elem.title = elem.title + ' (' + (isMac ? macHint : pcHint) + ')'; 
+  let elems = document.querySelectorAll(uxid);
+  elems.forEach(elem => elem.title = elem.title + ' (' + (isMac ? macHint : pcHint) + ')'); 
 }
 
-function changePenSize(shortcut){
-  if (currentTool !== tools.pen) return;
-  let thePensize = document.querySelector('#pensize');
-  if (shortcut.endsWith('+')){
-    thePensize.value = Number(thePensize.value) + 1;
+function changePenOrEraserSize(shortcut){
+  let ui = null;
+  if (currentTool === tools.pen){
+    ui = document.querySelector('#pensize');
+  }else if (currentTool === tools.eraser){
+    ui = document.querySelector('#erasersize');
   }else{
-    thePensize.value = Number(thePensize.value) - 1;
+    return;
   }
-}
-
-function changeEraserSize(shortcut){
-  if (currentTool !== tools.eraser) return;
-  let theErasersize = document.querySelector('#erasersize');
   if (shortcut.endsWith('+')){
-    theErasersize.value = Number(theErasersize.value) + 1;
+    ui.value = Number(ui.value) + 1;
   }else{
-    theErasersize.value = Number(theErasersize.value) - 1;
+    ui.value = Number(ui.value) - 1;
   }
 }
 
@@ -741,11 +737,12 @@ addShortcuts('⌘+3, ctrl+3', ()=>selectTool({value:"move"}), '#toolmove', '⌘+
 addShortcuts('⌘+4, ctrl+4', ()=>selectTool({value:"zoomin"}), '#toolzoomin', '⌘+4', '⌃+4');
 addShortcuts('⌘+5, ctrl+5', ()=>selectTool({value:"zoomout"}), '#toolzoomput', '⌘+5', '⌃+5');
 addShortcuts('⌘+6, ctrl+6', ()=>selectTool({value:"eraser"}), '#tooleraser', '⌘+6', '⌃+6');
-addShortcuts('shift+⌘++, shift+ctrl++, shift+⌘+-, shift+ctrl+-', changePenOrEraserSize, '#pensize', '⌘+±', '⌃+±');
-addShortcuts('shift+⌘++, shift+ctrl++, shift+⌘+-, shift+ctrl+-', changeEraserSize, '#pensize', '⌘+±', '⌃+±');
+addShortcuts('shift+⌘++, shift+ctrl++, shift+⌘+-, shift+ctrl+-', changePenOrEraserSize, '#pensize.#erasersize', '⇧+⌘+±', '⇧+⌃+±');
 // TODO: Add zoomin in/out without switching tools
+// colors
+// TODO
 // Frames
-addShortcuts('shift+⌘+n, shift+ctrl+n', ()=>{addFrame(); return false;});
+addShortcuts('shift+⌘+n, shift+ctrl+n', addFrame, '#framenew', '⇧+⌘+⌫', '⇧+⌃+⌦');
 addShortcuts('shift+⌘+backspace, shift+ctrl+backspace, shift+ctrl+delete', ()=>{deleteFrame(); return false;});
 addShortcuts('shift+⌘+c, shift+ctrl+c', ()=>{cloneFrame(); return false;});
 addShortcuts('shift+⌘+x, shift+ctrl+x', ()=>{_clear(); return false;});
