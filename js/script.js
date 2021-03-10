@@ -741,8 +741,8 @@ addShortcuts('⌘+3, ctrl+3', ()=>selectTool({value:"move"}), '#toolmove', '⌘+
 addShortcuts('⌘+4, ctrl+4', ()=>selectTool({value:"zoomin"}), '#toolzoomin', '⌘+4', '⌃+4');
 addShortcuts('⌘+5, ctrl+5', ()=>selectTool({value:"zoomout"}), '#toolzoomput', '⌘+5', '⌃+5');
 addShortcuts('⌘+6, ctrl+6', ()=>selectTool({value:"eraser"}), '#tooleraser', '⌘+6', '⌃+6');
-addShortcuts('shift+⌘++, shift+ctrl++, shift+⌘+-, shift+ctrl+-', changePenSize, '#pensize', '⌘+±', '⌃+±');
-addShortcuts('shift+⌘++, shift+ctrl++, shift+⌘+-, shift+ctrl+-', changePenSize, '#pensize', '⌘+±', '⌃+±');
+addShortcuts('shift+⌘++, shift+ctrl++, shift+⌘+-, shift+ctrl+-', changePenOrEraserSize, '#pensize', '⌘+±', '⌃+±');
+addShortcuts('shift+⌘++, shift+ctrl++, shift+⌘+-, shift+ctrl+-', changeEraserSize, '#pensize', '⌘+±', '⌃+±');
 // TODO: Add zoomin in/out without switching tools
 // Frames
 addShortcuts('shift+⌘+n, shift+ctrl+n', ()=>{addFrame(); return false;});
