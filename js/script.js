@@ -215,26 +215,32 @@ function selectTool(sel) {
     case "pen":
       currentTool = tools.pen;
       enablePenSize(true);
+      sel.selectedIndex = 0;
       break;
     case "move":
       currentTool = tools.move;
       enablePenSize(false);
+      sel.selectedIndex = 1;
       break;
     case "rotate":
       currentTool = tools.rotate;
       enablePenSize(false);
+      sel.selectedIndex = 2;
       break;
     case "zoomin":
       currentTool = tools.zoomin;
       enablePenSize(false);
+      sel.selectedIndex = 3;
       break;
     case "zoomout":
       currentTool = tools.zoomout;
       enablePenSize(false);
+      sel.selectedIndex = 4;
       break;
     case "eraser":
       currentTool = tools.eraser;
       enableEraserSize();
+      sel.selectedIndex = 5;
       break;
     default:
       console.error("unrecognized tool name: %s", name);
@@ -738,7 +744,7 @@ addShortcuts('⌘+3, ctrl+3', ()=>selectTool({value:"move"}), '#toolmove', '⌘+
 addShortcuts('⌘+4, ctrl+4', ()=>selectTool({value:"zoomin"}), '#toolzoomin', '⌘+4', '⌃+4');
 addShortcuts('⌘+5, ctrl+5', ()=>selectTool({value:"zoomout"}), '#toolzoomput', '⌘+5', '⌃+5');
 addShortcuts('⌘+6, ctrl+6', ()=>selectTool({value:"eraser"}), '#tooleraser', '⌘+6', '⌃+6');
-addShortcuts('shift+⌘++, shift+ctrl++, shift+⌘+-, shift+ctrl+-', changePenOrEraserSize, '#pensize,#erasersize', '⇧+⌘+±', '⇧+⌃+±');
+addShortcuts('shift+⌘+=, shift+ctrl+=, shift+⌘+-, shift+ctrl+-', changePenOrEraserSize, '#pensize,#erasersize', '⇧+⌘+±', '⇧+⌃+±');
 // TODO: Add zoomin in/out without switching tools
 // colors
 addShortcuts('1', ()=>document.querySelector('#color1').click(), '#color1', '1', '1');

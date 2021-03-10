@@ -429,11 +429,11 @@ function pointsToPath(points) {
 
 // Because points are actually circles (due to penWidth / eraserWidth) this is a basic circl collision algorithm
 function collideCircle(p1, r1, p2, r2) {
-  if (r1 > 1) {
-    console.log(
-      `collideCircle({x:${p1.x},y:${p1.y}}, ${r1}, {x:${p2.x},y:${p2.y}}, ${r2})`
-    );
-  }
+  // if (r1 > 1) {
+  //   console.log(
+  //     `collideCircle({x:${p1.x},y:${p1.y}}, ${r1}, {x:${p2.x},y:${p2.y}}, ${r2})`
+  //   );
+  // }
   return (
     Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2) < Math.pow(r1 + r2, 2)
   );
