@@ -753,3 +753,9 @@ addShortcuts('shift+⌘+n, shift+ctrl+n', addFrame, '#framenew', '⇧+⌘+n', '�
 addShortcuts('shift+⌘+backspace, shift+ctrl+backspace, shift+ctrl+delete', deleteFrame, '#framedelete', '⇧+⌘+⌫', '⇧+⌃+⌦');
 addShortcuts('shift+⌘+c, shift+ctrl+c', cloneFrame, '#framecopy', '⇧+⌘+c', '⇧+⌃+c');
 addShortcuts('shift+⌘+x, shift+ctrl+x', _clear, '#frameclear', '⇧+⌘+x', '⇧+⌃+x');
+addShortcuts('shift+⌘+left, shift+ctrl+left', '#framefirst', gotoFirstFrame, '⇧+⌘+←', '⇧+⌃+←');
+addShortcuts('⌘+left, ctrl+left', decrementFrame, '#frameprev', '⌘+←', '⌃+←');
+addShortcuts('⌘+right, ctrl+right', incrementFrame, '#framenext', '⌘+→', '⌃+→');
+addShortcuts('shift+⌘+right, shift+ctrl+right', '#framelast', gotoLastFrame, '⇧+⌘+→', '⇧+⌃+→');
+addShortcuts('⌘+k, ctrl+k', ()=>document.querySelector('#doonionskin').click()), '#doonionskin', '⌘+k', '⌃+k');
+
