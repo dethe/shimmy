@@ -221,12 +221,12 @@ function selectTool(sel) {
     case "move":
       currentTool = tools.move;
       enablePenSize(false);
-      ui.selectedIndex = 1;
+      ui.selectedIndex = 2;
       break;
     case "rotate":
       currentTool = tools.rotate;
       enablePenSize(false);
-      ui.selectedIndex = 2;
+      ui.selectedIndex = 3;
       break;
     case "zoomin":
       currentTool = tools.zoomin;
@@ -734,18 +734,18 @@ addShortcuts('esc', ()=>document.querySelector('#shimmy').click(), '#shimmy', 'e
 addShortcuts('⌘+z, ctrl+z', ()=>undo.frameUndo(), '#frameundo', '⌘-z', '⌃-z');
 addShortcuts('shift+⌘+z, ctrl+y', ()=>undo.frameRedo(), '#frameredo', '⇧+⌘+z', '⌃+y');
 // Files
-addShortcuts('⌘+n, ctrl+n', file.new, '#filenew', '⌘+n', '⌃+n');
+addShortcuts('n', file.new, '#filenew', 'n', 'n');
 addShortcuts('⌘+s, ctrl+s', saveAsSvg, '#filesave', '⌘+s', '⌃+s');
 addShortcuts('⌘+o, ctrl+o', openSvg, '#fileopen', '⌘+o', '⌃+o');
-addShortcuts('shift+⌘+s, shift+ctrl+', saveAsGif, '#filegif', '⇧+⌘+s', '⇧+⌃+s');
+addShortcuts('g', saveAsGif, '#filegif', '⇧+⌘+s', '⇧+⌃+s');
 addShortcuts('shift+⌘+n, shift+ctrl+n', saveAsSpritesheet, '#filepng', '⇧+⌘+p', '⇧+⌃+p');
 // Tools
-addShortcuts('⌘+1, ctrl+1', ()=>selectTool({value:"pen"}), '#toolpen', '⌘+1', '⌃+1'); 
-addShortcuts('⌘+2, ctrl+2', ()=>selectTool({value:"rotate"}), '#toolrotate', '⌘+2', '⌃+2');
-addShortcuts('⌘+3, ctrl+3', ()=>selectTool({value:"move"}), '#toolmove', '⌘+3', '⌃+3');
-addShortcuts('⌘+4, ctrl+4', ()=>selectTool({value:"zoomin"}), '#toolzoomin', '⌘+4', '⌃+4');
-addShortcuts('⌘+5, ctrl+5', ()=>selectTool({value:"zoomout"}), '#toolzoomput', '⌘+5', '⌃+5');
-addShortcuts('⌘+6, ctrl+6', ()=>selectTool({value:"eraser"}), '#tooleraser', '⌘+6', '⌃+6');
+addShortcuts('shift+1', ()=>selectTool({value:"pen"}), '#toolpen', '⇧+1', '⇧+1'); 
+addShortcuts('shift+2', ()=>selectTool({value:"rotate"}), '#toolrotate', '⇧+2', '⇧+2');
+addShortcuts('shift+3', ()=>selectTool({value:"move"}), '#toolmove', '⇧+3', '⇧+3');
+addShortcuts('shift+4', ()=>selectTool({value:"zoomin"}), '#toolzoomin', '⇧+4', '⇧+4');
+addShortcuts('shift+5', ()=>selectTool({value:"zoomout"}), '#toolzoomput', '⇧+5', '⇧+5');
+addShortcuts('shift+6', ()=>selectTool({value:"eraser"}), '#tooleraser', '⇧+6', '⇧+6');
 addShortcuts('shift+=, =, -', changePenOrEraserSize, '#pensize,#erasersize', '+/-', '+/-');
 // TODO: Add zoomin in/out without switching tools
 // colors
@@ -758,7 +758,7 @@ addShortcuts('6', ()=>document.querySelector('#color6').click(), '#color6', '6',
 addShortcuts('7', ()=>document.querySelector('#color7').click(), '#color7', '7', '7');
 addShortcuts('8', ()=>document.querySelector('#color8').click(), '#color8', '8', '8');
 // Frames
-addShortcuts('shift+⌘+n, shift+ctrl+n', addFrame, '#framenew', '⇧+⌘+n', '⇧+⌃+n');
+addShortcuts('shift+n', addFrame, '#framenew', '⇧+n', '⇧+n');
 addShortcuts('shift+⌘+backspace, shift+ctrl+backspace, shift+ctrl+delete', deleteFrame, '#framedelete', '⇧+⌘+⌫', '⇧+⌃+⌦');
 addShortcuts('shift+⌘+c, shift+ctrl+c', cloneFrame, '#framecopy', '⇧+⌘+c', '⇧+⌃+c');
 addShortcuts('shift+⌘+x, shift+ctrl+x', _clear, '#frameclear', '⇧+⌘+x', '⇧+⌃+x');
@@ -768,7 +768,7 @@ addShortcuts('⌘+right, ctrl+right', incrementFrame, '#framenext', '⌘+→', '
 addShortcuts('shift+⌘+right, shift+ctrl+right', gotoLastFrame, '#framelast', gotoLastFrame, '⇧+⌘+→', '⇧+⌃+→');
 addShortcuts('⌘+k, ctrl+k', ()=>document.querySelector('#doonionskin').click(), '#doonionskin', '⌘+k', '⌃+k');
 // Animate
-addShortcuts('⌘+r, ctrl+r, F5', play, 'animateplay', '⌘+r', 'F5');
+addShortcuts('p', play, 'animateplay', 'p', 'p');
 
 setInterval(()=>document.body.focus(), 1000);
 
