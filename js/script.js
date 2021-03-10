@@ -529,6 +529,10 @@ function animationToImages() {
 }
 
 function saveAsSpritesheet() {
+  var title = prompt("Save file as: ", name);
+  if (!title) {
+    return;
+  }
   let { x, y, width, height } = getAnimationBBox();
   let frames = document.querySelectorAll(".frame");
   let canvas = dom.html("canvas", {
