@@ -120,7 +120,6 @@ function UndoRedo(frame) {
       redoFn
     });
     documentRedoStack.length = 0;
-    mess;
     sendEvent();
   };
 
