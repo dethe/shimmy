@@ -762,3 +762,5 @@ addShortcuts('⌘+k, ctrl+k', ()=>document.querySelector('#doonionskin').click()
 // Animate
 addShortcuts('⌘+r, ctrl+r, F5', play, 'animateplay', '⌘+r', 'F5');
 
+setInterval(()=>document.body.focus(), 1000);
+
