@@ -234,6 +234,11 @@
   }
 
   function loadFile() {
+    let forSure = confirm('This will overwrite your current document, be sure to save first. Delete and open another document?');
+    if (!forSure){
+      return;
+    }
+
     var input = dom.html("input", { type: "file", accept: "image/svg+xml" });
     if (!input) {
       return;
