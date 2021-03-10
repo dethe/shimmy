@@ -426,7 +426,7 @@ function saveFrameAsPng(evt) {
 }
 
 function saveAsGif(evt) {
-  let title = prompt("Save file as: ", name);
+  let title = prompt("Save GIF file as: ", name);
   if (!title) {
     return;
   }
@@ -534,7 +534,7 @@ function animationToImages() {
 }
 
 function saveAsSpritesheet() {
-  var title = prompt("Save file as: ", name);
+  var title = prompt("Save PNG file as: ", name);
   if (!title) {
     return;
   }

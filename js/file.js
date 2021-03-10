@@ -107,7 +107,7 @@
     if (evt) {
       evt.preventDefault();
     }
-    var title = prompt("Save file as: ", name);
+    var title = prompt("Save SVG file as: ", name);
     setName(title);
     if (!title) {
       return;
