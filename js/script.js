@@ -756,5 +756,5 @@ addShortcuts('right', incrementFrame, '#framenext', '→', '→');
 addShortcuts('shift+right', gotoLastFrame, '#framelast', gotoLastFrame, '⇧+→', '⇧+→');
 addShortcuts('k', ()=>document.querySelector('#doonionskin').click(), '#doonionskin', 'k', 'k');
 // Animate
-addShortcuts('p', play, 'animateplay', 'p', 'p');
+addShortcuts('r', play, 'animateplay', 'r', 'r');
 
