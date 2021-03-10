@@ -434,10 +434,6 @@ function saveAsGif(evt) {
   gif.render();
 }
 
-function saveAsMovie(evt) {
-  console.log("save as movie");
-}
-
 function openSvg(evt) {
   file.loadFile();
 }
@@ -563,38 +559,6 @@ function hideUI(button) {
   }
 }
 
-function hotkeys(evt) {
-  if (evt.altKey) return;
-  if (evt.shiftKey) return;
-  if (evt.ctrlKey) return;
-  switch (evt.key) {
-    case "n":
-      newAnimation(evt);
-      break;
-    case "s":
-      saveAsSvg(evt);
-      break;
-    // case "f":
-    //   saveFrameAsPNG(evt); // not implemented
-    //   break;
-    case "g":
-      saveAsGif(evt);
-      break;
-    case "m":
-      saveAsMovie(evt);
-      break;
-    case "o":
-      openSvg(evt);
-      break;
-    case "d":
-      toggleDisplay(evt);
-      break;
-  }
-}
-console.log(
-  "n new | s save | f save frame | g gif | m movie | o open | d toggle display"
-);
-
 function keydownHandler(evt) {
   if ((evt.key || evt.keyIdentifier) === "Control") {
     document.body.classList.add("usefiles");
@@ -614,7 +578,6 @@ window.app = {
 
 document.addEventListener("keydown", keydownHandler, false);
 document.addEventListener("keyup", keyupHandler, false);
-document.addEventListener("keydown", hotkeys, false);
 
 // Attempt to disable default Safari iOS pinch to zoom (failed)
 
@@ -737,8 +700,9 @@ addShortcuts('shift+⌘+z, ctrl+y', ()=>undo.frameRedo(), '#frameredo', '⇧+⌘
 addShortcuts('n', file.new, '#filenew', 'n', 'n');
 addShortcuts('⌘+s, ctrl+s', saveAsSvg, '#filesave', '⌘+s', '⌃+s');
 addShortcuts('⌘+o, ctrl+o', openSvg, '#fileopen', '⌘+o', '⌃+o');
-addShortcuts('g', saveAsGif, '#filegif', '⇧+⌘+s', '⇧+⌃+s');
-addShortcuts('shift+⌘+n, shift+ctrl+n', saveAsSpritesheet, '#filepng', '⇧+⌘+p', '⇧+⌃+p');
+addShortcuts('g', saveAsGif, '#filegif', 'g', 'g');
+addShortcuts('p', saveAsSpritesheet, '#filepng', 'p', 'p');
+addShortcuts('d', toggleDisplay, '', 'd', 'd');
 // Tools
 addShortcuts('shift+1', ()=>selectTool({value:"pen"}), '#toolpen', '⇧+1', '⇧+1'); 
 addShortcuts('shift+2', ()=>selectTool({value:"rotate"}), '#toolrotate', '⇧+2', '⇧+2');
@@ -759,14 +723,14 @@ addShortcuts('7', ()=>document.querySelector('#color7').click(), '#color7', '7',
 addShortcuts('8', ()=>document.querySelector('#color8').click(), '#color8', '8', '8');
 // Frames
 addShortcuts('shift+n', addFrame, '#framenew', '⇧+n', '⇧+n');
-addShortcuts('shift+⌘+backspace, shift+ctrl+backspace, shift+ctrl+delete', deleteFrame, '#framedelete', '⇧+⌘+⌫', '⇧+⌃+⌦');
-addShortcuts('shift+⌘+c, shift+ctrl+c', cloneFrame, '#framecopy', '⇧+⌘+c', '⇧+⌃+c');
-addShortcuts('shift+⌘+x, shift+ctrl+x', _clear, '#frameclear', '⇧+⌘+x', '⇧+⌃+x');
-addShortcuts('shift+⌘+left, shift+ctrl+left', gotoFirstFrame, '#framefirst', '⇧+⌘+←', '⇧+⌃+←');
-addShortcuts('⌘+left, ctrl+left', decrementFrame, '#frameprev', '⌘+←', '⌃+←');
-addShortcuts('⌘+right, ctrl+right', incrementFrame, '#framenext', '⌘+→', '⌃+→');
-addShortcuts('shift+⌘+right, shift+ctrl+right', gotoLastFrame, '#framelast', gotoLastFrame, '⇧+⌘+→', '⇧+⌃+→');
-addShortcuts('⌘+k, ctrl+k', ()=>document.querySelector('#doonionskin').click(), '#doonionskin', '⌘+k', '⌃+k');
+addShortcuts('shift+backspace, shift+delete', deleteFrame, '#framedelete', '⇧+⌫', '⇧+⌦');
+addShortcuts('shift+c', cloneFrame, '#framecopy', '⇧+c', '⇧+c');
+addShortcuts('shift+x', _clear, '#frameclear', '⇧+x', '⇧+x');
+addShortcuts('shift+left', gotoFirstFrame, '#framefirst', '⇧+←', '⇧+←');
+addShortcuts('left', decrementFrame, '#frameprev', '←', '←');
+addShortcuts('right', incrementFrame, '#framenext', '→', '→');
+addShortcuts('shift+right', gotoLastFrame, '#framelast', gotoLastFrame, '⇧+→', '⇧+→');
+addShortcuts('k', ()=>document.querySelector('#doonionskin').click(), '#doonionskin', '⌘+k', '⌃+k');
 // Animate
 addShortcuts('p', play, 'animateplay', 'p', 'p');
 
