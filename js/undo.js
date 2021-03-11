@@ -123,39 +123,24 @@ function UndoRedo(frame) {
     sendEvent();
   };
 
-  const pushFrameUndo = (name, undoFn, redoFn) => {
+  const pushUndo = (name, undoFn, redoFn) => {
     // Special handling for particular events
-    get(curr).push({ name, undoFn, redoFn });
-    frameRedoStack.get(curr).length = 0;
+    getUndoStack(curr).push({ name, undoFn, redoFn });
+    getRedoStack(curr).length = 0;
     sendEvent();
   };
 
-  const docUndo = () => {
-    let action = documentUndoStack.pop();
+  const undo = () => {
+    let action = getUndoStack(curr).pop();
     action.undoFn();
-    // handle special case of copying a frame, which copies undo/redo stacks of the frame
-    documentRedoStack.push(action);
+    getRedoStack(curr).push(action);
     sendEvent();
   };
 
-  const docRedo = () => {
-    let action = documentRedoStack.pop();
+  const redo = () => {
+    let action = getRedoStack(curr).pop();
     action.redoFn();
-    documentUndoStack.push(action);
-    sendEvent();
-  };
-
-  const frameUndo = () => {
-    let action = frameUndoStack.get(curr).pop();
-    action.undoFn();
-    frameRedoStack.get(curr).push(action);
-    sendEvent();
-  };
-
-  const frameRedo = () => {
-    let action = frameRedoStack.get(curr).pop();
-    action.redoFn();
-    frameUndoStack.get(curr).push(action);
+    getUndoStack(curr).push(action);
     sendEvent();
   };
 
@@ -168,11 +153,9 @@ function UndoRedo(frame) {
   sendEvent();
 
   return {
-    frameUndo,
-    frameRedo,
-    docUndo,
-    docRedo,
-    pushFrameUndo,
+    undo,
+    redo,
+    pushUndo,
     pushDocUndo,
     switchFrame
   };
