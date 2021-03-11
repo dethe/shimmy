@@ -374,7 +374,7 @@ class Eraser {
       return;
     }
     if (collideCircle({ x, y }, 1, this.prevPoint, 1)) {
-      // too close to previous point to both erasing
+      // too close to previous point to bother erasing
       return;
     }
     this.prevPoint = { x, y };
@@ -422,6 +422,7 @@ function pointFromText(t) {
 function pointsFromPath(path) {
   return path
     .getAttribute("d")
+    .replace(/, /g, ',')
     .split(/[ ]+/)
     .map(pointFromText);
 }
@@ -530,9 +531,9 @@ function drawBoundingBox(bbox, color) {
 }
 
 function erasePaths(point) {
-  currentFrame()
-    .querySelectorAll("rect")
-    .forEach(r => r.remove());
+  // currentFrame()
+  //   .querySelectorAll("rect")
+  //   .forEach(r => r.remove());
   let candidatePaths = Array.from(currentFrame().querySelectorAll("path"));
   // console.log(`${candidatePaths.length} candidate paths`);
   // candidatePaths.forEach(path => drawBoundingBox(path.getBBox({stroke: true})));
