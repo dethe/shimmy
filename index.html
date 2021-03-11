@@ -238,7 +238,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         >
           <span>Frames</span>
         </button>
-        <button onclick="deleteFrame()" id="framedelete" title="Delete Frame" disabled>
+        <button
+          onclick="deleteFrame()"
+          id="framedelete"
+          title="Delete Frame"
+          disabled
+        >
           Delete<br />
           <span class="fa-stack">
             <i class="fas fa-film-alt fa-stack-2x"></i>
@@ -264,7 +269,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           First<br />
           <i class="far fa-2x fa-fast-backward"></i>
         </button>
-        <button onclick="decrementFrame()" id="frameprev" title="Previous Frame">
+        <button
+          onclick="decrementFrame()"
+          id="frameprev"
+          title="Previous Frame"
+        >
           Back<br />
           <i class="far fa-2x fa-step-backward"></i>
         </button>
@@ -355,6 +364,25 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <input type="submit" class="close" value="Close" />
       </form>
     </dialog>
+    <dialog id="shortcuts">
+      <h3>
+        Keyboard Shortcuts
+      </h3>
+      <p>
+        The following keyboard shortcuts are available.
+      </p>
+      <ul>
+        <li><kbd>esc</kbd> Toggle UI</li>
+        <li><kbd>d</kbd> Toggle Storyboard view (in progress)</li>
+        <li><kbd>⌃-z/⌘-z</kbd> Undo (per-frame)</li>
+        <li><kbd>⌃-y/⇧-⌘-z</kbd> Redo (per-frame)</li>
+        <li><kbd>n</kbd> New File</li>
+        <li><kbd>⌘+s', '⌃+s</kbd></li>
+      </ul>
+      <form method="dialog">
+        <input type="submit" class="close" value="Close" />
+      </form>
+    </dialog>
     <script src="lib/dialog-polyfill.js"></script>
     <script src="lib/svgToDataURL.js"></script>
     <script src="lib/gif.js"></script>
@@ -362,7 +390,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     <script src="lib/qrcode.js"></script>
     <script src="lib/timeago.js"></script>
     <script src="lib/keymaster.js"></script>
-<!--     <script src="lib/simplify.js"></script> -->
+    <!--     <script src="lib/simplify.js"></script> -->
     <script src="lib/mess.js"></script>
     <script src="js/palettes.js"></script>
     <script src="js/dom.js"></script>
