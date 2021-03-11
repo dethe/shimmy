@@ -701,8 +701,10 @@ function changePenOrEraserSize(evt, handler){
   if (handler.shortcut.endsWith('-')){
     ui.stepDown();
   }else{
-    ui.value = Number(ui.value) + 1;
+    ui.stepUp();
   }
+  ui.onchange(); // this is messed up, but whatever works
+  // ui.dispatchEvent(new Event('change', {bubbles: true})); // notify listeners that the value has changed
 }
 
 
