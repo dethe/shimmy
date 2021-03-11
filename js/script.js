@@ -30,8 +30,6 @@ const radians = degs => degs / DEG;
 let currentColor = "#000000";
 let currentFrameDelay = 30; // milliseconds
 let currentMatrix = null;
-let WIDTH = document.body.clientWidth;
-let HEIGHT = document.body.clientHeight;
 let currentDisplay = "drawingboard";
 let currentTool;
 let currentStrokeWidth = 1;

@@ -76,11 +76,17 @@
     canvas.outerHTML = savetext;
     canvas = document.querySelector("#canvas");
     updateFrameCount();
-    canvas.setAttribute("width", document.body.clientWidth + "px");
-    canvas.setAttribute("height", document.body.clientHeight + "px");
+    resize();
     listenCanvas();
     restoreSavedState();
   }
+  
+  function resize(){
+    canvas.setAttribute("width", document.body.clientWidth + "px");
+    canvas.setAttribute("height", document.body.clientHeight + "px");    
+  }
+  
+  window.onresize = resize;
 
   function restore() {
     var path = location.href.split("?");
