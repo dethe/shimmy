@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-/* globals dom file KellyColorPicker UndoRedo
+/* globals dom file KellyColorPicker undo
            palettes toDataURL canvas GIF
            getAnimationBBox play
            Pen Move Rotate ZoomIn ZoomOut Eraser 
@@ -37,7 +37,6 @@ let currentTool;
 let currentStrokeWidth = 1;
 let currentEraserWidth = 5;
 let currentDoOnionskin = true;
-let undo = null;
 let name = null;
 
 let aboutShimmyDialog = document.querySelector("#aboutShimmy");
@@ -120,8 +119,7 @@ function setState(state) {
   colorButton(document.getElementById("color6"), state.color6 || "#E0E4CC");
   colorButton(document.getElementById("color7"), state.color7 || "#F38630");
   colorButton(document.getElementById("color8"), state.color8 || "#FA6900");
-  undo = UndoRedo(currentFrame());
-  console.log('undo is initialized: %o', undo);
+  undo.clear();
 }
 
 function newFile() {
@@ -649,7 +647,6 @@ const undoButtons = {
 };
 
 function updateUndo(evt) {
-  // console.log("updateUndo(%o)", evt.detail);
   ["frameUndo", "frameRedo"].forEach(key => {
     if (evt.detail[key]) {
       undoButtons[key].disabled = false;

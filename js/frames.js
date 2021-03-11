@@ -27,33 +27,15 @@ function insertFrame(before, frame) {
   return frame;
 }
 
-function addFrame(suppressUndo) {
+function addFrame() {
   let curr = currentFrame();
   let frame = insertFrame(curr, dom.svg("g", { class: "frame" }));
-  if (!suppressUndo) {
-    undo.pushDocUndo(
-      "New Frame",
-      curr,
-      frame,
-      () => deleteFrame(false),
-      () => addFrame(false)
-    );
-  }
   goToFrame(curr, frame);
 }
 
-function cloneFrame(suppressUndo) {
+function cloneFrame() {
   let curr = currentFrame();
   let frame = insertFrame(curr, curr.cloneNode(true));
-  if (!suppressUndo) {
-    undo.pushDocUndo(
-      "Copy Frame",
-      curr,
-      frame,
-      () => deleteFrame(false),
-      () => cloneFrame(false)
-    );
-  }
   goToFrame(curr, frame);
 }
 
@@ -82,9 +64,6 @@ function deleteFrame(suppressUndo) {
       );
     }
     goToFrame(frameToDelete, curr);
-  } else {
-    // FIXME: disable the delete button for last frame vs. switching to clear()
-    _clear(); // don't delete the last frame, just its children
   }
   file.onChange();
 }
@@ -102,8 +81,9 @@ function _clear() {
   let oldTransform = curr.getAttribute("transform") || "";
   let children = [...curr.children];
   dom.clear(curr);
-  undo.pushFrameUndo(
+  undo.pushUndo(
     "Clear",
+    curr,
     () => restore(curr, children, oldTransform),
     () => dom.clear(curr)
   );
@@ -127,7 +107,7 @@ function goToFrame(prev, next) {
   next.classList.add("selected");
   updateOnionskin();
   updateFrameCount();
-  undo.switchFrame(next);
+  undo.update(next);
 }
 
 function incrementFrame() {
@@ -146,13 +126,13 @@ function decrementFrame() {
   }
 }
 
-function gotoFirstFrame(suppressUndo) {
+function gotoFirstFrame() {
   let curr = currentFrame();
   let first = document.querySelector(".frame");
   goToFrame(curr, first);
 }
 
-function gotoLastFrame(suppressUndo) {
+function gotoLastFrame() {
   const curr = currentFrame();
   const last = document.querySelector(".frame:last-child");
   goToFrame(curr, last);

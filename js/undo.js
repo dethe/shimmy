@@ -21,10 +21,9 @@
 // type: frame or document
 //
 // pushDocUndo(name, frameTarget, currentFrame, undoFn, redoFn);
-// pushUndo(name, undoFn, redoFn);
-// undo(type); pops the relevant undo stack
-// redo(type); pops the relevant redo stack
-// switchFrame(newFrame); // because most undo is frame-based
+// pushUndo(name, frame, undoFn, redoFn);
+// undo(frame); pops the relevant undo stack
+// redo(frame); pops the relevant redo stack
 // clear(); // reset, i.e., when a new document is created
 //
 // Use events for enabling/disabling buttons and changing button labels
@@ -83,15 +82,14 @@ const undo = (function UndoRedo(frame) {
   const sendEvent = (frame) => {
     let evt = new CustomEvent("shimmy-undo-change", {
       detail: {
-        frameUndo: topUndo(curr),
-        frameRedo: topRedo(curr)
+        frameUndo: topUndo(frame),
+        frameRedo: topRedo(frame)
       }
     });
     document.dispatchEvent(evt);
   };
 
   const pushDocUndo = (name, targetFrame, newCurrentFrame, undoFn, redoFn) => {
-    // NOTE: 'document' type actions can change the curr (current frame)
     // Special handling for particular events
     switch (name) {
       case "New Frame":
@@ -151,7 +149,7 @@ const undo = (function UndoRedo(frame) {
     redo,
     pushUndo,
     pushDocUndo,
-    switchFrame,
+    update: sendEvent,
     clear
   };
 })();
