@@ -718,7 +718,7 @@ addShortcuts('esc', ()=>document.querySelector('#shimmy').click(), '#shimmy', 'e
 addShortcuts('d', toggleDisplay, '', 'd', 'd');
 // Undo/Redo
 addShortcuts('⌘+z, ctrl+z', ()=>undo.undo(currentFrame()), '#frameundo', '⌘-z', '⌃-z');
-addShortcuts('shift+⌘+z, ctrl+y', ()=>undo.frameRedo(currentFrame()), '#frameredo', '⇧+⌘+z', '⌃+y');
+addShortcuts('shift+⌘+z, ctrl+y', ()=>undo.redo(currentFrame()), '#frameredo', '⇧+⌘+z', '⌃+y');
 // Files
 addShortcuts('n', file.new, '#filenew', 'n', 'n');
 addShortcuts('⌘+s, ctrl+s', saveAsSvg, '#filesave', '⌘+s', '⌃+s');
