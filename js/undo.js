@@ -44,8 +44,8 @@ const undo = (function UndoRedo(frame) {
   mess.init();
   
   const clear = () => {
-    undoStack = new Map();
-    redoStack = new Map();
+    undoStack.clear();
+    redoStack.clear();
   }
 
   const getUndoStack = frame => {

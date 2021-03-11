@@ -640,12 +640,13 @@ document.addEventListener(
   false
 );
 
-/* Initialize Undo */
+/* Initialize Undo UI */
 const undoButtons = {
   frameUndo: document.querySelector("#frameundo"),
   frameRedo: document.querySelector("#frameredo")
 };
 
+/* Show current undo options on buttons */
 function updateUndo(evt) {
   ["frameUndo", "frameRedo"].forEach(key => {
     if (evt.detail[key]) {
@@ -716,8 +717,8 @@ function changePenOrEraserSize(evt, handler){
 addShortcuts('esc', ()=>document.querySelector('#shimmy').click(), '#shimmy', 'esc', 'esc');
 addShortcuts('d', toggleDisplay, '', 'd', 'd');
 // Undo/Redo
-addShortcuts('⌘+z, ctrl+z', ()=>undo.frameUndo(), '#frameundo', '⌘-z', '⌃-z');
-addShortcuts('shift+⌘+z, ctrl+y', ()=>undo.frameRedo(), '#frameredo', '⇧+⌘+z', '⌃+y');
+addShortcuts('⌘+z, ctrl+z', ()=>undo.undo(currentFrame()), '#frameundo', '⌘-z', '⌃-z');
+addShortcuts('shift+⌘+z, ctrl+y', ()=>undo.frameRedo(currentFrame()), '#frameredo', '⇧+⌘+z', '⌃+y');
 // Files
 addShortcuts('n', file.new, '#filenew', 'n', 'n');
 addShortcuts('⌘+s, ctrl+s', saveAsSvg, '#filesave', '⌘+s', '⌃+s');

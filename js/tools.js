@@ -86,7 +86,7 @@ class Pen {
     }
     this.drawing = false;
     currentMatrix = null;
-    undo.pushFrameUndo(
+    undo.pushUndo(
       "Draw",
       () => path.remove(),
       () => parent.appendChild(path)
@@ -153,7 +153,7 @@ class Move {
     currentMatrix = null;
     let curr = currentFrame();
     let newTransform = curr.getAttribute("transform");
-    undo.pushFrameUndo(
+    undo.pushUndo(
       "Move",
       () => curr.setAttribute("transform", oldTransform),
       () => curr.setAttribute("transform", newTransform)
@@ -238,7 +238,7 @@ class Rotate {
     currentMatrix = null;
     let curr = currentFrame();
     let newTransform = curr.getAttribute("transform");
-    undo.pushFrameUndo(
+    undo.pushUndo(
       "Rotate",
       () => curr.setAttribute("transform", oldTransform),
       () => curr.setAttribute("transform", newTransform)
@@ -274,7 +274,7 @@ class ZoomIn {
     let newTransform = `${oldTransform} translate(${x} ${y}) scale(${ZOOMIN}) translate(-${x}, -${y})`;
     currentFrame().setAttribute("transform", newTransform);
     currentMatrix = null;
-    undo.pushFrameUndo(
+    undo.pushUndo(
       "Zoom In",
       () => curr.setAttribute("transform", oldTransform),
       () => curr.setAttribute("transform", newTransform)
@@ -315,7 +315,7 @@ class ZoomOut {
     let newTransform = `${oldTransform} translate(${x} ${y}) scale(${ZOOMOUT}) translate(-${x}, -${y})`;
     currentFrame().setAttribute("transform", newTransform);
     currentMatrix = null;
-    undo.pushFrameUndo(
+    undo.pushUndo(
       "Zoom Out",
       () => curr.setAttribute("transform", oldTransform),
       () => curr.setAttribute("transform", newTransform)
@@ -387,7 +387,7 @@ class Eraser {
     let before = this.before;
     let curr = currentFrame();
     let after = curr.innerHTML;
-    undo.pushFrameUndo(
+    undo.pushUndo(
       "Erase",
       () => (curr.innerHTML = before),
       () => (curr.innerHTML = after)
