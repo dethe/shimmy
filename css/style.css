@@ -348,6 +348,17 @@ dialog p {
   margin-bottom: 1rem;
 }
 
+dialog ul{
+  display: flex;
+  flex-wrap: wrap;
+  max-width: 600px;
+  flex-basis: 250px;
+}
+
+dialog li{
+  
+}
+
 dialog .logo {
   height: 4rem;
 }
@@ -355,6 +366,10 @@ dialog .logo {
 dialog form {
   display: flex;
   justify-content: flex-end;
+}
+
+dialog button{
+  padding: 1em;
 }
 
 dialog .close {
