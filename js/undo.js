@@ -52,7 +52,7 @@ const undo = (function UndoRedo(frame) {
     let stack = undoStack.get(frame);
     if (!stack){
       stack = [];
-      redoStack.set(frame, stack);
+      undoStack.set(frame, stack);
     }
     return stack;
   }
@@ -91,31 +91,13 @@ const undo = (function UndoRedo(frame) {
 
   const pushDocUndo = (name, targetFrame, newCurrentFrame, undoFn, redoFn) => {
     // Special handling for particular events
-    switch (name) {
-      case "New Frame":
-        // frames are lazily instantiated, nothing to do here
-        break;
-      case "Copy Frame":
-        // frames are lazily instantiated, nothing to do here
-        break;
-      case "Delete Frame":
+    if (name === "Delete Frame"){
         let oldUndo = undoFn;
         undoFn = function(){
           oldUndo();
           sendEvent(targetFrame);
         }
         mess.showHtml('You deleted a frame <button>undo</button>', undoFn);
-        break;
-      case "Change Frame":
-        // Do Nothing
-        break;
-      default:
-        console.error(
-          "We should not get here => pushDocUndo unknown type: %s",
-          name
-        );
-        return;
-        break;
     }
     sendEvent(newCurrentFrame);
   };
@@ -124,6 +106,7 @@ const undo = (function UndoRedo(frame) {
     // Special handling for particular events
     getUndoStack(frame).push({ name, undoFn, redoFn });
     getRedoStack(frame).length = 0;
+    console.log('pushing to stack: %o', getUndoStack(frame));
     sendEvent(frame);
   };
 

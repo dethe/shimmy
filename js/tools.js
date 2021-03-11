@@ -88,6 +88,7 @@ class Pen {
     currentMatrix = null;
     undo.pushUndo(
       "Draw",
+      currentFrame(),
       () => path.remove(),
       () => parent.appendChild(path)
     );
@@ -155,6 +156,7 @@ class Move {
     let newTransform = curr.getAttribute("transform");
     undo.pushUndo(
       "Move",
+      curr,
       () => curr.setAttribute("transform", oldTransform),
       () => curr.setAttribute("transform", newTransform)
     );
@@ -240,6 +242,7 @@ class Rotate {
     let newTransform = curr.getAttribute("transform");
     undo.pushUndo(
       "Rotate",
+      curr,
       () => curr.setAttribute("transform", oldTransform),
       () => curr.setAttribute("transform", newTransform)
     );
@@ -276,6 +279,7 @@ class ZoomIn {
     currentMatrix = null;
     undo.pushUndo(
       "Zoom In",
+      curr,
       () => curr.setAttribute("transform", oldTransform),
       () => curr.setAttribute("transform", newTransform)
     );
@@ -317,6 +321,7 @@ class ZoomOut {
     currentMatrix = null;
     undo.pushUndo(
       "Zoom Out",
+      curr,
       () => curr.setAttribute("transform", oldTransform),
       () => curr.setAttribute("transform", newTransform)
     );
@@ -389,6 +394,7 @@ class Eraser {
     let after = curr.innerHTML;
     undo.pushUndo(
       "Erase",
+      curr,
       () => (curr.innerHTML = before),
       () => (curr.innerHTML = after)
     );
