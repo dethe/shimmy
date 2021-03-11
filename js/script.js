@@ -38,9 +38,15 @@ let currentDoOnionskin = true;
 let name = null;
 
 let aboutShimmyDialog = document.querySelector("#aboutShimmy");
+let shortcutsDialog = document.querySelector("#shortcuts");
 
 function showAbout() {
   aboutShimmyDialog.showModal();
+}
+
+function showShortcuts() {
+  aboutShimmyDialog.close();
+  shortcutsDialog.showModal();
 }
 
 function getSvgPoint(x, y) {
@@ -77,9 +83,9 @@ function getState() {
   return state;
 }
 
-function setName(str){
+function setName(str) {
   name = str;
-  document.title = 'Shimmy: ' + str;
+  document.title = "Shimmy: " + str;
 }
 
 function setState(state) {
@@ -215,7 +221,7 @@ currentTool = tools.pen;
 
 function selectTool(sel) {
   let name = sel.value;
-  let ui = document.querySelector('#toolpicker');
+  let ui = document.querySelector("#toolpicker");
   switch (name) {
     case "pen":
       currentTool = tools.pen;
@@ -656,11 +662,11 @@ function updateUndo(evt) {
       undoButtons[key].disabled = true;
     }
   });
-  const frameCount = document.querySelectorAll('.frame').length;
-  if (frameCount > 1){
-    document.querySelector('#framedelete').removeAttribute('disabled');
-  }else{
-    document.querySelector('#framedelete').setAttribute('disabled', 'disabled');
+  const frameCount = document.querySelectorAll(".frame").length;
+  if (frameCount > 1) {
+    document.querySelector("#framedelete").removeAttribute("disabled");
+  } else {
+    document.querySelector("#framedelete").setAttribute("disabled", "disabled");
   }
 }
 document.addEventListener("shimmy-undo-change", updateUndo, false);
@@ -676,35 +682,39 @@ if (!localStorage.hasSeenAbout) {
 
 // keyboard shortcuts
 
-var isMac = navigator.platform.toUpperCase().indexOf('MAC')>=0;
+var isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
 
-function addShortcuts(shortcuts, fn, uxid, macHint, pcHint){
-  key(shortcuts, (evt, handler)=>{fn(evt, handler); return false;});
-  if (!uxid){
+function addShortcuts(shortcuts, fn, uxid, macHint, pcHint) {
+  key(shortcuts, (evt, handler) => {
+    fn(evt, handler);
+    return false;
+  });
+  if (!uxid) {
     return;
   }
   let elems = document.querySelectorAll(uxid);
-  elems.forEach(elem => elem.title = elem.title + ' (' + (isMac ? macHint : pcHint) + ')'); 
+  elems.forEach(
+    elem => (elem.title = elem.title + " (" + (isMac ? macHint : pcHint) + ")")
+  );
 }
 
-function changePenOrEraserSize(evt, handler){
+function changePenOrEraserSize(evt, handler) {
   let ui = null;
-  if (currentTool === tools.pen){
-    ui = document.querySelector('#pensize');
-  }else if (currentTool === tools.eraser){
-    ui = document.querySelector('#erasersize');
-  }else{
+  if (currentTool === tools.pen) {
+    ui = document.querySelector("#pensize");
+  } else if (currentTool === tools.eraser) {
+    ui = document.querySelector("#erasersize");
+  } else {
     return;
   }
-  if (handler.shortcut.endsWith('-')){
+  if (handler.shortcut.endsWith("-")) {
     ui.stepDown();
-  }else{
+  } else {
     ui.stepUp();
   }
   ui.oninput(); // this is messed up, but whatever works, if I replace how Steppers work this will have to change
   // ui.dispatchEvent(new Event('change', {bubbles: true})); // notify listeners that the value has changed
 }
-
 
 // Key shortcuts: Command: ⌘
 //                Control: ⌃
@@ -713,45 +723,171 @@ function changePenOrEraserSize(evt, handler){
 //                Delete:  ⌦
 //                Arrows: ← →
 
-addShortcuts('esc', ()=>document.querySelector('#shimmy').click(), '#shimmy', 'esc', 'esc');
-addShortcuts('d', toggleDisplay, '', 'd', 'd');
+addShortcuts(
+  "esc",
+  () => document.querySelector("#shimmy").click(),
+  "#shimmy",
+  "esc",
+  "esc"
+);
+addShortcuts("d", toggleDisplay, "", "d", "d");
 // Undo/Redo
-addShortcuts('⌘+z, ctrl+z', ()=>undo.undo(currentFrame()), '#frameundo', '⌘-z', '⌃-z');
-addShortcuts('shift+⌘+z, ctrl+y', ()=>undo.redo(currentFrame()), '#frameredo', '⇧+⌘+z', '⌃+y');
+addShortcuts(
+  "⌘+z, ctrl+z",
+  () => undo.undo(currentFrame()),
+  "#frameundo",
+  "⌘-z",
+  "⌃-z"
+);
+addShortcuts(
+  "shift+⌘+z, ctrl+y",
+  () => undo.redo(currentFrame()),
+  "#frameredo",
+  "⇧+⌘+z",
+  "⌃+y"
+);
 // Files
-addShortcuts('n', file.new, '#filenew', 'n', 'n');
-addShortcuts('⌘+s, ctrl+s', saveAsSvg, '#filesave', '⌘+s', '⌃+s');
-addShortcuts('⌘+o, ctrl+o', openSvg, '#fileopen', '⌘+o', '⌃+o');
-addShortcuts('g', saveAsGif, '#filegif', 'g', 'g');
-addShortcuts('p', saveAsSpritesheet, '#filepng', 'p', 'p');
+addShortcuts("n", file.new, "#filenew", "n", "n");
+addShortcuts("⌘+s, ctrl+s", saveAsSvg, "#filesave", "⌘+s", "⌃+s");
+addShortcuts("⌘+o, ctrl+o", openSvg, "#fileopen", "⌘+o", "⌃+o");
+addShortcuts("g", saveAsGif, "#filegif", "g", "g");
+addShortcuts("p", saveAsSpritesheet, "#filepng", "p", "p");
 // Tools
-addShortcuts('shift+1', ()=>selectTool({value:"pen"}), '#toolpen', '⇧+1', '⇧+1'); 
-addShortcuts('shift+2', ()=>selectTool({value:"rotate"}), '#toolrotate', '⇧+2', '⇧+2');
-addShortcuts('shift+3', ()=>selectTool({value:"move"}), '#toolmove', '⇧+3', '⇧+3');
-addShortcuts('shift+4', ()=>selectTool({value:"zoomin"}), '#toolzoomin', '⇧+4', '⇧+4');
-addShortcuts('shift+5', ()=>selectTool({value:"zoomout"}), '#toolzoomput', '⇧+5', '⇧+5');
-addShortcuts('shift+6', ()=>selectTool({value:"eraser"}), '#tooleraser', '⇧+6', '⇧+6');
-addShortcuts('shift+=, =, -', changePenOrEraserSize, '#pensize,#erasersize', '+/-', '+/-');
+addShortcuts(
+  "shift+1",
+  () => selectTool({ value: "pen" }),
+  "#toolpen",
+  "⇧+1",
+  "⇧+1"
+);
+addShortcuts(
+  "shift+2",
+  () => selectTool({ value: "rotate" }),
+  "#toolrotate",
+  "⇧+2",
+  "⇧+2"
+);
+addShortcuts(
+  "shift+3",
+  () => selectTool({ value: "move" }),
+  "#toolmove",
+  "⇧+3",
+  "⇧+3"
+);
+addShortcuts(
+  "shift+4",
+  () => selectTool({ value: "zoomin" }),
+  "#toolzoomin",
+  "⇧+4",
+  "⇧+4"
+);
+addShortcuts(
+  "shift+5",
+  () => selectTool({ value: "zoomout" }),
+  "#toolzoomput",
+  "⇧+5",
+  "⇧+5"
+);
+addShortcuts(
+  "shift+6",
+  () => selectTool({ value: "eraser" }),
+  "#tooleraser",
+  "⇧+6",
+  "⇧+6"
+);
+addShortcuts(
+  "shift+=, =, -",
+  changePenOrEraserSize,
+  "#pensize,#erasersize",
+  "+/-",
+  "+/-"
+);
 // TODO: Add zoomin in/out without switching tools
 // colors
-addShortcuts('1', ()=>document.querySelector('#color1').click(), '#color1', '1', '1');
-addShortcuts('2', ()=>document.querySelector('#color2').click(), '#color2', '2', '2');
-addShortcuts('3', ()=>document.querySelector('#color3').click(), '#color3', '3', '3');
-addShortcuts('4', ()=>document.querySelector('#color4').click(), '#color4', '4', '4');
-addShortcuts('5', ()=>document.querySelector('#color5').click(), '#color5', '5', '5');
-addShortcuts('6', ()=>document.querySelector('#color6').click(), '#color6', '6', '6');
-addShortcuts('7', ()=>document.querySelector('#color7').click(), '#color7', '7', '7');
-addShortcuts('8', ()=>document.querySelector('#color8').click(), '#color8', '8', '8');
+addShortcuts(
+  "1",
+  () => document.querySelector("#color1").click(),
+  "#color1",
+  "1",
+  "1"
+);
+addShortcuts(
+  "2",
+  () => document.querySelector("#color2").click(),
+  "#color2",
+  "2",
+  "2"
+);
+addShortcuts(
+  "3",
+  () => document.querySelector("#color3").click(),
+  "#color3",
+  "3",
+  "3"
+);
+addShortcuts(
+  "4",
+  () => document.querySelector("#color4").click(),
+  "#color4",
+  "4",
+  "4"
+);
+addShortcuts(
+  "5",
+  () => document.querySelector("#color5").click(),
+  "#color5",
+  "5",
+  "5"
+);
+addShortcuts(
+  "6",
+  () => document.querySelector("#color6").click(),
+  "#color6",
+  "6",
+  "6"
+);
+addShortcuts(
+  "7",
+  () => document.querySelector("#color7").click(),
+  "#color7",
+  "7",
+  "7"
+);
+addShortcuts(
+  "8",
+  () => document.querySelector("#color8").click(),
+  "#color8",
+  "8",
+  "8"
+);
 // Frames
-addShortcuts('shift+n', ()=>addFrame(), '#framenew', '⇧+n', '⇧+n');
-addShortcuts('shift+backspace, shift+delete', ()=>deleteFrame(), '#framedelete', '⇧+⌫', '⇧+⌦');
-addShortcuts('shift+c', ()=>cloneFrame(), '#framecopy', '⇧+c', '⇧+c');
-addShortcuts('shift+x', ()=>_clear(), '#frameclear', '⇧+x', '⇧+x');
-addShortcuts('shift+left', gotoFirstFrame, '#framefirst', '⇧+←', '⇧+←');
-addShortcuts('left', decrementFrame, '#frameprev', '←', '←');
-addShortcuts('right', incrementFrame, '#framenext', '→', '→');
-addShortcuts('shift+right', gotoLastFrame, '#framelast', gotoLastFrame, '⇧+→', '⇧+→');
-addShortcuts('k', ()=>document.querySelector('#doonionskin').click(), '#doonionskin', 'k', 'k');
+addShortcuts("shift+n", () => addFrame(), "#framenew", "⇧+n", "⇧+n");
+addShortcuts(
+  "shift+backspace, shift+delete",
+  () => deleteFrame(),
+  "#framedelete",
+  "⇧+⌫",
+  "⇧+⌦"
+);
+addShortcuts("shift+c", () => cloneFrame(), "#framecopy", "⇧+c", "⇧+c");
+addShortcuts("shift+x", () => _clear(), "#frameclear", "⇧+x", "⇧+x");
+addShortcuts("shift+left", gotoFirstFrame, "#framefirst", "⇧+←", "⇧+←");
+addShortcuts("left", decrementFrame, "#frameprev", "←", "←");
+addShortcuts("right", incrementFrame, "#framenext", "→", "→");
+addShortcuts(
+  "shift+right",
+  gotoLastFrame,
+  "#framelast",
+  gotoLastFrame,
+  "⇧+→",
+  "⇧+→"
+);
+addShortcuts(
+  "k",
+  () => document.querySelector("#doonionskin").click(),
+  "#doonionskin",
+  "k",
+  "k"
+);
 // Animate
-addShortcuts('r', play, 'animateplay', 'r', 'r');
-
+addShortcuts("r", play, "animateplay", "r", "r");
