@@ -103,10 +103,8 @@ const undo = (function UndoRedo(frame) {
   };
 
   const pushUndo = (name, frame, undoFn, redoFn) => {
-    // Special handling for particular events
     getUndoStack(frame).push({ name, undoFn, redoFn });
     getRedoStack(frame).length = 0;
-    console.log('pushing to stack: %o', getUndoStack(frame));
     sendEvent(frame);
   };
 
