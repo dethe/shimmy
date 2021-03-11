@@ -28,6 +28,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
     <link href="css/solid.css?rel2" rel="stylesheet" />
     <link href="css/style.css?rel2" rel="stylesheet" />
     <link href="css/select-css.css?rel2" rel="stylesheet" />
+    <link href="lib/dialog-polyfill.js?rel2" rel="stylesheet" />
   </head>
   <body>
     <header>
@@ -361,6 +362,9 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         >.
       </p>
       <form method="dialog">
+        <button onclick="showShortcuts()">
+          Keyboard Shortcuts
+        </button>
         <input type="submit" class="close" value="Close" />
       </form>
     </dialog>
