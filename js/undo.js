@@ -39,38 +39,52 @@
 /* globals Mess */
 
 function UndoRedo(frame) {
-  const documentUndoStack = [];
-  const documentRedoStack = [];
-  const frameUndoStack = new Map();
-  const frameRedoStack = new Map();
+  const undoStack = new Map();
+  const redoStack = new Map();
   const mess = new Mess(); // toast-style popups for document-level undo messages
   mess.init();
   let curr = frame;
   [...curr.parentElement.children].forEach(frame => {
-    frameUndoStack.set(frame, []);
-    frameRedoStack.set(frame, []);
+    undoStack.set(frame, []);
+    redoStack.set(frame, []);
   });
 
   const getUndoStack = frame => {
-    let stack = documentUndoStack.get(frame);
+    let stack = undoStack.get(frame);
     if (!stack){
       stack = [];
-      documentUndoStack.set(frame, stack);
+      redoStack.set(frame, stack);
     }
     return stack;
   }
 
-  // look at the top item of a stack
-  const peek = stack => (stack.length ? stack[stack.length - 1].name : null);
+  const getRedoStack = frame => {
+    let stack = redoStack.get(frame);
+    if (!stack){
+      stack = [];
+      redoStack.set(frame, stack);
+    }
+    return stack;
+  }
 
-  // for map copying a stack
-  const copy = item => (item.cloneNode ? item.cloneNode(true) : item);
+  // top // look at the top item of a stack
+  const top = stack => (stack.length ? stack[stack.length - 1].name : null);
+
+  const topUndo = frame => {
+    let stack = getUndoStack(frame);
+    return stack ? top(stack): null
+  }
+  
+  const topRedo = frame => {
+    let stack = getRedoStack(frame);
+    return stack ? top(stack): null
+  }
 
   const sendEvent = () => {
     let evt = new CustomEvent("shimmy-undo-change", {
       detail: {
-        frameUndo: peek(frameUndoStack.get(curr)),
-        frameRedo: peek(frameRedoStack.get(curr))
+        frameUndo: topUndo(curr),
+        frameRedo: topRedo(curr)
       }
     });
     document.dispatchEvent(evt);
@@ -82,25 +96,12 @@ function UndoRedo(frame) {
     // Special handling for particular events
     switch (name) {
       case "New Frame":
-        // add a frame to the frameUndoStack and frameRedoStack
-        // frameTarget and curr should be the same
-        frameUndoStack.set(newCurrentFrame, []);
-        frameRedoStack.set(newCurrentFrame, []);
+        // frames are lazily instantiated, nothing to do here
         break;
       case "Copy Frame":
-        // add a frame to the frameUndoStack and frameRedoStack
-        // copy undo stack and redo stack from old frame to new frame
-        // frameTarget should be the frame being copied, frame
-        frameUndoStack.set(newCurrentFrame, []);
-        frameRedoStack.set(newCurrentFrame, []);
+        // frames are lazily instantiated, nothing to do here
         break;
       case "Delete Frame":
-        // Target frame has been removed. Save undo and redo stacks in case it is restored.
-        // Not deleting the stacks will  leak some memory, but we're saving them anyway for undo, at least this might be more reliable?
-        // let undoStack = frameUndoStack.get(targetFrame);
-        // let redoStack = frameRedoStack.get(targetFrame);
-        // frameUndoStack.delete(targetFrame);
-        // frameRedoStack.delete(targetFrame);
         let oldUndo = undoFn;
         undoFn = function(){
           oldUndo();
@@ -119,34 +120,12 @@ function UndoRedo(frame) {
         return;
         break;
     }
-    documentUndoStack.push({
-      name,
-      targetFrame,
-      curr: newCurrentFrame,
-      undoFn,
-      redoFn
-    });
-    documentRedoStack.length = 0;
     sendEvent();
   };
 
   const pushFrameUndo = (name, undoFn, redoFn) => {
     // Special handling for particular events
-    switch (name) {
-      case "Draw":
-        break;
-      case "Move":
-        break;
-      case "Rotate":
-        break;
-      case "Zoom":
-        break;
-      case "Clear":
-        break;
-      case "Erase":
-        break;
-    }
-    frameUndoStack.get(curr).push({ name, undoFn, redoFn });
+    get(curr).push({ name, undoFn, redoFn });
     frameRedoStack.get(curr).length = 0;
     sendEvent();
   };
