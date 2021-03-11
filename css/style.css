@@ -352,11 +352,12 @@ dialog ul{
   display: flex;
   flex-wrap: wrap;
   max-width: 600px;
-  flex-basis: 250px;
+  justify-content: space-between;
 }
 
 dialog li{
-  
+  list-style-type: none;
+  flex: 1 1 250px;
 }
 
 dialog .logo {
