@@ -21,7 +21,7 @@
 // type: frame or document
 //
 // pushDocUndo(name, frameTarget, currentFrame, undoFn, redoFn);
-// pushFrameUndo(name, undoFn, redoFn);
+// pushUndo(name, undoFn, redoFn);
 // undo(type); pops the relevant undo stack
 // redo(type); pops the relevant redo stack
 // switchFrame(newFrame); // because most undo is frame-based
@@ -38,16 +38,16 @@
 
 /* globals Mess */
 
-function UndoRedo(frame) {
+const undo = (function UndoRedo(frame) {
   const undoStack = new Map();
   const redoStack = new Map();
   const mess = new Mess(); // toast-style popups for document-level undo messages
   mess.init();
-  let curr = frame;
-  [...curr.parentElement.children].forEach(frame => {
-    undoStack.set(frame, []);
-    redoStack.set(frame, []);
-  });
+  
+  const clear = () => {
+    undoStack = new Map();
+    redoStack = new Map();
+  }
 
   const getUndoStack = frame => {
     let stack = undoStack.get(frame);
@@ -80,7 +80,7 @@ function UndoRedo(frame) {
     return stack ? top(stack): null
   }
 
-  const sendEvent = () => {
+  const sendEvent = (frame) => {
     let evt = new CustomEvent("shimmy-undo-change", {
       detail: {
         frameUndo: topUndo(curr),
@@ -92,7 +92,6 @@ function UndoRedo(frame) {
 
   const pushDocUndo = (name, targetFrame, newCurrentFrame, undoFn, redoFn) => {
     // NOTE: 'document' type actions can change the curr (current frame)
-    curr = newCurrentFrame;
     // Special handling for particular events
     switch (name) {
       case "New Frame":
@@ -105,7 +104,7 @@ function UndoRedo(frame) {
         let oldUndo = undoFn;
         undoFn = function(){
           oldUndo();
-          curr = targetFrame;
+          sendEvent(targetFrame);
         }
         mess.showHtml('You deleted a frame <button>undo</button>', undoFn);
         break;
@@ -120,43 +119,39 @@ function UndoRedo(frame) {
         return;
         break;
     }
-    sendEvent();
+    sendEvent(newCurrentFrame);
   };
 
-  const pushUndo = (name, undoFn, redoFn) => {
+  const pushUndo = (name, frame, undoFn, redoFn) => {
     // Special handling for particular events
-    getUndoStack(curr).push({ name, undoFn, redoFn });
-    getRedoStack(curr).length = 0;
-    sendEvent();
+    getUndoStack(frame).push({ name, undoFn, redoFn });
+    getRedoStack(frame).length = 0;
+    sendEvent(frame);
   };
 
-  const undo = () => {
-    let action = getUndoStack(curr).pop();
+  const undo = frame => {
+    let action = getUndoStack(frame).pop();
     action.undoFn();
-    getRedoStack(curr).push(action);
-    sendEvent();
+    getRedoStack(frame).push(action);
+    sendEvent(frame);
   };
 
-  const redo = () => {
-    let action = getRedoStack(curr).pop();
+  const redo = frame => {
+    let action = getRedoStack(frame).pop();
     action.redoFn();
-    getUndoStack(curr).push(action);
-    sendEvent();
-  };
-
-  const switchFrame = frame => {
-    curr = frame;
-    sendEvent();
+    getUndoStack(frame).push(action);
+    sendEvent(frame);
   };
 
   // clear buttons on when new doc is created
-  sendEvent();
+  sendEvent(null);
 
   return {
     undo,
     redo,
     pushUndo,
     pushDocUndo,
-    switchFrame
+    switchFrame,
+    clear
   };
-}
+})();
