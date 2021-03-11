@@ -131,14 +131,12 @@ function upgrade(input) {
 
   window["increment" + id] = function() {
     let input = document.querySelector("#" + id);
-    let value = parseInt(input.value) + 1;
-    input.value = value;
+    input.stepUp();
     window["onchange" + id](input);
   };
   window["decrement" + id] = function() {
     let input = document.querySelector("#" + id);
-    let value = parseInt(input.value) - 1;
-    input.value = value;
+    input.stepDown();
     window["onchange" + id](input);
   };
   window["onchange" + id] = function(input) {

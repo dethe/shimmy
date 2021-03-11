@@ -703,7 +703,7 @@ function changePenOrEraserSize(evt, handler){
   }else{
     ui.stepUp();
   }
-  ui.onchange(); // this is messed up, but whatever works
+  ui.oninput(); // this is messed up, but whatever works, if I replace how Steppers work this will have to change
   // ui.dispatchEvent(new Event('change', {bubbles: true})); // notify listeners that the value has changed
 }
 
