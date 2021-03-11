@@ -437,7 +437,7 @@ function saveAsGif(evt) {
   let images = animationToImages();
   images.forEach(img => gif.addFrame(img, { delay: currentFrameDelay }));
   gif.on("finished", function(blob) {
-    console.log("gif completed");
+    console.info("gif completed");
     file.saveBlob(blob, `${title}.gif`);
     window.open(URL.createObjectURL(blob));
   });
@@ -698,9 +698,8 @@ function changePenOrEraserSize(evt, handler){
   }else{
     return;
   }
-  console.log(handler.shortcut);
   if (handler.shortcut.endsWith('-')){
-    ui.value = Number(ui.value) - 1;
+    ui.stepDown();
   }else{
     ui.value = Number(ui.value) + 1;
   }
@@ -744,10 +743,10 @@ addShortcuts('6', ()=>document.querySelector('#color6').click(), '#color6', '6',
 addShortcuts('7', ()=>document.querySelector('#color7').click(), '#color7', '7', '7');
 addShortcuts('8', ()=>document.querySelector('#color8').click(), '#color8', '8', '8');
 // Frames
-addShortcuts('shift+n', addFrame, '#framenew', '⇧+n', '⇧+n');
-addShortcuts('shift+backspace, shift+delete', deleteFrame, '#framedelete', '⇧+⌫', '⇧+⌦');
-addShortcuts('shift+c', cloneFrame, '#framecopy', '⇧+c', '⇧+c');
-addShortcuts('shift+x', _clear, '#frameclear', '⇧+x', '⇧+x');
+addShortcuts('shift+n', ()=>addFrame(), '#framenew', '⇧+n', '⇧+n');
+addShortcuts('shift+backspace, shift+delete', ()=>deleteFrame(), '#framedelete', '⇧+⌫', '⇧+⌦');
+addShortcuts('shift+c', ()=>cloneFrame(), '#framecopy', '⇧+c', '⇧+c');
+addShortcuts('shift+x', ()=>_clear(), '#frameclear', '⇧+x', '⇧+x');
 addShortcuts('shift+left', gotoFirstFrame, '#framefirst', '⇧+←', '⇧+←');
 addShortcuts('left', decrementFrame, '#frameprev', '←', '←');
 addShortcuts('right', incrementFrame, '#framenext', '→', '→');
