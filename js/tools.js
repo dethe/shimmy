@@ -352,7 +352,7 @@ class Eraser {
 
   start(evt) {
     saveMatrix();
-    this.before = currentFrame.innerHtml;
+    this.before = currentFrame().innerHTML;
     let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
       console.error("Houston, we have a problem");

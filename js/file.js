@@ -82,8 +82,10 @@
   }
   
   function resize(){
-    canvas.setAttribute("width", document.body.clientWidth + "px");
-    canvas.setAttribute("height", document.body.clientHeight + "px");    
+    window.WIDTH = document.body.clientWidth;
+    window.HEIGHT = document.body.clientHeight;
+    canvas.setAttribute("width", window.WIDTH + "px");
+    canvas.setAttribute("height", window.HEIGHT + "px");    
   }
   
   window.onresize = resize;
