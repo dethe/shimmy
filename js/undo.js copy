@@ -51,15 +51,6 @@ function UndoRedo(frame) {
     frameRedoStack.set(frame, []);
   });
 
-  const getUndoStack = frame => {
-    let stack = documentUndoStack.get(frame);
-    if (!stack){
-      stack = [];
-      documentUndoStack.set(frame, stack);
-    }
-    return stack;
-  }
-
   // look at the top item of a stack
   const peek = stack => (stack.length ? stack[stack.length - 1].name : null);
 
@@ -70,7 +61,9 @@ function UndoRedo(frame) {
     let evt = new CustomEvent("shimmy-undo-change", {
       detail: {
         frameUndo: peek(frameUndoStack.get(curr)),
-        frameRedo: peek(frameRedoStack.get(curr))
+        frameRedo: peek(frameRedoStack.get(curr)),
+        docUndo: peek(documentUndoStack),
+        docRedo: peek(documentRedoStack)
       }
     });
     document.dispatchEvent(evt);
