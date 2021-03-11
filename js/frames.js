@@ -17,7 +17,7 @@ function currentOnionskinFrame() {
 
 function updateOnionskin() {
   if (!isOnionskinOn()) return;
-  dom.removeClass(currentOnionskinFrame(), "onionskin");
+  document.querySelectorAll('.frame.onionskin').forEach(frame => frame.classList.remove('onionskin'));
   dom.addClass(dom.previous(currentFrame(), ".frame"), "onionskin");
 }
 
