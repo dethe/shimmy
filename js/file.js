@@ -31,8 +31,9 @@
   var defaultCanvas = `<svg id="canvas" width="2560px" height="1116px" data-name="untitled" data-tool="pen" data-stroke-width="2" data-do-onionskin="true" data-fps="10" data-palette="0" data-color="#000000" data-bgcolor="#FFFFFF" data-color1="#FF0000" data-color2="#FFFF00" data-color3="#00FF00" data-color4="#00FFFF" data-color5="#0000FF" data-color6="#666666" data-color7="#000000" data-color8="#FFFFFF" data-tab_file="false" data-tab_draw="true" data-tab_frames="true" data-tab_animate="false"><g class="frame selected"></g></svg>`;
 
   // polyfill for dialog
-  const dialog = document.querySelector("dialog");
-  dialogPolyfill.registerDialog(dialog);
+  const dialog = document
+    .querySelectorAll("dialog")
+    .forEach(dialog => dialogPolyfill.registerDialog(dialog));
 
   function saveLocal() {
     localStorage._currentWork = saveFormat();
@@ -80,14 +81,14 @@
     listenCanvas();
     restoreSavedState();
   }
-  
-  function resize(){
+
+  function resize() {
     window.WIDTH = document.body.clientWidth;
     window.HEIGHT = document.body.clientHeight;
     canvas.setAttribute("width", window.WIDTH + "px");
-    canvas.setAttribute("height", window.HEIGHT + "px");    
+    canvas.setAttribute("height", window.HEIGHT + "px");
   }
-  
+
   window.onresize = resize;
 
   function restore() {
@@ -242,8 +243,10 @@
   }
 
   function loadFile() {
-    let forSure = confirm('This will overwrite your current document, be sure to save first. Delete and open another document?');
-    if (!forSure){
+    let forSure = confirm(
+      "This will overwrite your current document, be sure to save first. Delete and open another document?"
+    );
+    if (!forSure) {
       return;
     }
 
@@ -313,8 +316,10 @@
   }
 
   function newFile() {
-    let forSure = confirm('This will delete your current document, be sure to save first. Delete and start a new document?');
-    if (forSure){
+    let forSure = confirm(
+      "This will delete your current document, be sure to save first. Delete and start a new document?"
+    );
+    if (forSure) {
       clear();
       onChange();
     }
