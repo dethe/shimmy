@@ -1,4 +1,4 @@
-# Sketchdance Shimmy
+# Sketchdance Shimmy (formerly Drawingboard)
 
 Shimmy is intended as a super-simple line drawing animation program for quick sketch animations. 
 
