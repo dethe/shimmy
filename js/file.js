@@ -63,8 +63,7 @@
     }
   }
 
-  window.canvas = null;
-
+  // FIXME: Move restoreFormat to script.js, file.js should not have so much info on the app internals (and this is breaking on load when it hits updateFrameCount, which hasn't been defined yet)
   function restoreFormat(savetext) {
     window.canvas = document.querySelector("#canvas");
     if (!canvas) {
@@ -80,6 +79,14 @@
     resize();
     listenCanvas();
     restoreSavedState();
+  }
+
+  function updateUI(text){
+    if (app && app.updateUI()){
+      app.updateUI();
+    }else{
+      setTimeout(25, () => updateUI(text));
+    }
   }
 
   function resize() {
