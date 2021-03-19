@@ -680,7 +680,21 @@ if (!localStorage.hasSeenAbout) {
 
 // If we don't explicitly request moat integration, hide it
 
+// Show/Hide Timeline
+
+function toggleVisible(element){
+  element.hasAttribute('hidden') ? element.removeAttribute('hidden') : element.setAttribute('hidden', 'hidden');
+}
+
+function toggleTimeline(){
+  document.querySelectorAll('.timeline > div').forEach(toggleVisible);
+}
+
+//////////////////////////////////////////////////////////
+//
 // keyboard shortcuts
+//
+//////////////////////////////////////////////////////////
 
 var isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
 
