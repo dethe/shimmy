@@ -378,3 +378,57 @@ dialog .close {
   font-weight: bold;
   padding: 1rem;
 }
+
+.timeline{
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  border: 2px solid black;
+}
+
+.timeline label{
+  position: absolute;
+  left: 3em;
+  bottom: 100%;
+  border: 1px solid #000;
+  border-bottom: 0;
+  border-top-left-radius: 15px;
+  border-top-right-radius: 15px;
+  padding: .25em .5em;
+  background: #333;
+  color: #FFF;
+}
+
+.timeline-clock{
+  position: relative;
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  height: 16px;
+}
+
+.timeline-clock::before{
+  content: " ";
+  display: block;
+  height: 50%;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  background-image: repeating-linear-gradient(90deg, transparent, transparent 3px, #333 3px, transparent 4px);
+}
+
+.timeline-clock::after{
+  content: " ";
+  display: block;
+  height: 75%;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  position: absolute;
+  background-image: repeating-linear-gradient(90deg, transparent, transparent 30px, #000 30px, transparent 31px);
+}
+
+.timeline-frames{
+  height: 64px;
+}
