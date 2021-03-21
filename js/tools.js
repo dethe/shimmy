@@ -16,7 +16,7 @@ class Pen {
 
   select() {
     document.querySelector("svg").style.cursor =
-      "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fpen.svg?v=1610663218987) 1 31, auto";
+      "url(img/pen.svg) 1 31, auto";
   }
 
   startPath(x, y) {
@@ -111,7 +111,7 @@ class Move {
 
   select() {
     document.querySelector("svg").style.cursor =
-      "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Farrows.svg?v=1610663226271) 16 16, auto";
+      "url(img/arrows.svg) 16 16, auto";
   }
 
   start(evt) {
@@ -185,7 +185,7 @@ class Rotate {
 
   select() {
     document.querySelector("svg").style.cursor =
-      "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fsync-alt.svg?v=1610654587602) 16 16, auto";
+      "url(img/sync-alt.svg) 16 16, auto";
   }
 
   start(evt) {
@@ -263,7 +263,7 @@ class ZoomIn {
 
   select() {
     document.querySelector("svg").style.cursor =
-      "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fexpand-arrows-alt.svg?v=1610654585198) 16 16,auto";
+      "url(img/expand-arrows-alt.svg) 16 16,auto";
   }
 
   start(evt) {
@@ -305,7 +305,7 @@ class ZoomOut {
 
   select() {
     document.querySelector("svg").style.cursor =
-      "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Fcompress-arrows-alt.svg?v=1610654584652) 16 16, auto";
+      "url(img/compress-arrows-alt.svg) 16 16, auto";
   }
 
   start(evt) {
@@ -347,7 +347,7 @@ class Eraser {
 
   select() {
     document.querySelector("svg").style.cursor =
-      "url(https://cdn.glitch.com/04316111-367c-42fe-a896-74a8aa728ec3%2Feraser.svg?v=1610663229150) 16 28, auto";
+      "url(img/eraser.svg) 16 28, auto";
   }
 
   start(evt) {
