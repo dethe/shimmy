@@ -1,4 +1,4 @@
-// Copyright (C) 2020 Richmond Public Library
+// Copyright (C) 2020 Dethe Elza
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
@@ -14,12 +14,14 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 /* globals dom file KellyColorPicker undo
-           palettes toDataURL canvas GIF
+            toDataURL canvas GIF
            getAnimationBBox play
            Pen Move Rotate ZoomIn ZoomOut Eraser 
            addFrame deleteFrame cloneFrame _clear
            gotoFirstFrame gotoLastFrame incrementFrame decrementFrame
            key */
+import {palettes} from "./palettes.js";
+import * as file from "./file.js";
 
 const mouse = {};
 
@@ -40,6 +42,12 @@ let name = null;
 let aboutShimmyDialog = document.querySelector("#aboutShimmy");
 let shortcutsDialog = document.querySelector("#shortcuts");
 
+let canvas = document.querySelector("#canvas");
+if (!canvas) {
+  canvas = dom.svg("svg");
+  document.body.prepend(canvas);
+}
+
 function showAbout() {
   aboutShimmyDialog.showModal();
 }
@@ -55,6 +63,20 @@ function getSvgPoint(x, y) {
   point.y = y;
   return point;
 }
+
+  // used by file.js
+  function restoreFormat(savetext) {
+    if (!savetext) {
+      savetext = defaultCanvas;
+    }
+    canvas.outerHTML = savetext;
+    canvas = document.querySelector("#canvas");
+    updateFrameCount();
+    resize();
+    restoreSavedState();
+    listenCanvas();
+  }
+
 
 function getState() {
   let tabs = document.querySelectorAll(".js-tab");
