@@ -2,14 +2,16 @@
 /* global dom
    canvas currentFrame currentFrameDelay */
 
+import {svg, removeClass, insertAfter, next, $, $$} from "./dom.js";
+
 let _lastFrameTime = 0;
 
 function playingFrame() {
-  return document.querySelector(".frame.play-frame");
+  return $(".frame.play-frame");
 }
 
 function getAnimationBBox(show) {
-  let frames = Array.from(document.querySelectorAll(".frame"));
+  let frames = $$(".frame");
   let boxes = frames.map(frame => {
     if (frame.classList.contains("selected")) {
       return frame.getBoundingClientRect();
@@ -35,8 +37,8 @@ function getAnimationBBox(show) {
   box.width = box.right - box.x;
   box.height = box.bottom - box.y;
   if (show) {
-    dom.insertAfter(
-      dom.svg("rect", {
+    insertAfter(
+      svg("rect", {
         x: box.x,
         y: box.y,
         width: box.width,
@@ -56,12 +58,12 @@ function play() {
   // temporarily turn off onionskin (remember state)
   // start at beginning of document (remember state)
   let { x, y, width, height } = getAnimationBBox();
-  let onion = document.querySelector(".onionskin");
+  let onion = $(".onionskin");
   if (onion) {
     onion.classList.replace("onionskin", "nskin");
   }
   document.body.classList.add("playing");
-  document.querySelector(".frame").classList.add("play-frame");
+  $(".frame").classList.add("play-frame");
   canvas.setAttribute("width", width + "px");
   canvas.setAttribute("height", height + "px");
   canvas.style.left = (document.body.clientWidth - width) / 2 + "px";
@@ -82,9 +84,9 @@ function stop() {
   // return to the frame we were on
   // re-enable onionskin if needed
   // turn stop button into play button
-  dom.removeClass(playingFrame(), "play-frame");
+  removeClass(playingFrame(), "play-frame");
   document.body.classList.remove("playing");
-  let onion = document.querySelector(".nskin");
+  let onion = $(".nskin");
   if (onion) {
     onion.classList.replace("nskin", "onionskin");
   }
@@ -102,7 +104,7 @@ function playNextFrame() {
   }
   let currFrame = playingFrame();
   _lastFrameTime = time;
-  let next = dom.next(currFrame, ".frame");
+  let next = next(currFrame, ".frame");
   if (next) {
     currFrame.classList.remove("play-frame");
     next.classList.add("play-frame");
@@ -111,3 +113,5 @@ function playNextFrame() {
     setTimeout(stop, 500);
   }
 }
+
+export {playingFrame, getAnimationBBox, play};

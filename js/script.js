@@ -22,31 +22,18 @@
            key */
 import {palettes} from "./palettes.js";
 import * as file from "./file.js";
+import * as state from "./state.js";
+import * as ui from "./ui.js";
+import * as tool from "./tool.js";
+import SVGCanvas from "./svgcanvas";
 
 const mouse = {};
 
-const DEG = 180 / Math.PI;
-const degrees = rads => rads * DEG;
-const radians = degs => degs / DEG;
 
-let currentColor = "#000000";
-let currentFrameDelay = 30; // milliseconds
-let currentMatrix = null;
-let currentDisplay = "drawingboard";
-let currentTool;
-let currentStrokeWidth = 1;
-let currentEraserWidth = 5;
-let currentDoOnionskin = true;
-let name = null;
 
 let aboutShimmyDialog = document.querySelector("#aboutShimmy");
 let shortcutsDialog = document.querySelector("#shortcuts");
 
-let canvas = document.querySelector("#canvas");
-if (!canvas) {
-  canvas = dom.svg("svg");
-  document.body.prepend(canvas);
-}
 
 function showAbout() {
   aboutShimmyDialog.showModal();
@@ -64,105 +51,10 @@ function getSvgPoint(x, y) {
   return point;
 }
 
-  // used by file.js
-  function restoreFormat(savetext) {
-    if (!savetext) {
-      savetext = defaultCanvas;
-    }
-    canvas.outerHTML = savetext;
-    canvas = document.querySelector("#canvas");
-    updateFrameCount();
-    resize();
-    restoreSavedState();
-    listenCanvas();
-  }
 
+const newFile = file.new;
 
-function getState() {
-  let tabs = document.querySelectorAll(".js-tab");
-  let state = {
-    name: name,
-    tool: currentTool.name,
-    strokeWidth: document.getElementById("pensize").value,
-    eraserWidth: document.getElementById("erasersize").value,
-    doOnionskin: document.getElementById("doonionskin").checked,
-    fps: document.getElementById("framerate").value,
-    palette: document.getElementById("colorpalette").selectedIndex,
-    color: document.getElementById("pencolor").value,
-    bgcolor: document.getElementById("backgroundcolor").value,
-    color1: document.getElementById("color1").value,
-    color2: document.getElementById("color2").value,
-    color3: document.getElementById("color3").value,
-    color4: document.getElementById("color4").value,
-    color5: document.getElementById("color5").value,
-    color6: document.getElementById("color6").value,
-    color7: document.getElementById("color7").value,
-    color8: document.getElementById("color8").value
-  };
-  tabs.forEach(
-    button => (state[`tab_${button.id}`] = button.matches(".active"))
-  );
-  return state;
-}
-
-function setName(str) {
-  name = str;
-  document.title = "Shimmy: " + str;
-}
-
-function setState(state) {
-  let currentTabs = document.querySelectorAll(".js-tab.active");
-  currentTabs.forEach(selectToolbar); // turn off any active tabs
-  ["file", "draw", "frames", "animate"].forEach(tabid => {
-    if (state[`tab_${tabid}`] !== "false") {
-      selectToolbar(document.getElementById(tabid));
-    }
-  });
-  selectTool({ value: state.tool || "pen" });
-  setName(state.name);
-  currentStrokeWidth = parseInt(state.strokeWidth || 2);
-  currentEraserWidth = parseInt(state.eraserWidth || 5);
-  document.getElementById("pensize").value = currentStrokeWidth;
-  document.getElementById("erasersize").value = currentEraserWidth;
-  currentDoOnionskin = state.doOnionskin !== "false";
-  document.getElementById("doonionskin").checked = currentDoOnionskin;
-  currentFrameDelay = 1000 / new Number(state.fps || 10);
-  document.getElementById("framerate").value = state.fps;
-  let palette = document.getElementById("colorpalette");
-  palette.selectedIndex = state.palette || 0;
-  setPalette({ target: palette.options[state.palette || 0] });
-  currentColor = state.color || "#000000";
-  colorButton(document.getElementById("pencolor"), currentColor);
-  colorButton(
-    document.getElementById("backgroundcolor"),
-    state.bgcolor || "#FFFFFF"
-  );
-  colorButton(document.getElementById("color1"), state.color1 || "#000000");
-  colorButton(document.getElementById("color2"), state.color2 || "#FFFFFF");
-  colorButton(document.getElementById("color3"), state.color3 || "#666666");
-  colorButton(document.getElementById("color4"), state.color4 || "#69D2E7");
-  colorButton(document.getElementById("color5"), state.color5 || "#A7DBD8");
-  colorButton(document.getElementById("color6"), state.color6 || "#E0E4CC");
-  colorButton(document.getElementById("color7"), state.color7 || "#F38630");
-  colorButton(document.getElementById("color8"), state.color8 || "#FA6900");
-  undo.clear();
-}
-
-function newFile() {
-  file.new();
-}
-
-// Initialization of canvas happens in file.js
-const colorpaletteselect = document.querySelector(".palettechooser");
-palettes.forEach((p, i) => {
-  colorpaletteselect.append(dom.html("option", { value: i }, p.name));
-});
-colorpaletteselect.addEventListener("change", setPalette);
-
-function changeColor(picker) {
-  let color = picker.getCurColorHex();
-  let hsv = picker.getCurColorHsv();
-}
+// move to ui.js
 // Color picker
 const colorpicker = new KellyColorPicker({
   place: document.querySelector(".popup-color"),
@@ -170,7 +62,7 @@ const colorpicker = new KellyColorPicker({
   size: 200,
   color: "#ffffff",
   method: "square",
-  input_color: false, // or inputColor (sice v1.15)
+  input_color: false, // or inputColor (since v1.15)
   input_format: "mixed", // or inputFormat (since v1.15)
   alpha: 1,
   alpha_slider: false, // or alphaSlider (since v1.15)
@@ -178,112 +70,23 @@ const colorpicker = new KellyColorPicker({
   resizeWith: true, // auto redraw canvas on resize window
   popupClass: "popup-color",
   userEvents: {
-    change: changeColor
-    // change : function(self) {
-    //   // set background color for 'input' to current color of color picker
-    //   if(self.getCurColorHsv().v < 0.5){
-    //   self.getInput().style.color = "#FFF";
-    // } else {
-    //   self.getInput().style.color = "#000";
-    // }
-    // self.getInput().style.background = self.getCurColorHex();
-    // }
+    change : function(self) {
+      // set background color for 'input' to current color of color picker
+      if(self.getCurColorHsv().v < 0.5){
+      self.getInput().style.color = "#FFF";
+    } else {
+      self.getInput().style.color = "#000";
+    }
+    self.getInput().style.background = self.getCurColorHex();
+    }
   }
 });
 
-function setPalette(evt) {
-  let palette = palettes[parseInt(evt.target.value)];
-  let wells = document.querySelectorAll(".js-miniwell");
-  for (let i = 0; i < 5; i++) {
-    colorButton(wells[i], "#" + palette.colors[i]);
-  }
-}
-setPalette({ target: colorpaletteselect });
-
-function selectToolbar(button) {
-  let name;
-  if (typeof button === "string") {
-    name = button;
-    button = document.getElementById(name);
-  } else {
-    name = button.id;
-  }
-  let toolbar = document.querySelector(`#${name}-toolbar`);
-  if (button.classList.contains("active")) {
-    button.classList.remove("active");
-    toolbar.classList.remove("active");
-  } else {
-    button.classList.add("active");
-    toolbar.classList.add("active");
-  }
+function selectToolbarHandler(button){
+  ui.toggleToolbar(button.id, button);
 }
 
-function enablePenSize(flag) {
-  document.querySelector(".feedback.pensize").removeAttribute("hidden");
-  document.querySelector(".feedback.erasersize").setAttribute("hidden", "");
-  document
-    .querySelectorAll(".pensize .stepper > *")
-    .forEach(d => (d.disabled = !flag));
-}
 
-function enableEraserSize() {
-  document.querySelector(".feedback.erasersize").removeAttribute("hidden");
-  document.querySelector(".feedback.pensize").setAttribute("hidden", "");
-}
-
-let tools = {
-  pen: new Pen(canvas),
-  move: new Move(canvas),
-  rotate: new Rotate(canvas),
-  zoomin: new ZoomIn(canvas),
-  zoomout: new ZoomOut(canvas),
-  eraser: new Eraser(canvas)
-};
-currentTool = tools.pen;
-
-function selectTool(sel) {
-  let name = sel.value;
-  let ui = document.querySelector("#toolpicker");
-  switch (name) {
-    case "pen":
-      currentTool = tools.pen;
-      enablePenSize(true);
-      ui.selectedIndex = 0;
-      break;
-    case "move":
-      currentTool = tools.move;
-      enablePenSize(false);
-      ui.selectedIndex = 2;
-      break;
-    case "rotate":
-      currentTool = tools.rotate;
-      enablePenSize(false);
-      ui.selectedIndex = 3;
-      break;
-    case "zoomin":
-      currentTool = tools.zoomin;
-      enablePenSize(false);
-      ui.selectedIndex = 3;
-      break;
-    case "zoomout":
-      currentTool = tools.zoomout;
-      enablePenSize(false);
-      ui.selectedIndex = 4;
-      break;
-    case "eraser":
-      currentTool = tools.eraser;
-      enableEraserSize();
-      ui.selectedIndex = 5;
-      break;
-    default:
-      console.error("unrecognized tool name: %s", name);
-  }
-  currentTool.select();
-}
-
-function setFrameRate(input) {
-  currentFrameDelay = Math.floor(1000 / Number(input.value));
-}
 
 let choosingBackground = false;
 
@@ -354,13 +157,13 @@ function swallowClicks(evt) {
 }
 dom.listen(".toolbar, .tabbar", ["mousedown", "touchstart"], swallowClicks);
 
-const toolStart = evt => currentTool.start(evt);
-const toolMove = evt => currentTool.move(evt);
-const toolStop = evt => currentTool.stop(evt);
-const toolCancel = evt => currentTool.cancel();
+const toolStart = evt => state.currentTool.start(evt);
+const toolMove = evt => state.currentTool.move(evt);
+const toolStop = evt => state.currentTool.stop(evt);
+const toolCancel = evt => state.currentTool.cancel();
 const escCancel = evt => {
   if (evt.code && evt.code === "Escape") {
-    currentTool.cancel();
+    state.currentTool.cancel();
   }
 };
 
@@ -385,16 +188,6 @@ function currentFrame() {
   return frame;
 }
 
-function updateFrameCount() {
-  try {
-    let frames = Array.from(document.querySelectorAll(".frame"));
-    let index = frames.indexOf(currentFrame()) + 1;
-    document.querySelector(".framecount output").textContent =
-      index + " of " + frames.length;
-  } catch (e) {
-    // wait for the file to load, probably
-  }
-}
 
 function undoLine() {
   dom.remove(currentFrame().lastElementChild);
@@ -404,6 +197,7 @@ function undoLine() {
 function newAnimation(evt) {
   file.new();
   updateFrameCount();
+  // FIXME: Reset undo/redo stacks
 }
 
 /* FILE Functions */
@@ -474,64 +268,6 @@ function openSvg(evt) {
   file.loadFile();
 }
 
-class SVGCanvas {
-  constructor(frame, x, y, width, height) {
-    this.canvas = dom.html("canvas", {
-      width: width,
-      height: height,
-      class: "storyboard-frame"
-    });
-    this.ctx = this.canvas.getContext("2d");
-    this.ctx.lineCap = "round";
-    this.ctx.lineJoin = "round";
-    this.svg = frame;
-    this.offset = { x, y };
-    this.draw();
-  }
-
-  draw() {
-    this.setTransforms();
-    let lines = this.svg.querySelectorAll("path");
-    lines.forEach(line => this.drawLine(line));
-  }
-
-  setTransforms() {
-    let { a, b, c, d, e, f } = this.svg.getCTM();
-    this.ctx.setTransform(a, b, c, d, e - this.offset.x, f - this.offset.y);
-  }
-
-  translate(x, y) {
-    this.ctx.translate(x, y);
-  }
-
-  scale(x) {
-    this.ctx.scale(x, x);
-  }
-
-  rotate(angle, cx, cy) {
-    this.ctx.translate(cx, cy);
-    this.ctx.rotate(radians(angle));
-    this.ctx.translate(-cx, -cy);
-  }
-
-  drawLine(line) {
-    this.ctx.beginPath();
-    this.ctx.lineWidth = Number(line.getAttribute("stroke-width"));
-    this.ctx.strokeStyle = line.getAttribute("stroke");
-    let path = line
-      .getAttribute("d")
-      .slice(1)
-      .trim()
-      .split(/\s*L\s*/);
-    let pairs = path.map(p => p.split(/\s*,\s*/).map(Number));
-    let start = pairs.shift();
-    this.ctx.moveTo(...start);
-    pairs.forEach(p => {
-      this.ctx.lineTo(...p);
-    });
-    this.ctx.stroke();
-  }
-}
 
 function frameToImage(frame, x, y, width, height, callback) {
   let c = new SVGCanvas(frame, x, y, width, height);

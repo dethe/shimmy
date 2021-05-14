@@ -40,6 +40,7 @@
 const undo = (function UndoRedo(frame) {
   const undoStack = new Map();
   const redoStack = new Map();
+  // Fixme: Move Mess to ui.js
   const mess = new Mess(); // toast-style popups for document-level undo messages
   mess.init();
   
@@ -79,6 +80,7 @@ const undo = (function UndoRedo(frame) {
     return stack ? top(stack): null
   }
 
+  // FIXME: This should be defined somewhere more re-usable, maybe in dom.js?
   const sendEvent = (frame) => {
     let evt = new CustomEvent("shimmy-undo-change", {
       detail: {

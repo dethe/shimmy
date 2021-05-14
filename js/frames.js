@@ -7,23 +7,23 @@
 /* global dom file undo
    currentFrame currentDoOnionskin updateFrameCount */
 
-function isOnionskinOn() {
-  return currentDoOnionskin;
-}
+import {doOnionSkin} from "./state.js";
+import {$$, addClass, previous, insertAfter} from "./dom.js";
+import {onChange} from "./file.js";
 
 function currentOnionskinFrame() {
-  return document.querySelector(".frame.onionskin");
+  return $(".frame.onionskin");
 }
 
 function updateOnionskin() {
-  if (!isOnionskinOn()) return;
-  document.querySelectorAll('.frame.onionskin').forEach(frame => frame.classList.remove('onionskin'));
-  dom.addClass(dom.previous(currentFrame(), ".frame"), "onionskin");
+  if (!doOnionskin) return;
+  $$('.frame.onionskin').forEach(frame => frame.classList.remove('onionskin'));
+  addClass(previous(currentFrame(), ".frame"), "onionskin");
 }
 
 function insertFrame(before, frame) {
-  dom.insertAfter(frame, before);
-  file.onChange();
+  insertAfter(frame, before);
+  onChange();
   return frame;
 }
 
@@ -65,7 +65,7 @@ function deleteFrame(suppressUndo) {
     }
     goToFrame(frameToDelete, curr);
   }
-  file.onChange();
+  onChange();
 }
 
 function restore(node, children, transform) {
@@ -76,30 +76,17 @@ function restore(node, children, transform) {
   return node;
 }
 
-function _clear() {
+function clearFrame() {
   let curr = currentFrame();
   let oldTransform = curr.getAttribute("transform") || "";
   let children = [...curr.children];
-  dom.clear(curr);
+  clear(curr);
   undo.pushUndo(
     "Clear",
     curr,
     () => restore(curr, children, oldTransform),
-    () => dom.clear(curr)
+    () => clear(curr)
   );
-}
-
-function setOnionSkin(input) {
-  currentDoOnionskin = input.checked;
-  toggleOnionskin();
-}
-
-function toggleOnionskin() {
-  if (isOnionskinOn()) {
-    dom.addClass(currentFrame().previousElementSibling, "onionskin");
-  } else {
-    dom.removeClass(currentOnionskinFrame(), "onionskin");
-  }
 }
 
 function goToFrame(prev, next) {
@@ -126,14 +113,16 @@ function decrementFrame() {
   }
 }
 
-function gotoFirstFrame() {
+function goToFirstFrame() {
   let curr = currentFrame();
   let first = document.querySelector(".frame");
   goToFrame(curr, first);
 }
 
-function gotoLastFrame() {
+function goToLastFrame() {
   const curr = currentFrame();
   const last = document.querySelector(".frame:last-child");
   goToFrame(curr, last);
 }
+
+export {currentOnionskinFrame, currentFrame, insertFrame, addFrame, cloneFrame, deleteFrame, clearFrame, goToFrame, incrementFrame, decrementFrame, goToFirstFrame, goToLastFrame};

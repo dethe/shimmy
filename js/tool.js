@@ -1,10 +1,15 @@
 /* global dom file undo
-   ZOOMIN ZOOMOUT degrees WIDTH HEIGHT
+   ZOOMIN ZOOMOUT WIDTH HEIGHT
    currentFrame currentColor currentStrokeWidth currentMatrix currentEraserWidth */
+
+import {onchange} from "./file.js"
 
 const ZOOMIN = 1.2;
 const ZOOMOUT = 1 / ZOOMIN;
 
+const DEG = 180 / Math.PI;
+const degrees = rads => rads * DEG;
+const radians = degs => degs / DEG;
 
 class Pen {
   constructor() {
@@ -31,7 +36,7 @@ class Pen {
     });
     this.currentPath = currentFrame().appendChild(path);
     // console.log('currentPath: %o', this.currentPath);
-    file.onChange();
+    onChange();
   }
 
   appendToPath(x, y) {
@@ -594,3 +599,6 @@ function collidePaths(point, paths) {
     collideBox(eraserBox, path.getBBox({ stroke: true }))
   );
 }
+
+
+export {Pen, Move, Rotate, ZoomIn, ZoomOut, Eraser};
