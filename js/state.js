@@ -3,6 +3,9 @@
    and sync the DOM to that */
 /* All state functions that are event handlers should likewise be split. Event handling can go in script.js or if needed we can create an event.js. State functions should only update the JS state */
 
+import * as tool from "./tool.js";
+import {ui} from "./ui.js";
+
 let values = {
   color: "#000000",
   frameDelay: 30, // milliseconds
@@ -68,14 +71,14 @@ function setState(newState) {
 }
 
 let tools = {
-  pen: new tool.Pen(state.canvas),
-  move: new tool.Move(state.canvas),
-  rotate: new tool.Rotate(state.canvas),
-  zoomin: new tool.ZoomIn(state.canvas),
-  zoomout: new tool.ZoomOut(state.canvas),
-  eraser: new tool.Eraser(state.canvas),
+  pen: new tool.Pen(ui.canvas),
+  move: new tool.Move(ui.canvas),
+  rotate: new tool.Rotate(ui.canvas),
+  zoomin: new tool.ZoomIn(ui.canvas),
+  zoomout: new tool.ZoomOut(ui.canvas),
+  eraser: new tool.Eraser(ui.canvas),
 };
-currentTool = tools.pen;
+let currentTool = tools.pen;
 
 function selectToolHandler(sel) {
   selectTool(sel.value);

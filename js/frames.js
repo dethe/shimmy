@@ -5,18 +5,28 @@
  ***************************************/
 
 /* global dom file undo
-   currentFrame currentDoOnionskin updateFrameCount */
+   currentFrame  */
 
-import {doOnionSkin} from "./state.js";
+import state from "./state.js";
 import {$$, addClass, previous, insertAfter} from "./dom.js";
 import {onChange} from "./file.js";
+
+function currentFrame() {
+  let frame = document.querySelector(".frame.selected");
+  if (!frame) {
+    frame = dom.svg("g", { class: "frame selected" });
+    canvas.insertBefore(frame, canvas.firstElementChild);
+  }
+  return frame;
+}
+
 
 function currentOnionskinFrame() {
   return $(".frame.onionskin");
 }
 
 function updateOnionskin() {
-  if (!doOnionskin) return;
+  if (!state.doOnionskin) return;
   $$('.frame.onionskin').forEach(frame => frame.classList.remove('onionskin'));
   addClass(previous(currentFrame(), ".frame"), "onionskin");
 }

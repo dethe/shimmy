@@ -1,15 +1,13 @@
 /* Functions specifically to manipulate the DOM go here */
 
-import { $, $$, byId, svg, addClass, removeClass } from "./dom.js";
+import { $, $$, byId, html, svg, addClass, removeClass } from "./dom.js";
 import { currentFrame, currentOnionskinFrame } from "./frames.js";
-import * as palettes from "./palletes.js";
+import {palettes} from "./palettes.js";
 
 const defaultCanvas = `<svg id="canvas" width="2560px" height="1116px" data-name="untitled" data-tool="pen" data-stroke-width="2" data-do-onionskin="true" data-fps="10" data-palette="0" data-color="#000000" data-bgcolor="#FFFFFF" data-color1="#FF0000" data-color2="#FFFF00" data-color3="#00FF00" data-color4="#00FFFF" data-color5="#0000FF" data-color6="#666666" data-color7="#000000" data-color8="#FFFFFF" data-tab_file="false" data-tab_draw="true" data-tab_frames="true" data-tab_animate="false"><g class="frame selected"></g></svg>`;
 
 // polyfill for dialog
-const dialog = document
-  .$$("dialog")
-  .forEach(dialog => dialogPolyfill.registerDialog(dialog));
+const dialog = $$("dialog").forEach(dialog => dialogPolyfill.registerDialog(dialog));
 
 const enablePenSize = flag => {
   $(".feedback.pensize").removeAttribute("hidden");
@@ -30,12 +28,46 @@ const resize = () => {
   canvas.setAttribute("height", window.HEIGHT + "px");
 };
 
+// Initialized palettes
 const colorpaletteselect = document.querySelector(".palettechooser");
 palettes.forEach((p, i) => {
-  colorpaletteselect.append(dom.html("option", { value: p.name }, p.name));
+  colorpaletteselect.append(html("option", { value: p.name }, p.name));
 });
-// Move event handling to script.js
+
+// FIXME: Move event handling to script.js
 colorpaletteselect.addEventListener("change", setPalette);
+
+
+// Color picker
+const colorpicker = new KellyColorPicker({
+  place: $(".popup-color"),
+  input: ".js-color",
+  size: 200,
+  color: "#ffffff",
+  method: "square",
+  input_color: false, // or inputColor (since v1.15)
+  input_format: "mixed", // or inputFormat (since v1.15)
+  alpha: 1,
+  alpha_slider: false, // or alphaSlider (since v1.15)
+  colorSaver: false,
+  resizeWith: true, // auto redraw canvas on resize window
+  popupClass: "popup-color",
+  userEvents: {
+    change : function(self) {
+      if (!self.getInput()){
+        // we're initializing but don't have a colorwell yet, ignore
+        return;
+      }
+      // set background color for 'input' to current color of color picker
+      if(self.getCurColorHsv().v < 0.5){
+      self.getInput().style.color = "#FFF";
+    } else {
+      self.getInput().style.color = "#000";
+    }
+    self.getInput().style.background = self.getCurColorHex();
+    }
+  }
+});
 
 function setPalette(evt) {
   let palette = palettes.filter(p => p.name === evt.target.value)[0];
@@ -45,6 +77,71 @@ function setPalette(evt) {
   }
 }
 setPalette({ target: colorpaletteselect });
+
+
+let choosingBackground = false;
+
+function colorPopup(input) {
+  let popup = $(".popup-color");
+  let colorwell;
+  if (input.id === "backgroundcolor") {
+    choosingBackground = true;
+    colorwell = input;
+  } else {
+    choosingBackground = false;
+    colorwell = $(".js-color");
+  }
+  if (popup.style.display === "none" || popup.style.display === "") {
+    colorpicker.setColor(input.value);
+    popup.style.display = "block";
+  } else {
+    let color = colorpicker.getCurColorHex();
+    colorButton(colorwell, color);
+    colorButton(input, color);
+    if (choosingBackground) {
+      canvas.style.backgroundColor = color;
+    } else {
+      // FIXME: this has to set the state, but don't want a circular import dependency
+      currentColor = color;
+    }
+    popup.style.display = "none";
+  }
+}
+
+function setBackgroundColor(color) {
+  colorButton(document.getElementById("backgroundcolor"), color);
+  canvas.style.backgroundColor = color;
+}
+
+function colorButton(button, color) {
+  button.value = color;
+  button.style.backgroundColor = color;
+  if (hexToValue(color) < 0.5) {
+    button.style.color = "#FFF";
+  } else {
+    button.style.color = "#000";
+  }
+}
+
+function hexToValue(hex) {
+  return colorpicker.rgbToHsv(colorpicker.hexToRgb(hex)).v;
+}
+
+function selectColor(input) {
+  let popup = document.querySelector(".popup-color");
+  let colorwell = document.querySelector(".js-color");
+  if (popup.style.display === "block") {
+    let color = colorpicker.getCurColorHex();
+    colorButton(colorwell, color);
+    colorButton(input, color);
+    currentColor = color;
+    popup.style.display = "none";
+  } else {
+    colorButton(colorwell, input.value);
+    currentColor = input.value;
+  }
+}
+
 
 class ui {
   static toggleToolbar(name) {
@@ -128,7 +225,7 @@ class ui {
 
 if (!ui.canvas) {
   ui.canvas = svg("svg");
-  document.body.prepend(canvas);
+  document.body.prepend(ui.canvas);
 }
 
 // FIXME: use proper event handling
@@ -169,4 +266,4 @@ function selectTool(name) {
   currentTool.select();
 }
 
-export default ui;
+export {ui};

@@ -2,7 +2,7 @@
    ZOOMIN ZOOMOUT WIDTH HEIGHT
    currentFrame currentColor currentStrokeWidth currentMatrix currentEraserWidth */
 
-import {onchange} from "./file.js"
+import {onChange} from "./file.js"
 
 const ZOOMIN = 1.2;
 const ZOOMOUT = 1 / ZOOMIN;

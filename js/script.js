@@ -13,27 +13,22 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-/* globals dom file KellyColorPicker undo
-            toDataURL canvas GIF
-           getAnimationBBox play
-           Pen Move Rotate ZoomIn ZoomOut Eraser 
-           addFrame deleteFrame cloneFrame _clear
+/* globals GIF
+           getAnimationBBox 
            gotoFirstFrame gotoLastFrame incrementFrame decrementFrame
            key */
-import {palettes} from "./palettes.js";
 import * as file from "./file.js";
 import * as state from "./state.js";
 import * as ui from "./ui.js";
 import * as tool from "./tool.js";
-import SVGCanvas from "./svgcanvas";
+import * as dom from "./dom.js";
+import * as animation from "./animation.js";
+import SVGCanvas from "./svgcanvas.js";
 
 const mouse = {};
 
-
-
 let aboutShimmyDialog = document.querySelector("#aboutShimmy");
 let shortcutsDialog = document.querySelector("#shortcuts");
-
 
 function showAbout() {
   aboutShimmyDialog.showModal();
@@ -51,103 +46,10 @@ function getSvgPoint(x, y) {
   return point;
 }
 
-
 const newFile = file.new;
 
-// move to ui.js
-// Color picker
-const colorpicker = new KellyColorPicker({
-  place: document.querySelector(".popup-color"),
-  input: ".js-color",
-  size: 200,
-  color: "#ffffff",
-  method: "square",
-  input_color: false, // or inputColor (since v1.15)
-  input_format: "mixed", // or inputFormat (since v1.15)
-  alpha: 1,
-  alpha_slider: false, // or alphaSlider (since v1.15)
-  colorSaver: false,
-  resizeWith: true, // auto redraw canvas on resize window
-  popupClass: "popup-color",
-  userEvents: {
-    change : function(self) {
-      // set background color for 'input' to current color of color picker
-      if(self.getCurColorHsv().v < 0.5){
-      self.getInput().style.color = "#FFF";
-    } else {
-      self.getInput().style.color = "#000";
-    }
-    self.getInput().style.background = self.getCurColorHex();
-    }
-  }
-});
-
-function selectToolbarHandler(button){
+function selectToolbarHandler(button) {
   ui.toggleToolbar(button.id, button);
-}
-
-
-
-let choosingBackground = false;
-
-function colorPopup(input) {
-  let popup = document.querySelector(".popup-color");
-  let colorwell;
-  if (input.id === "backgroundcolor") {
-    choosingBackground = true;
-    colorwell = input;
-  } else {
-    choosingBackground = false;
-    colorwell = document.querySelector(".js-color");
-  }
-  if (popup.style.display === "none" || popup.style.display === "") {
-    colorpicker.setColor(input.value);
-    popup.style.display = "block";
-  } else {
-    let color = colorpicker.getCurColorHex();
-    colorButton(colorwell, color);
-    colorButton(input, color);
-    if (choosingBackground) {
-      canvas.style.backgroundColor = color;
-    } else {
-      currentColor = color;
-    }
-    popup.style.display = "none";
-  }
-}
-
-function setBackgroundColor(color) {
-  colorButton(document.getElementById("backgroundcolor"), color);
-  canvas.style.backgroundColor = color;
-}
-
-function colorButton(button, color) {
-  button.value = color;
-  button.style.backgroundColor = color;
-  if (hexToValue(color) < 0.5) {
-    button.style.color = "#FFF";
-  } else {
-    button.style.color = "#000";
-  }
-}
-
-function hexToValue(hex) {
-  return colorpicker.rgbToHsv(colorpicker.hexToRgb(hex)).v;
-}
-
-function selectColor(input) {
-  let popup = document.querySelector(".popup-color");
-  let colorwell = document.querySelector(".js-color");
-  if (popup.style.display === "block") {
-    let color = colorpicker.getCurColorHex();
-    colorButton(colorwell, color);
-    colorButton(input, color);
-    currentColor = color;
-    popup.style.display = "none";
-  } else {
-    colorButton(colorwell, input.value);
-    currentColor = input.value;
-  }
 }
 
 // Prevent control clicks from passing through to svg
@@ -179,16 +81,6 @@ function listenCanvas() {
 dom.listen(body, "mouseup", toolStop);
 dom.listen(body, "keydown", escCancel);
 
-function currentFrame() {
-  let frame = document.querySelector(".frame.selected");
-  if (!frame) {
-    frame = dom.svg("g", { class: "frame selected" });
-    canvas.insertBefore(frame, canvas.firstElementChild);
-  }
-  return frame;
-}
-
-
 function undoLine() {
   dom.remove(currentFrame().lastElementChild);
   file.onChange();
@@ -196,7 +88,8 @@ function undoLine() {
 
 function newAnimation(evt) {
   file.new();
-  updateFrameCount();
+  ui.updateFrameCount();
+  undo.clear();
   // FIXME: Reset undo/redo stacks
 }
 
@@ -252,11 +145,11 @@ function saveAsGif(evt) {
     workers: 2,
     quality: 10,
     workerScript: "lib/gif.worker.js",
-    background: document.getElementById("backgroundcolor").value
+    background: document.getElementById("backgroundcolor").value,
   });
   let images = animationToImages();
   images.forEach(img => gif.addFrame(img, { delay: currentFrameDelay }));
-  gif.on("finished", function(blob) {
+  gif.on("finished", function (blob) {
     console.info("gif completed");
     file.saveBlob(blob, `${title}.gif`);
     window.open(URL.createObjectURL(blob));
@@ -267,7 +160,6 @@ function saveAsGif(evt) {
 function openSvg(evt) {
   file.loadFile();
 }
-
 
 function frameToImage(frame, x, y, width, height, callback) {
   let c = new SVGCanvas(frame, x, y, width, height);
@@ -302,7 +194,7 @@ function saveAsSpritesheet() {
   let frames = document.querySelectorAll(".frame");
   let canvas = dom.html("canvas", {
     width: width,
-    height: height * frames.length
+    height: height * frames.length,
   });
   let ctx = canvas.getContext("2d");
   frames.forEach((frame, idx) => {
@@ -353,8 +245,8 @@ function keyupHandler(evt) {
 }
 
 window.app = {
-  updateFrameCount: updateFrameCount,
-  play: play
+  updateFrameCount: ui.updateFrameCount,
+  play: animation.play,
 };
 
 document.addEventListener("keydown", keydownHandler, false);
@@ -392,7 +284,7 @@ document.documentElement.addEventListener("gestureend", gestureEnd, false);
 var lastTouchEnd = 0;
 document.addEventListener(
   "touchend",
-  function(event) {
+  function (event) {
     var now = new Date().getTime();
     if (now - lastTouchEnd <= 300) {
       event.preventDefault();
@@ -405,7 +297,7 @@ document.addEventListener(
 /* Initialize Undo UI */
 const undoButtons = {
   frameUndo: document.querySelector("#frameundo"),
-  frameRedo: document.querySelector("#frameredo")
+  frameRedo: document.querySelector("#frameredo"),
 };
 
 /* Show current undo options on buttons */
@@ -422,9 +314,9 @@ function updateUndo(evt) {
   });
   const frameCount = document.querySelectorAll(".frame").length;
   if (frameCount > 1) {
-    document.querySelector("#framedelete").removeAttribute("disabled");
+    $("#framedelete").removeAttribute("disabled");
   } else {
-    document.querySelector("#framedelete").setAttribute("disabled", "disabled");
+    $("#framedelete").setAttribute("disabled", "disabled");
   }
 }
 document.addEventListener("shimmy-undo-change", updateUndo, false);
@@ -440,12 +332,14 @@ if (!localStorage.hasSeenAbout) {
 
 // Show/Hide Timeline
 
-function toggleVisible(element){
-  element.hasAttribute('hidden') ? element.removeAttribute('hidden') : element.setAttribute('hidden', 'hidden');
+function toggleVisible(element) {
+  element.hasAttribute("hidden")
+    ? element.removeAttribute("hidden")
+    : element.setAttribute("hidden", "hidden");
 }
 
-function toggleTimeline(){
-  document.querySelectorAll('.timeline > div').forEach(toggleVisible);
+function toggleTimeline() {
+  $$(".timeline > div").forEach(toggleVisible);
 }
 
 //////////////////////////////////////////////////////////
@@ -497,7 +391,7 @@ function changePenOrEraserSize(evt, handler) {
 
 addShortcuts(
   "esc",
-  () => document.querySelector("#shimmy").click(),
+  () => $("#shimmy").click(),
   "#shimmy",
   "esc",
   "esc"
@@ -576,62 +470,14 @@ addShortcuts(
 );
 // TODO: Add zoomin in/out without switching tools
 // colors
-addShortcuts(
-  "1",
-  () => document.querySelector("#color1").click(),
-  "#color1",
-  "1",
-  "1"
-);
-addShortcuts(
-  "2",
-  () => document.querySelector("#color2").click(),
-  "#color2",
-  "2",
-  "2"
-);
-addShortcuts(
-  "3",
-  () => document.querySelector("#color3").click(),
-  "#color3",
-  "3",
-  "3"
-);
-addShortcuts(
-  "4",
-  () => document.querySelector("#color4").click(),
-  "#color4",
-  "4",
-  "4"
-);
-addShortcuts(
-  "5",
-  () => document.querySelector("#color5").click(),
-  "#color5",
-  "5",
-  "5"
-);
-addShortcuts(
-  "6",
-  () => document.querySelector("#color6").click(),
-  "#color6",
-  "6",
-  "6"
-);
-addShortcuts(
-  "7",
-  () => document.querySelector("#color7").click(),
-  "#color7",
-  "7",
-  "7"
-);
-addShortcuts(
-  "8",
-  () => document.querySelector("#color8").click(),
-  "#color8",
-  "8",
-  "8"
-);
+addShortcuts("1", () => $("#color1").click(), "#color1", "1", "1");
+addShortcuts("2", () => $("#color2").click(), "#color2", "2", "2");
+addShortcuts("3", () => $("#color3").click(), "#color3", "3", "3");
+addShortcuts("4", () => $("#color4").click(), "#color4", "4", "4");
+addShortcuts("5", () => $("#color5").click(), "#color5", "5", "5");
+addShortcuts("6", () => $("#color6").click(), "#color6", "6", "6");
+addShortcuts("7", () => $("#color7").click(), "#color7", "7", "7");
+addShortcuts("8", () => $("#color8").click(), "#color8", "8", "8");
 // Frames
 addShortcuts("shift+n", () => addFrame(), "#framenew", "⇧+n", "⇧+n");
 addShortcuts(
@@ -641,25 +487,31 @@ addShortcuts(
   "⇧+⌫",
   "⇧+⌦"
 );
-addShortcuts("shift+c", () => cloneFrame(), "#framecopy", "⇧+c", "⇧+c");
-addShortcuts("shift+x", () => _clear(), "#frameclear", "⇧+x", "⇧+x");
-addShortcuts("shift+left", gotoFirstFrame, "#framefirst", "⇧+←", "⇧+←");
-addShortcuts("left", decrementFrame, "#frameprev", "←", "←");
-addShortcuts("right", incrementFrame, "#framenext", "→", "→");
+addShortcuts("shift+c", () => frames.cloneFrame, "#framecopy", "⇧+c", "⇧+c");
+addShortcuts(
+  "shift+x",
+  () => frames.clearFrame,
+  "#frameclear",
+  "⇧+x",
+  "⇧+x"
+);
+addShortcuts(
+  "shift+left",
+  frames.goToFirstFrame,
+  "#framefirst",
+  "⇧+←",
+  "⇧+←"
+);
+addShortcuts("left", frames.decrementFrame, "#frameprev", "←", "←");
+addShortcuts("right", frames.incrementFrame, "#framenext", "→", "→");
 addShortcuts(
   "shift+right",
-  gotoLastFrame,
+  frames.gotoLastFrame,
   "#framelast",
-  gotoLastFrame,
+  frames.gotoLastFrame,
   "⇧+→",
   "⇧+→"
 );
-addShortcuts(
-  "k",
-  () => document.querySelector("#doonionskin").click(),
-  "#doonionskin",
-  "k",
-  "k"
-);
+addShortcuts("k", () => $("#doonionskin").click(), "#doonionskin", "k", "k");
 // Animate
-addShortcuts("r", play, "animateplay", "r", "r");
+addShortcuts("r", animation.play, "animateplay", "r", "r");
