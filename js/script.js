@@ -18,17 +18,18 @@
            gotoFirstFrame gotoLastFrame incrementFrame decrementFrame
            key */
 import * as file from "./file.js";
-import * as state from "./state.js";
-import * as ui from "./ui.js";
+import {state} from "./state.js";
+import {ui} from "./ui.js";
 import * as tool from "./tool.js";
 import * as dom from "./dom.js";
+import {$, $$, listen} from "./dom.js";
 import * as animation from "./animation.js";
 import SVGCanvas from "./svgcanvas.js";
 
 const mouse = {};
 
-let aboutShimmyDialog = document.querySelector("#aboutShimmy");
-let shortcutsDialog = document.querySelector("#shortcuts");
+let aboutShimmyDialog = $("#aboutShimmy");
+let shortcutsDialog = $("#shortcuts");
 
 function showAbout() {
   aboutShimmyDialog.showModal();
@@ -40,7 +41,7 @@ function showShortcuts() {
 }
 
 function getSvgPoint(x, y) {
-  let point = document.querySelector("svg").createSVGPoint();
+  let point = $("svg").createSVGPoint();
   point.x = x;
   point.y = y;
   return point;
@@ -52,34 +53,55 @@ function selectToolbarHandler(button) {
   ui.toggleToolbar(button.id, button);
 }
 
+let tools = {
+  pen: new tool.Pen(ui.canvas),
+  move: new tool.Move(ui.canvas),
+  rotate: new tool.Rotate(ui.canvas),
+  zoomin: new tool.ZoomIn(ui.canvas),
+  zoomout: new tool.ZoomOut(ui.canvas),
+  eraser: new tool.Eraser(ui.canvas),
+};
+let currentTool;
+selectTool('pen');
+
+function selectToolHandler(sel) {
+  selectTool(sel.value);
+}
+
+function selectTool(name) {
+  currentTool = tools[name];
+  state.tool = name;
+  currentTool.select();
+}
+
 // Prevent control clicks from passing through to svg
 function swallowClicks(evt) {
   evt.stopPropagation();
   // evt.preventDefault();
 }
-dom.listen(".toolbar, .tabbar", ["mousedown", "touchstart"], swallowClicks);
+listen(".toolbar, .tabbar", ["mousedown", "touchstart"], swallowClicks);
 
-const toolStart = evt => state.currentTool.start(evt);
-const toolMove = evt => state.currentTool.move(evt);
-const toolStop = evt => state.currentTool.stop(evt);
-const toolCancel = evt => state.currentTool.cancel();
+const toolStart = evt => currentTool.start(evt);
+const toolMove = evt => currentTool.move(evt);
+const toolStop = evt => currentTool.stop(evt);
+const toolCancel = evt => currentTool.cancel();
 const escCancel = evt => {
   if (evt.code && evt.code === "Escape") {
-    state.currentTool.cancel();
+    currentTool.cancel();
   }
 };
 
 let body = document.body;
 
 function listenCanvas() {
-  dom.listen(canvas, ["mousedown", "touchstart"], toolStart);
-  dom.listen(canvas, ["mousemove", "touchmove"], toolMove);
-  dom.listen(canvas, "touchend", toolStop);
-  dom.listen(canvas, "touchcancel", toolCancel);
+  listen(canvas, ["mousedown", "touchstart"], toolStart);
+  listen(canvas, ["mousemove", "touchmove"], toolMove);
+  listen(canvas, "touchend", toolStop);
+  listen(canvas, "touchcancel", toolCancel);
 }
 
-dom.listen(body, "mouseup", toolStop);
-dom.listen(body, "keydown", escCancel);
+listen(body, "mouseup", toolStop);
+listen(body, "keydown", escCancel);
 
 function undoLine() {
   dom.remove(currentFrame().lastElementChild);
@@ -90,32 +112,31 @@ function newAnimation(evt) {
   file.new();
   ui.updateFrameCount();
   undo.clear();
-  // FIXME: Reset undo/redo stacks
 }
 
 /* FILE Functions */
 
-function setMoatUI(list) {
-  let moat = document.getElementById("moat");
-  if (list.length) {
-    if (list.length > 1) {
-      moat.append(dom.html("option", { value: "" }, "Choose a Program"));
-    }
-    list.forEach(item =>
-      moat.append(dom.html("option", { value: item.id }, item.name))
-    );
-  } else {
-    moat.appendChild(
-      dom.html("option", { value: "" }, "No Moat Programs Found")
-    );
-    moat.disabled = true;
-    document.getElementById("save-moat").disabled = true;
+function restoreFormat(savetext) {
+  if (!savetext) {
+    savetext = defaultCanvas;
   }
+  ui.canvas.outerHTML = savetext;
+  ui.canvas = $("#canvas");
+  ui.updateFrameCount();
+  ui.resize();
+  restoreSavedState();
+  listenCanvas();
 }
 
-function clearMoatUI() {
-  document.getElementById("moat-container").remove();
+function restoreLocal() {
+  restoreFormat(localStorage._currentWork || defaultCanvas);
 }
+
+function clear() {
+  callbacks.restoreFormat(defaultCanvas);
+}
+
+
 
 function saveToMoat() {
   let moat = document.getElementById("moat");
@@ -123,11 +144,28 @@ function saveToMoat() {
     alert("You have to choose a Moat program first");
     return;
   }
-  file.sendToMoat(moat.value);
+  if (!state.name){
+    state.name = prompt("Save SVG file as: ");
+  }
+  file.sendToMoat(saveFormat(), `${state.name}.svg`, moat.value);
 }
 
+function saveFormat() {
+  if (canvas) {
+    updateSavedState();
+    return canvas.outerHTML;
+  } else {
+    return "";
+  }
+}
+
+
 function saveAsSvg(evt) {
-  file.saveFile();
+  evt.preventDefault();
+  if (!state.name){
+    state.name = prompt("Save SVG file as: ");
+  }
+  file.save(saveFormat(), state.name);
 }
 
 function saveFrameAsPng(evt) {
@@ -151,14 +189,14 @@ function saveAsGif(evt) {
   images.forEach(img => gif.addFrame(img, { delay: currentFrameDelay }));
   gif.on("finished", function (blob) {
     console.info("gif completed");
-    file.saveBlob(blob, `${title}.gif`);
+    file.saveAs(blob, `${title}.gif`);
     window.open(URL.createObjectURL(blob));
   });
   gif.render();
 }
 
 function openSvg(evt) {
-  file.loadFile();
+  file.load(restoreFormat);
 }
 
 function frameToImage(frame, x, y, width, height, callback) {
@@ -180,7 +218,7 @@ function toggleDisplay(evt) {
 
 function animationToImages() {
   let { x, y, width, height } = getAnimationBBox();
-  return Array.from(document.querySelectorAll(".frame")).map(frame =>
+  return Array.from($$(".frame")).map(frame =>
     frameToImage(frame, x, y, width, height)
   );
 }
@@ -191,7 +229,7 @@ function saveAsSpritesheet() {
     return;
   }
   let { x, y, width, height } = getAnimationBBox();
-  let frames = document.querySelectorAll(".frame");
+  let frames = $$(".frame");
   let canvas = dom.html("canvas", {
     width: width,
     height: height * frames.length,
@@ -203,6 +241,42 @@ function saveAsSpritesheet() {
   file.saveAs(canvas, `${title}.png`);
 }
 
+function saveLocal() {
+  localStorage._currentWork = saveFormat();
+}
+
+function updateSavedState() {
+  let state = getState();
+  for (let key in state) {
+    canvas.dataset[key] = state[key];
+  }
+}
+
+function restoreSavedState() {
+  let values = {};
+  for (let key in ui.canvas.dataset) {
+    values[key] = ui.canvas.dataset[key];
+  }
+  state.setState(values);
+}
+
+function restore() {
+  var path = location.href.split("?");
+  var query = location.search;
+  if (query) {
+    var queryparts = query.slice(1).split("=");
+    if (queryparts[0] === "gist") {
+      loadScriptsFromGistId(queryparts[1]);
+      return;
+    }
+  }
+  restoreLocal();
+}
+
+
+listen(window, "unload", saveLocal);
+listen(window, "load", restore);
+
 function displayAsStoryboard() {
   let frames = animationToImages();
   frames.forEach(f => document.body.appendChild(f));
@@ -211,7 +285,7 @@ function displayAsStoryboard() {
 }
 
 function displayAsDrawingboard() {
-  Array.from(document.querySelectorAll(".storyboard-frame")).map(f =>
+  Array.from($$(".storyboard-frame")).map(f =>
     f.remove()
   );
   document.body.classList.remove("storyboard");
@@ -249,12 +323,12 @@ window.app = {
   play: animation.play,
 };
 
-document.addEventListener("keydown", keydownHandler, false);
-document.addEventListener("keyup", keyupHandler, false);
+listen(document, "keydown", keydownHandler);
+listen(document, "keyup", keyupHandler);
 
 // Attempt to disable default Safari iOS pinch to zoom (failed)
 
-// document.body.addEventListener('touchmove', function (event) {
+// listen('touchmove', function (event) {
 //   if (event.scale !== 1) { event.preventDefault();  event.stopPropagation();}
 //   if (event.changedTouches.length > 1){
 //     event.preventDefault(); event.stopPropagation();
@@ -272,32 +346,26 @@ function gestureChange(event) {
 
 function gestureEnd(event) {}
 
-document.documentElement.addEventListener("gesturestart", gestureStart, false);
-document.documentElement.addEventListener(
-  "gesturechange",
-  gestureChange,
-  false
-);
-document.documentElement.addEventListener("gestureend", gestureEnd, false);
+listen(document.documentElement, "gesturestart", gestureStart);
+listen(document.documentElement, "gesturechange", gestureChange);
+listen(document.documentElement, "gestureed", gestureEnd);
 
 // Disable default Safari iOS double-tap to zoom
 var lastTouchEnd = 0;
-document.addEventListener(
-  "touchend",
+listen(document, "touchend", 
   function (event) {
     var now = new Date().getTime();
     if (now - lastTouchEnd <= 300) {
       event.preventDefault();
     }
     lastTouchEnd = now;
-  },
-  false
+  }
 );
 
 /* Initialize Undo UI */
 const undoButtons = {
-  frameUndo: document.querySelector("#frameundo"),
-  frameRedo: document.querySelector("#frameredo"),
+  frameUndo: $("#frameundo"),
+  frameRedo: $("#frameredo"),
 };
 
 /* Show current undo options on buttons */
@@ -312,14 +380,14 @@ function updateUndo(evt) {
       undoButtons[key].disabled = true;
     }
   });
-  const frameCount = document.querySelectorAll(".frame").length;
+  const frameCount = $$(".frame").length;
   if (frameCount > 1) {
     $("#framedelete").removeAttribute("disabled");
   } else {
     $("#framedelete").setAttribute("disabled", "disabled");
   }
 }
-document.addEventListener("shimmy-undo-change", updateUndo, false);
+listen(document, "shimmy-undo-change", updateUndo);
 
 // Show About dialogue the first time someone visits.
 if (!localStorage.hasSeenAbout) {
@@ -358,7 +426,7 @@ function addShortcuts(shortcuts, fn, uxid, macHint, pcHint) {
   if (!uxid) {
     return;
   }
-  let elems = document.querySelectorAll(uxid);
+  let elems = $$(uxid);
   elems.forEach(
     elem => (elem.title = elem.title + " (" + (isMac ? macHint : pcHint) + ")")
   );
@@ -367,9 +435,9 @@ function addShortcuts(shortcuts, fn, uxid, macHint, pcHint) {
 function changePenOrEraserSize(evt, handler) {
   let ui = null;
   if (currentTool === tools.pen) {
-    ui = document.querySelector("#pensize");
+    ui = $("#pensize");
   } else if (currentTool === tools.eraser) {
-    ui = document.querySelector("#erasersize");
+    ui = $("#erasersize");
   } else {
     return;
   }
@@ -381,6 +449,36 @@ function changePenOrEraserSize(evt, handler) {
   ui.oninput(); // this is messed up, but whatever works, if I replace how Steppers work this will have to change
   // ui.dispatchEvent(new Event('change', {bubbles: true})); // notify listeners that the value has changed
 }
+
+function render() {
+  let values = state.getState();
+  if (state.dirty) {
+    state.dirty = false;
+    ui.name = values.name;
+    ui.tool = values.tool;
+    ui.doOnionskin = values.doOnionskin;
+    ui.fps = values.fps;
+    ui.palette = values.palette;
+    ui.color = values.color;
+    ui.bgcolor = values.bgcolor;
+    ui.color1 = values.color1;
+    ui.color2 = values.color2;
+    ui.color3 = values.color3;
+    ui.color4 = values.color4;
+    ui.color5 = values.color5;
+    ui.color6 = values.color6;
+    ui.color7 = values.color7;
+    ui.color8 = values.color8;
+    ui.tab_file = values.tab_file;
+    ui.tab_draw = values.tab_draw;
+    ui.tab_frames = values.tab_frames;
+    ui.tab_animate = values.tab_animate;
+  }
+  requestAnimationFrame(render);
+}
+
+requestAnimationFrame(render);
+
 
 // Key shortcuts: Command: ⌘
 //                Control: ⌃
@@ -515,3 +613,9 @@ addShortcuts(
 addShortcuts("k", () => $("#doonionskin").click(), "#doonionskin", "k", "k");
 // Animate
 addShortcuts("r", animation.play, "animateplay", "r", "r");
+
+
+// EVENT HANDLERS
+
+// FIXME: Move event handling to script.js
+listen('.palettechooser', "change", ui.setPaletteHandler);

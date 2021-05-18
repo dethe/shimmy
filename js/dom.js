@@ -55,10 +55,10 @@ function listen(selector, event, listener) {
   } else if (Array.isArray(listener)) {
     listener.forEach(l => listen(selector, event, l));
   } else {
-    if (selector.nodeName) {
+    if (selector.nodeName || selector === window) {
       selector.addEventListener(event, listener);
     } else {
-      Array.from(document.querySelectorAll(selector)).forEach(e =>
+      findAll(selector).forEach(e =>
         e.addEventListener(event, listener)
       );
     }

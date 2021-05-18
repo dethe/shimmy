@@ -13,14 +13,14 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-/* globals ajax updateFrameCount dom listenCanvas canvas getState setState setName setMoatUI dialogPolyfill QRCode timeago*/
+/* globals QRCode timeago*/
 
 // TODO: Separate out Moat and file-format specifics, other non-file functions
 
+import * as dom from "./dom.js";
+
 // CONFIGURATION
 let params = new URLSearchParams(new URL(window.location).search);
-let callbacks = {};
-
 const USE_MOAT = params.has("moat");
 
 const MOAT_URL = window.location.host.includes("glitch")
@@ -28,66 +28,11 @@ const MOAT_URL = window.location.host.includes("glitch")
   : "https://launchpad.yourlibrary.ca/moat/";
 
 
-function saveLocal() {
-  localStorage._currentWork = saveFormat();
-}
-
-function updateSavedState() {
-  let state = getState();
-  for (let key in state) {
-    canvas.dataset[key] = state[key];
-  }
-}
-
-function restoreSavedState() {
-  let state = {};
-  for (let key in canvas.dataset) {
-    state[key] = canvas.dataset[key];
-  }
-  setState(state);
-}
-
-function saveFormat() {
-  if (canvas) {
-    updateSavedState();
-    return canvas.outerHTML;
-  } else {
-    return "";
-  }
-}
-
-
-function restore() {
-  var path = location.href.split("?");
-  var query = location.search;
-  if (query) {
-    var queryparts = query.slice(1).split("=");
-    if (queryparts[0] === "gist") {
-      loadScriptsFromGistId(queryparts[1]);
-      return;
-    }
-  }
-  restoreLocal();
-}
-
-function restoreLocal() {
-  callbacks.restoreFormat(localStorage._currentWork || defaultCanvas);
-}
-
-function clear() {
-  callbacks.restoreFormat(defaultCanvas);
-}
-
-function saveFile(evt) {
-  if (evt) {
-    evt.preventDefault();
-  }
-  var title = prompt("Save SVG file as: ", name);
-  setName(title);
+function save(data, title){
   if (!title) {
     return;
   }
-  saveAs(saveFormat(), `${title}.svg`);
+  saveAs(data, `${title}.svg`);
 }
 
 const filetypes = {
@@ -108,9 +53,8 @@ function saveToCallback(data, filename, cb) {
   }
 }
 
-function sendToMoat(progid) {
-  console.log("sendToMoat(%s)", progid);
-  saveToCallback(saveFormat(), "shimmy.svg", (blob, filename) =>
+function sendToMoat(data, filename, progid) {
+  saveToCallback(data, filename, (blob, filename) =>
     sendToMoatCB(blob, filename, progid)
   );
 }
@@ -193,7 +137,7 @@ function saveBlob(blob, filename) {
   reader.readAsDataURL(blob);
 }
 
-function readFile(file) {
+function read(file, cb) {
   var fileName = file.name;
   if (fileName.indexOf(".svg", fileName.length - 5) === -1) {
     return alert("Not an SVG file");
@@ -201,11 +145,11 @@ function readFile(file) {
   var reader = new FileReader();
   reader.readAsText(file);
   reader.onload = function (evt) {
-    callbacks.restoreFormat(evt.target.result);
+    cb(evt.target.result);
   };
 }
 
-function loadFile() {
+function load(cb) {
   let forSure = confirm(
     "This will overwrite your current document, be sure to save first. Delete and open another document?"
   );
@@ -217,13 +161,11 @@ function loadFile() {
   if (!input) {
     return;
   }
-  input.addEventListener("change", function (evt) {
-    readFile(input.files[0]);
-  });
+  dom.listen(input, "change", evt => read(input.files[0], cb));
   input.click();
 }
 
-function newFile() {
+function newFile(){
   let forSure = confirm(
     "This will delete your current document, be sure to save first. Delete and start a new document?"
   );
@@ -241,28 +183,45 @@ function onChange() {
   }
 }
 
+function setMoatUI(list) {
+  let moat = document.getElementById("moat");
+  if (list.length) {
+    if (list.length > 1) {
+      moat.append(dom.html("option", { value: "" }, "Choose a Program"));
+    }
+    list.forEach(item =>
+      moat.append(dom.html("option", { value: item.id }, item.name))
+    );
+  } else {
+    moat.appendChild(
+      dom.html("option", { value: "" }, "No Moat Programs Found")
+    );
+    moat.disabled = true;
+    document.getElementById("save-moat").disabled = true;
+  }
+}
+
+function clearMoatUI() {
+  document.getElementById("moat-container").remove();
+}
+
+
 function queryMoat(cb) {
   fetch(MOAT_URL + "programs/?integration=shimmy").then(response =>
     response.json().then(cb)
   );
 }
 if (USE_MOAT) {
-  window.addEventListener("load", e => queryMoat(setMoatUI), true);
+  dom.listen(window, "load", e => queryMoat(setMoatUI));
 } else {
   document.getElementById("moat-container").remove();
 }
 
-window.addEventListener("unload", saveLocal, false);
-window.addEventListener("load", restore, false);
-
 export {
   onChange,
   newFile as new,
-  clear,
-  loadFile,
-  saveFile,
-  saveBlob,
-  saveLocal,
+  load,
+  save,
   saveAs,
   sendToMoat
 };

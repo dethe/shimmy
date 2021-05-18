@@ -7,7 +7,7 @@
 /* global dom file undo
    currentFrame  */
 
-import state from "./state.js";
+import {state} from "./state.js";
 import {$$, addClass, previous, insertAfter} from "./dom.js";
 import {onChange} from "./file.js";
 

@@ -4,7 +4,8 @@
 /* All state functions that are event handlers should likewise be split. Event handling can go in script.js or if needed we can create an event.js. State functions should only update the JS state */
 
 import * as tool from "./tool.js";
-import {ui} from "./ui.js";
+
+let dirty = false; // flag to know when to redraw
 
 let values = {
   color: "#000000",
@@ -18,79 +19,6 @@ let values = {
   name: null,
 };
 
-// flag to know when to redraw
-let dirty = false;
-
-function restoreFormat(savetext) {
-  if (!savetext) {
-    savetext = defaultCanvas;
-  }
-  ui.canvas.outerHTML = savetext;
-  ui.canvas = document.querySelector("#canvas");
-  ui.updateFrameCount();
-  ui.resize();
-  restoreSavedState();
-  listenCanvas();
-}
-
-function getState() {
-  return values;
-}
-
-function applyState() {
-  if (dirty) {
-    dirty = false;
-    ui.name = values.name;
-    ui.tool = values.tool;
-    ui.doOnionskin = values.doOnionskin;
-    ui.fps = values.fps;
-    ui.palette = values.palette;
-    ui.color = values.color;
-    ui.bgcolor = values.bgcolor;
-    ui.color1 = values.color1;
-    ui.color2 = values.color2;
-    ui.color3 = values.color3;
-    ui.color4 = values.color4;
-    ui.color5 = values.color5;
-    ui.color6 = values.color6;
-    ui.color7 = values.color7;
-    ui.color8 = values.color8;
-    ui.tab_file = values.tab_file;
-    ui.tab_draw = values.tab_draw;
-    ui.tab_frames = values.tab_frames;
-    ui.tab_animate = values.tab_animate;
-  }
-  requestAnimationFrame(applyState);
-}
-
-requestAnimationFrame(applyState);
-
-// rename this to apply state, push all state to DOM. This will be the basis of rendering
-function setState(newState) {
-  values = newState;
-}
-
-let tools = {
-  pen: new tool.Pen(ui.canvas),
-  move: new tool.Move(ui.canvas),
-  rotate: new tool.Rotate(ui.canvas),
-  zoomin: new tool.ZoomIn(ui.canvas),
-  zoomout: new tool.ZoomOut(ui.canvas),
-  eraser: new tool.Eraser(ui.canvas),
-};
-let currentTool = tools.pen;
-
-function selectToolHandler(sel) {
-  selectTool(sel.value);
-}
-
-function selectTool(name) {
-  currentTool = tools[name];
-  state.tool = name;
-  currentTool.select();
-  dirty = true;
-}
-
 function setFrameRate(input) {
   currentFrameDelay = Math.floor(1000 / Number(input.value));
 }
@@ -100,6 +28,23 @@ function toggleOnionSkin() {
 }
 
 class state {
+
+  static get dirty(){
+    return dirty;
+  }
+
+  static set dirty(val){
+    dirty = !!val;
+  }
+
+  static getState(){
+    return values; // FIXME, should be read-only or cloned
+  }
+
+  static setState(vals){
+    values = vals;
+  }
+
   static get name() {
     return values.name;
   }
@@ -110,7 +55,7 @@ class state {
   }
 
   static set tool(val) {
-    selectTool(val);
+    values.tool = val;
     dirty = true;
   }
 
@@ -235,4 +180,4 @@ class state {
   }
 }
 
-export default state;
+export {state};

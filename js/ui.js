@@ -21,21 +21,11 @@ const enableEraserSize = () => {
   $(".feedback.pensize").setAttribute("hidden", "");
 };
 
-const resize = () => {
-  window.WIDTH = document.body.clientWidth;
-  window.HEIGHT = document.body.clientHeight;
-  canvas.setAttribute("width", window.WIDTH + "px");
-  canvas.setAttribute("height", window.HEIGHT + "px");
-};
-
 // Initialized palettes
 const colorpaletteselect = document.querySelector(".palettechooser");
 palettes.forEach((p, i) => {
   colorpaletteselect.append(html("option", { value: p.name }, p.name));
 });
-
-// FIXME: Move event handling to script.js
-colorpaletteselect.addEventListener("change", setPalette);
 
 
 // Color picker
@@ -69,14 +59,14 @@ const colorpicker = new KellyColorPicker({
   }
 });
 
-function setPalette(evt) {
+function setPaletteHandler(evt) {
   let palette = palettes.filter(p => p.name === evt.target.value)[0];
-  let wells = document.querySelectorAll(".js-miniwell");
+  let wells = $$(".js-miniwell");
   for (let i = 0; i < 5; i++) {
     colorButton(wells[i], "#" + palette.colors[i]);
   }
 }
-setPalette({ target: colorpaletteselect });
+setPaletteHandler({ target: colorpaletteselect });
 
 
 let choosingBackground = false;
@@ -128,8 +118,8 @@ function hexToValue(hex) {
 }
 
 function selectColor(input) {
-  let popup = document.querySelector(".popup-color");
-  let colorwell = document.querySelector(".js-color");
+  let popup = $(".popup-color");
+  let colorwell = $(".js-color");
   if (popup.style.display === "block") {
     let color = colorpicker.getCurColorHex();
     colorButton(colorwell, color);
@@ -144,6 +134,9 @@ function selectColor(input) {
 
 
 class ui {
+
+  static canvas = $("#canvas");
+
   static toggleToolbar(name) {
     byId(`${name}-toolbar`).classList.toggle("active");
   }
@@ -158,15 +151,25 @@ class ui {
     }
   }
 
-  static canvas = document.querySelector("#canvas");
-
+  static resize(){
+    window.WIDTH = document.body.clientWidth;
+    window.HEIGHT = document.body.clientHeight;
+    this.canvas.setAttribute("width", window.WIDTH + "px");
+    this.canvas.setAttribute("height", window.HEIGHT + "px");
+  }
+  
   // Render state as needed
   static set name(val) {
     document.title = "Shimmy: " + val;
   }
 
+  static _oldtool;
+
   static set tool(val) {
-    selectTool(val);
+    if (val !== this._oldtool){
+      this._oldtool = val;
+      selectTool(val);
+    }
   }
 
   static set strokeWidth(val) {
@@ -193,38 +196,13 @@ class ui {
   static set palette(val){
     byId('colorpalette').select
   }
-}
 
-//   let currentTabs = document.querySelectorAll(".js-tab.active");
-//   currentTabs.forEach(selectToolbar); // turn off any active tabs
-//   ["file", "draw", "frames", "animate"].forEach(tabid => {
-//     if (state[`tab_${tabid}`] !== "false") {
-//       selectToolbar(document.getElementById(tabid));
-//     }
-//   });
-//   selectTool({ value: state.tool || "pen" });
-//   let palette = document.getElementById("colorpalette");
-//   palette.selectedIndex = state.palette || 0;
-//   setPalette({ target: palette.options[state.palette || 0] });
-//   currentColor = state.color || "#000000";
-//   colorButton(document.getElementById("pencolor"), currentColor);
-//   colorButton(
-//     document.getElementById("backgroundcolor"),
-//     state.bgcolor || "#FFFFFF"
-//   );
-//   colorButton(document.getElementById("color1"), state.color1 || "#000000");
-//   colorButton(document.getElementById("color2"), state.color2 || "#FFFFFF");
-//   colorButton(document.getElementById("color3"), state.color3 || "#666666");
-//   colorButton(document.getElementById("color4"), state.color4 || "#69D2E7");
-//   colorButton(document.getElementById("color5"), state.color5 || "#A7DBD8");
-//   colorButton(document.getElementById("color6"), state.color6 || "#E0E4CC");
-//   colorButton(document.getElementById("color7"), state.color7 || "#F38630");
-//   colorButton(document.getElementById("color8"), state.color8 || "#FA6900");
-//   undo.clear();
-// }
+  static setPaletteHandler = setPaletteHandler;
+}
 
 if (!ui.canvas) {
   ui.canvas = svg("svg");
+  ui.canvas.id = 'canvas';
   document.body.prepend(ui.canvas);
 }
 
@@ -263,7 +241,6 @@ function selectTool(name) {
     default:
       console.error("unrecognized tool name: %s", name);
   }
-  currentTool.select();
 }
 
 export {ui};
