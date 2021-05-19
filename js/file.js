@@ -166,24 +166,6 @@ function load(cb) {
   input.click();
 }
 
-function newFile(){
-  let forSure = confirm(
-    "This will delete your current document, be sure to save first. Delete and start a new document?"
-  );
-  if (forSure) {
-    clear();
-    onChange();
-  }
-}
-
-function onChange() {
-  if (gistID) {
-    gistID = null;
-    var path = location.href.split("?")[0];
-    history.replaceState(null, null, path);
-  }
-}
-
 function setMoatUI(list) {
   let moat = $("#moat");
   if (list.length) {
@@ -219,9 +201,8 @@ if (USE_MOAT) {
 }
 
 export {
-  newFile as new,
   load,
   save,
   saveAs,
-  sendToMoat
+  sendToMoat,
 };

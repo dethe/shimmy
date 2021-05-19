@@ -29,7 +29,14 @@ import SVGCanvas from "./svgcanvas.js";
 import * as stepper from "./stepper.js";
 import * as undo from "./undo.js";
 
+for (const val in state){
+  console.log("%s => %s", val, state[val]);
+}
+
 const mouse = {};
+
+const defaultCanvas = `<svg id="canvas" width="2560px" height="1116px" data-name="untitled" data-tool="pen" data-stroke-width="2" data-do-onionskin="true" data-fps="10" data-palette="0" data-color="#000000" data-bgcolor="#FFFFFF" data-color1="#FF0000" data-color2="#FFFF00" data-color3="#00FF00" data-color4="#00FFFF" data-color5="#0000FF" data-color6="#666666" data-color7="#000000" data-color8="#FFFFFF" data-tab_file="false" data-tab_draw="true" data-tab_frames="true" data-tab_animate="false"><g class="frame selected"></g></svg>`;
+
 
 function getSvgPoint(x, y) {
   let point = $("svg").createSVGPoint();
@@ -37,8 +44,6 @@ function getSvgPoint(x, y) {
   point.y = y;
   return point;
 }
-
-const newFile = file.new;
 
 let tools = {
   pen: new tool.Pen(ui.canvas),
@@ -94,13 +99,19 @@ function undoLine() {
   dom.remove(ui.currentFrame().lastElementChild);
 }
 
-function newAnimation(evt) {
-  file.new();
-  ui.updateFrameCount();
-  undo.clear();
-}
 
 /* FILE Functions */
+
+function newAnimation(evt) {
+  let forSure = confirm(
+    "This will delete your current document, be sure to save first. Delete and start a new document?"
+  );
+  if (forSure){
+    clear();
+    ui.updateFrameCount();
+    undo.clear();
+  }
+}
 
 function restoreFormat(savetext) {
   if (!savetext) {
@@ -119,7 +130,7 @@ function restoreLocal() {
 }
 
 function clear() {
-  callbacks.restoreFormat(defaultCanvas);
+  restoreFormat(defaultCanvas);
 }
 
 function saveToMoat() {
@@ -130,6 +141,9 @@ function saveToMoat() {
   }
   if (!state.name) {
     state.name = prompt("Save SVG file as: ");
+  }
+  if (!state.name){
+    return;
   }
   file.sendToMoat(saveFormat(), `${state.name}.svg`, moat.value);
 }
@@ -145,9 +159,10 @@ function saveFormat() {
 
 function saveAsSvg(evt) {
   evt.preventDefault();
-  if (!state.name) {
+  if (!state.name || state.name === 'untitled') {
     state.name = prompt("Save SVG file as: ");
   }
+  if (!state.name) return;
   file.save(saveFormat(), state.name);
 }
 
@@ -158,10 +173,10 @@ function saveFrameAsPng(evt) {
 }
 
 function saveAsGif(evt) {
-  let title = prompt("Save GIF file as: ", name);
-  if (!title) {
-    return;
+  if (!state.name || state.name === 'untitled') {
+    state.name = prompt("Save SVG file as: ");
   }
+  if (!state.name) return;
   let gif = new GIF({
     workers: 2,
     quality: 10,
@@ -172,7 +187,7 @@ function saveAsGif(evt) {
   images.forEach(img => gif.addFrame(img, { delay: state.frameDelay }));
   gif.on("finished", function (blob) {
     console.info("gif completed");
-    file.saveAs(blob, `${title}.gif`);
+    file.saveAs(blob, `${state.name}.gif`);
     window.open(URL.createObjectURL(blob));
   });
   gif.render();
@@ -207,21 +222,21 @@ function animationToImages() {
 }
 
 function saveAsSpritesheet() {
-  var title = prompt("Save PNG file as: ", name);
-  if (!title) {
-    return;
+  if (!state.name || state.name === 'untitled') {
+    state.name = prompt("Save PNG file as: ");
   }
+  if (!state.name) return;
   let { x, y, width, height } = getAnimationBBox();
   let frames = $$(".frame");
   let canvas = dom.html("canvas", {
     width: width,
-    height: height * frames.length,
+    height: height * frames.length
   });
   let ctx = canvas.getContext("2d");
   frames.forEach((frame, idx) => {
     ctx.drawImage(frameToImage(frame, x, y, width, height), 0, height * idx);
   });
-  file.saveAs(canvas, `${title}.png`);
+  file.saveAs(canvas, `${state.name}.png`);
 }
 
 function saveLocal() {
@@ -229,31 +244,15 @@ function saveLocal() {
 }
 
 function updateSavedState() {
-  let values = state.getState();
-  for (let key in values) {
+  for (let key in state) {
     ui.canvas.dataset[key] = values[key];
   }
 }
 
 function restoreSavedState() {
-  let values = {};
   for (let key in ui.canvas.dataset) {
-    values[key] = ui.canvas.dataset[key];
+    state[key] = ui.canvas.dataset[key];
   }
-  state.setState(values);
-}
-
-function restore() {
-  var path = location.href.split("?");
-  var query = location.search;
-  if (query) {
-    var queryparts = query.slice(1).split("=");
-    if (queryparts[0] === "gist") {
-      loadScriptsFromGistId(queryparts[1]);
-      return;
-    }
-  }
-  restoreLocal();
 }
 
 function displayAsStoryboard() {
@@ -412,28 +411,27 @@ function changePenOrEraserSize(evt, handler) {
 }
 
 function render() {
-  let values = state.getState();
   if (state.dirty) {
     state.dirty = false;
-    ui.name = values.name;
-    ui.tool = values.tool;
-    ui.doOnionskin = values.doOnionskin;
-    ui.fps = values.fps;
-    ui.palette = values.palette;
-    ui.color = values.color;
-    ui.bgcolor = values.bgcolor;
-    ui.color1 = values.color1;
-    ui.color2 = values.color2;
-    ui.color3 = values.color3;
-    ui.color4 = values.color4;
-    ui.color5 = values.color5;
-    ui.color6 = values.color6;
-    ui.color7 = values.color7;
-    ui.color8 = values.color8;
-    ui.tab_file = values.tab_file;
-    ui.tab_draw = values.tab_draw;
-    ui.tab_frames = values.tab_frames;
-    ui.tab_animate = values.tab_animate;
+    ui.name = state.name;
+    ui.tool = state.tool;
+    ui.doOnionskin = state.doOnionskin;
+    ui.fps = state.fps;
+    ui.palette = state.palette;
+    ui.color = state.color;
+    ui.bgcolor = state.bgcolor;
+    ui.color1 = state.color1;
+    ui.color2 = state.color2;
+    ui.color3 = state.color3;
+    ui.color4 = state.color4;
+    ui.color5 = state.color5;
+    ui.color6 = state.color6;
+    ui.color7 = state.color7;
+    ui.color8 = state.color8;
+    ui.tab_file = state.tab_file;
+    ui.tab_draw = state.tab_draw;
+    ui.tab_frames = state.tab_frames;
+    ui.tab_animate = state.tab_animate;
   }
   requestAnimationFrame(render);
 }
@@ -465,7 +463,7 @@ addShortcuts(
   "⌃+y"
 );
 // Files
-addShortcuts("n", file.new, "#filenew", "n", "n");
+addShortcuts("n", newAnimation, "#filenew", "n", "n");
 addShortcuts("⌘+s, ctrl+s", saveAsSvg, "#filesave", "⌘+s", "⌃+s");
 addShortcuts("⌘+o, ctrl+o", openSvg, "#fileopen", "⌘+o", "⌃+o");
 addShortcuts("g", saveAsGif, "#filegif", "g", "g");
@@ -556,7 +554,7 @@ listen("#about", "click", ui.showAbout);
 listen("#frameundo", "click", evt => undo.undo(ui.currentFrame()));
 listen("#frameredo", "click", evt => undo.redo(ui.currentFrame()));
 listen("#file", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
-listen("#filenew", "click", file.new);
+listen("#filenew", "click", newAnimation);
 listen("#fileopen", "click", openSvg);
 listen("#filesave", "click", saveAsSvg);
 listen("#filegif", "click", saveAsGif);
@@ -596,4 +594,4 @@ listen("#timeline", "click", toggleTimeline);
 listen("#shortcuts", "click", ui.showShortcuts);
 // File Events
 listen(window, "unload", saveLocal);
-listen(window, "load", restore);
+listen(window, "load", restoreLocal);

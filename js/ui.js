@@ -4,8 +4,6 @@ import { $, $$, html, svg, addClass, removeClass } from "./dom.js";
 import { palettes } from "./palettes.js";
 import {state} from "./state.js";
 
-const defaultCanvas = `<svg id="canvas" width="2560px" height="1116px" data-name="untitled" data-tool="pen" data-stroke-width="2" data-do-onionskin="true" data-fps="10" data-palette="0" data-color="#000000" data-bgcolor="#FFFFFF" data-color1="#FF0000" data-color2="#FFFF00" data-color3="#00FF00" data-color4="#00FFFF" data-color5="#0000FF" data-color6="#666666" data-color7="#000000" data-color8="#FFFFFF" data-tab_file="false" data-tab_draw="true" data-tab_frames="true" data-tab_animate="false"><g class="frame selected"></g></svg>`;
-
 // polyfill for dialog
 const dialog = $$("dialog").forEach(dialog =>
   dialogPolyfill.registerDialog(dialog)
@@ -166,7 +164,7 @@ function selectTool(name) {
 
 
 let aboutShimmyDialog = $("#aboutShimmy");
-let shortcutsDialog = $("#shortcuts");
+let shortcutsDialog = $("#shortcutsDialog");
 
 class ui {
   static canvas = $("#canvas");
@@ -181,7 +179,7 @@ class ui {
   }
 
   static toggleUI() {
-    () => $("body").classList.toggle("noui");
+    $("body").classList.toggle("noui");
   }
 
   static toggleToolbar(name) {

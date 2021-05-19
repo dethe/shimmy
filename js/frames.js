@@ -58,7 +58,6 @@ function deleteFrame(suppressUndo) {
     }
     goToFrame(frameToDelete, curr);
   }
-  onChange();
 }
 
 function restore(node, children, transform) {

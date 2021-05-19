@@ -100,7 +100,9 @@ class Pen {
   }
 
   cancel() {
-    this.currentPath.remove();
+    if (this.currentPath){
+      this.currentPath.remove();
+    }
     this.currentPath = null;
     currentMatrix = null;
   }
