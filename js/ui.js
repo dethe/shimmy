@@ -1,13 +1,15 @@
 /* Functions specifically to manipulate the DOM go here */
 
-import { $, $$, byId, html, svg, addClass, removeClass } from "./dom.js";
-import { currentFrame, currentOnionskinFrame } from "./frames.js";
-import {palettes} from "./palettes.js";
+import { $, $$, html, svg, addClass, removeClass } from "./dom.js";
+import { palettes } from "./palettes.js";
+import {state} from "./state.js";
 
 const defaultCanvas = `<svg id="canvas" width="2560px" height="1116px" data-name="untitled" data-tool="pen" data-stroke-width="2" data-do-onionskin="true" data-fps="10" data-palette="0" data-color="#000000" data-bgcolor="#FFFFFF" data-color1="#FF0000" data-color2="#FFFF00" data-color3="#00FF00" data-color4="#00FFFF" data-color5="#0000FF" data-color6="#666666" data-color7="#000000" data-color8="#FFFFFF" data-tab_file="false" data-tab_draw="true" data-tab_frames="true" data-tab_animate="false"><g class="frame selected"></g></svg>`;
 
 // polyfill for dialog
-const dialog = $$("dialog").forEach(dialog => dialogPolyfill.registerDialog(dialog));
+const dialog = $$("dialog").forEach(dialog =>
+  dialogPolyfill.registerDialog(dialog)
+);
 
 const enablePenSize = flag => {
   $(".feedback.pensize").removeAttribute("hidden");
@@ -27,7 +29,6 @@ palettes.forEach((p, i) => {
   colorpaletteselect.append(html("option", { value: p.name }, p.name));
 });
 
-
 // Color picker
 const colorpicker = new KellyColorPicker({
   place: $(".popup-color"),
@@ -43,31 +44,30 @@ const colorpicker = new KellyColorPicker({
   resizeWith: true, // auto redraw canvas on resize window
   popupClass: "popup-color",
   userEvents: {
-    change : function(self) {
-      if (!self.getInput()){
+    change: function (self) {
+      if (!self.getInput()) {
         // we're initializing but don't have a colorwell yet, ignore
         return;
       }
       // set background color for 'input' to current color of color picker
-      if(self.getCurColorHsv().v < 0.5){
-      self.getInput().style.color = "#FFF";
-    } else {
-      self.getInput().style.color = "#000";
-    }
-    self.getInput().style.background = self.getCurColorHex();
-    }
-  }
+      if (self.getCurColorHsv().v < 0.5) {
+        self.getInput().style.color = "#FFF";
+      } else {
+        self.getInput().style.color = "#000";
+      }
+      self.getInput().style.background = self.getCurColorHex();
+    },
+  },
 });
 
 function setPaletteHandler(evt) {
-  let palette = palettes.filter(p => p.name === evt.target.value)[0];
+  let palette = palettes.filter(p => p.name === evt.originalTarget.value)[0];
   let wells = $$(".js-miniwell");
   for (let i = 0; i < 5; i++) {
     colorButton(wells[i], "#" + palette.colors[i]);
   }
 }
-setPaletteHandler({ target: colorpaletteselect });
-
+setPaletteHandler({ originalTarget: colorpaletteselect });
 
 let choosingBackground = false;
 
@@ -99,7 +99,7 @@ function colorPopup(input) {
 }
 
 function setBackgroundColor(color) {
-  colorButton(document.getElementById("backgroundcolor"), color);
+  colorButton($("#backgroundcolor"), color);
   canvas.style.backgroundColor = color;
 }
 
@@ -132,87 +132,8 @@ function selectColor(input) {
   }
 }
 
-
-class ui {
-
-  static canvas = $("#canvas");
-
-  static toggleToolbar(name) {
-    byId(`${name}-toolbar`).classList.toggle("active");
-  }
-
-  static updateFrameCount() {
-    try {
-      let frames = $$(".frame");
-      let index = frames.indexOf(currentFrame()) + 1;
-      $(".framecount output").textContent = index + " of " + frames.length;
-    } catch (e) {
-      // wait for the file to load, probably
-    }
-  }
-
-  static resize(){
-    window.WIDTH = document.body.clientWidth;
-    window.HEIGHT = document.body.clientHeight;
-    this.canvas.setAttribute("width", window.WIDTH + "px");
-    this.canvas.setAttribute("height", window.HEIGHT + "px");
-  }
-  
-  // Render state as needed
-  static set name(val) {
-    document.title = "Shimmy: " + val;
-  }
-
-  static _oldtool;
-
-  static set tool(val) {
-    if (val !== this._oldtool){
-      this._oldtool = val;
-      selectTool(val);
-    }
-  }
-
-  static set strokeWidth(val) {
-    byId("pensize").value = val;
-  }
-
-  static set errorWidth(val) {
-    byId("erasersize").value = val;
-  }
-
-  static set doOnionSkin(val) {
-    byId("doonionskin").checked = val;
-    if (val) {
-      addClass(currentFrame().previousElementSibling, "onionskin");
-    } else {
-      removeClass(currentOnionskinFrame(), "onionskin");
-    }
-  }
-
-  static set fps(val) {
-    byId("framerate").value = val;
-  }
-
-  static set palette(val){
-    byId('colorpalette').select
-  }
-
-  static setPaletteHandler = setPaletteHandler;
-}
-
-if (!ui.canvas) {
-  ui.canvas = svg("svg");
-  ui.canvas.id = 'canvas';
-  document.body.prepend(ui.canvas);
-}
-
-// FIXME: use proper event handling
-window.onresize = ui.resize;
-
-// Render state as needed
-
 function selectTool(name) {
-  let sel = byId("toolpicker");
+  let sel = $("#toolpicker");
   switch (name) {
     case "pen":
       enablePenSize(true);
@@ -243,4 +164,115 @@ function selectTool(name) {
   }
 }
 
-export {ui};
+
+let aboutShimmyDialog = $("#aboutShimmy");
+let shortcutsDialog = $("#shortcuts");
+
+class ui {
+  static canvas = $("#canvas");
+
+  static showAbout() {
+    aboutShimmyDialog.showModal();
+  }
+
+  static showShortcuts() {
+    aboutShimmyDialog.close();
+    shortcutsDialog.showModal();
+  }
+
+  static toggleUI() {
+    () => $("body").classList.toggle("noui");
+  }
+
+  static toggleToolbar(name) {
+    console.log("looking for %s-toolbar", name);
+    $(`#${name}-toolbar`).classList.toggle("active");
+  }
+
+  static updateFrameCount() {
+    try {
+      let frames = $$(".frame");
+      let index = frames.indexOf(this.currentFrame()) + 1;
+      $(".framecount output").textContent = index + " of " + frames.length;
+    } catch (e) {
+      // wait for the file to load, probably
+    }
+  }
+
+  static resize() {
+    window.WIDTH = document.body.clientWidth;
+    window.HEIGHT = document.body.clientHeight;
+    this.canvas.setAttribute("width", window.WIDTH + "px");
+    this.canvas.setAttribute("height", window.HEIGHT + "px");
+  }
+
+  // Render state as needed
+  static set name(val) {
+    document.title = "Shimmy: " + val;
+  }
+
+  static _oldtool;
+
+  static set tool(val) {
+    if (val !== this._oldtool) {
+      this._oldtool = val;
+      selectTool(val);
+    }
+  }
+
+  static set strokeWidth(val) {
+    $("#pensize").value = val;
+  }
+
+  static set errorWidth(val) {
+    $("#erasersize").value = val;
+  }
+
+  static set doOnionSkin(val) {
+    $("#doonionskin").checked = val;
+    if (val) {
+      addClass(this.currentFrame().previousElementSibling, "onionskin");
+    } else {
+      removeClass(this.$$currentOnionskinFrame(), "onionskin");
+    }
+  }
+
+  static set fps(val) {
+    $("#framerate").value = val;
+  }
+
+  static set palette(val) {
+    $("#colorpalette").select;
+  }
+
+  static currentFrame() {
+    let frame = $(".frame.selected");
+    if (!frame) {
+      frame = dom.svg("g", { class: "frame selected" });
+      canvas.insertBefore(frame, canvas.firstElementChild);
+    }
+    return frame;
+  }
+  
+  
+  static currentOnionskinFrame() {
+    return $(".frame.onionskin");
+  }
+  
+
+  static setPaletteHandler = setPaletteHandler;
+}
+
+if (!ui.canvas) {
+  ui.canvas = svg("svg");
+  ui.canvas.id = "canvas";
+  document.body.prepend(ui.canvas);
+}
+
+
+
+// FIXME: use proper event handling
+window.onresize = ui.resize;
+
+
+export { ui };

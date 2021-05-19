@@ -3,14 +3,11 @@
    and sync the DOM to that */
 /* All state functions that are event handlers should likewise be split. Event handling can go in script.js or if needed we can create an event.js. State functions should only update the JS state */
 
-import * as tool from "./tool.js";
-
 let dirty = false; // flag to know when to redraw
 
 let values = {
   color: "#000000",
   frameDelay: 30, // milliseconds
-  matrix: null,
   display: "drawingboard",
   tool: null,
   strokeWidth: 1,
@@ -18,10 +15,6 @@ let values = {
   doOnionskin: true,
   name: null,
 };
-
-function setFrameRate(input) {
-  currentFrameDelay = Math.floor(1000 / Number(input.value));
-}
 
 function toggleOnionSkin() {
   state.doOnionskin = !state.doOnionskin;

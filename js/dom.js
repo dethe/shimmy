@@ -55,12 +55,14 @@ function listen(selector, event, listener) {
   } else if (Array.isArray(listener)) {
     listener.forEach(l => listen(selector, event, l));
   } else {
-    if (selector.nodeName || selector === window) {
-      selector.addEventListener(event, listener);
-    } else {
-      findAll(selector).forEach(e =>
-        e.addEventListener(event, listener)
+    if (selector.addEventListener) {
+      selector.addEventListener(
+        event,
+        listener,
+        true
       );
+    } else {
+      findAll(selector).forEach(e => listen(e, event, listener));
     }
   }
 }
@@ -69,7 +71,7 @@ function setAttributes(elem, attributes) {
   // keys must be strings
   // values can be strings, numbers, booleans, or functions
   if (attributes) {
-    Object.keys(attributes).forEach(function(key) {
+    Object.keys(attributes).forEach(function (key) {
       if (attributes[key] === null || attributes[key] === undefined) return;
       if (typeof attributes[key] === "function") {
         var val = attributes[key](key, attributes);
@@ -91,7 +93,7 @@ function appendChildren(elem, children) {
     if (!Array.isArray(children)) {
       children = [children]; // convenience, allow a single argument vs. an array of one
     }
-    children.forEach(function(child) {
+    children.forEach(function (child) {
       if (child.nodeName) {
         elem.appendChild(child);
       } else {
@@ -135,14 +137,10 @@ function closest(elem, selector) {
   return null;
 }
 
-function byId(id){
-  return document.getElementById(id);
-}
-
 function find(elem, selector) {
   if (typeof elem === "string") {
     selector = elem;
-    elem = document.body;
+    elem = document;
   }
   return elem.querySelector(selector);
 }
@@ -150,7 +148,7 @@ function find(elem, selector) {
 function findAll(elem, selector) {
   if (typeof elem === "string") {
     selector = elem;
-    elem = document.body;
+    elem = document;
   }
   return [].slice.call(elem.querySelectorAll(selector));
 }
@@ -206,7 +204,7 @@ function prevSibling(elem) {
 function toggleClass(elements, klass) {
   if (!elements) return;
   if (Array.isArray(elements)) {
-    elements.forEach(function(elem) {
+    elements.forEach(function (elem) {
       toggleClass(elem, klass);
     });
   } else {
@@ -220,14 +218,14 @@ function indexOf(child) {
 }
 
 function pathToArray(pathElem) {
-  return [].slice.call(pathElem.pathSegList).map(function(seg) {
+  return [].slice.call(pathElem.pathSegList).map(function (seg) {
     return { x: seg.x, y: seg.y };
   });
 }
 
 function arrayToPath(arr) {
   return arr
-    .map(function(point, index) {
+    .map(function (point, index) {
       if (index) {
         return "L" + point.x + "," + point.y;
       } else {
@@ -236,7 +234,6 @@ function arrayToPath(arr) {
     })
     .join(" ");
 }
-
 
 export {
   element,
@@ -248,16 +245,13 @@ export {
   insertAfter,
   previous,
   next,
-  find,
-  findAll,
   find as $,
   findAll as $$,
-  byId,
   closest,
   addClass,
   removeClass,
   prevSibling,
   nextSibling,
   toggleClass,
-  indexOf
+  indexOf,
 };

@@ -129,6 +129,10 @@ header {
   height: var(--bh);
 }
 
+.noui .toolbar{
+  display: none;
+}
+
 .toolbar > * , .toolbar.active > [hidden]{
   display: none !important;
 }

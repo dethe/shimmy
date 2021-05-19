@@ -1,8 +1,9 @@
-/* global dom file undo
-   ZOOMIN ZOOMOUT WIDTH HEIGHT
-   currentFrame currentColor currentStrokeWidth currentMatrix currentEraserWidth */
 
-import {onChange} from "./file.js"
+import * as dom from "./dom.js";
+const {$, $$} = dom;
+import { state } from "./state.js";
+import { ui } from "./ui.js";
+import * as undo from "./undo.js";
 
 const ZOOMIN = 1.2;
 const ZOOMOUT = 1 / ZOOMIN;
@@ -10,6 +11,8 @@ const ZOOMOUT = 1 / ZOOMIN;
 const DEG = 180 / Math.PI;
 const degrees = rads => rads * DEG;
 const radians = degs => degs / DEG;
+
+let currentMatrix;
 
 class Pen {
   constructor() {
@@ -20,23 +23,21 @@ class Pen {
   }
 
   select() {
-    document.querySelector("svg").style.cursor =
+    $("svg").style.cursor =
       "url(img/pen.svg) 1 31, auto";
   }
 
   startPath(x, y) {
-    // TODO: Change cursor to reflect current color and currentStrokeWidth
+    // TODO: Change cursor to reflect current color and current stroke width
     let path = dom.svg("path", {
       d: `M${x},${y}`,
-      stroke: currentColor,
-      "stroke-width": currentStrokeWidth,
+      stroke: state.color,
+      "stroke-width": state.strokeWidth,
       "stroke-linejoin": "round",
       "stroke-linecap": "round",
       fill: "none"
     });
-    this.currentPath = currentFrame().appendChild(path);
-    // console.log('currentPath: %o', this.currentPath);
-    onChange();
+    this.currentPath = ui.currentFrame().appendChild(path);
   }
 
   appendToPath(x, y) {
@@ -81,19 +82,18 @@ class Pen {
       return;
     }
     let path = this.currentPath;
-    let parent = currentFrame();
+    let parent = ui.currentFrame();
     if (this.currentPath) {
       if (inBounds(wx, wy) && this.sx === x && this.sy === y) {
         this.appendToPath(x, y);
       }
-      //dom.simplifyPath(currentPath);
       this.currentPath = null;
     }
     this.drawing = false;
     currentMatrix = null;
     undo.pushUndo(
       "Draw",
-      currentFrame(),
+      ui.currentFrame(),
       () => path.remove(),
       () => parent.appendChild(path)
     );
@@ -115,7 +115,7 @@ class Move {
   }
 
   select() {
-    document.querySelector("svg").style.cursor =
+    $("svg").style.cursor =
       "url(img/arrows.svg) 16 16, auto";
   }
 
@@ -128,7 +128,7 @@ class Move {
     this.px = x;
     this.py = y;
     this.dragging = true;
-    this.origTransform = currentFrame().getAttribute("transform") || "";
+    this.origTransform = ui.currentFrame().getAttribute("transform") || "";
   }
 
   move(evt) {
@@ -141,7 +141,7 @@ class Move {
     }
     let dx = x - this.px;
     let dy = y - this.py;
-    currentFrame().setAttribute(
+    ui.currentFrame().setAttribute(
       "transform",
       `${this.origTransform} translate(${dx} ${dy})`
     );
@@ -157,7 +157,7 @@ class Move {
     let oldTransform = this.origTransform;
     this.origTransform = "";
     currentMatrix = null;
-    let curr = currentFrame();
+    let curr = ui.currentFrame();
     let newTransform = curr.getAttribute("transform");
     undo.pushUndo(
       "Move",
@@ -168,7 +168,7 @@ class Move {
   }
 
   cancel() {
-    currentFrame().setAttribute("transform", this.origTransform);
+    ui.currentFrame().setAttribute("transform", this.origTransform);
     this.dragging = false;
     this.origTransform = false;
     currentMatrix = null;
@@ -189,7 +189,7 @@ class Rotate {
   }
 
   select() {
-    document.querySelector("svg").style.cursor =
+    $("svg").style.cursor =
       "url(img/sync-alt.svg) 16 16, auto";
   }
 
@@ -202,7 +202,7 @@ class Rotate {
     this.px = x;
     this.py = y;
     this.dragging = true;
-    this.origTransform = currentFrame().getAttribute("transform") || "";
+    this.origTransform = ui.currentFrame().getAttribute("transform") || "";
   }
 
   move(evt) {
@@ -223,7 +223,7 @@ class Rotate {
     if (this.originalAngle !== null) {
       let transform = this.origTransform;
       let angle = degrees(Math.atan2(dy, dx)) - this.originalAngle;
-      currentFrame().setAttribute(
+      ui.currentFrame().setAttribute(
         "transform",
         `${transform} rotate(${angle} ${px} ${py})`
       );
@@ -243,7 +243,7 @@ class Rotate {
     this.origTransform = "";
     this.originalAngle = null;
     currentMatrix = null;
-    let curr = currentFrame();
+    let curr = ui.currentFrame();
     let newTransform = curr.getAttribute("transform");
     undo.pushUndo(
       "Rotate",
@@ -254,7 +254,7 @@ class Rotate {
   }
 
   cancel(evt) {
-    currentFrame().setAttribute("transform", this.origTransform);
+    ui.currentFrame().setAttribute("transform", this.origTransform);
     this.dragging = false;
     this.origTransform = false;
     currentMatrix = null;
@@ -267,7 +267,7 @@ class ZoomIn {
   }
 
   select() {
-    document.querySelector("svg").style.cursor =
+    $("svg").style.cursor =
       "url(img/expand-arrows-alt.svg) 16 16,auto";
   }
 
@@ -277,10 +277,10 @@ class ZoomIn {
     if (err) {
       return;
     }
-    let curr = currentFrame();
+    let curr = ui.currentFrame();
     let oldTransform = curr.getAttribute("transform") || "";
     let newTransform = `${oldTransform} translate(${x} ${y}) scale(${ZOOMIN}) translate(-${x}, -${y})`;
-    currentFrame().setAttribute("transform", newTransform);
+    ui.currentFrame().setAttribute("transform", newTransform);
     currentMatrix = null;
     undo.pushUndo(
       "Zoom In",
@@ -309,7 +309,7 @@ class ZoomOut {
   }
 
   select() {
-    document.querySelector("svg").style.cursor =
+    $("svg").style.cursor =
       "url(img/compress-arrows-alt.svg) 16 16, auto";
   }
 
@@ -319,10 +319,10 @@ class ZoomOut {
     if (err) {
       return;
     }
-    let curr = currentFrame();
+    let curr = ui.currentFrame();
     let oldTransform = curr.getAttribute("transform") || "";
     let newTransform = `${oldTransform} translate(${x} ${y}) scale(${ZOOMOUT}) translate(-${x}, -${y})`;
-    currentFrame().setAttribute("transform", newTransform);
+    ui.currentFrame().setAttribute("transform", newTransform);
     currentMatrix = null;
     undo.pushUndo(
       "Zoom Out",
@@ -351,13 +351,13 @@ class Eraser {
   }
 
   select() {
-    document.querySelector("svg").style.cursor =
+    $("svg").style.cursor =
       "url(img/eraser.svg) 16 28, auto";
   }
 
   start(evt) {
     saveMatrix();
-    this.before = currentFrame().innerHTML;
+    this.before = ui.currentFrame().innerHTML;
     let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
       console.error("Houston, we have a problem");
@@ -395,7 +395,7 @@ class Eraser {
     this.dragging = false;
     this.prevPoint = null;
     let before = this.before;
-    let curr = currentFrame();
+    let curr = ui.currentFrame();
     let after = curr.innerHTML;
     undo.pushUndo(
       "Erase",
@@ -439,13 +439,8 @@ function pointsToPath(points) {
   return points.map(pt => `${pt.cmd}${pt.x},${pt.y}`).join(" ");
 }
 
-// Because points are actually circles (due to penWidth / eraserWidth) this is a basic circl collision algorithm
+// Because points are actually circles (due to penWidth / eraserWidth) this is a basic circle collision algorithm
 function collideCircle(p1, r1, p2, r2) {
-  // if (r1 > 1) {
-  //   console.log(
-  //     `collideCircle({x:${p1.x},y:${p1.y}}, ${r1}, {x:${p2.x},y:${p2.y}}, ${r2})`
-  //   );
-  // }
   return (
     Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2) < Math.pow(r1 + r2, 2)
   );
@@ -472,7 +467,7 @@ function inBounds(x, y) {
 }
 
 function saveMatrix() {
-  let matrix = currentFrame().getCTM();
+  let matrix = ui.currentFrame().getCTM();
   if (matrix instanceof SVGMatrix) {
     matrix = new DOMMatrix([
       matrix.a,
@@ -499,7 +494,7 @@ function getXY(evt) {
     evt.preventDefault();
   }
 
-  const rect = this.canvas.getBoundingClientRect();
+  const rect = ui.canvas.getBoundingClientRect();
   const position = (evt.changedTouches && evt.changedTouches[0]) || evt;
   let x = position.offsetX;
   let y = position.offsetY;
@@ -516,7 +511,7 @@ function getXY(evt) {
 }
 
 function transformPoint(x, y) {
-  let frame = currentFrame();
+  let frame = ui.currentFrame();
   if (frame.transform.baseVal.length === 0) {
     return { x, y };
   }
@@ -532,24 +527,17 @@ function drawBoundingBox(bbox, color) {
     fill: "none",
     stroke: color || "#00F"
   });
-  currentFrame().appendChild(r);
+  ui.currentFrame().appendChild(r);
 }
 
 function erasePaths(point) {
-  // currentFrame()
-  //   .querySelectorAll("rect")
-  //   .forEach(r => r.remove());
-  let candidatePaths = Array.from(currentFrame().querySelectorAll("path"));
-  // console.log(`${candidatePaths.length} candidate paths`);
-  // candidatePaths.forEach(path => drawBoundingBox(path.getBBox({stroke: true})));
+  let candidatePaths = $$(currentFrame(), "path");
   let paths = collidePaths(point, candidatePaths);
-  // console.log(`${paths.length} matching paths`);
-  // paths.forEach(path => drawBoundingBox(path.getBBox({stroke: true})));
   paths.forEach(path => erasePath(point, path));
 }
 
 function erasePath(pt1, path) {
-  let r1 = currentEraserWidth;
+  let r1 = state.eraserWidth;
   let r2 = Number(path.getAttribute("stroke-width"));
   let deletions = false;
   // instead of filtering, make two passes:
@@ -587,12 +575,12 @@ function erasePath(pt1, path) {
 
 function collidePaths(point, paths) {
   // quck check to try to eliminate paths that don't intersect
-  let d = currentEraserWidth / 2;
+  let d = state.eraserWidth / 2;
   let eraserBox = {
     x: point.x - d,
     y: point.y - d,
-    width: currentEraserWidth,
-    height: currentEraserWidth
+    width: state.eraserWidth,
+    height: state.eraserWidth
   };
   // drawBoundingBox(eraserBox, '#F00');
   return paths.filter(path =>

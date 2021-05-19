@@ -18,27 +18,18 @@
            gotoFirstFrame gotoLastFrame incrementFrame decrementFrame
            key */
 import * as file from "./file.js";
-import {state} from "./state.js";
-import {ui} from "./ui.js";
+import { state } from "./state.js";
+import { ui } from "./ui.js";
+import * as frames from "./frames.js";
 import * as tool from "./tool.js";
 import * as dom from "./dom.js";
-import {$, $$, listen} from "./dom.js";
+const { $, $$, listen } = dom;
 import * as animation from "./animation.js";
 import SVGCanvas from "./svgcanvas.js";
+import * as stepper from "./stepper.js";
+import * as undo from "./undo.js";
 
 const mouse = {};
-
-let aboutShimmyDialog = $("#aboutShimmy");
-let shortcutsDialog = $("#shortcuts");
-
-function showAbout() {
-  aboutShimmyDialog.showModal();
-}
-
-function showShortcuts() {
-  aboutShimmyDialog.close();
-  shortcutsDialog.showModal();
-}
 
 function getSvgPoint(x, y) {
   let point = $("svg").createSVGPoint();
@@ -49,10 +40,6 @@ function getSvgPoint(x, y) {
 
 const newFile = file.new;
 
-function selectToolbarHandler(button) {
-  ui.toggleToolbar(button.id, button);
-}
-
 let tools = {
   pen: new tool.Pen(ui.canvas),
   move: new tool.Move(ui.canvas),
@@ -62,7 +49,7 @@ let tools = {
   eraser: new tool.Eraser(ui.canvas),
 };
 let currentTool;
-selectTool('pen');
+selectTool("pen");
 
 function selectToolHandler(sel) {
   selectTool(sel.value);
@@ -104,8 +91,7 @@ listen(body, "mouseup", toolStop);
 listen(body, "keydown", escCancel);
 
 function undoLine() {
-  dom.remove(currentFrame().lastElementChild);
-  file.onChange();
+  dom.remove(ui.currentFrame().lastElementChild);
 }
 
 function newAnimation(evt) {
@@ -136,33 +122,30 @@ function clear() {
   callbacks.restoreFormat(defaultCanvas);
 }
 
-
-
 function saveToMoat() {
-  let moat = document.getElementById("moat");
+  let moat = $("#moat");
   if (!moat.value) {
     alert("You have to choose a Moat program first");
     return;
   }
-  if (!state.name){
+  if (!state.name) {
     state.name = prompt("Save SVG file as: ");
   }
   file.sendToMoat(saveFormat(), `${state.name}.svg`, moat.value);
 }
 
 function saveFormat() {
-  if (canvas) {
+  if (ui.canvas) {
     updateSavedState();
-    return canvas.outerHTML;
+    return ui.canvas.outerHTML;
   } else {
     return "";
   }
 }
 
-
 function saveAsSvg(evt) {
   evt.preventDefault();
-  if (!state.name){
+  if (!state.name) {
     state.name = prompt("Save SVG file as: ");
   }
   file.save(saveFormat(), state.name);
@@ -170,7 +153,7 @@ function saveAsSvg(evt) {
 
 function saveFrameAsPng(evt) {
   let { x, y, width, height } = getAnimationBBox();
-  let img = frameToImage(currentFrame(), x, y, width, height);
+  let img = frameToImage(ui.currentFrame(), x, y, width, height);
   // FIXME: save the image
 }
 
@@ -183,10 +166,10 @@ function saveAsGif(evt) {
     workers: 2,
     quality: 10,
     workerScript: "lib/gif.worker.js",
-    background: document.getElementById("backgroundcolor").value,
+    background: $("#backgroundcolor").value,
   });
   let images = animationToImages();
-  images.forEach(img => gif.addFrame(img, { delay: currentFrameDelay }));
+  images.forEach(img => gif.addFrame(img, { delay: state.frameDelay }));
   gif.on("finished", function (blob) {
     console.info("gif completed");
     file.saveAs(blob, `${title}.gif`);
@@ -246,9 +229,9 @@ function saveLocal() {
 }
 
 function updateSavedState() {
-  let state = getState();
-  for (let key in state) {
-    canvas.dataset[key] = state[key];
+  let values = state.getState();
+  for (let key in values) {
+    ui.canvas.dataset[key] = values[key];
   }
 }
 
@@ -273,10 +256,6 @@ function restore() {
   restoreLocal();
 }
 
-
-listen(window, "unload", saveLocal);
-listen(window, "load", restore);
-
 function displayAsStoryboard() {
   let frames = animationToImages();
   frames.forEach(f => document.body.appendChild(f));
@@ -285,25 +264,9 @@ function displayAsStoryboard() {
 }
 
 function displayAsDrawingboard() {
-  Array.from($$(".storyboard-frame")).map(f =>
-    f.remove()
-  );
+  Array.from($$(".storyboard-frame")).map(f => f.remove());
   document.body.classList.remove("storyboard");
   canvas.style.display = "block";
-}
-
-function hideUI(button) {
-  if (button.matches(".active")) {
-    button.classList.remove("active");
-    document
-      .querySelectorAll(".toolbar")
-      .forEach(tb => (tb.style.display = "flex"));
-  } else {
-    button.classList.add("active");
-    document
-      .querySelectorAll(".toolbar")
-      .forEach(tb => (tb.style.display = "none"));
-  }
 }
 
 function keydownHandler(evt) {
@@ -352,15 +315,13 @@ listen(document.documentElement, "gestureed", gestureEnd);
 
 // Disable default Safari iOS double-tap to zoom
 var lastTouchEnd = 0;
-listen(document, "touchend", 
-  function (event) {
-    var now = new Date().getTime();
-    if (now - lastTouchEnd <= 300) {
-      event.preventDefault();
-    }
-    lastTouchEnd = now;
+listen(document, "touchend", function (event) {
+  var now = new Date().getTime();
+  if (now - lastTouchEnd <= 300) {
+    event.preventDefault();
   }
-);
+  lastTouchEnd = now;
+});
 
 /* Initialize Undo UI */
 const undoButtons = {
@@ -479,7 +440,6 @@ function render() {
 
 requestAnimationFrame(render);
 
-
 // Key shortcuts: Command: ⌘
 //                Control: ⌃
 //                Shift:   ⇧
@@ -487,25 +447,19 @@ requestAnimationFrame(render);
 //                Delete:  ⌦
 //                Arrows: ← →
 
-addShortcuts(
-  "esc",
-  () => $("#shimmy").click(),
-  "#shimmy",
-  "esc",
-  "esc"
-);
+addShortcuts("esc", () => $("#shimmy").click(), "#shimmy", "esc", "esc");
 addShortcuts("d", toggleDisplay, "", "d", "d");
 // Undo/Redo
 addShortcuts(
   "⌘+z, ctrl+z",
-  () => undo.undo(currentFrame()),
+  () => undo.undo(ui.currentFrame()),
   "#frameundo",
   "⌘-z",
   "⌃-z"
 );
 addShortcuts(
   "shift+⌘+z, ctrl+y",
-  () => undo.redo(currentFrame()),
+  () => undo.redo(ui.currentFrame()),
   "#frameredo",
   "⇧+⌘+z",
   "⌃+y"
@@ -517,44 +471,32 @@ addShortcuts("⌘+o, ctrl+o", openSvg, "#fileopen", "⌘+o", "⌃+o");
 addShortcuts("g", saveAsGif, "#filegif", "g", "g");
 addShortcuts("p", saveAsSpritesheet, "#filepng", "p", "p");
 // Tools
-addShortcuts(
-  "shift+1",
-  () => selectTool({ value: "pen" }),
-  "#toolpen",
-  "⇧+1",
-  "⇧+1"
-);
+addShortcuts("shift+1", () => selectTool("pen"), "#toolpen", "⇧+1", "⇧+1");
 addShortcuts(
   "shift+2",
-  () => selectTool({ value: "rotate" }),
+  () => selectTool("rotate"),
   "#toolrotate",
   "⇧+2",
   "⇧+2"
 );
-addShortcuts(
-  "shift+3",
-  () => selectTool({ value: "move" }),
-  "#toolmove",
-  "⇧+3",
-  "⇧+3"
-);
+addShortcuts("shift+3", () => selectTool("move"), "#toolmove", "⇧+3", "⇧+3");
 addShortcuts(
   "shift+4",
-  () => selectTool({ value: "zoomin" }),
+  () => selectTool("zoomin"),
   "#toolzoomin",
   "⇧+4",
   "⇧+4"
 );
 addShortcuts(
   "shift+5",
-  () => selectTool({ value: "zoomout" }),
+  () => selectTool("zoomout"),
   "#toolzoomput",
   "⇧+5",
   "⇧+5"
 );
 addShortcuts(
   "shift+6",
-  () => selectTool({ value: "eraser" }),
+  () => selectTool("eraser"),
   "#tooleraser",
   "⇧+6",
   "⇧+6"
@@ -577,29 +519,17 @@ addShortcuts("6", () => $("#color6").click(), "#color6", "6", "6");
 addShortcuts("7", () => $("#color7").click(), "#color7", "7", "7");
 addShortcuts("8", () => $("#color8").click(), "#color8", "8", "8");
 // Frames
-addShortcuts("shift+n", () => addFrame(), "#framenew", "⇧+n", "⇧+n");
+addShortcuts("shift+n", frames.addFrame, "#framenew", "⇧+n", "⇧+n");
 addShortcuts(
   "shift+backspace, shift+delete",
-  () => deleteFrame(),
+  frames.deleteFrame,
   "#framedelete",
   "⇧+⌫",
   "⇧+⌦"
 );
-addShortcuts("shift+c", () => frames.cloneFrame, "#framecopy", "⇧+c", "⇧+c");
-addShortcuts(
-  "shift+x",
-  () => frames.clearFrame,
-  "#frameclear",
-  "⇧+x",
-  "⇧+x"
-);
-addShortcuts(
-  "shift+left",
-  frames.goToFirstFrame,
-  "#framefirst",
-  "⇧+←",
-  "⇧+←"
-);
+addShortcuts("shift+c", frames.cloneFrame, "#framecopy", "⇧+c", "⇧+c");
+addShortcuts("shift+x", frames.clearFrame, "#frameclear", "⇧+x", "⇧+x");
+addShortcuts("shift+left", frames.goToFirstFrame, "#framefirst", "⇧+←", "⇧+←");
 addShortcuts("left", frames.decrementFrame, "#frameprev", "←", "←");
 addShortcuts("right", frames.incrementFrame, "#framenext", "→", "→");
 addShortcuts(
@@ -614,8 +544,56 @@ addShortcuts("k", () => $("#doonionskin").click(), "#doonionskin", "k", "k");
 // Animate
 addShortcuts("r", animation.play, "animateplay", "r", "r");
 
+// Promote number inputs to steppers
+$$("input[type=number]").forEach(stepper.upgrade);
 
 // EVENT HANDLERS
 
-// FIXME: Move event handling to script.js
-listen('.palettechooser', "change", ui.setPaletteHandler);
+// UI Events
+listen(".palettechooser", "change", ui.setPaletteHandler);
+listen("#shimmy", "click", ui.toggleUI);
+listen("#about", "click", ui.showAbout);
+listen("#frameundo", "click", evt => undo.undo(ui.currentFrame()));
+listen("#frameredo", "click", evt => undo.redo(ui.currentFrame()));
+listen("#file", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
+listen("#filenew", "click", file.new);
+listen("#fileopen", "click", openSvg);
+listen("#filesave", "click", saveAsSvg);
+listen("#filegif", "click", saveAsGif);
+listen("#filepng", "click", saveAsSpritesheet);
+listen("#save-moat", "click", saveToMoat);
+listen("#draw", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
+listen("#toolpicker", "change", evt => selectToolHandler(evt.currentTarget));
+listen(
+  "#pensize",
+  "change",
+  evt => (currentStrokeWidth = Number(evt.currentTarget.value))
+);
+listen(
+  "#erasersize",
+  "change",
+  evt => (currentEraserWidth = Number(evt.currentTarget.value))
+);
+listen("#pencolor, #backgroundcolor", "click", evt =>
+  colorPopup(evt.currentTarget)
+);
+listen(".js-miniwell", "click", evt => selectColor(evt.currentTarget));
+listen(".js-miniwell", "dblclick", evt => colorPopup(evt.currentTarget));
+listen("#frames", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
+listen("#framedelete", "click", frames.deleteFrame);
+listen("#framenew", "click", frames.addFrame);
+listen("#framecopy", "click", frames.cloneFrame);
+listen("#frameclear", "click", frames.clearFrame);
+listen("#framefirst", "click", frames.gotoFirstFrame);
+listen("#frameprev", "click", frames.decrementFrame);
+listen("#framenext", "click", frames.incrementFrame);
+listen("#framelast", "click", frames.gotoLastFrame);
+listen("#doonionskin", "change", evt => setOnionSkin(evt.currentTarget));
+listen("#animate", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
+listen("#animateplay", "click", animation.play);
+listen("#framerate", "change", evt => setFrameRate(evt.currentTarget));
+listen("#timeline", "click", toggleTimeline);
+listen("#shortcuts", "click", ui.showShortcuts);
+// File Events
+listen(window, "unload", saveLocal);
+listen(window, "load", restore);

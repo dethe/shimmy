@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-Copyright (C) 2020 Richmond Public Library
+Copyright (C) 2020 Dethe Elza
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -32,12 +32,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
   </head>
   <body>
     <header>
-      <button onclick="hideUI(this)" id="shimmy" title="shimmy">
+      <button id="shimmy" title="shimmy">
         <i class="far fa-palette fa-3x"></i>
       </button>
       <!-- Always visible, no toggle -->
       <nav class="toolbar active" id="always">
-        <button onclick="showAbout()" id="about" title="About Shimmy">
+        <button id="about" title="About Shimmy">
           About<br />Shimmy
         </button>
         <div class="feedback framecount">
@@ -47,45 +47,42 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <button
           title="Frame Undo"
           id="frameundo"
-          onclick="undo.undo(currentFrame())"
         ></button>
         <button
           title="Frame Redo"
           id="frameredo"
-          onclick="undo.redo(currentFrame())"
         ></button>
       </nav>
 
       <!-- FILE -->
       <nav class="toolbar" id="file-toolbar">
         <button
-          onclick="selectToolbar(this)"
           id="file"
           title="File"
           class="js-tab tab"
         >
           <span>File</span>
         </button>
-        <button id="filenew" onclick="file.new()" title="New file">
+        <button id="filenew" title="New file">
           New<br />
           <i class="far fa-2x fa-file-alt"></i>
         </button>
-        <button id="fileopen" onclick="openSvg()" title="Load file">
+        <button id="fileopen" title="Load file">
           Load<br />
           <i class="far fa-2x fa-upload"></i>
         </button>
-        <button id="filesave" onclick="saveAsSvg()" title="Save file">
+        <button id="filesave" title="Save file">
           Save<br />
           <i class="far fa-2x fa-download"></i>
         </button>
-        <button id="filegif" onclick="saveAsGif()" title="Save as GIF">
+        <button id="filegif" title="Save as GIF">
           Save as GIF
         </button>
-        <button id="filepng" onclick="saveAsSpritesheet()" title="Save as PNG">
+        <button id="filepng" title="Save as PNG">
           Save as PNG
         </button>
         <div class="feedback moat" id="moat-container">
-          <button id="save-moat" onclick="saveToMoat()">
+          <button id="save-moat">
             Save to Moat
           </button>
           <select id="moat" class="js-moat select-css"> </select>
@@ -95,7 +92,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <!-- DRAW -->
       <nav class="toolbar active" id="draw-toolbar">
         <button
-          onclick="selectToolbar(this)"
           id="draw"
           title="Draw"
           class="js-tab tab"
@@ -108,7 +104,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <select
               id="toolpicker"
               class="tools select-css far"
-              onchange="selectTool(this)"
             >
               <option value="pen" selected>&#xf304; Pen</option>
               <option value="rotate">&#xf021; Rotate</option>
@@ -123,7 +118,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           <label class="pensize">Pen Size</label>
           <input
             id="pensize"
-            onchange="currentStrokeWidth = Number(this.value);"
             type="number"
             min="1"
             value="2"
@@ -134,7 +128,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           <label class="erasersize">Eraser Size</label>
           <input
             id="erasersize"
-            onchange="currentEraserWidth = Number(this.value);"
             type="number"
             min="1"
             value="6"
@@ -153,7 +146,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </div>
         <div class="stack colors">
           <button
-            onclick="colorPopup(this)"
             title="Pen Colour"
             id="pencolor"
             value="#000000"
@@ -173,54 +165,38 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </div>
         <div class="stack colors quickcolors">
           <button
-            onclick="selectColor(this)"
-            ondblclick="colorPopup(this)"
             id="color1"
             class="color miniwell js-miniwell"
           ></button>
           <button
-            onclick="selectColor(this)"
-            ondblclick="colorPopup(this)"
             id="color2"
             class="color miniwell js-miniwell"
           ></button>
           <button
-            onclick="selectColor(this)"
-            ondblclick="colorPopup(this)"
             id="color3"
             class="color miniwell js-miniwell"
           ></button>
           <button
-            onclick="selectColor(this)"
-            ondblclick="colorPopup(this)"
             id="color4"
             class="color miniwell js-miniwell"
           ></button>
           <button
-            onclick="selectColor(this)"
-            ondblclick="colorPopup(this)"
             id="color5"
             class="color miniwell js-miniwell"
           ></button>
           <button
-            onclick="selectColor(this)"
-            ondblclick="colorPopup(this)"
             id="color6"
             class="color miniwell"
             value="#666666"
             style="background-color: #666666;"
           ></button>
           <button
-            onclick="selectColor(this)"
-            ondblclick="colorPopup(this)"
             id="color7"
             class="color miniwell"
             value="#000000"
             style="background-color: #000000;"
           ></button>
           <button
-            onclick="selectColor(this)"
-            ondblclick="colorPopup(this)"
             id="color8"
             class="color miniwell"
             value="#FFFFFF"
@@ -232,7 +208,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <!-- FRAMES -->
       <nav class="toolbar" id="frames-toolbar">
         <button
-          onclick="selectToolbar(this)"
           id="frames"
           title="Frames"
           class="js-tab tab"
@@ -240,7 +215,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           <span>Frames</span>
         </button>
         <button
-          onclick="deleteFrame()"
           id="framedelete"
           title="Delete Frame"
           disabled
@@ -251,38 +225,37 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <i class="far fa-minus fa-stack-1x fa-inverse"></i>
           </span>
         </button>
-        <button onclick="addFrame()" id="framenew" title="Add Frame">
+        <button id="framenew" title="Add Frame">
           Add<br />
           <span class="fa-stack">
             <i class="fas fa-film-alt fa-stack-2x"></i>
             <i class="far fa-plus fa-stack-1x fa-inverse"></i>
           </span>
         </button>
-        <button onclick="cloneFrame()" id="framecopy" title="Copy Frame">
+        <button id="framecopy" title="Copy Frame">
           Copy<br />
           <i class="far fa-photo-video fa-2x"></i>
         </button>
-        <button onclick="_clear();" id="frameclear" title="Clear">
+        <button id="frameclear" title="Clear">
           Clear<br />
           <i class="far fa-2x fa-sparkles"></i>
         </button>
-        <button onclick="gotoFirstFrame()" id="framefirst" title="First Frame">
+        <button id="framefirst" title="First Frame">
           First<br />
           <i class="far fa-2x fa-fast-backward"></i>
         </button>
         <button
-          onclick="decrementFrame()"
           id="frameprev"
           title="Previous Frame"
         >
           Back<br />
           <i class="far fa-2x fa-step-backward"></i>
         </button>
-        <button onclick="incrementFrame()" id="framenext" title="Next Frame">
+        <button id="framenext" title="Next Frame">
           Next<br />
           <i class="far fa-2x fa-step-forward"></i>
         </button>
-        <button onclick="gotoLastFrame()" id="framelast" title="Last Frame">
+        <button id="framelast" title="Last Frame">
           Last<br />
           <i class="far fa-2x fa-fast-forward"></i>
         </button>
@@ -293,7 +266,6 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
               type="checkbox"
               checked
               id="doonionskin"
-              onchange="setOnionSkin(this);"
             />
             <i class="unchecked far fa-square"></i>
             <i class="checked far fa-check-square"></i>
@@ -303,14 +275,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       <!-- ANIMATE -->
       <nav class="toolbar" id="animate-toolbar">
         <button
-          onclick="selectToolbar(this)"
           id="animate"
           title="Animate"
           class="js-tab tab"
         >
           <span>Animate</span>
         </button>
-        <button onclick="play()" id="animateplay" title="Play">
+        <button id="animateplay" title="Play">
           Play<br />
           <i class="far fa-2x fa-play"></i>
         </button>
@@ -320,13 +291,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             id="framerate"
             type="number"
             value="10"
-            onchange="setFrameRate(this);"
           />
         </div>
       </nav>
     </header>
     <!--section class="timeline">
-      <label onclick="toggleTimeline()">Timeline</label>
+      <label id="timeline" onclick="toggleTimeline()">Timeline</label>
       <div class="timeline-clock"></div>
       <div class="timeline-frames"></div>
     </section-->
@@ -367,7 +337,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         >.
       </p>
       <form method="dialog">
-        <button onclick="showShortcuts()">
+        <button id="shortcuts">
           Keyboard Shortcuts
         </button>
         <input type="submit" class="close" value="Close" />
@@ -414,15 +384,16 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <input type="submit" class="close" value="Close" />
       </form>
     </dialog>
+    <!-- To Do: library scripts should be imported as modules -->
     <script src="lib/dialog-polyfill.js"></script>
     <script src="lib/svgToDataURL.js"></script>
     <script src="lib/gif.js"></script>
     <script src="lib/html5-color-picker.js"></script>
-    <script src="lib/qrcode.js"></script>
-    <script src="lib/timeago.js"></script>
-    <script src="lib/keymaster.js"></script>
-    <script src="lib/mess.js"></script>
-    <!-- app scripts should vanish into modules -->
+    <script src="lib/qrcode.js"></script><!-- used by Moat integration -->
+    <script src="lib/timeago.js"></script><!-- used by Moat integration -->
+    <script src="lib/keymaster.js"></script><!-- used for shortcut keys -->
+    <script src="lib/mess.js"></script><!-- used for "toast" popups -->
+    <!-- app scripts vanished into modules -->
     <script type="module" src="js/script.js"></script>
   </body>
 </html>

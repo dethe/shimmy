@@ -1,8 +1,7 @@
 
-/* global dom
-   canvas currentFrame currentFrameDelay */
-
 import {svg, removeClass, insertAfter, next, $, $$} from "./dom.js";
+import {state} from "./state.js";
+import {ui} from "./ui.js";
 
 let _lastFrameTime = 0;
 
@@ -46,7 +45,7 @@ function getAnimationBBox(show) {
         stroke: "red",
         fill: "none"
       }),
-      currentFrame()
+      ui.currentFrame()
     );
   }
   return box;
@@ -98,7 +97,7 @@ function stop() {
 
 function playNextFrame() {
   let time = Date.now();
-  if (time - _lastFrameTime < currentFrameDelay) {
+  if (time - _lastFrameTime < state.frameDelay) {
     requestAnimationFrame(playNextFrame);
     return;
   }

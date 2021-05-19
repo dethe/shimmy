@@ -73,7 +73,7 @@ const css_rules = `
  background-color: #222;
  vertical-align: bottom;
  text-align: center;
- color: #fff
+ color: #fff;
 
 }
 @media (min-width:37.5em) {
@@ -100,12 +100,12 @@ const css_rules = `
  text-align: center;
  z-index: 2;
  position: relative;
- border-radius: ;
+ border-radius: 5;
 }
 .stepper input[type=number]::-webkit-inner-spin-button,
 .stepper input[type=number]::-webkit-outer-spin-button {
  -webkit-appearance:none;
- margin:0
+ margin:0;
 }
 .stepper input[type="number"] {
     -moz-appearance: textfield;
@@ -169,4 +169,4 @@ function upgrade(input) {
   onchange = Function(onchange).bind(newInput);
 }
 
-Array.from(document.querySelectorAll("input[type=number]")).forEach(upgrade);
+export {upgrade};

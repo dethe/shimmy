@@ -18,6 +18,7 @@
 // TODO: Separate out Moat and file-format specifics, other non-file functions
 
 import * as dom from "./dom.js";
+import {$, $$} from "./dom.js";
 
 // CONFIGURATION
 let params = new URLSearchParams(new URL(window.location).search);
@@ -184,7 +185,7 @@ function onChange() {
 }
 
 function setMoatUI(list) {
-  let moat = document.getElementById("moat");
+  let moat = $("#moat");
   if (list.length) {
     if (list.length > 1) {
       moat.append(dom.html("option", { value: "" }, "Choose a Program"));
@@ -197,12 +198,12 @@ function setMoatUI(list) {
       dom.html("option", { value: "" }, "No Moat Programs Found")
     );
     moat.disabled = true;
-    document.getElementById("save-moat").disabled = true;
+    $("#save-moat").disabled = true;
   }
 }
 
 function clearMoatUI() {
-  document.getElementById("moat-container").remove();
+  $("#moat-container").remove();
 }
 
 
@@ -214,11 +215,10 @@ function queryMoat(cb) {
 if (USE_MOAT) {
   dom.listen(window, "load", e => queryMoat(setMoatUI));
 } else {
-  document.getElementById("moat-container").remove();
+  $("#moat-container").remove();
 }
 
 export {
-  onChange,
   newFile as new,
   load,
   save,
