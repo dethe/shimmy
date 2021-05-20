@@ -251,7 +251,9 @@ function updateSavedState() {
 
 function restoreSavedState() {
   for (let key in ui.canvas.dataset) {
-    state[key] = ui.canvas.dataset[key];
+    if (Object.keys(state).includes(key)){
+      state[key] = ui.canvas.dataset[key];
+    }
   }
 }
 
@@ -488,7 +490,7 @@ addShortcuts(
 addShortcuts(
   "shift+5",
   () => selectTool("zoomout"),
-  "#toolzoomput",
+  "#toolzoomout",
   "⇧+5",
   "⇧+5"
 );
