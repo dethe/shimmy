@@ -1,3 +1,5 @@
+import * as dom from "./dom.js";
+
 class SVGCanvas {
   constructor(frame, x, y, width, height) {
     this.canvas = dom.html("canvas", {

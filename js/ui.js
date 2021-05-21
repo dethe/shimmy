@@ -1,8 +1,10 @@
 /* Functions specifically to manipulate the DOM go here */
 
-import { $, $$, html, svg, addClass, removeClass } from "./dom.js";
+import * as dom from "./dom.js";
+const {$, $$} = dom;
 import { palettes } from "./palettes.js";
-import {state} from "./state.js";
+import SVGCanvas from "./svgcanvas.js";
+import state from "./state.js";
 
 // polyfill for dialog
 const dialog = $$("dialog").forEach(dialog =>
@@ -24,7 +26,7 @@ const enableEraserSize = () => {
 // Initialized palettes
 const colorpaletteselect = document.querySelector(".palettechooser");
 palettes.forEach((p, i) => {
-  colorpaletteselect.append(html("option", { value: p.name }, p.name));
+  colorpaletteselect.append(dom.html("option", { value: p.name }, p.name));
 });
 
 // Color picker
@@ -115,20 +117,6 @@ function hexToValue(hex) {
   return colorpicker.rgbToHsv(colorpicker.hexToRgb(hex)).v;
 }
 
-function selectColor(input) {
-  let popup = $(".popup-color");
-  let colorwell = $(".js-color");
-  if (popup.style.display === "block") {
-    let color = colorpicker.getCurColorHex();
-    colorButton(colorwell, color);
-    colorButton(input, color);
-    currentColor = color;
-    popup.style.display = "none";
-  } else {
-    colorButton(colorwell, input.value);
-    currentColor = input.value;
-  }
-}
 
 function selectTool(name) {
   let sel = $("#toolpicker");
@@ -162,9 +150,23 @@ function selectTool(name) {
   }
 }
 
+function displayAsStoryboard() {
+  let frames = ui.animationToImages();
+  frames.forEach(f => document.body.appendChild(f));
+  document.body.classList.add("storyboard");
+  ui.canvas.style.display = "none";
+}
+
+function displayAsDrawingboard() {
+  $$(".storyboard-frame").map(f => f.remove());
+  document.body.classList.remove("storyboard");
+  ui.canvas.style.display = "block";
+}
+
 
 let aboutShimmyDialog = $("#aboutShimmy");
 let shortcutsDialog = $("#shortcutsDialog");
+let currentDisplay = "drawingboard";
 
 class ui {
   static canvas = $("#canvas");
@@ -178,6 +180,18 @@ class ui {
     shortcutsDialog.showModal();
   }
 
+  static toggleDisplay(evt) {
+    evt.preventDefault();
+    evt.stopPropagation();
+    if (currentDisplay === "drawingboard") {
+      currentDisplay = "storyboard";
+      displayAsStoryboard();
+    } else {
+      currentDisplay = "drawingboard";
+      displayAsDrawingboard();
+    }
+  }
+  
   static toggleUI() {
     $("body").classList.toggle("noui");
   }
@@ -187,6 +201,76 @@ class ui {
     $(`#${name}-toolbar`).classList.toggle("active");
   }
 
+  static frameToImage(frame, x, y, width, height, callback) {
+    let c = new SVGCanvas(frame, x, y, width, height);
+    return c.canvas;
+  }
+  
+  static animationToImages() {
+    let { x, y, width, height } = this.getAnimationBBox();
+    return $$(".frame").map(frame =>
+      this.frameToImage(frame, x, y, width, height)
+    );
+  }
+  
+  static getAnimationBBox(show) {
+    let frames = $$(".frame");
+    let boxes = frames.map(frame => {
+      if (frame.classList.contains("selected")) {
+        return frame.getBoundingClientRect();
+      } else {
+        frame.classList.add("selected");
+        let box = frame.getBoundingClientRect();
+        frame.classList.remove("selected");
+        return box;
+      }
+    });
+    let box = {
+      x: Math.max(Math.floor(Math.min(...boxes.map(b => b.x))) - 10, 0),
+      y: Math.max(Math.floor(Math.min(...boxes.map(b => b.y))) - 10, 0),
+      right: Math.min(
+        Math.floor(Math.max(...boxes.map(b => b.right))) + 10,
+        document.body.clientWidth
+      ),
+      bottom: Math.min(
+        Math.floor(Math.max(...boxes.map(b => b.bottom))) + 10,
+        document.body.clientHeight
+      )
+    };
+    box.width = box.right - box.x;
+    box.height = box.bottom - box.y;
+    if (show) {
+      insertAfter(
+        dom.svg("rect", {
+          x: box.x,
+          y: box.y,
+          width: box.width,
+          height: box.height,
+          stroke: "red",
+          fill: "none"
+        }),
+        ui.currentFrame()
+      );
+    }
+    return box;
+  }
+
+  static selectColor(input) {
+    let popup = $(".popup-color");
+    let colorwell = $(".js-color");
+    if (popup.style.display === "block") {
+      let color = colorpicker.getCurColorHex();
+      colorButton(colorwell, color);
+      colorButton(input, color);
+      state.color = color;
+      popup.style.display = "none";
+    } else {
+      colorButton(colorwell, input.value);
+      state.color = input.value;
+    }
+  }
+  
+  
   static updateFrameCount() {
     try {
       let frames = $$(".frame");
@@ -222,16 +306,16 @@ class ui {
     $("#pensize").value = val;
   }
 
-  static set errorWidth(val) {
+  static set eraserWidth(val){
     $("#erasersize").value = val;
   }
 
   static set doOnionSkin(val) {
     $("#doonionskin").checked = val;
     if (val) {
-      addClass(this.currentFrame().previousElementSibling, "onionskin");
+      dom.addClass(this.currentFrame().previousElementSibling, "onionskin");
     } else {
-      removeClass(this.$$currentOnionskinFrame(), "onionskin");
+      dom.removeClass(this.currentOnionskinFrame(), "onionskin");
     }
   }
 
@@ -241,6 +325,10 @@ class ui {
 
   static set palette(val) {
     $("#colorpalette").select;
+  }
+
+  static set color(val){
+    
   }
 
   static currentFrame() {
@@ -262,15 +350,13 @@ class ui {
 }
 
 if (!ui.canvas) {
-  ui.canvas = svg("svg");
+  ui.canvas = dom.svg("svg");
   ui.canvas.id = "canvas";
   document.body.prepend(ui.canvas);
 }
-
-
 
 // FIXME: use proper event handling
 window.onresize = ui.resize;
 
 
-export { ui };
+export default ui;

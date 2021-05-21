@@ -3,11 +3,11 @@
    and sync the DOM to that */
 /* All state functions that are event handlers should likewise be split. Event handling can go in script.js or if needed we can create an event.js. State functions should only update the JS state */
 
-let dirty = false; // flag to know when to redraw
-
 let values = {
+  dirty: false,
   color: "#000000",
-  frameDelay: 30, // milliseconds
+  fps: 10,
+  frameDelay: 100, // milliseconds
   display: "drawingboard",
   tool: null,
   strokeWidth: 1,
@@ -21,6 +21,30 @@ function toggleOnionSkin() {
 }
 
 class state {
+
+  static keys = [
+    "name",
+    "tool",
+    "strokeWidth",
+    "eraserWidth",
+    "doOnionskin",
+    "fps",
+    "palette",
+    "color",
+    "bgcolor",
+    "color1",
+    "color2",
+    "color3",
+    "color4",
+    "color5",
+    "color6",
+    "color7",
+    "color8",
+    "fileTab",
+    "drawTab",
+    "framesTab",
+    "animateTab",
+  ];
 
   static get name() {
     return values.name;
@@ -233,4 +257,4 @@ Object.defineProperty(state, "dirty", {
   configurable: false
 });
 
-export {state};
+export default state;

@@ -4,19 +4,20 @@
  *
  ***************************************/
 
-import {state} from "./state.js";
-import {$$, addClass, previous, insertAfter} from "./dom.js";
-import {ui} from "./ui.js";
+import state from "./state.js";
+import ui from "./ui.js";
+import * as dom from "./dom.js";
+const {$, $$} = dom;
 import * as undo from "./undo.js";
 
 function updateOnionskin() {
   if (!state.doOnionskin) return;
   $$('.frame.onionskin').forEach(frame => frame.classList.remove('onionskin'));
-  addClass(previous(ui.currentFrame(), ".frame"), "onionskin");
+  dom.addClass(dom.previous(ui.currentFrame(), ".frame"), "onionskin");
 }
 
 function insertFrame(before, frame) {
-  insertAfter(frame, before);
+  dom.insertAfter(frame, before);
   return frame;
 }
 
@@ -85,7 +86,7 @@ function goToFrame(prev, next) {
   prev.classList.remove("selected");
   next.classList.add("selected");
   updateOnionskin();
-  updateFrameCount();
+  ui.updateFrameCount();
   undo.update(next);
 }
 

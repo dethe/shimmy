@@ -13,30 +13,25 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-/* globals GIF
-           getAnimationBBox 
-           gotoFirstFrame gotoLastFrame incrementFrame decrementFrame
-           key */
+/* globals GIF key */
+
 import * as file from "./file.js";
-import { state } from "./state.js";
-import { ui } from "./ui.js";
+import state from "./state.js";
+import ui from "./ui.js";
 import * as frames from "./frames.js";
 import * as tool from "./tool.js";
 import * as dom from "./dom.js";
 const { $, $$, listen } = dom;
 import * as animation from "./animation.js";
-import SVGCanvas from "./svgcanvas.js";
 import * as stepper from "./stepper.js";
 import * as undo from "./undo.js";
 
-for (const val in state){
-  console.log("%s => %s", val, state[val]);
-}
-
 const mouse = {};
 
-const defaultCanvas = `<svg id="canvas" width="2560px" height="1116px" data-name="untitled" data-tool="pen" data-stroke-width="2" data-do-onionskin="true" data-fps="10" data-palette="0" data-color="#000000" data-bgcolor="#FFFFFF" data-color1="#FF0000" data-color2="#FFFF00" data-color3="#00FF00" data-color4="#00FFFF" data-color5="#0000FF" data-color6="#666666" data-color7="#000000" data-color8="#FFFFFF" data-tab_file="false" data-tab_draw="true" data-tab_frames="true" data-tab_animate="false"><g class="frame selected"></g></svg>`;
+window.ui = ui;
+window.state = state;
 
+const defaultCanvas = `<svg id="canvas" width="2560px" height="1116px" data-name="untitled" data-tool="pen" data-stroke-width="2" data-do-onionskin="true" data-fps="10" data-palette="0" data-color="#000000" data-bgcolor="#FFFFFF" data-color1="#FF0000" data-color2="#FFFF00" data-color3="#00FF00" data-color4="#00FFFF" data-color5="#0000FF" data-color6="#666666" data-color7="#000000" data-color8="#FFFFFF" data-tab_file="false" data-tab_draw="true" data-tab_frames="true" data-tab_animate="false"><g class="frame selected"></g></svg>`;
 
 function getSvgPoint(x, y) {
   let point = $("svg").createSVGPoint();
@@ -99,14 +94,13 @@ function undoLine() {
   dom.remove(ui.currentFrame().lastElementChild);
 }
 
-
 /* FILE Functions */
 
 function newAnimation(evt) {
   let forSure = confirm(
     "This will delete your current document, be sure to save first. Delete and start a new document?"
   );
-  if (forSure){
+  if (forSure) {
     clear();
     ui.updateFrameCount();
     undo.clear();
@@ -142,7 +136,7 @@ function saveToMoat() {
   if (!state.name) {
     state.name = prompt("Save SVG file as: ");
   }
-  if (!state.name){
+  if (!state.name) {
     return;
   }
   file.sendToMoat(saveFormat(), `${state.name}.svg`, moat.value);
@@ -159,7 +153,7 @@ function saveFormat() {
 
 function saveAsSvg(evt) {
   evt.preventDefault();
-  if (!state.name || state.name === 'untitled') {
+  if (!state.name || state.name === "untitled") {
     state.name = prompt("Save SVG file as: ");
   }
   if (!state.name) return;
@@ -167,13 +161,13 @@ function saveAsSvg(evt) {
 }
 
 function saveFrameAsPng(evt) {
-  let { x, y, width, height } = getAnimationBBox();
+  let { x, y, width, height } = ui.getAnimationBBox();
   let img = frameToImage(ui.currentFrame(), x, y, width, height);
   // FIXME: save the image
 }
 
 function saveAsGif(evt) {
-  if (!state.name || state.name === 'untitled') {
+  if (!state.name || state.name === "untitled") {
     state.name = prompt("Save SVG file as: ");
   }
   if (!state.name) return;
@@ -183,7 +177,7 @@ function saveAsGif(evt) {
     workerScript: "lib/gif.worker.js",
     background: $("#backgroundcolor").value,
   });
-  let images = animationToImages();
+  let images = ui.animationToImages();
   images.forEach(img => gif.addFrame(img, { delay: state.frameDelay }));
   gif.on("finished", function (blob) {
     console.info("gif completed");
@@ -197,77 +191,36 @@ function openSvg(evt) {
   file.load(restoreFormat);
 }
 
-function frameToImage(frame, x, y, width, height, callback) {
-  let c = new SVGCanvas(frame, x, y, width, height);
-  return c.canvas;
-}
-
-function toggleDisplay(evt) {
-  evt.preventDefault();
-  evt.stopPropagation();
-  if (currentDisplay === "drawingboard") {
-    currentDisplay = "storyboard";
-    displayAsStoryboard();
-  } else {
-    currentDisplay = "drawingboard";
-    displayAsDrawingboard();
-  }
-}
-
-function animationToImages() {
-  let { x, y, width, height } = getAnimationBBox();
-  return Array.from($$(".frame")).map(frame =>
-    frameToImage(frame, x, y, width, height)
-  );
-}
-
 function saveAsSpritesheet() {
-  if (!state.name || state.name === 'untitled') {
+  if (!state.name || state.name === "untitled") {
     state.name = prompt("Save PNG file as: ");
   }
   if (!state.name) return;
-  let { x, y, width, height } = getAnimationBBox();
+  let { x, y, width, height } = ui.getAnimationBBox();
   let frames = $$(".frame");
   let canvas = dom.html("canvas", {
     width: width,
-    height: height * frames.length
+    height: height * frames.length,
   });
   let ctx = canvas.getContext("2d");
   frames.forEach((frame, idx) => {
-    ctx.drawImage(frameToImage(frame, x, y, width, height), 0, height * idx);
+    ctx.drawImage(ui.frameToImage(frame, x, y, width, height), 0, height * idx);
   });
   file.saveAs(canvas, `${state.name}.png`);
 }
 
 function saveLocal() {
+  console.log('saving');
   localStorage._currentWork = saveFormat();
+  console.log('saved');
 }
 
 function updateSavedState() {
-  for (let key in state) {
-    ui.canvas.dataset[key] = values[key];
-  }
+  state.keys.forEach(key => ui.canvas.dataset[key] = state[key]);
 }
 
 function restoreSavedState() {
-  for (let key in ui.canvas.dataset) {
-    if (Object.keys(state).includes(key)){
-      state[key] = ui.canvas.dataset[key];
-    }
-  }
-}
-
-function displayAsStoryboard() {
-  let frames = animationToImages();
-  frames.forEach(f => document.body.appendChild(f));
-  document.body.classList.add("storyboard");
-  canvas.style.display = "none";
-}
-
-function displayAsDrawingboard() {
-  Array.from($$(".storyboard-frame")).map(f => f.remove());
-  document.body.classList.remove("storyboard");
-  canvas.style.display = "block";
+  state.keys.forEach(key => state[key] = ui.canvas.dataset[key]);
 }
 
 function keydownHandler(evt) {
@@ -281,11 +234,6 @@ function keyupHandler(evt) {
     document.body.classList.remove("usefiles");
   }
 }
-
-window.app = {
-  updateFrameCount: ui.updateFrameCount,
-  play: animation.play,
-};
 
 listen(document, "keydown", keydownHandler);
 listen(document, "keyup", keyupHandler);
@@ -395,21 +343,21 @@ function addShortcuts(shortcuts, fn, uxid, macHint, pcHint) {
 }
 
 function changePenOrEraserSize(evt, handler) {
-  let ui = null;
+  let key;
   if (currentTool === tools.pen) {
-    ui = $("#pensize");
+    key = "strokeWidth";
   } else if (currentTool === tools.eraser) {
-    ui = $("#erasersize");
+    key = "eraserWidth";
   } else {
     return;
   }
   if (handler.shortcut.endsWith("-")) {
-    ui.stepDown();
+    console.log('subtract from %s', key);
+    state[key] -= 1;
   } else {
-    ui.stepUp();
+    console.log('add to %s', key);
+    state[key] += 1;
   }
-  ui.oninput(); // this is messed up, but whatever works, if I replace how Steppers work this will have to change
-  // ui.dispatchEvent(new Event('change', {bubbles: true})); // notify listeners that the value has changed
 }
 
 function render() {
@@ -430,6 +378,8 @@ function render() {
     ui.color6 = state.color6;
     ui.color7 = state.color7;
     ui.color8 = state.color8;
+    ui.strokeWidth = state.strokeWidth;
+    ui.eraserWidth = state.eraserWidth;
     ui.tab_file = state.tab_file;
     ui.tab_draw = state.tab_draw;
     ui.tab_frames = state.tab_frames;
@@ -448,7 +398,7 @@ requestAnimationFrame(render);
 //                Arrows: ← →
 
 addShortcuts("esc", () => $("#shimmy").click(), "#shimmy", "esc", "esc");
-addShortcuts("d", toggleDisplay, "", "d", "d");
+addShortcuts("d", ui.toggleDisplay, "", "d", "d");
 // Undo/Redo
 addShortcuts(
   "⌘+z, ctrl+z",
@@ -467,7 +417,8 @@ addShortcuts(
 // Files
 addShortcuts("n", newAnimation, "#filenew", "n", "n");
 addShortcuts("⌘+s, ctrl+s", saveAsSvg, "#filesave", "⌘+s", "⌃+s");
-addShortcuts("⌘+o, ctrl+o", openSvg, "#fileopen", "⌘+o", "⌃+o");
+// hotkey to open file can't work because the <input> requires user interaction to trigger
+//addShortcuts("⌘+o, ctrl+o", openSvg, "#fileopen", "⌘+o", "⌃+o");
 addShortcuts("g", saveAsGif, "#filegif", "g", "g");
 addShortcuts("p", saveAsSpritesheet, "#filepng", "p", "p");
 // Tools
@@ -567,18 +518,18 @@ listen("#toolpicker", "change", evt => selectToolHandler(evt.currentTarget));
 listen(
   "#pensize",
   "change",
-  evt => (currentStrokeWidth = Number(evt.currentTarget.value))
+  evt => (state.strokeWidth = Number(evt.currentTarget.value))
 );
 listen(
   "#erasersize",
   "change",
-  evt => (currentEraserWidth = Number(evt.currentTarget.value))
+  evt => (state.eraserWidth = Number(evt.currentTarget.value))
 );
 listen("#pencolor, #backgroundcolor", "click", evt =>
-  colorPopup(evt.currentTarget)
+  ui.colorPopup(evt.currentTarget)
 );
-listen(".js-miniwell", "click", evt => selectColor(evt.currentTarget));
-listen(".js-miniwell", "dblclick", evt => colorPopup(evt.currentTarget));
+listen(".miniwell", "click", evt => ui.selectColor(evt.currentTarget));
+listen(".miniwell", "dblclick", evt => ui.colorPopup(evt.currentTarget));
 listen("#frames", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
 listen("#framedelete", "click", frames.deleteFrame);
 listen("#framenew", "click", frames.addFrame);

@@ -1,7 +1,7 @@
 
 import {svg, removeClass, insertAfter, next, $, $$} from "./dom.js";
-import {state} from "./state.js";
-import {ui} from "./ui.js";
+import state from "./state.js";
+import ui from "./ui.js";
 
 let _lastFrameTime = 0;
 
@@ -9,54 +9,12 @@ function playingFrame() {
   return $(".frame.play-frame");
 }
 
-function getAnimationBBox(show) {
-  let frames = $$(".frame");
-  let boxes = frames.map(frame => {
-    if (frame.classList.contains("selected")) {
-      return frame.getBoundingClientRect();
-    } else {
-      frame.classList.add("selected");
-      let box = frame.getBoundingClientRect();
-      frame.classList.remove("selected");
-      return box;
-    }
-  });
-  let box = {
-    x: Math.max(Math.floor(Math.min(...boxes.map(b => b.x))) - 10, 0),
-    y: Math.max(Math.floor(Math.min(...boxes.map(b => b.y))) - 10, 0),
-    right: Math.min(
-      Math.floor(Math.max(...boxes.map(b => b.right))) + 10,
-      document.body.clientWidth
-    ),
-    bottom: Math.min(
-      Math.floor(Math.max(...boxes.map(b => b.bottom))) + 10,
-      document.body.clientHeight
-    )
-  };
-  box.width = box.right - box.x;
-  box.height = box.bottom - box.y;
-  if (show) {
-    insertAfter(
-      svg("rect", {
-        x: box.x,
-        y: box.y,
-        width: box.width,
-        height: box.height,
-        stroke: "red",
-        fill: "none"
-      }),
-      ui.currentFrame()
-    );
-  }
-  return box;
-}
-
 function play() {
   // turn play button into stop button
   // disable all other controls
   // temporarily turn off onionskin (remember state)
   // start at beginning of document (remember state)
-  let { x, y, width, height } = getAnimationBBox();
+  let { x, y, width, height } = ui.getAnimationBBox();
   let onion = $(".onionskin");
   if (onion) {
     onion.classList.replace("onionskin", "nskin");
@@ -113,4 +71,4 @@ function playNextFrame() {
   }
 }
 
-export {playingFrame, getAnimationBBox, play};
+export {playingFrame, play};

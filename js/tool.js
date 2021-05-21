@@ -1,8 +1,8 @@
 
 import * as dom from "./dom.js";
 const {$, $$} = dom;
-import { state } from "./state.js";
-import { ui } from "./ui.js";
+import state from "./state.js";
+import ui from "./ui.js";
 import * as undo from "./undo.js";
 
 const ZOOMIN = 1.2;
@@ -533,7 +533,7 @@ function drawBoundingBox(bbox, color) {
 }
 
 function erasePaths(point) {
-  let candidatePaths = $$(currentFrame(), "path");
+  let candidatePaths = $$(ui.currentFrame(), "path");
   let paths = collidePaths(point, candidatePaths);
   paths.forEach(path => erasePath(point, path));
 }

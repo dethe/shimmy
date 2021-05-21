@@ -18,7 +18,7 @@
 // TODO: Separate out Moat and file-format specifics, other non-file functions
 
 import * as dom from "./dom.js";
-import {$, $$} from "./dom.js";
+const {$, $$} = dom;
 
 // CONFIGURATION
 let params = new URLSearchParams(new URL(window.location).search);
