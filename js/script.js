@@ -19,7 +19,6 @@ import * as file from "./file.js";
 import state from "./state.js";
 import ui from "./ui.js";
 import * as frames from "./frames.js";
-import * as tool from "./tool.js";
 import * as dom from "./dom.js";
 const { $, $$, listen } = dom;
 import * as animation from "./animation.js";
@@ -40,25 +39,9 @@ function getSvgPoint(x, y) {
   return point;
 }
 
-let tools = {
-  pen: new tool.Pen(ui.canvas),
-  move: new tool.Move(ui.canvas),
-  rotate: new tool.Rotate(ui.canvas),
-  zoomin: new tool.ZoomIn(ui.canvas),
-  zoomout: new tool.ZoomOut(ui.canvas),
-  eraser: new tool.Eraser(ui.canvas),
-};
-let currentTool;
-selectTool("pen");
 
 function selectToolHandler(sel) {
-  selectTool(sel.value);
-}
-
-function selectTool(name) {
-  currentTool = tools[name];
-  state.tool = name;
-  currentTool.select();
+  state.tool = sel.value;
 }
 
 // Prevent control clicks from passing through to svg
@@ -68,13 +51,13 @@ function swallowClicks(evt) {
 }
 listen(".toolbar, .tabbar", ["mousedown", "touchstart"], swallowClicks);
 
-const toolStart = evt => currentTool.start(evt);
-const toolMove = evt => currentTool.move(evt);
-const toolStop = evt => currentTool.stop(evt);
-const toolCancel = evt => currentTool.cancel();
+const toolStart = evt => ui.currentTool.start(evt);
+const toolMove = evt => ui.currentTool.move(evt);
+const toolStop = evt => ui.currentTool.stop(evt);
+const toolCancel = evt => ui.currentTool.cancel();
 const escCancel = evt => {
   if (evt.code && evt.code === "Escape") {
-    currentTool.cancel();
+    ui.currentTool.cancel();
   }
 };
 
@@ -210,7 +193,6 @@ function saveAsSpritesheet() {
 }
 
 function saveLocal() {
-  console.log('saving');
   localStorage._currentWork = saveFormat();
   console.log('saved');
 }
@@ -248,7 +230,7 @@ listen(document, "keyup", keyupHandler);
 // }, false);
 
 // Attempt again to disable default Safari iOS pinch to zoom and replace with our own zoom
-function gestureStart(event) {}
+function gestureStart(event) { }
 
 function gestureChange(event) {
   // Disable browser zoom
@@ -256,7 +238,7 @@ function gestureChange(event) {
   // need centre point between fingers to zoom from and amount to zoom
 }
 
-function gestureEnd(event) {}
+function gestureEnd(event) { }
 
 listen(document.documentElement, "gesturestart", gestureStart);
 listen(document.documentElement, "gesturechange", gestureChange);
@@ -301,9 +283,8 @@ listen(document, "shimmy-undo-change", updateUndo);
 
 // Show About dialogue the first time someone visits.
 if (!localStorage.hasSeenAbout) {
+  ui.showAbout(3000);
   localStorage.hasSeenAbout = true;
-  aboutShimmyDialog.showModal();
-  setTimeout(() => aboutShimmyDialog.close(), 3000);
 }
 
 // If we don't explicitly request moat integration, hide it
@@ -328,6 +309,7 @@ function toggleTimeline() {
 
 var isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
 
+// REFACTOR: Move this to ui.js or maybe dom.js
 function addShortcuts(shortcuts, fn, uxid, macHint, pcHint) {
   key(shortcuts, (evt, handler) => {
     fn(evt, handler);
@@ -344,18 +326,16 @@ function addShortcuts(shortcuts, fn, uxid, macHint, pcHint) {
 
 function changePenOrEraserSize(evt, handler) {
   let key;
-  if (currentTool === tools.pen) {
+  if (ui.currentTool.name === "pen") {
     key = "strokeWidth";
-  } else if (currentTool === tools.eraser) {
+  } else if (ui.currentTool.name === "eraser") {
     key = "eraserWidth";
   } else {
     return;
   }
   if (handler.shortcut.endsWith("-")) {
-    console.log('subtract from %s', key);
     state[key] -= 1;
   } else {
-    console.log('add to %s', key);
     state[key] += 1;
   }
 }
@@ -366,6 +346,7 @@ function render() {
     ui.name = state.name;
     ui.tool = state.tool;
     ui.doOnionskin = state.doOnionskin;
+    frames.updateOnionskin();
     ui.fps = state.fps;
     ui.palette = state.palette;
     ui.color = state.color;
@@ -453,7 +434,7 @@ addShortcuts(
   "⇧+6"
 );
 addShortcuts(
-  "shift+=, =, -",
+  "shift+=, =, shift+-, -",
   changePenOrEraserSize,
   "#pensize,#erasersize",
   "+/-",
@@ -473,7 +454,7 @@ addShortcuts("8", () => $("#color8").click(), "#color8", "8", "8");
 addShortcuts("shift+n", frames.addFrame, "#framenew", "⇧+n", "⇧+n");
 addShortcuts(
   "shift+backspace, shift+delete",
-  frames.deleteFrame,
+  () => { console.log('delete frame'); frames.deleteFrame() },
   "#framedelete",
   "⇧+⌫",
   "⇧+⌦"
@@ -485,13 +466,12 @@ addShortcuts("left", frames.decrementFrame, "#frameprev", "←", "←");
 addShortcuts("right", frames.incrementFrame, "#framenext", "→", "→");
 addShortcuts(
   "shift+right",
-  frames.gotoLastFrame,
+  frames.goToLastFrame,
   "#framelast",
-  frames.gotoLastFrame,
   "⇧+→",
   "⇧+→"
 );
-addShortcuts("k", () => $("#doonionskin").click(), "#doonionskin", "k", "k");
+addShortcuts("k", state.toggleOnionskin, "#doonionskin", "k", "k");
 // Animate
 addShortcuts("r", animation.play, "animateplay", "r", "r");
 
@@ -515,6 +495,10 @@ listen("#filepng", "click", saveAsSpritesheet);
 listen("#save-moat", "click", saveToMoat);
 listen("#draw", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
 listen("#toolpicker", "change", evt => selectToolHandler(evt.currentTarget));
+listen('.pensize .stepper-add-button', 'click', evt => state.strokeWidth += 1);
+listen('.pensize .stepper-remove-button', 'click', evt => state.strokeWidth -= 1);
+listen('.erasersize .stepper-add-button', 'click', evt => state.eraserWidth += 1);
+listen('.erasersize .stepper-remove-button', 'click', evt => state.eraserWidth -= 1);
 listen(
   "#pensize",
   "change",
@@ -539,7 +523,7 @@ listen("#framefirst", "click", frames.gotoFirstFrame);
 listen("#frameprev", "click", frames.decrementFrame);
 listen("#framenext", "click", frames.incrementFrame);
 listen("#framelast", "click", frames.gotoLastFrame);
-listen("#doonionskin", "change", evt => setOnionSkin(evt.currentTarget));
+listen("#doonionskin", "change", state.toggleOnionskin);
 listen("#animate", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
 listen("#animateplay", "click", animation.play);
 listen("#framerate", "change", evt => setFrameRate(evt.currentTarget));

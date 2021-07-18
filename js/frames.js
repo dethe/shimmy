@@ -7,7 +7,7 @@
 import state from "./state.js";
 import ui from "./ui.js";
 import * as dom from "./dom.js";
-const {$, $$} = dom;
+const { $, $$ } = dom;
 import * as undo from "./undo.js";
 
 function updateOnionskin() {
@@ -73,7 +73,7 @@ function clearFrame() {
   let curr = ui.currentFrame();
   let oldTransform = curr.getAttribute("transform") || "";
   let children = [...curr.children];
-  clear(curr);
+  dom.clear(curr);
   undo.pushUndo(
     "Clear",
     curr,
@@ -118,4 +118,4 @@ function goToLastFrame() {
   goToFrame(curr, last);
 }
 
-export {insertFrame, addFrame, cloneFrame, deleteFrame, clearFrame, goToFrame, incrementFrame, decrementFrame, goToFirstFrame, goToLastFrame};
+export { insertFrame, addFrame, cloneFrame, deleteFrame, clearFrame, goToFrame, incrementFrame, decrementFrame, goToFirstFrame, goToLastFrame, updateOnionskin };

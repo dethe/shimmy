@@ -1,10 +1,11 @@
 /* Functions specifically to manipulate the DOM go here */
 
 import * as dom from "./dom.js";
-const {$, $$} = dom;
+const { $, $$ } = dom;
 import { palettes } from "./palettes.js";
 import SVGCanvas from "./svgcanvas.js";
 import state from "./state.js";
+import * as tool from "./tool.js";
 
 // polyfill for dialog
 const dialog = $$("dialog").forEach(dialog =>
@@ -117,9 +118,10 @@ function hexToValue(hex) {
   return colorpicker.rgbToHsv(colorpicker.hexToRgb(hex)).v;
 }
 
-
 function selectTool(name) {
   let sel = $("#toolpicker");
+  ui.currentTool = tools[name];
+  ui.currentTool.select();
   switch (name) {
     case "pen":
       enablePenSize(true);
@@ -171,8 +173,11 @@ let currentDisplay = "drawingboard";
 class ui {
   static canvas = $("#canvas");
 
-  static showAbout() {
+  static showAbout(timeout) {
     aboutShimmyDialog.showModal();
+    if (timeout) {
+      setTimeout(() => aboutShimmyDialog.close(), timeout);
+    }
   }
 
   static showShortcuts() {
@@ -191,7 +196,7 @@ class ui {
       displayAsDrawingboard();
     }
   }
-  
+
   static toggleUI() {
     $("body").classList.toggle("noui");
   }
@@ -205,14 +210,14 @@ class ui {
     let c = new SVGCanvas(frame, x, y, width, height);
     return c.canvas;
   }
-  
+
   static animationToImages() {
     let { x, y, width, height } = this.getAnimationBBox();
     return $$(".frame").map(frame =>
       this.frameToImage(frame, x, y, width, height)
     );
   }
-  
+
   static getAnimationBBox(show) {
     let frames = $$(".frame");
     let boxes = frames.map(frame => {
@@ -269,8 +274,8 @@ class ui {
       state.color = input.value;
     }
   }
-  
-  
+
+
   static updateFrameCount() {
     try {
       let frames = $$(".frame");
@@ -306,16 +311,17 @@ class ui {
     $("#pensize").value = val;
   }
 
-  static set eraserWidth(val){
+  static set eraserWidth(val) {
     $("#erasersize").value = val;
   }
 
-  static set doOnionSkin(val) {
+  static set doOnionskin(val) {
+    console.log('ui set doOnionskin');
     $("#doonionskin").checked = val;
     if (val) {
-      dom.addClass(this.currentFrame().previousElementSibling, "onionskin");
+      dom.addClass(dom.previous(ui.currentFrame(), ".frame"), "onionskin");
     } else {
-      dom.removeClass(this.currentOnionskinFrame(), "onionskin");
+      $$('.frame.onionskin').forEach(frame => frame.classList.remove('onionskin'));
     }
   }
 
@@ -327,8 +333,8 @@ class ui {
     $("#colorpalette").select;
   }
 
-  static set color(val){
-    
+  static set color(val) {
+
   }
 
   static currentFrame() {
@@ -339,21 +345,31 @@ class ui {
     }
     return frame;
   }
-  
-  
+
+
   static currentOnionskinFrame() {
     return $(".frame.onionskin");
   }
-  
+
 
   static setPaletteHandler = setPaletteHandler;
+  static currentTool = null;
 }
-
 if (!ui.canvas) {
   ui.canvas = dom.svg("svg");
   ui.canvas.id = "canvas";
   document.body.prepend(ui.canvas);
 }
+
+let tools = {
+  pen: new tool.Pen(ui.canvas),
+  move: new tool.Move(ui.canvas),
+  rotate: new tool.Rotate(ui.canvas),
+  zoomin: new tool.ZoomIn(ui.canvas),
+  zoomout: new tool.ZoomOut(ui.canvas),
+  eraser: new tool.Eraser(ui.canvas),
+};
+ui.tool = "pen";
 
 // FIXME: use proper event handling
 window.onresize = ui.resize;

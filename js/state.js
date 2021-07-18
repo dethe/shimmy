@@ -55,7 +55,7 @@ class state {
     values.dirty = true;
   }
 
-  static get tool(){
+  static get tool() {
     return values.tool;
   }
 
@@ -69,8 +69,11 @@ class state {
   }
 
   static set strokeWidth(val) {
-    values.strokeWidth = parseInt(val || 2, 10);
-    values.dirty = true;
+    let theVal = parseInt(val, 10);
+    if (theVal > 0) {
+      values.strokeWidth = theVal;
+    }
+    values.dirty = true; // reset if someone types in an invalid value
   }
 
   static get eraserWidth() {
@@ -78,7 +81,10 @@ class state {
   }
 
   static set eraserWidth(val) {
-    values.eraserWidth = parseInt(val || 5, 10);
+    let theVal = parseInt(val, 10);
+    if (theVal > 0) {
+      values.eraserWidth = theVal;
+    }
     values.dirty = true;
   }
 
@@ -91,7 +97,13 @@ class state {
     values.dirty = true;
   }
 
-  static get fps(){
+  static toggleOnionskin() {
+    console.log('toggleOnionskin');
+    values.doOnionskin = !values.doOnionskin;
+    values.dirty = true;
+  }
+
+  static get fps() {
     return values.fps;
   }
 
@@ -101,7 +113,7 @@ class state {
     values.dirty = true;
   }
 
-  static get palette(){
+  static get palette() {
     return values.palette;
   }
 
@@ -128,7 +140,7 @@ class state {
     values.dirty = true;
   }
 
-  static get color1(){
+  static get color1() {
     return values.color1;
   }
 
@@ -137,7 +149,7 @@ class state {
     values.dirty = true;
   }
 
-  static get color2(){
+  static get color2() {
     return values.color2;
   }
 
@@ -146,7 +158,7 @@ class state {
     values.dirty = true;
   }
 
-  static get color3(){
+  static get color3() {
     return values.color3;
   }
 
@@ -155,7 +167,7 @@ class state {
     values.dirty = true;
   }
 
-  static get color4(){
+  static get color4() {
     return values.color1;
   }
 
@@ -164,7 +176,7 @@ class state {
     values.dirty = true;
   }
 
-  static get color5(){
+  static get color5() {
     return values.color5;
   }
 
@@ -173,7 +185,7 @@ class state {
     values.dirty = true;
   }
 
-  static get color6(){
+  static get color6() {
     return values.color6;
   }
 
@@ -182,7 +194,7 @@ class state {
     values.dirty = true;
   }
 
-  static get color7(){
+  static get color7() {
     return values.color7;
   }
 
@@ -191,7 +203,7 @@ class state {
     values.dirty = true;
   }
 
-  static get color8(){
+  static get color8() {
     return values.color8;
   }
 
@@ -200,7 +212,7 @@ class state {
     values.dirty = true;
   }
 
-  static get fileTab(){
+  static get fileTab() {
     return values.fileTab;
   }
 
@@ -209,7 +221,7 @@ class state {
     values.dirty = true;
   }
 
-  static get drawTab(){
+  static get drawTab() {
     return values.drawTab;
   }
 
@@ -218,7 +230,7 @@ class state {
     values.dirty = true;
   }
 
-  static get framesTab(){
+  static get framesTab() {
     return values.framesTab;
   }
 
@@ -227,7 +239,7 @@ class state {
     values.dirty = true;
   }
 
-  static get animateTab(){
+  static get animateTab() {
     return values.animateTab;
   }
 
@@ -239,7 +251,7 @@ class state {
 
 // Getter-only and not persisted or enumerable
 Object.defineProperty(state, "frameDelay", {
-  get(){
+  get() {
     return values.frameDelay;
   },
   enumerable: false,
@@ -247,10 +259,10 @@ Object.defineProperty(state, "frameDelay", {
 });
 
 Object.defineProperty(state, "dirty", {
-  get(){
+  get() {
     return values.dirty;
   },
-  set(val){
+  set(val) {
     values.dirty = !!val;
   },
   enumerable: false,
