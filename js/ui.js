@@ -33,30 +33,28 @@ palettes.forEach((p, i) => {
 // Color picker
 const colorpicker = new KellyColorPicker({
   place: $(".popup-color"),
-  input: ".js-color",
+  // input: ".js-color",
   size: 200,
   color: "#ffffff",
   method: "square",
-  input_color: false, // or inputColor (since v1.15)
-  input_format: "mixed", // or inputFormat (since v1.15)
+  inputColor: false,
+  inputFormat: "mixed",
   alpha: 1,
-  alpha_slider: false, // or alphaSlider (since v1.15)
+  alphaSlider: false,
   colorSaver: false,
   resizeWith: true, // auto redraw canvas on resize window
   popupClass: "popup-color",
   userEvents: {
     change: function (self) {
-      if (!self.getInput()) {
+      if (!self.input) {
         // we're initializing but don't have a colorwell yet, ignore
         return;
       }
-      // set background color for 'input' to current color of color picker
-      if (self.getCurColorHsv().v < 0.5) {
-        self.getInput().style.color = "#FFF";
-      } else {
-        self.getInput().style.color = "#000";
+      console.log(self.input.id);
+      state[self.input.id] = self.getCurColorHex();
+      if (self.input.id !== "bgcolor") {
+        state.color = self.getCurColorHex();
       }
-      self.getInput().style.background = self.getCurColorHex();
     },
   },
 });
@@ -69,39 +67,6 @@ function setPaletteHandler(evt) {
   }
 }
 setPaletteHandler({ originalTarget: colorpaletteselect });
-
-let choosingBackground = false;
-
-function colorPopup(input) {
-  let popup = $(".popup-color");
-  let colorwell;
-  if (input.id === "backgroundcolor") {
-    choosingBackground = true;
-    colorwell = input;
-  } else {
-    choosingBackground = false;
-    colorwell = $(".js-color");
-  }
-  if (popup.style.display === "none" || popup.style.display === "") {
-    colorpicker.setColor(input.value);
-    popup.style.display = "block";
-  } else {
-    let color = colorpicker.getCurColorHex();
-    colorButton(colorwell, color);
-    colorButton(input, color);
-    if (choosingBackground) {
-      state.bgcolor = color;
-    } else {
-      state.color = color;
-    }
-    popup.style.display = "none";
-  }
-}
-
-function setBackgroundColor(color) {
-  colorButton($("#backgroundcolor"), color);
-  canvas.style.backgroundColor = color;
-}
 
 function colorButton(button, color) {
   button.value = color;
@@ -258,23 +223,6 @@ class ui {
     return box;
   }
 
-  static selectColor(input) {
-    let popup = $(".popup-color");
-    let colorwell = $(".js-color");
-    if (popup.style.display === "block") {
-      let color = colorpicker.getCurColorHex();
-      colorButton(colorwell, color);
-      colorButton(input, color);
-      state.color = color;
-      popup.style.display = "none";
-    } else {
-      colorButton(colorwell, input.value);
-      state.color = input.value;
-    }
-  }
-
-  static colorPopup = colorPopup;
-
   static updateFrameCount() {
     try {
       let frames = $$(".frame");
@@ -330,13 +278,64 @@ class ui {
   }
 
   static set palette(val) {
+    // FIXME
     $("#colorpalette").select;
   }
 
-  static set color(val) {}
+  static isColorPopupVisible = false;
 
-  static set bgcolor(val) {
-    this.canvas.style.backgroundColor = val;
+  static hideColorPopup() {
+    this.isColorPopupVisible = false;
+    $(".popup-color").style.display = "none";
+  }
+
+  static showColorPopup(input) {
+    this.isColorPopupVisible = true;
+    colorpicker.input = input;
+    colorpicker.setColor(input.value);
+    $(".popup-color").style.display = "block";
+  }
+
+  static selectColor(input) {
+    if (this.isColorPopupVisible) {
+      colorpicker.input = input;
+      colorpicker.setColor(input.value);
+    }
+    state.color = input.value;
+  }
+
+  static set color(color) {
+    colorButton($("#color"), color);
+  }
+
+  static set bgcolor(color) {
+    colorButton($("#bgcolor"), color);
+    this.canvas.style.backgroundColor = color;
+  }
+
+  static set color1(color) {
+    colorButton($("#color1"), color);
+  }
+  static set color2(color) {
+    colorButton($("#color2"), color);
+  }
+  static set color3(color) {
+    colorButton($("#color3"), color);
+  }
+  static set color4(color) {
+    colorButton($("#color4"), color);
+  }
+  static set color5(color) {
+    colorButton($("#color5"), color);
+  }
+  static set color6(color) {
+    colorButton($("#color6"), color);
+  }
+  static set color7(color) {
+    colorButton($("#color7"), color);
+  }
+  static set color8(color) {
+    colorButton($("#color8"), color);
   }
 
   static currentFrame() {

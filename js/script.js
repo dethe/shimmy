@@ -25,8 +25,7 @@ import * as animation from "./animation.js";
 import * as stepper from "./stepper.js";
 import * as undo from "./undo.js";
 
-const mouse = {};
-
+// for debugging, FIXME
 window.ui = ui;
 window.state = state;
 
@@ -57,20 +56,31 @@ const toolCancel = evt => ui.currentTool.cancel();
 const escCancel = evt => {
   if (evt.code && evt.code === "Escape") {
     ui.currentTool.cancel();
+    if (ui.isColorPopupVisible) {
+      ui.hideColorPopup();
+    }
   }
 };
 
 let body = document.body;
 
+let toolStartOrHidePopup = evt => {
+  if (ui.isColorPopupVisible) {
+    ui.hideColorPopup();
+  } else {
+    toolStart(evt);
+  }
+};
+
 function listenCanvas() {
-  listen(canvas, ["mousedown", "touchstart"], toolStart);
+  listen(canvas, ["mousedown", "touchstart"], toolStartOrHidePopup);
   listen(canvas, ["mousemove", "touchmove"], toolMove);
   listen(canvas, "touchend", toolStop);
   listen(canvas, "touchcancel", toolCancel);
 }
 
 listen(body, "mouseup", toolStop);
-listen(body, "keydown", escCancel);
+listen(window, "keydown", escCancel);
 
 function undoLine() {
   dom.remove(ui.currentFrame().lastElementChild);
@@ -157,7 +167,7 @@ function saveAsGif(evt) {
     workers: 2,
     quality: 10,
     workerScript: "lib/gif.worker.js",
-    background: $("#backgroundcolor").value,
+    background: $("#bgcolor").value,
   });
   let images = ui.animationToImages();
   images.forEach(img => gif.addFrame(img, { delay: state.frameDelay }));
@@ -376,7 +386,7 @@ requestAnimationFrame(render);
 //                Delete:  ⌦
 //                Arrows: ← →
 
-addShortcuts("esc", () => $("#shimmy").click(), "#shimmy", "esc", "esc");
+addShortcuts("tab", () => $("#shimmy").click(), "#shimmy", "tab", "tab");
 addShortcuts("d", ui.toggleDisplay, "", "d", "d");
 // Undo/Redo
 addShortcuts(
@@ -520,11 +530,11 @@ listen(
   "change",
   evt => (state.eraserWidth = Number(evt.currentTarget.value))
 );
-listen("#pencolor, #backgroundcolor", "click", evt =>
-  ui.colorPopup(evt.currentTarget)
+listen("#color, #bgcolor", "click", evt =>
+  ui.showColorPopup(evt.currentTarget)
 );
 listen(".miniwell", "click", evt => ui.selectColor(evt.currentTarget));
-listen(".miniwell", "dblclick", evt => ui.colorPopup(evt.currentTarget));
+listen(".miniwell", "dblclick", evt => ui.showColorPopup(evt.currentTarget));
 listen("#frames", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
 listen("#framedelete", "click", frames.deleteFrame);
 listen("#framenew", "click", frames.addFrame);
