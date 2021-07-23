@@ -21,7 +21,6 @@ function toggleOnionSkin() {
 }
 
 class state {
-
   static keys = [
     "name",
     "tool",
@@ -98,7 +97,6 @@ class state {
   }
 
   static toggleOnionskin() {
-    console.log('toggleOnionskin');
     values.doOnionskin = !values.doOnionskin;
     values.dirty = true;
   }
@@ -108,8 +106,12 @@ class state {
   }
 
   static set fps(val) {
-    values.fps = new Number(val || 10);
-    values.frameDelay = 1000 / values.fps;
+    let newVal = Number(val);
+    if (Number.isNaN(newVal) || newVal < 1) {
+      return;
+    }
+    values.fps = newVal;
+    values.frameDelay = 1000 / newVal;
     values.dirty = true;
   }
 
@@ -255,7 +257,7 @@ Object.defineProperty(state, "frameDelay", {
     return values.frameDelay;
   },
   enumerable: false,
-  configurable: false
+  configurable: false,
 });
 
 Object.defineProperty(state, "dirty", {
@@ -266,7 +268,7 @@ Object.defineProperty(state, "dirty", {
     values.dirty = !!val;
   },
   enumerable: false,
-  configurable: false
+  configurable: false,
 });
 
 export default state;

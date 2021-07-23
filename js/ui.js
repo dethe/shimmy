@@ -90,10 +90,9 @@ function colorPopup(input) {
     colorButton(colorwell, color);
     colorButton(input, color);
     if (choosingBackground) {
-      canvas.style.backgroundColor = color;
+      state.bgcolor = color;
     } else {
-      // FIXME: this has to set the state, but don't want a circular import dependency
-      currentColor = color;
+      state.color = color;
     }
     popup.style.display = "none";
   }
@@ -165,7 +164,6 @@ function displayAsDrawingboard() {
   ui.canvas.style.display = "block";
 }
 
-
 let aboutShimmyDialog = $("#aboutShimmy");
 let shortcutsDialog = $("#shortcutsDialog");
 let currentDisplay = "drawingboard";
@@ -174,9 +172,10 @@ class ui {
   static canvas = $("#canvas");
 
   static showAbout(timeout) {
+    console.log(aboutShimmyDialog);
     aboutShimmyDialog.showModal();
-    if (timeout) {
-      setTimeout(() => aboutShimmyDialog.close(), timeout);
+    if (timeout && !Number.isNaN(Number(timeout))) {
+      setTimeout(aboutShimmyDialog.close, timeout);
     }
   }
 
@@ -202,7 +201,6 @@ class ui {
   }
 
   static toggleToolbar(name) {
-    console.log("looking for %s-toolbar", name);
     $(`#${name}-toolbar`).classList.toggle("active");
   }
 
@@ -240,7 +238,7 @@ class ui {
       bottom: Math.min(
         Math.floor(Math.max(...boxes.map(b => b.bottom))) + 10,
         document.body.clientHeight
-      )
+      ),
     };
     box.width = box.right - box.x;
     box.height = box.bottom - box.y;
@@ -252,7 +250,7 @@ class ui {
           width: box.width,
           height: box.height,
           stroke: "red",
-          fill: "none"
+          fill: "none",
         }),
         ui.currentFrame()
       );
@@ -275,6 +273,7 @@ class ui {
     }
   }
 
+  static colorPopup = colorPopup;
 
   static updateFrameCount() {
     try {
@@ -316,12 +315,13 @@ class ui {
   }
 
   static set doOnionskin(val) {
-    console.log('ui set doOnionskin');
     $("#doonionskin").checked = val;
     if (val) {
       dom.addClass(dom.previous(ui.currentFrame(), ".frame"), "onionskin");
     } else {
-      $$('.frame.onionskin').forEach(frame => frame.classList.remove('onionskin'));
+      $$(".frame.onionskin").forEach(frame =>
+        frame.classList.remove("onionskin")
+      );
     }
   }
 
@@ -333,8 +333,10 @@ class ui {
     $("#colorpalette").select;
   }
 
-  static set color(val) {
+  static set color(val) {}
 
+  static set bgcolor(val) {
+    this.canvas.style.backgroundColor = val;
   }
 
   static currentFrame() {
@@ -346,11 +348,9 @@ class ui {
     return frame;
   }
 
-
   static currentOnionskinFrame() {
     return $(".frame.onionskin");
   }
-
 
   static setPaletteHandler = setPaletteHandler;
   static currentTool = null;
@@ -373,6 +373,5 @@ ui.tool = "pen";
 
 // FIXME: use proper event handling
 window.onresize = ui.resize;
-
 
 export default ui;

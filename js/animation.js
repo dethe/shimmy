@@ -61,10 +61,10 @@ function playNextFrame() {
   }
   let currFrame = playingFrame();
   _lastFrameTime = time;
-  let next = next(currFrame, ".frame");
-  if (next) {
+  let nextFrame = next(currFrame, ".frame");
+  if (nextFrame) {
     currFrame.classList.remove("play-frame");
-    next.classList.add("play-frame");
+    nextFrame.classList.add("play-frame");
     requestAnimationFrame(playNextFrame);
   } else {
     setTimeout(stop, 500);

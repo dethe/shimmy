@@ -39,7 +39,6 @@ function getSvgPoint(x, y) {
   return point;
 }
 
-
 function selectToolHandler(sel) {
   state.tool = sel.value;
 }
@@ -194,15 +193,14 @@ function saveAsSpritesheet() {
 
 function saveLocal() {
   localStorage._currentWork = saveFormat();
-  console.log('saved');
 }
 
 function updateSavedState() {
-  state.keys.forEach(key => ui.canvas.dataset[key] = state[key]);
+  state.keys.forEach(key => (ui.canvas.dataset[key] = state[key]));
 }
 
 function restoreSavedState() {
-  state.keys.forEach(key => state[key] = ui.canvas.dataset[key]);
+  state.keys.forEach(key => (state[key] = ui.canvas.dataset[key]));
 }
 
 function keydownHandler(evt) {
@@ -230,7 +228,7 @@ listen(document, "keyup", keyupHandler);
 // }, false);
 
 // Attempt again to disable default Safari iOS pinch to zoom and replace with our own zoom
-function gestureStart(event) { }
+function gestureStart(event) {}
 
 function gestureChange(event) {
   // Disable browser zoom
@@ -238,7 +236,7 @@ function gestureChange(event) {
   // need centre point between fingers to zoom from and amount to zoom
 }
 
-function gestureEnd(event) { }
+function gestureEnd(event) {}
 
 listen(document.documentElement, "gesturestart", gestureStart);
 listen(document.documentElement, "gesturechange", gestureChange);
@@ -454,7 +452,10 @@ addShortcuts("8", () => $("#color8").click(), "#color8", "8", "8");
 addShortcuts("shift+n", frames.addFrame, "#framenew", "⇧+n", "⇧+n");
 addShortcuts(
   "shift+backspace, shift+delete",
-  () => { console.log('delete frame'); frames.deleteFrame() },
+  () => {
+    console.log("delete frame");
+    frames.deleteFrame();
+  },
   "#framedelete",
   "⇧+⌫",
   "⇧+⌦"
@@ -464,13 +465,7 @@ addShortcuts("shift+x", frames.clearFrame, "#frameclear", "⇧+x", "⇧+x");
 addShortcuts("shift+left", frames.goToFirstFrame, "#framefirst", "⇧+←", "⇧+←");
 addShortcuts("left", frames.decrementFrame, "#frameprev", "←", "←");
 addShortcuts("right", frames.incrementFrame, "#framenext", "→", "→");
-addShortcuts(
-  "shift+right",
-  frames.goToLastFrame,
-  "#framelast",
-  "⇧+→",
-  "⇧+→"
-);
+addShortcuts("shift+right", frames.goToLastFrame, "#framelast", "⇧+→", "⇧+→");
 addShortcuts("k", state.toggleOnionskin, "#doonionskin", "k", "k");
 // Animate
 addShortcuts("r", animation.play, "animateplay", "r", "r");
@@ -495,10 +490,26 @@ listen("#filepng", "click", saveAsSpritesheet);
 listen("#save-moat", "click", saveToMoat);
 listen("#draw", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
 listen("#toolpicker", "change", evt => selectToolHandler(evt.currentTarget));
-listen('.pensize .stepper-add-button', 'click', evt => state.strokeWidth += 1);
-listen('.pensize .stepper-remove-button', 'click', evt => state.strokeWidth -= 1);
-listen('.erasersize .stepper-add-button', 'click', evt => state.eraserWidth += 1);
-listen('.erasersize .stepper-remove-button', 'click', evt => state.eraserWidth -= 1);
+listen(
+  ".pensize .stepper-add-button",
+  "click",
+  evt => (state.strokeWidth += 1)
+);
+listen(
+  ".pensize .stepper-remove-button",
+  "click",
+  evt => (state.strokeWidth -= 1)
+);
+listen(
+  ".erasersize .stepper-add-button",
+  "click",
+  evt => (state.eraserWidth += 1)
+);
+listen(
+  ".erasersize .stepper-remove-button",
+  "click",
+  evt => (state.eraserWidth -= 1)
+);
 listen(
   "#pensize",
   "change",
@@ -519,14 +530,14 @@ listen("#framedelete", "click", frames.deleteFrame);
 listen("#framenew", "click", frames.addFrame);
 listen("#framecopy", "click", frames.cloneFrame);
 listen("#frameclear", "click", frames.clearFrame);
-listen("#framefirst", "click", frames.gotoFirstFrame);
+listen("#framefirst", "click", frames.goToFirstFrame);
 listen("#frameprev", "click", frames.decrementFrame);
 listen("#framenext", "click", frames.incrementFrame);
-listen("#framelast", "click", frames.gotoLastFrame);
+listen("#framelast", "click", frames.goToLastFrame);
 listen("#doonionskin", "change", state.toggleOnionskin);
 listen("#animate", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
 listen("#animateplay", "click", animation.play);
-listen("#framerate", "change", evt => setFrameRate(evt.currentTarget));
+listen("#framerate", "change", evt => (state.fps = evt.currentTarget.value));
 listen("#timeline", "click", toggleTimeline);
 listen("#shortcuts", "click", ui.showShortcuts);
 // File Events
