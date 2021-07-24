@@ -4,46 +4,57 @@
 /* All state functions that are event handlers should likewise be split. Event handling can go in script.js or if needed we can create an event.js. State functions should only update the JS state */
 
 let values = {
-  dirty: false,
-  color: "#000000",
-  fps: 10,
-  frameDelay: 100, // milliseconds
+  _dirty: false,
+  name: "untitled",
+  tool: "pen",
   display: "drawingboard",
-  tool: null,
   strokeWidth: 1,
   eraserWidth: 5,
   doOnionskin: true,
-  name: null,
+  fps: 10,
+  _frameDelay: 100,
+  palette: 0,
+  color: "#000000",
+  bgcolor: "transparent",
+  color1: "#FF0000",
+  color2: "#FFFF00",
+  color3: "#00FF00",
+  color4: "#00FFFF",
+  color5: "#0000FF",
+  color6: "#666666",
+  color7: "#000000",
+  color8: "#FFFFFF",
+  display: "drawingboard",
+  fileTab: false,
+  drawTab: true,
+  framesTab: false,
+  animateTab: false,
 };
 
 function toggleOnionSkin() {
   state.doOnionskin = !state.doOnionskin;
 }
 
+function bool(val) {
+  if (val === "false") {
+    return false;
+  }
+  return !!val;
+}
+
 class state {
-  static keys = [
-    "name",
-    "tool",
-    "strokeWidth",
-    "eraserWidth",
-    "doOnionskin",
-    "fps",
-    "palette",
-    "color",
-    "bgcolor",
-    "color1",
-    "color2",
-    "color3",
-    "color4",
-    "color5",
-    "color6",
-    "color7",
-    "color8",
-    "fileTab",
-    "drawTab",
-    "framesTab",
-    "animateTab",
-  ];
+  static get keys() {
+    return Object.keys(values).filter(key => key[0] !== "_");
+  }
+
+  static clearDirtyFlag() {
+    // Should only be called by render()
+    values._dirty = false;
+  }
+
+  static get dirty() {
+    return values._dirty;
+  }
 
   static get name() {
     return values.name;
@@ -51,7 +62,7 @@ class state {
 
   static set name(val) {
     values.name = val;
-    values.dirty = true;
+    values._dirty = true;
   }
 
   static get tool() {
@@ -60,7 +71,16 @@ class state {
 
   static set tool(val) {
     values.tool = val;
-    values.dirty = true;
+    values._dirty = true;
+  }
+
+  static get display() {
+    return values.display;
+  }
+
+  static set display(val) {
+    values.display = val;
+    values._dirty = true;
   }
 
   static get strokeWidth() {
@@ -72,7 +92,7 @@ class state {
     if (theVal > 0) {
       values.strokeWidth = theVal;
     }
-    values.dirty = true; // reset if someone types in an invalid value
+    values._dirty = true; // reset if someone types in an invalid value
   }
 
   static get eraserWidth() {
@@ -84,7 +104,7 @@ class state {
     if (theVal > 0) {
       values.eraserWidth = theVal;
     }
-    values.dirty = true;
+    values._dirty = true;
   }
 
   static get doOnionskin() {
@@ -92,13 +112,13 @@ class state {
   }
 
   static set doOnionskin(val) {
-    values.doOnionskin = !!val;
-    values.dirty = true;
+    values.doOnionskin = bool(val);
+    values._dirty = true;
   }
 
   static toggleOnionskin() {
     values.doOnionskin = !values.doOnionskin;
-    values.dirty = true;
+    values._dirty = true;
   }
 
   static get fps() {
@@ -111,8 +131,12 @@ class state {
       return;
     }
     values.fps = newVal;
-    values.frameDelay = 1000 / newVal;
-    values.dirty = true;
+    values._frameDelay = 1000 / newVal;
+    values._dirty = true;
+  }
+
+  static get frameDelay() {
+    return values._frameDelay;
   }
 
   static get palette() {
@@ -121,7 +145,7 @@ class state {
 
   static set palette(val) {
     values.palette = val;
-    values.dirty = true;
+    values._dirty = true;
   }
 
   static get color() {
@@ -130,7 +154,7 @@ class state {
 
   static set color(val) {
     values.color = val;
-    values.dirty = true;
+    values._dirty = true;
   }
 
   static get bgcolor() {
@@ -139,7 +163,7 @@ class state {
 
   static set bgcolor(val) {
     values.bgcolor = val;
-    values.dirty = true;
+    values._dirty = true;
   }
 
   static get color1() {
@@ -148,7 +172,7 @@ class state {
 
   static set color1(val) {
     values.color1 = val;
-    values.dirty = true;
+    values._dirty = true;
   }
 
   static get color2() {
@@ -157,7 +181,7 @@ class state {
 
   static set color2(val) {
     values.color2 = val;
-    values.dirty = true;
+    values._dirty = true;
   }
 
   static get color3() {
@@ -166,7 +190,7 @@ class state {
 
   static set color3(val) {
     values.color3 = val;
-    values.dirty = true;
+    values._dirty = true;
   }
 
   static get color4() {
@@ -175,7 +199,7 @@ class state {
 
   static set color4(val) {
     values.color4 = val;
-    values.dirty = true;
+    values._dirty = true;
   }
 
   static get color5() {
@@ -184,7 +208,7 @@ class state {
 
   static set color5(val) {
     values.color5 = val;
-    values.dirty = true;
+    values._dirty = true;
   }
 
   static get color6() {
@@ -193,7 +217,7 @@ class state {
 
   static set color6(val) {
     values.color6 = val;
-    values.dirty = true;
+    values._dirty = true;
   }
 
   static get color7() {
@@ -202,7 +226,7 @@ class state {
 
   static set color7(val) {
     values.color7 = val;
-    values.dirty = true;
+    values._dirty = true;
   }
 
   static get color8() {
@@ -211,7 +235,7 @@ class state {
 
   static set color8(val) {
     values.color8 = val;
-    values.dirty = true;
+    values._dirty = true;
   }
 
   static get fileTab() {
@@ -219,8 +243,8 @@ class state {
   }
 
   static set fileTab(val) {
-    values.fileTab = !!val;
-    values.dirty = true;
+    values.fileTab = bool(val);
+    values._dirty = true;
   }
 
   static get drawTab() {
@@ -228,8 +252,8 @@ class state {
   }
 
   static set drawTab(val) {
-    values.drawTab = !!val;
-    values.dirty = true;
+    values.drawTab = bool(val);
+    values._dirty = true;
   }
 
   static get framesTab() {
@@ -237,8 +261,8 @@ class state {
   }
 
   static set framesTab(val) {
-    values.framesTab = !!val;
-    values.dirty = true;
+    values.framesTab = bool(val);
+    values._dirty = true;
   }
 
   static get animateTab() {
@@ -246,29 +270,9 @@ class state {
   }
 
   static set animateTab(val) {
-    values.animateTab = !!val;
-    values.dirty = true;
+    values.animateTab = bool(val);
+    values._dirty = true;
   }
 }
-
-// Getter-only and not persisted or enumerable
-Object.defineProperty(state, "frameDelay", {
-  get() {
-    return values.frameDelay;
-  },
-  enumerable: false,
-  configurable: false,
-});
-
-Object.defineProperty(state, "dirty", {
-  get() {
-    return values.dirty;
-  },
-  set(val) {
-    values.dirty = !!val;
-  },
-  enumerable: false,
-  configurable: false,
-});
 
 export default state;

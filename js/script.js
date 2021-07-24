@@ -20,7 +20,7 @@ import state from "./state.js";
 import ui from "./ui.js";
 import * as frames from "./frames.js";
 import * as dom from "./dom.js";
-const { $, $$, listen } = dom;
+const { $, $$, listen, addShortcuts } = dom;
 import * as animation from "./animation.js";
 import * as stepper from "./stepper.js";
 import * as undo from "./undo.js";
@@ -29,7 +29,7 @@ import * as undo from "./undo.js";
 window.ui = ui;
 window.state = state;
 
-const defaultCanvas = `<svg id="canvas" width="2560px" height="1116px" data-name="untitled" data-tool="pen" data-stroke-width="2" data-do-onionskin="true" data-fps="10" data-palette="0" data-color="#000000" data-bgcolor="#FFFFFF" data-color1="#FF0000" data-color2="#FFFF00" data-color3="#00FF00" data-color4="#00FFFF" data-color5="#0000FF" data-color6="#666666" data-color7="#000000" data-color8="#FFFFFF" data-tab_file="false" data-tab_draw="true" data-tab_frames="true" data-tab_animate="false"><g class="frame selected"></g></svg>`;
+const defaultCanvas = `<svg id="canvas" width="2560px" height="1116px" data-name="untitled" data-tool="pen" data-strokeWidth="2" data-doOnionskin="true" data-fps="10" data-palette="0" data-color="#000000" data-bgcolor="#FFFFFF" data-color1="#FF0000" data-color2="#FFFF00" data-color3="#00FF00" data-color4="#00FFFF" data-color5="#0000FF" data-color6="#666666" data-color7="#000000" data-color8="#FFFFFF" data-fileTab="false" data-drawTab="true" data-framesTab="true" data-animateTab="false"><g class="frame selected"></g></svg>`;
 
 function getSvgPoint(x, y) {
   let point = $("svg").createSVGPoint();
@@ -153,6 +153,7 @@ function saveAsSvg(evt) {
 }
 
 function saveFrameAsPng(evt) {
+  // unused, add UI or delete
   let { x, y, width, height } = ui.getAnimationBBox();
   let img = frameToImage(ui.currentFrame(), x, y, width, height);
   // FIXME: save the image
@@ -315,23 +316,6 @@ function toggleTimeline() {
 //
 //////////////////////////////////////////////////////////
 
-var isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
-
-// REFACTOR: Move this to ui.js or maybe dom.js
-function addShortcuts(shortcuts, fn, uxid, macHint, pcHint) {
-  key(shortcuts, (evt, handler) => {
-    fn(evt, handler);
-    return false;
-  });
-  if (!uxid) {
-    return;
-  }
-  let elems = $$(uxid);
-  elems.forEach(
-    elem => (elem.title = elem.title + " (" + (isMac ? macHint : pcHint) + ")")
-  );
-}
-
 function changePenOrEraserSize(evt, handler) {
   let key;
   if (ui.currentTool.name === "pen") {
@@ -350,29 +334,9 @@ function changePenOrEraserSize(evt, handler) {
 
 function render() {
   if (state.dirty) {
-    state.dirty = false;
-    ui.name = state.name;
-    ui.tool = state.tool;
-    ui.doOnionskin = state.doOnionskin;
+    state.clearDirtyFlag();
+    state.keys.forEach(key => (ui[key] = state[key]));
     frames.updateOnionskin();
-    ui.fps = state.fps;
-    ui.palette = state.palette;
-    ui.color = state.color;
-    ui.bgcolor = state.bgcolor;
-    ui.color1 = state.color1;
-    ui.color2 = state.color2;
-    ui.color3 = state.color3;
-    ui.color4 = state.color4;
-    ui.color5 = state.color5;
-    ui.color6 = state.color6;
-    ui.color7 = state.color7;
-    ui.color8 = state.color8;
-    ui.strokeWidth = state.strokeWidth;
-    ui.eraserWidth = state.eraserWidth;
-    ui.tab_file = state.tab_file;
-    ui.tab_draw = state.tab_draw;
-    ui.tab_frames = state.tab_frames;
-    ui.tab_animate = state.tab_animate;
   }
   requestAnimationFrame(render);
 }
@@ -411,32 +375,32 @@ addShortcuts("⌘+s, ctrl+s", saveAsSvg, "#filesave", "⌘+s", "⌃+s");
 addShortcuts("g", saveAsGif, "#filegif", "g", "g");
 addShortcuts("p", saveAsSpritesheet, "#filepng", "p", "p");
 // Tools
-addShortcuts("shift+1", () => selectTool("pen"), "#toolpen", "⇧+1", "⇧+1");
+addShortcuts("shift+1", () => (state.tool = "pen"), "#toolpen", "⇧+1", "⇧+1");
 addShortcuts(
   "shift+2",
-  () => selectTool("rotate"),
+  () => (state.tool = "rotate"),
   "#toolrotate",
   "⇧+2",
   "⇧+2"
 );
-addShortcuts("shift+3", () => selectTool("move"), "#toolmove", "⇧+3", "⇧+3");
+addShortcuts("shift+3", () => (state.tool = "move"), "#toolmove", "⇧+3", "⇧+3");
 addShortcuts(
   "shift+4",
-  () => selectTool("zoomin"),
+  () => (state.tool = "zoomin"),
   "#toolzoomin",
   "⇧+4",
   "⇧+4"
 );
 addShortcuts(
   "shift+5",
-  () => selectTool("zoomout"),
+  () => (state.tool = "zoomout"),
   "#toolzoomout",
   "⇧+5",
   "⇧+5"
 );
 addShortcuts(
   "shift+6",
-  () => selectTool("eraser"),
+  () => (state.tool = "eraser"),
   "#tooleraser",
   "⇧+6",
   "⇧+6"
@@ -463,7 +427,6 @@ addShortcuts("shift+n", frames.addFrame, "#framenew", "⇧+n", "⇧+n");
 addShortcuts(
   "shift+backspace, shift+delete",
   () => {
-    console.log("delete frame");
     frames.deleteFrame();
   },
   "#framedelete",

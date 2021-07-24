@@ -56,11 +56,7 @@ function listen(selector, event, listener) {
     listener.forEach(l => listen(selector, event, l));
   } else {
     if (selector.addEventListener) {
-      selector.addEventListener(
-        event,
-        listener,
-        true
-      );
+      selector.addEventListener(event, listener, true);
     } else {
       findAll(selector).forEach(e => listen(e, event, listener));
     }
@@ -217,6 +213,23 @@ function indexOf(child) {
   return allChildren.indexOf(child);
 }
 
+var isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
+
+// shortcuts depends on keymaster.js
+function addShortcuts(shortcuts, fn, uxid, macHint, pcHint) {
+  key(shortcuts, (evt, handler) => {
+    fn(evt, handler);
+    return false;
+  });
+  if (!uxid) {
+    return;
+  }
+  let elems = findAll(uxid);
+  elems.forEach(
+    elem => (elem.title = elem.title + " (" + (isMac ? macHint : pcHint) + ")")
+  );
+}
+
 function pathToArray(pathElem) {
   return [].slice.call(pathElem.pathSegList).map(function (seg) {
     return { x: seg.x, y: seg.y };
@@ -254,4 +267,5 @@ export {
   nextSibling,
   toggleClass,
   indexOf,
+  addShortcuts,
 };

@@ -50,7 +50,6 @@ const colorpicker = new KellyColorPicker({
         // we're initializing but don't have a colorwell yet, ignore
         return;
       }
-      console.log(self.input.id);
       state[self.input.id] = self.getCurColorHex();
       if (self.input.id !== "bgcolor") {
         state.color = self.getCurColorHex();
@@ -137,7 +136,6 @@ class ui {
   static canvas = $("#canvas");
 
   static showAbout(timeout) {
-    console.log(aboutShimmyDialog);
     aboutShimmyDialog.showModal();
     if (timeout && !Number.isNaN(Number(timeout))) {
       setTimeout(aboutShimmyDialog.close, timeout);
@@ -152,11 +150,17 @@ class ui {
   static toggleDisplay(evt) {
     evt.preventDefault();
     evt.stopPropagation();
-    if (currentDisplay === "drawingboard") {
-      currentDisplay = "storyboard";
+    if (state.display === "drawingboard") {
+      state.display = "storyboard";
+    } else {
+      state.display = "drawingboard";
+    }
+  }
+
+  static set display(name) {
+    if (name === "storyboard") {
       displayAsStoryboard();
     } else {
-      currentDisplay = "drawingboard";
       displayAsDrawingboard();
     }
   }
@@ -166,7 +170,7 @@ class ui {
   }
 
   static toggleToolbar(name) {
-    $(`#${name}-toolbar`).classList.toggle("active");
+    state[`${name}Tab`] = !state[`${name}Tab`];
   }
 
   static frameToImage(frame, x, y, width, height, callback) {
@@ -338,6 +342,36 @@ class ui {
     colorButton($("#color8"), color);
   }
 
+  static set fileTab(flag) {
+    if (flag) {
+      $("#file-toolbar").classList.add("active");
+    } else {
+      $("#file-toolbar").classList.remove("active");
+    }
+  }
+
+  static set drawTab(flag) {
+    if (flag) {
+      $("#draw-toolbar").classList.add("active");
+    } else {
+      $("#draw-toolbar").classList.remove("active");
+    }
+  }
+
+  static set framesTab(flag) {
+    if (flag) {
+      $("#frames-toolbar").classList.add("active");
+    } else {
+      $("#frames-toolbar").classList.remove("active");
+    }
+  }
+  static set animateTab(flag) {
+    if (flag) {
+      $("#animate-toolbar").classList.add("active");
+    } else {
+      $("#animate-toolbar").classList.remove("active");
+    }
+  }
   static currentFrame() {
     let frame = $(".frame.selected");
     if (!frame) {
