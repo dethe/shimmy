@@ -1,3 +1,9 @@
+/* animation.js
+   part of the Shimmy animation program
+   requires dom.js, state.js, ui.js
+   exports playingFrame(), play()
+*/
+
 import { svg, removeClass, insertAfter, next, $, $$ } from "./dom.js";
 import state from "./state.js";
 import ui from "./ui.js";
