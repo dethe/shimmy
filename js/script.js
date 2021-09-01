@@ -40,6 +40,7 @@ function getSvgPoint(x, y) {
 
 function selectToolHandler(sel) {
   state.tool = sel.value;
+  sel.blur();
 }
 
 // Prevent control clicks from passing through to svg
@@ -370,8 +371,7 @@ addShortcuts(
 // Files
 addShortcuts("n", newAnimation, "#filenew", "n", "n");
 addShortcuts("⌘+s, ctrl+s", saveAsSvg, "#filesave", "⌘+s", "⌃+s");
-// hotkey to open file can't work because the <input> requires user interaction to trigger
-//addShortcuts("⌘+o, ctrl+o", openSvg, "#fileopen", "⌘+o", "⌃+o");
+addShortcuts("⌘+o, ctrl+o", openSvg, "#fileopen", "⌘+o", "⌃+o");
 addShortcuts("g", saveAsGif, "#filegif", "g", "g");
 addShortcuts("p", saveAsSpritesheet, "#filepng", "p", "p");
 // Tools

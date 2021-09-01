@@ -64,6 +64,7 @@ function setPaletteHandler(evt) {
   for (let i = 0; i < 5; i++) {
     colorButton(wells[i], "#" + palette.colors[i]);
   }
+  evt.originalTarget.blur();
 }
 setPaletteHandler({ originalTarget: colorpaletteselect });
 
