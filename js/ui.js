@@ -59,12 +59,13 @@ const colorpicker = new KellyColorPicker({
 });
 
 function setPaletteHandler(evt) {
-  let palette = palettes.filter(p => p.name === evt.originalTarget.value)[0];
+  const sel = evt.target || evt.originalTarget;
+  let palette = palettes.filter(p => p.name === sel.value)[0];
   let wells = $$(".js-miniwell");
   for (let i = 0; i < 5; i++) {
     colorButton(wells[i], "#" + palette.colors[i]);
   }
-  evt.originalTarget.blur();
+  sel.blur();
 }
 setPaletteHandler({ originalTarget: colorpaletteselect });
 
