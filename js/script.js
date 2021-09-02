@@ -20,7 +20,7 @@ import state from "./state.js";
 import ui from "./ui.js";
 import * as frames from "./frames.js";
 import * as dom from "./dom.js";
-const { $, $$, listen, addShortcuts } = dom;
+const { $, $$, listen, addShortcuts, sendEvent } = dom;
 import * as animation from "./animation.js";
 import * as stepper from "./stepper.js";
 import * as undo from "./undo.js";
@@ -52,7 +52,7 @@ listen(".toolbar, .tabbar", ["mousedown", "touchstart"], swallowClicks);
 
 const toolStart = evt => ui.currentTool.start(evt);
 const toolMove = evt => ui.currentTool.move(evt);
-const toolStop = evt => ui.currentTool.stop(evt);
+const toolStop = evt => {ui.currentTool.stop(evt); sendEvent('updateTimeline', {})};
 const toolCancel = evt => ui.currentTool.cancel();
 const escCancel = evt => {
   if (evt.code && evt.code === "Escape") {

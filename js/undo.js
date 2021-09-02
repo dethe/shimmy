@@ -37,6 +37,7 @@
 
 /* globals Mess */
 
+import {sendEvent} from "./dom.js";
 const undoStack = new Map();
 const redoStack = new Map();
 // Fixme: Move Mess to ui.js
@@ -79,16 +80,10 @@ const topRedo = frame => {
   return stack ? top(stack): null
 }
 
-// FIXME: This should be defined somewhere more re-usable, maybe in dom.js?
-const sendEvent = (frame) => {
-  let evt = new CustomEvent("shimmy-undo-change", {
-    detail: {
-      frameUndo: topUndo(frame),
-      frameRedo: topRedo(frame)
-    }
-  });
-  document.dispatchEvent(evt);
-};
+const sendUndoEvent = (frame) => sendEvent("shimmy-undo-change", {
+  frameUndo: topUndo(frame),
+  frameRedo: topRedo(frame)
+});
 
 const pushDocUndo = (name, targetFrame, newCurrentFrame, undoFn, redoFn) => {
   // Special handling for particular events
@@ -96,41 +91,41 @@ const pushDocUndo = (name, targetFrame, newCurrentFrame, undoFn, redoFn) => {
       let oldUndo = undoFn;
       undoFn = function(){
         oldUndo();
-        sendEvent(targetFrame);
+        sendUndoEvent(targetFrame);
       }
       mess.showHtml('You deleted a frame <button>undo</button>', undoFn);
   }
-  sendEvent(newCurrentFrame);
+  sendUndoEvent(newCurrentFrame);
 };
 
 const pushUndo = (name, frame, undoFn, redoFn) => {
   getUndoStack(frame).push({ name, undoFn, redoFn });
   getRedoStack(frame).length = 0;
-  sendEvent(frame);
+  sendUndoEvent(frame);
 };
 
 const undo = frame => {
   let action = getUndoStack(frame).pop();
   action.undoFn();
   getRedoStack(frame).push(action);
-  sendEvent(frame);
+  sendUndoEvent(frame);
 };
 
 const redo = frame => {
   let action = getRedoStack(frame).pop();
   action.redoFn();
   getUndoStack(frame).push(action);
-  sendEvent(frame);
+  sendUndoEvent(frame);
 };
 
 // clear buttons on when new doc is created
-sendEvent(null);
+sendUndoEvent(null);
 
 export {
   undo,
   redo,
   pushUndo,
   pushDocUndo,
-  sendEvent as update,
+  sendUndoEvent as update,
   clear
 };

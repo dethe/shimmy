@@ -248,6 +248,13 @@ function arrayToPath(arr) {
     .join(" ");
 }
 
+const sendEvent = (name, data) => {
+  let evt = new CustomEvent(name, {detail: data});
+  document.dispatchEvent(evt);
+}
+
+
+
 export {
   element,
   html,
@@ -268,4 +275,5 @@ export {
   toggleClass,
   indexOf,
   addShortcuts,
+  sendEvent
 };
