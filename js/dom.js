@@ -253,7 +253,11 @@ const sendEvent = (name, data) => {
   document.dispatchEvent(evt);
 }
 
-
+// Taken from waterbearlang/waterbear, originally based on Paul Irish's random hex color:
+// http://www.paulirish.com/2009/random-hex-color-code-snippets/
+// Theoretically could return non-unique values, not going to let that keep me up at night
+const randomId = () =>
+  return 'k' + Math.floor(Math.random() * 16777215).toString(16); // 'k' because ids have to start with a letter
 
 export {
   element,
@@ -275,5 +279,6 @@ export {
   toggleClass,
   indexOf,
   addShortcuts,
-  sendEvent
+  sendEvent,
+  randomId
 };
