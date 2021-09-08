@@ -259,6 +259,8 @@ const sendEvent = (name, data) => {
 const randomId = () =>
   return 'k' + Math.floor(Math.random() * 16777215).toString(16); // 'k' because ids have to start with a letter
 
+const ensureIds = selector => findAll(selector).forEach(elem => if (!elem.id) elem.id = randomId());
+
 export {
   element,
   html,
@@ -280,5 +282,6 @@ export {
   indexOf,
   addShortcuts,
   sendEvent,
-  randomId
+  randomId,
+  ensureIds
 };
