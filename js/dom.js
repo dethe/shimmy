@@ -257,9 +257,9 @@ const sendEvent = (name, data) => {
 // http://www.paulirish.com/2009/random-hex-color-code-snippets/
 // Theoretically could return non-unique values, not going to let that keep me up at night
 const randomId = () =>
-  return 'k' + Math.floor(Math.random() * 16777215).toString(16); // 'k' because ids have to start with a letter
+  'k' + Math.floor(Math.random() * 16777215).toString(16); // 'k' because ids have to start with a letter
 
-const ensureIds = selector => findAll(selector).forEach(elem => if (!elem.id) elem.id = randomId());
+const ensureIds = selector => findAll(selector).forEach(elem => elem.id ? elem.id : elem.id = randomId());
 
 export {
   element,

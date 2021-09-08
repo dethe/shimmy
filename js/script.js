@@ -107,6 +107,7 @@ function restoreFormat(savetext) {
   ui.canvas.outerHTML = savetext;
   ui.canvas = $("#canvas");
   ui.updateFrameCount();
+  dom.ensureIds('.frame');
   ui.resize();
   restoreSavedState();
   listenCanvas();

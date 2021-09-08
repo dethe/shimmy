@@ -18,6 +18,7 @@ function updateOnionskin() {
 
 function insertFrame(before, frame) {
   dom.insertAfter(frame, before);
+  frame.id = dom.randomId();
   return frame;
 }
 
