@@ -52,7 +52,7 @@ listen(".toolbar, .tabbar", ["mousedown", "touchstart"], swallowClicks);
 
 const toolStart = evt => ui.currentTool.start(evt);
 const toolMove = evt => ui.currentTool.move(evt);
-const toolStop = evt => {ui.currentTool.stop(evt); sendEvent('updateTimeline', {})};
+const toolStop = evt => {ui.currentTool.stop(evt); sendEvent('updateTimeline', {frame: ui.currentFrame()})};
 const toolCancel = evt => ui.currentTool.cancel();
 const escCancel = evt => {
   if (evt.code && evt.code === "Escape") {
@@ -83,6 +83,8 @@ function listenCanvas() {
 listen(body, "mouseup", toolStop);
 listen(window, "keydown", escCancel);
 
+listen(window, "updateTimeline", evt => ui.updateThumbnail(evt.detail.frame));
+
 function undoLine() {
   dom.remove(ui.currentFrame().lastElementChild);
 }
@@ -97,6 +99,7 @@ function newAnimation(evt) {
     clear();
     ui.updateFrameCount();
     undo.clear();
+    ui.makeThumbnails();
   }
 }
 
@@ -111,14 +114,7 @@ function restoreFormat(savetext) {
   ui.resize();
   restoreSavedState();
   listenCanvas();
-  // Make Thumbnails
-  $$('.frame').forEach(frame => {
-    const tl = $('.timeline-frames');
-    console.log(tl);
-    const thumb = ui.frameToImage(frame, 0, 0, WIDTH, HEIGHT, 64);
-    console.log(thumb);
-    tl.appendChild(thumb);
-  });
+  ui.makeThumbnails();
 }
 
 function restoreLocal() {

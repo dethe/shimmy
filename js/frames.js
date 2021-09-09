@@ -19,6 +19,7 @@ function updateOnionskin() {
 function insertFrame(before, frame) {
   dom.insertAfter(frame, before);
   frame.id = dom.randomId();
+  ui.addThumbnail(frame);
   return frame;
 }
 
@@ -46,6 +47,7 @@ function deleteFrame(suppressUndo) {
   let next = frameToDelete.nextElementSibling;
   if (frameToDelete.parentNode.children.length > 1) {
     dom.remove(frameToDelete);
+    ui.removeThumbnail(frameToDelete);
     if (!suppressUndo) {
       undo.pushDocUndo(
         "Delete Frame",
@@ -53,6 +55,7 @@ function deleteFrame(suppressUndo) {
         curr,
         () => {
           parent.insertBefore(frameToDelete, next);
+          ui.addThumbnail(frameToDelete);
           goToFrame(curr, frameToDelete);
         },
         () => deleteFrame(true)
@@ -67,19 +70,23 @@ function restore(node, children, transform) {
     node.setAttribute("transform", transform);
   }
   children.forEach(child => node.appendChild(child));
+  ui.updateThumbnail(node);
   return node;
 }
 
-function clearFrame() {
-  let curr = ui.currentFrame();
+function clearFrame(curr) {
+  if (!curr){
+    curr = ui.currentFrame();
+  }
   let oldTransform = curr.getAttribute("transform") || "";
   let children = [...curr.children];
   dom.clear(curr);
+  ui.updateThumbnail(curr);
   undo.pushUndo(
     "Clear",
     curr,
     () => restore(curr, children, oldTransform),
-    () => clear(curr)
+    () => clearFrame(curr)
   );
 }
 

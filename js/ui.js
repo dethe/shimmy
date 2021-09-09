@@ -167,6 +167,44 @@ class ui {
     }
   }
 
+  static frameToThumbnail(frame){
+    return this.frameToImage(frame, 0, 0, WIDTH, HEIGHT, 64);
+  }
+
+  static thumbnailForFrame(frame){
+    if (!frame) return null;
+    return $(`#${frame.id}-canvas`);
+  }
+
+  static frameForThumbnail(thumb){
+    return $(`#${thumb.id.split('-')[0]}`);
+  }
+
+  static makeThumbnails(){
+    const tl = $('.timeline-frames');
+    tl.innerHTML = ''; // remove any existing children
+    $$('.frame').forEach(frame => {
+      const thumb = this.frameToThumbnail(frame);
+      tl.appendChild(thumb);
+    });
+  }
+
+  static updateThumbnail(frame){
+    const oldThumb = this.thumbnailForFrame(frame);
+    const newThumb = this.frameToThumbnail(frame);
+    oldThumb.replaceWith(newThumb);
+  }
+
+  static addThumbnail(frame){
+    const oldThumb = this.thumbnailForFrame(frame.nextElementSibling);
+    const newThumb = this.frameToThumbnail(frame);
+    $('.timeline-frames').insertBefore(newThumb, oldThumb);
+  }
+
+  static removeThumbnail(frame){
+    this.thumbnailForFrame(frame).remove();
+  }
+
   static toggleUI() {
     $("body").classList.toggle("noui");
   }
