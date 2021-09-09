@@ -2,23 +2,23 @@ import * as dom from "./dom.js";
 
 class SVGCanvas {
   constructor(frame, x, y, width, height, maxHeight) {
-    let scaleFactor = 1;
+    this.scaleFactor = 1;
     if (maxHeight){
-      scaleFactor = maxHeight / height;
-      width = width * scaleFactor;
+      this.scaleFactor = maxHeight / height;
+      width = width * this.scaleFactor;
       height = maxHeight;
     }
     this.canvas = dom.html("canvas", {
       width: width,
       height: height,
-      class: "storyboard-frame"
+      class: "canvas-frame",
+      id: frame.id + '-canvas'
     });
     this.ctx = this.canvas.getContext("2d");
     this.ctx.lineCap = "round";
     this.ctx.lineJoin = "round";
     this.svg = frame;
     this.offset = { x, y };
-    this.scale(scaleFactor, scaleFactor);
     this.draw();
   }
 
@@ -29,8 +29,27 @@ class SVGCanvas {
   }
 
   setTransforms() {
-    let { a, b, c, d, e, f } = this.svg.getCTM();
-    this.ctx.setTransform(a, b, c, d, e - this.offset.x, f - this.offset.y);
+    this.scale(this.scaleFactor); // handle non 1:1 conversion
+    let transforms = this.svg.transform.baseVal;
+    for (let idx = 0; idx < transforms.numberOfItems; idx++){
+      let tx = transforms.getItem(idx);
+      switch(tx.type){
+        case 2: // SVG_TRANSFORM_TRANSLATE
+          this.translate(tx.matrix.e, tx.matrix.f);
+          break;
+        case 3: // SVG_TRANSFORM_SCALE
+          this.scale(tx.matrix.a); // y-scale is tx.matrix.d, but we don't support non-uniform scaling
+          break;
+        case 4: // SVG_TRANSFORM_ROTATE
+          this.rotate(tx.angle);
+          break;
+        default:
+          throw new Exception('Unsupported transform: %o', tx);
+          break;
+      }
+    }
+    // let { a, b, c, d, e, f } = this.svg.getCTM();
+    // this.ctx.setTransform(a, b, c, d, e - this.offset.x, f - this.offset.y);
   }
 
   translate(x, y) {

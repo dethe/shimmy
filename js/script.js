@@ -112,8 +112,13 @@ function restoreFormat(savetext) {
   restoreSavedState();
   listenCanvas();
   // Make Thumbnails
-  $$('.frame').forEach(frame => 
-    $('.timeline-frames').appendChild(ui.frameToImage(frame, 0, 0, WIDTH, HEIGHT, 64)));
+  $$('.frame').forEach(frame => {
+    const tl = $('.timeline-frames');
+    console.log(tl);
+    const thumb = ui.frameToImage(frame, 0, 0, WIDTH, HEIGHT, 64);
+    console.log(thumb);
+    tl.appendChild(thumb);
+  });
 }
 
 function restoreLocal() {
