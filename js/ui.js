@@ -175,9 +175,8 @@ class ui {
     state[`${name}Tab`] = !state[`${name}Tab`];
   }
 
-  static frameToImage(frame, x, y, width, height, callback) {
-    let c = new SVGCanvas(frame, x, y, width, height);
-    return c.canvas;
+  static frameToImage(frame, x, y, width, height, maxHeight) {
+    return new SVGCanvas(frame, x, y, width, height, maxHeight).canvas;
   }
 
   static animationToImages() {

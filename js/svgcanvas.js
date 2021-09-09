@@ -1,7 +1,13 @@
 import * as dom from "./dom.js";
 
 class SVGCanvas {
-  constructor(frame, x, y, width, height) {
+  constructor(frame, x, y, width, height, maxHeight) {
+    let scaleFactor = 1;
+    if (maxHeight){
+      scaleFactor = maxHeight / height;
+      width = width * scaleFactor;
+      height = maxHeight;
+    }
     this.canvas = dom.html("canvas", {
       width: width,
       height: height,
@@ -12,6 +18,7 @@ class SVGCanvas {
     this.ctx.lineJoin = "round";
     this.svg = frame;
     this.offset = { x, y };
+    this.scale(scaleFactor, scaleFactor);
     this.draw();
   }
 

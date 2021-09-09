@@ -111,6 +111,9 @@ function restoreFormat(savetext) {
   ui.resize();
   restoreSavedState();
   listenCanvas();
+  // Make Thumbnails
+  $$('.frame').forEach(frame => 
+    $('.timeline-frames').appendChild(ui.frameToImage(frame, 0, 0, WIDTH, HEIGHT, 64)));
 }
 
 function restoreLocal() {
