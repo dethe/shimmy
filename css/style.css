@@ -1,4 +1,4 @@
-/* 
+/*
 Copyright (C) 2020 Richmond Public Library
 
 This program is free software: you can redistribute it and/or modify
@@ -436,4 +436,8 @@ dialog .close {
 
 .timeline-frames{
   height: 64px;
+}
+
+.timeline-frames > canvas:not(:first-child){
+  border-left: 3px dashed #333;
 }
