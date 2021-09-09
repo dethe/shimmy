@@ -98,7 +98,7 @@ function selectTool(name) {
       break;
     case "rotate":
       enablePenSize(false);
-      sel.selectedIndex = 3;
+      sel.selectedIndex = 1;
       break;
     case "zoomin":
       enablePenSize(false);
