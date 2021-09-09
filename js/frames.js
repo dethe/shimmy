@@ -92,7 +92,9 @@ function clearFrame(curr) {
 
 function goToFrame(prev, next) {
   prev.classList.remove("selected");
+  ui.thumbnailForFrame(prev).classList.remove("selected");
   next.classList.add("selected");
+  ui.thumbnailForFrame(next).classlist.add("selected");
   updateOnionskin();
   ui.updateFrameCount();
   undo.update(next);

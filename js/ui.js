@@ -187,6 +187,7 @@ class ui {
       const thumb = this.frameToThumbnail(frame);
       tl.appendChild(thumb);
     });
+    tl.firstElementChild().classList.add("selected");
   }
 
   static updateThumbnail(frame){

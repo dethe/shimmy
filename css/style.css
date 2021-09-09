@@ -446,3 +446,7 @@ dialog .close {
 .timeline-frames > canvas:not(:first-child){
   border-left: 3px dashed #333;
 }
+
+.timeline-frames > canvas.selected{
+  outline: 2px solid blue;
+}
