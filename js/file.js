@@ -15,7 +15,7 @@
 
 /* globals QRCode timeago*/
 
-// TODO: Separate out Moat and file-format specifics, other non-file functions
+// TODO: Separate out file-format specifics, other non-file functions
 
 import * as dom from "./dom.js";
 const { $, $$ } = dom;
