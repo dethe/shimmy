@@ -60,7 +60,7 @@ body.playing {
 }
 
 body.storyboard {
-  background-color: #CCC;
+  background-color: #ccc;
 }
 
 * {
@@ -129,11 +129,12 @@ header {
   height: var(--bh);
 }
 
-.noui .toolbar{
+.noui .toolbar {
   display: none;
 }
 
-.toolbar > * , .toolbar.active > [hidden]{
+.toolbar > *,
+.toolbar.active > [hidden] {
   display: none !important;
 }
 
@@ -353,14 +354,14 @@ dialog p {
   margin-bottom: 1rem;
 }
 
-dialog ul{
+dialog ul {
   display: flex;
   flex-wrap: wrap;
   max-width: 600px;
   justify-content: space-between;
 }
 
-dialog li{
+dialog li {
   list-style-type: none;
   flex: 1 1 250px;
 }
@@ -374,7 +375,7 @@ dialog form {
   justify-content: flex-end;
 }
 
-dialog button{
+dialog button {
   padding: 1em;
 }
 
@@ -384,7 +385,7 @@ dialog .close {
   padding: 1rem;
 }
 
-.timeline{
+.timeline {
   position: absolute;
   left: 0;
   bottom: 0;
@@ -394,7 +395,7 @@ dialog .close {
   overflow-x: scroll;
 }
 
-.timeline label{
+.timeline label {
   position: absolute;
   left: 3em;
   bottom: 100%;
@@ -402,19 +403,19 @@ dialog .close {
   border-bottom: 0;
   border-top-left-radius: 15px;
   border-top-right-radius: 15px;
-  padding: .25em .5em;
+  padding: 0.25em 0.5em;
   background: #333;
-  color: #FFF;
+  color: #fff;
 }
 
-.timeline-clock{
+.timeline-clock {
   position: relative;
   border-top: 1px solid #000;
   border-bottom: 1px solid #000;
   height: 16px;
 }
 
-.timeline-clock::before{
+.timeline-clock::before {
   content: " ";
   display: block;
   height: 50%;
@@ -422,10 +423,16 @@ dialog .close {
   bottom: 0;
   left: 0;
   position: absolute;
-  background-image: repeating-linear-gradient(90deg, transparent, transparent 3px, #333 3px, transparent 4px);
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 3px,
+    #333 3px,
+    transparent 4px
+  );
 }
 
-.timeline-clock::after{
+.timeline-clock::after {
   content: " ";
   display: block;
   height: 75%;
@@ -433,20 +440,26 @@ dialog .close {
   bottom: 0;
   left: 0;
   position: absolute;
-  background-image: repeating-linear-gradient(90deg, transparent, transparent 30px, #000 30px, transparent 31px);
+  background-image: repeating-linear-gradient(
+    90deg,
+    transparent,
+    transparent 30px,
+    #000 30px,
+    transparent 31px
+  );
 }
 
-.timeline-frames{
+.timeline-frames {
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row;
   height: 64px;
 }
 
-.timeline-frames > canvas:not(:first-child){
+.timeline-frames > canvas:not(:first-child) {
   border-left: 3px dashed #333;
 }
 
-.timeline-frames > canvas.selected{
+.timeline-frames > canvas.selected {
   outline: 2px solid blue;
 }

@@ -12,7 +12,7 @@ import * as undo from "./undo.js";
 
 function updateOnionskin() {
   if (!state.doOnionskin) return;
-  $$('.frame.onionskin').forEach(frame => frame.classList.remove('onionskin'));
+  $$(".frame.onionskin").forEach(frame => frame.classList.remove("onionskin"));
   dom.addClass(dom.previous(ui.currentFrame(), ".frame"), "onionskin");
 }
 
@@ -75,7 +75,7 @@ function restore(node, children, transform) {
 }
 
 function clearFrame(curr) {
-  if (!curr){
+  if (!curr) {
     curr = ui.currentFrame();
   }
   let oldTransform = curr.getAttribute("transform") || "";
@@ -94,7 +94,7 @@ function goToFrame(prev, next) {
   prev.classList.remove("selected");
   ui.thumbnailForFrame(prev).classList.remove("selected");
   next.classList.add("selected");
-  ui.thumbnailForFrame(next).classlist.add("selected");
+  ui.thumbnailForFrame(next).classList.add("selected");
   updateOnionskin();
   ui.updateFrameCount();
   undo.update(next);
@@ -128,4 +128,16 @@ function goToLastFrame() {
   goToFrame(curr, last);
 }
 
-export { insertFrame, addFrame, cloneFrame, deleteFrame, clearFrame, goToFrame, incrementFrame, decrementFrame, goToFirstFrame, goToLastFrame, updateOnionskin };
+export {
+  insertFrame,
+  addFrame,
+  cloneFrame,
+  deleteFrame,
+  clearFrame,
+  goToFrame,
+  incrementFrame,
+  decrementFrame,
+  goToFirstFrame,
+  goToLastFrame,
+  updateOnionskin,
+};

@@ -167,42 +167,47 @@ class ui {
     }
   }
 
-  static frameToThumbnail(frame){
+  static frameToThumbnail(frame) {
     return this.frameToImage(frame, 0, 0, WIDTH, HEIGHT, 64);
   }
 
-  static thumbnailForFrame(frame){
-    if (!frame) return null;
-    return $(`#${frame.id}-canvas`);
+  static thumbnailForFrame(frame) {
+    if (!frame) {
+      console.log("error: no frame in thumbnailForFrame");
+      return null;
+    }
+    let thumb = $(`#${frame.id}-canvas`);
+    console.log("thumb: %o", thumb);
+    return thumb;
   }
 
-  static frameForThumbnail(thumb){
-    return $(`#${thumb.id.split('-')[0]}`);
+  static frameForThumbnail(thumb) {
+    return $(`#${thumb.id.split("-")[0]}`);
   }
 
-  static makeThumbnails(){
-    const tl = $('.timeline-frames');
-    tl.innerHTML = ''; // remove any existing children
-    $$('.frame').forEach(frame => {
+  static makeThumbnails() {
+    const tl = $(".timeline-frames");
+    tl.innerHTML = ""; // remove any existing children
+    $$(".frame").forEach(frame => {
       const thumb = this.frameToThumbnail(frame);
       tl.appendChild(thumb);
     });
-    tl.firstElementChild().classList.add("selected");
+    tl.firstElementChild.classList.add("selected");
   }
 
-  static updateThumbnail(frame){
+  static updateThumbnail(frame) {
     const oldThumb = this.thumbnailForFrame(frame);
     const newThumb = this.frameToThumbnail(frame);
     oldThumb.replaceWith(newThumb);
   }
 
-  static addThumbnail(frame){
+  static addThumbnail(frame) {
     const oldThumb = this.thumbnailForFrame(frame.nextElementSibling);
     const newThumb = this.frameToThumbnail(frame);
-    $('.timeline-frames').insertBefore(newThumb, oldThumb);
+    $(".timeline-frames").insertBefore(newThumb, oldThumb);
   }
 
-  static removeThumbnail(frame){
+  static removeThumbnail(frame) {
     this.thumbnailForFrame(frame).remove();
   }
 
