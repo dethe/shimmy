@@ -94,7 +94,9 @@ function goToFrame(prev, next) {
   prev.classList.remove("selected");
   ui.thumbnailForFrame(prev).classList.remove("selected");
   next.classList.add("selected");
-  ui.thumbnailForFrame(next).classList.add("selected");
+  let nextThumb = ui.thumbnailForFrame(next);
+  nextThumb.classList.add("selected");
+  nextThumb.scrollIntoView();
   updateOnionskin();
   ui.updateFrameCount();
   undo.update(next);
