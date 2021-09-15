@@ -591,4 +591,4 @@ function collidePaths(point, paths) {
 }
 
 
-export {Pen, Move, Rotate, ZoomIn, ZoomOut, Eraser};
+export {Pen, Move, Rotate, ZoomIn, ZoomOut, Eraser, radians, degrees};

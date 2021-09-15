@@ -1,4 +1,5 @@
 import * as dom from "./dom.js";
+import {radians} from "./tool.js";
 
 class SVGCanvas {
   constructor(frame, x, y, width, height, maxHeight) {
@@ -41,7 +42,8 @@ class SVGCanvas {
           this.scale(tx.matrix.a); // y-scale is tx.matrix.d, but we don't support non-uniform scaling
           break;
         case 4: // SVG_TRANSFORM_ROTATE
-          this.rotate(tx.angle);
+          // this.rotate(tx.angle, tx.matrix.e, tx.matrix.f);
+          this.applyMatrix(tx.matrix);
           break;
         default:
           throw new Exception('Unsupported transform: %o', tx);
@@ -64,6 +66,10 @@ class SVGCanvas {
     this.ctx.translate(cx, cy);
     this.ctx.rotate(radians(angle));
     this.ctx.translate(-cx, -cy);
+  }
+
+  applyMatrix(m){
+    this.ctx.transform(m.a, m.b, m.c, m.d, m.e, m.f);
   }
 
   drawLine(line) {

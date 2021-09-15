@@ -173,11 +173,10 @@ class ui {
 
   static thumbnailForFrame(frame) {
     if (!frame) {
-      console.log("error: no frame in thumbnailForFrame");
+      console.error("error: no frame in thumbnailForFrame");
       return null;
     }
     let thumb = $(`#${frame.id}-canvas`);
-    console.log("thumb: %o", thumb);
     return thumb;
   }
 
