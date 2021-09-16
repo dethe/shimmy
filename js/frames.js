@@ -120,13 +120,13 @@ function decrementFrame() {
 
 function goToFirstFrame() {
   let curr = ui.currentFrame();
-  let first = document.querySelector(".frame");
+  let first = $(".frame");
   goToFrame(curr, first);
 }
 
 function goToLastFrame() {
   const curr = ui.currentFrame();
-  const last = document.querySelector(".frame:last-child");
+  const last = $$(".frame:last-child");
   goToFrame(curr, last);
 }
 
