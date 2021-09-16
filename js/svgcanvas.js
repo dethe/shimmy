@@ -1,10 +1,10 @@
 import * as dom from "./dom.js";
-import {radians} from "./tool.js";
+import { radians } from "./tool.js";
 
 class SVGCanvas {
   constructor(frame, x, y, width, height, maxHeight) {
     this.scaleFactor = 1;
-    if (maxHeight){
+    if (maxHeight) {
       this.scaleFactor = maxHeight / height;
       width = width * this.scaleFactor;
       height = maxHeight;
@@ -13,7 +13,7 @@ class SVGCanvas {
       width: width,
       height: height,
       class: "canvas-frame",
-      id: frame.id + '-canvas'
+      id: frame.id + "-canvas",
     });
     this.ctx = this.canvas.getContext("2d");
     this.ctx.lineCap = "round";
@@ -31,10 +31,11 @@ class SVGCanvas {
 
   setTransforms() {
     this.scale(this.scaleFactor); // handle non 1:1 conversion
+    this.translate(-this.offset.x, -this.offset.y);
     let transforms = this.svg.transform.baseVal;
-    for (let idx = 0; idx < transforms.numberOfItems; idx++){
+    for (let idx = 0; idx < transforms.numberOfItems; idx++) {
       let tx = transforms.getItem(idx);
-      switch(tx.type){
+      switch (tx.type) {
         case 2: // SVG_TRANSFORM_TRANSLATE
           this.translate(tx.matrix.e, tx.matrix.f);
           break;
@@ -46,7 +47,7 @@ class SVGCanvas {
           this.applyMatrix(tx.matrix);
           break;
         default:
-          throw new Exception('Unsupported transform: %o', tx);
+          throw new Exception("Unsupported transform: %o", tx);
           break;
       }
     }
@@ -68,7 +69,7 @@ class SVGCanvas {
     this.ctx.translate(-cx, -cy);
   }
 
-  applyMatrix(m){
+  applyMatrix(m) {
     this.ctx.transform(m.a, m.b, m.c, m.d, m.e, m.f);
   }
 

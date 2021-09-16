@@ -225,7 +225,7 @@ class ui {
   static animationToImages() {
     let { x, y, width, height } = this.getAnimationBBox();
     return $$(".frame").map(frame =>
-      this.frameToImage(frame, x, y, width, height)
+      ui.frameToImage(frame, x, y, width, height)
     );
   }
 
