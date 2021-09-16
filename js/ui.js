@@ -229,44 +229,69 @@ class ui {
     );
   }
 
-  static getAnimationBBox(show) {
-    let frames = $$(".frame");
-    let boxes = frames.map(frame => {
-      if (frame.classList.contains("selected")) {
-        return frame.getBoundingClientRect();
-      } else {
-        frame.classList.add("selected");
-        let box = frame.getBoundingClientRect();
-        frame.classList.remove("selected");
-        return box;
-      }
+  static getBBox(frame) {
+    if (frame.classList.contains("selected")) {
+      return frame.getBoundingClientRect();
+    } else {
+      frame.classList.add("selected");
+      let box = frame.getBoundingClientRect();
+      frame.classList.remove("selected");
+      return box;
+    }
+  }
+
+  static showBBoxes() {
+    $$(".frame").forEach(frame =>
+      frame.appendChild(ui.rectForBox(ui.paddedBox(ui.getBBox(frame))))
+    );
+  }
+
+  static hideBBoxes() {
+    let boxes = $$(".guidebox");
+    boxes.forEach(box => box.remove());
+  }
+
+  // get a red SVG rect for a frame
+  static rectForBox(box) {
+    return dom.svg("rect", {
+      x: box.x,
+      y: box.y,
+      width: box.width,
+      height: box.height,
+      stroke: "red",
+      fill: "none",
+      class: "guidebox",
     });
+  }
+
+  // return an x,y,right,bottom,width,height with a bit of room around (10px)
+  static paddedBox(bbox) {
     let box = {
-      x: Math.max(Math.floor(Math.min(...boxes.map(b => b.x))) - 10, 0),
-      y: Math.max(Math.floor(Math.min(...boxes.map(b => b.y))) - 10, 0),
-      right: Math.min(
-        Math.floor(Math.max(...boxes.map(b => b.right))) + 10,
-        document.body.clientWidth
-      ),
-      bottom: Math.min(
-        Math.floor(Math.max(...boxes.map(b => b.bottom))) + 10,
-        document.body.clientHeight
-      ),
+      x: Math.max(bbox.x - 10, 0),
+      y: Math.max(bbox.y - 10, 0),
+      right: Math.min(bbox.right + 10, document.body.clientWidth),
+      bottom: Math.min(bbox.bottom + 10, document.body.clientHeight),
     };
     box.width = box.right - box.x;
     box.height = box.bottom - box.y;
+    return box;
+  }
+
+  static unionBoxes(boxes) {
+    return {
+      x: Math.floor(Math.min(...boxes.map(b => b.x))),
+      y: Math.floor(Math.min(...boxes.map(b => b.y))),
+      right: Math.floor(Math.max(...boxes.map(b => b.right))),
+      bottom: Math.floor(Math.max(...boxes.map(b => b.bottom))),
+    };
+  }
+
+  static getAnimationBBox(show) {
+    let frames = $$(".frame");
+    let boxes = frames.map(ui.getBBox);
+    let box = ui.paddedBox(ui.unionBoxes(boxes));
     if (show) {
-      insertAfter(
-        dom.svg("rect", {
-          x: box.x,
-          y: box.y,
-          width: box.width,
-          height: box.height,
-          stroke: "red",
-          fill: "none",
-        }),
-        ui.currentFrame()
-      );
+      insertAfter(ui.rectForBox(box), ui.currentFrame());
     }
     return box;
   }
