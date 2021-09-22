@@ -230,6 +230,9 @@ class ui {
   }
 
   static getBBox(frame) {
+    if (!frame.classList.contains("frame")){
+      console.log("OK, that's odd: %o", frame);
+    }
     if (frame.classList.contains("selected")) {
       return frame.getBoundingClientRect();
     } else {

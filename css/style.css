@@ -57,6 +57,7 @@ body {
 
 body.playing {
   background-color: #000;
+  pointer-events: none;
 }
 
 body.storyboard {

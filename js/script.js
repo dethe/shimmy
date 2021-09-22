@@ -20,10 +20,15 @@ import state from "./state.js";
 import ui from "./ui.js";
 import * as frames from "./frames.js";
 import * as dom from "./dom.js";
-const { $, $$, listen, addShortcuts, sendEvent } = dom;
+const { $, $$, sendEvent } = dom;
 import * as animation from "./animation.js";
 import * as stepper from "./stepper.js";
 import * as undo from "./undo.js";
+
+// Wrap `dom.listen` and `dom.addShortcuts` so that events don't trigger during animation playback
+
+const listen = (selector, event, listener) => dom.listen(selector, event, evt => {if (!state.playing){listener(evt)}});
+const addShortcuts = (shortcuts, fn, uxid, macHint, pcHint) => dom.addShortcuts(shortcuts, evt => {if (!state.playing){fn(evt)}}, uxid, macHint, pcHint);
 
 // for debugging, FIXME
 window.ui = ui;

@@ -91,6 +91,7 @@ function clearFrame(curr) {
 }
 
 function goToFrame(prev, next) {
+  if (prev === next){ return; }
   console.log("goToFrame(%o, %o)", prev, next);
   prev.classList.remove("selected");
   let prevThumb = ui.thumbnailForFrame(prev);
