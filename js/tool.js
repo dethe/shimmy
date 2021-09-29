@@ -94,9 +94,10 @@ class Pen {
     undo.pushUndo(
       "Draw",
       ui.currentFrame(),
-      () => path.remove(),
-      () => parent.appendChild(path)
+      () => {path.remove(), sendEvent('updateTimeline', {frame: ui.currentFrame()})},
+      () => {parent.appendChild(path); sendEvent('updateTimeline', {frame: ui.currentFrame()})}
     );
+    sendEvent('updateTimeline', {frame: ui.currentFrame()});
   }
 
   cancel() {
@@ -164,9 +165,10 @@ class Move {
     undo.pushUndo(
       "Move",
       curr,
-      () => curr.setAttribute("transform", oldTransform),
-      () => curr.setAttribute("transform", newTransform)
+      () => {curr.setAttribute("transform", oldTransform); sendEvent('updateTimeline', {frame: ui.currentFrame()})},
+      () => {curr.setAttribute("transform", newTransform); sendEvent('updateTimeline', {frame: ui.currentFrame()})}
     );
+    sendEvent('updateTimeline', {frame: ui.currentFrame()})
   }
 
   cancel() {
@@ -250,9 +252,10 @@ class Rotate {
     undo.pushUndo(
       "Rotate",
       curr,
-      () => curr.setAttribute("transform", oldTransform),
-      () => curr.setAttribute("transform", newTransform)
+      () => {curr.setAttribute("transform", oldTransform); sendEvent('updateTimeline', {frame: ui.currentFrame()})},
+      () => {curr.setAttribute("transform", newTransform); sendEvent('updateTimeline', {frame: ui.currentFrame()})}
     );
+    sendEvent('updateTimeline', {frame: ui.currentFrame()});
   }
 
   cancel(evt) {
@@ -287,9 +290,10 @@ class ZoomIn {
     undo.pushUndo(
       "Zoom In",
       curr,
-      () => curr.setAttribute("transform", oldTransform),
-      () => curr.setAttribute("transform", newTransform)
+      () => {curr.setAttribute("transform", oldTransform); sendEvent('updateTimeline', {frame: ui.currentFrame()})},
+      () => {curr.setAttribute("transform", newTransform); sendEvent('updateTimeline', {frame: ui.currentFrame()})}
     );
+    sendEvent('updateTimeline', {frame: ui.currentFrame()});
   }
 
   move(evt) {
@@ -329,9 +333,10 @@ class ZoomOut {
     undo.pushUndo(
       "Zoom Out",
       curr,
-      () => curr.setAttribute("transform", oldTransform),
-      () => curr.setAttribute("transform", newTransform)
+      () => {curr.setAttribute("transform", oldTransform); sendEvent('updateTimeline', {frame: ui.currentFrame()})},
+      () => {curr.setAttribute("transform", newTransform); sendEvent('updateTimeline', {frame: ui.currentFrame()})}
     );
+    sendEvent('updateTimeline', {frame: ui.currentFrame()});
   }
 
   move(evt) {
@@ -402,10 +407,11 @@ class Eraser {
     undo.pushUndo(
       "Erase",
       curr,
-      () => (curr.innerHTML = before),
-      () => (curr.innerHTML = after)
+      () => {(curr.innerHTML = before); sendEvent('updateTimeline', {frame: ui.currentFrame()})},
+      () => {(curr.innerHTML = after); sendEvent('updateTimeline', {frame: ui.currentFrame()})}
     );
     this.before = null;
+    sendEvent('updateTimeline', {frame: ui.currentFrame()});
   }
 
   cancel() {

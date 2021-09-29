@@ -91,8 +91,10 @@ function clearFrame(curr) {
 }
 
 function goToFrame(prev, next) {
-  if (prev === next){ return; }
-  console.log("goToFrame(%o, %o)", prev, next);
+  if (next.classList.contains("selected")){
+    // Trying to go to frame that is already selected
+    return;
+  }
   prev.classList.remove("selected");
   let prevThumb = ui.thumbnailForFrame(prev);
   prevThumb.classList.remove("selected");
@@ -100,7 +102,6 @@ function goToFrame(prev, next) {
   let nextThumb = ui.thumbnailForFrame(next);
   nextThumb.classList.add("selected");
   nextThumb.scrollIntoView();
-  console.log("thumbnails: %o, %o", prevThumb, nextThumb);
   updateOnionskin();
   ui.updateFrameCount();
   undo.update(next);
@@ -133,6 +134,8 @@ function goToLastFrame() {
   const last = $(".frame:last-child");
   goToFrame(curr, last);
 }
+
+window.goToFrame = goToFrame;
 
 export {
   insertFrame,

@@ -57,7 +57,7 @@ listen(".toolbar, .tabbar", ["mousedown", "touchstart"], swallowClicks);
 
 const toolStart = evt => ui.currentTool.start(evt);
 const toolMove = evt => ui.currentTool.move(evt);
-const toolStop = evt => {ui.currentTool.stop(evt); sendEvent('updateTimeline', {frame: ui.currentFrame()})};
+const toolStop = evt => ui.currentTool.stop(evt);
 const toolCancel = evt => ui.currentTool.cancel();
 const escCancel = evt => {
   if (evt.code && evt.code === "Escape") {
@@ -306,8 +306,6 @@ if (!localStorage.hasSeenAbout) {
   ui.showAbout(3000);
   localStorage.hasSeenAbout = true;
 }
-
-// If we don't explicitly request moat integration, hide it
 
 // Show/Hide Timeline
 

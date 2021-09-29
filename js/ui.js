@@ -191,12 +191,15 @@ class ui {
       const thumb = this.frameToThumbnail(frame);
       tl.appendChild(thumb);
     });
-    tl.firstElementChild.classList.add("selected");
+    tl.children[state.currentFrame].classList.add("selected");
   }
 
   static updateThumbnail(frame) {
     const oldThumb = this.thumbnailForFrame(frame);
     const newThumb = this.frameToThumbnail(frame);
+    if (oldThumb.classList.contains('selected')){
+      newThumb.classList.add('selected');
+    }
     oldThumb.replaceWith(newThumb);
   }
 
@@ -302,8 +305,9 @@ class ui {
   static updateFrameCount() {
     try {
       let frames = $$(".frame");
-      let index = frames.indexOf(this.currentFrame()) + 1;
-      $(".framecount output").textContent = index + " of " + frames.length;
+      let index = frames.indexOf(this.currentFrame());
+      state.currentFrame = index; // 0-based index for both frames and timeline thumbnails
+      $(".framecount output").textContent = (index + 1) + " of " + frames.length;
     } catch (e) {
       // wait for the file to load, probably
     }
