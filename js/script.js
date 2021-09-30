@@ -13,7 +13,7 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-/* globals GIF key */
+/* globals  key */
 
 import * as file from "./file.js";
 import state from "./state.js";
@@ -24,6 +24,7 @@ const { $, $$, sendEvent } = dom;
 import * as animation from "./animation.js";
 import * as stepper from "./stepper.js";
 import * as undo from "./undo.js";
+import GIF from "../lib/gif.js";
 
 // Wrap `dom.listen` and `dom.addShortcuts` so that events don't trigger during animation playback
 

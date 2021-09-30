@@ -7,6 +7,8 @@ import SVGCanvas from "./svgcanvas.js";
 import state from "./state.js";
 import * as tool from "./tool.js";
 
+import KellyColorPicker from "../lib/html5-color-picker.js";
+
 // polyfill for dialog
 const dialog = $$("dialog").forEach(dialog =>
   dialogPolyfill.registerDialog(dialog)
@@ -197,8 +199,8 @@ class ui {
   static updateThumbnail(frame) {
     const oldThumb = this.thumbnailForFrame(frame);
     const newThumb = this.frameToThumbnail(frame);
-    if (oldThumb.classList.contains('selected')){
-      newThumb.classList.add('selected');
+    if (oldThumb.classList.contains("selected")) {
+      newThumb.classList.add("selected");
     }
     oldThumb.replaceWith(newThumb);
   }
@@ -233,7 +235,7 @@ class ui {
   }
 
   static getBBox(frame) {
-    if (!frame.classList.contains("frame")){
+    if (!frame.classList.contains("frame")) {
       console.log("OK, that's odd: %o", frame);
     }
     if (frame.classList.contains("selected")) {
@@ -307,7 +309,7 @@ class ui {
       let frames = $$(".frame");
       let index = frames.indexOf(this.currentFrame());
       state.currentFrame = index; // 0-based index for both frames and timeline thumbnails
-      $(".framecount output").textContent = (index + 1) + " of " + frames.length;
+      $(".framecount output").textContent = index + 1 + " of " + frames.length;
     } catch (e) {
       // wait for the file to load, probably
     }

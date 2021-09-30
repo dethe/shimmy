@@ -37,7 +37,8 @@
 
 /* globals Mess */
 
-import {sendEvent} from "./dom.js";
+import { sendEvent } from "./dom.js";
+import Mess from "../lib/mess.js";
 const undoStack = new Map();
 const redoStack = new Map();
 // Fixme: Move Mess to ui.js
@@ -47,53 +48,54 @@ mess.init();
 const clear = () => {
   undoStack.clear();
   redoStack.clear();
-}
+};
 
 const getUndoStack = frame => {
   let stack = undoStack.get(frame);
-  if (!stack){
+  if (!stack) {
     stack = [];
     undoStack.set(frame, stack);
   }
   return stack;
-}
+};
 
 const getRedoStack = frame => {
   let stack = redoStack.get(frame);
-  if (!stack){
+  if (!stack) {
     stack = [];
     redoStack.set(frame, stack);
   }
   return stack;
-}
+};
 
 // top // look at the top item of a stack
 const top = stack => (stack.length ? stack[stack.length - 1].name : null);
 
 const topUndo = frame => {
   let stack = getUndoStack(frame);
-  return stack ? top(stack): null
-}
+  return stack ? top(stack) : null;
+};
 
 const topRedo = frame => {
   let stack = getRedoStack(frame);
-  return stack ? top(stack): null
-}
+  return stack ? top(stack) : null;
+};
 
-const sendUndoEvent = (frame) => sendEvent("shimmy-undo-change", {
-  frameUndo: topUndo(frame),
-  frameRedo: topRedo(frame)
-});
+const sendUndoEvent = frame =>
+  sendEvent("shimmy-undo-change", {
+    frameUndo: topUndo(frame),
+    frameRedo: topRedo(frame),
+  });
 
 const pushDocUndo = (name, targetFrame, newCurrentFrame, undoFn, redoFn) => {
   // Special handling for particular events
-  if (name === "Delete Frame"){
-      let oldUndo = undoFn;
-      undoFn = function(){
-        oldUndo();
-        sendUndoEvent(targetFrame);
-      }
-      mess.showHtml('You deleted a frame <button>undo</button>', undoFn);
+  if (name === "Delete Frame") {
+    let oldUndo = undoFn;
+    undoFn = function () {
+      oldUndo();
+      sendUndoEvent(targetFrame);
+    };
+    mess.showHtml("You deleted a frame <button>undo</button>", undoFn);
   }
   sendUndoEvent(newCurrentFrame);
 };
@@ -121,11 +123,4 @@ const redo = frame => {
 // clear buttons on when new doc is created
 sendUndoEvent(null);
 
-export {
-  undo,
-  redo,
-  pushUndo,
-  pushDocUndo,
-  sendUndoEvent as update,
-  clear
-};
+export { undo, redo, pushUndo, pushDocUndo, sendUndoEvent as update, clear };
