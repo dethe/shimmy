@@ -231,9 +231,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </nav>
     </header>
     <section class="timeline">
-      <label id="timeline" onclick="toggleTimeline()">Timeline</label>
-      <div class="timeline-clock"></div>
-      <div class="timeline-frames"></div>
+      <label class="timeline-label">Timeline</label>
+      <div class="timeline-scroll">
+        <div class="timeline-frames"></div>
+      </div>
     </section>
     <div class="popup-color"></div>
     <dialog id="aboutShimmy">
@@ -309,19 +310,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <input type="submit" class="close" value="Close" />
       </form>
     </dialog>
-    <!-- To Do: library scripts should be imported as modules -->
     <script src="lib/dialog-polyfill.js"></script>
-    <!-- <script src="lib/svgToDataURL.js"></script> -->
-    <!-- <script src="lib/gif.js"></script> -->
-    <!-- <script src="lib/html5-color-picker.js"></script> -->
-    <!-- <script src="lib/qrcode.js"></script> -->
-    <!-- used by Moat integration -->
-    <!-- <script src="lib/timeago.js"></script> -->
-    <!-- used by Moat integration -->
-    <!-- <script src="lib/keymaster.js"></script> -->
-    <!-- used for shortcut keys -->
-    <!-- <script src="lib/mess.js"></script>used for "toast" popups -->
-    <!-- app scripts vanished into modules -->
     <script type="module" src="js/script.js"></script>
   </body>
 </html>

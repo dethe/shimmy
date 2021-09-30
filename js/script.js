@@ -28,8 +28,24 @@ import GIF from "../lib/gif.js";
 
 // Wrap `dom.listen` and `dom.addShortcuts` so that events don't trigger during animation playback
 
-const listen = (selector, event, listener) => dom.listen(selector, event, evt => {if (!state.playing){listener(evt)}});
-const addShortcuts = (shortcuts, fn, uxid, macHint, pcHint) => dom.addShortcuts(shortcuts, evt => {if (!state.playing){fn(evt)}}, uxid, macHint, pcHint);
+const listen = (selector, event, listener) =>
+  dom.listen(selector, event, evt => {
+    if (!state.playing) {
+      listener(evt);
+    }
+  });
+const addShortcuts = (shortcuts, fn, uxid, macHint, pcHint) =>
+  dom.addShortcuts(
+    shortcuts,
+    evt => {
+      if (!state.playing) {
+        fn(evt);
+      }
+    },
+    uxid,
+    macHint,
+    pcHint
+  );
 
 // for debugging, FIXME
 window.ui = ui;
@@ -116,7 +132,7 @@ function restoreFormat(savetext) {
   ui.canvas.outerHTML = savetext;
   ui.canvas = $("#canvas");
   ui.updateFrameCount();
-  dom.ensureIds('.frame');
+  dom.ensureIds(".frame");
   ui.resize();
   restoreSavedState();
   listenCanvas();
@@ -520,7 +536,7 @@ listen("#doonionskin", "change", state.toggleOnionskin);
 listen("#animate", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
 listen("#animateplay", "click", animation.play);
 listen("#framerate", "change", evt => (state.fps = evt.currentTarget.value));
-listen("#timeline", "click", toggleTimeline);
+listen(".timeline-label", "click", toggleTimeline);
 listen("#shortcuts", "click", ui.showShortcuts);
 listen(".timeline-frames", "click", evt =>
   frames.goToFrame(ui.currentFrame(), ui.frameForThumbnail(evt.originalTarget))
