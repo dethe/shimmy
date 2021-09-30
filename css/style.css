@@ -121,6 +121,11 @@ header {
   flex-wrap: wrap;
   min-height: var(--bh);
   position: relative;
+  pointer-events: none;
+}
+
+header > * {
+  pointer-events: auto;
 }
 
 .toolbar {
