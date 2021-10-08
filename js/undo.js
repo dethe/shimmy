@@ -37,6 +37,8 @@
 
 /* globals Mess */
 
+import { sendEvent } from "./dom.js";
+import Mess from "../lib/mess.js";
 const undoStack = new Map();
 const redoStack = new Map();
 // Fixme: Move Mess to ui.js
@@ -46,91 +48,79 @@ mess.init();
 const clear = () => {
   undoStack.clear();
   redoStack.clear();
-}
+};
 
 const getUndoStack = frame => {
   let stack = undoStack.get(frame);
-  if (!stack){
+  if (!stack) {
     stack = [];
     undoStack.set(frame, stack);
   }
   return stack;
-}
+};
 
 const getRedoStack = frame => {
   let stack = redoStack.get(frame);
-  if (!stack){
+  if (!stack) {
     stack = [];
     redoStack.set(frame, stack);
   }
   return stack;
-}
+};
 
 // top // look at the top item of a stack
 const top = stack => (stack.length ? stack[stack.length - 1].name : null);
 
 const topUndo = frame => {
   let stack = getUndoStack(frame);
-  return stack ? top(stack): null
-}
+  return stack ? top(stack) : null;
+};
 
 const topRedo = frame => {
   let stack = getRedoStack(frame);
-  return stack ? top(stack): null
-}
-
-// FIXME: This should be defined somewhere more re-usable, maybe in dom.js?
-const sendEvent = (frame) => {
-  let evt = new CustomEvent("shimmy-undo-change", {
-    detail: {
-      frameUndo: topUndo(frame),
-      frameRedo: topRedo(frame)
-    }
-  });
-  document.dispatchEvent(evt);
+  return stack ? top(stack) : null;
 };
+
+const sendUndoEvent = frame =>
+  sendEvent("shimmy-undo-change", {
+    frameUndo: topUndo(frame),
+    frameRedo: topRedo(frame),
+  });
 
 const pushDocUndo = (name, targetFrame, newCurrentFrame, undoFn, redoFn) => {
   // Special handling for particular events
-  if (name === "Delete Frame"){
-      let oldUndo = undoFn;
-      undoFn = function(){
-        oldUndo();
-        sendEvent(targetFrame);
-      }
-      mess.showHtml('You deleted a frame <button>undo</button>', undoFn);
+  if (name === "Delete Frame") {
+    let oldUndo = undoFn;
+    undoFn = function () {
+      oldUndo();
+      sendUndoEvent(targetFrame);
+    };
+    mess.showHtml("You deleted a frame <button>undo</button>", undoFn);
   }
-  sendEvent(newCurrentFrame);
+  sendUndoEvent(newCurrentFrame);
 };
 
 const pushUndo = (name, frame, undoFn, redoFn) => {
   getUndoStack(frame).push({ name, undoFn, redoFn });
   getRedoStack(frame).length = 0;
-  sendEvent(frame);
+  sendUndoEvent(frame);
 };
 
 const undo = frame => {
   let action = getUndoStack(frame).pop();
   action.undoFn();
   getRedoStack(frame).push(action);
-  sendEvent(frame);
+  sendUndoEvent(frame);
 };
 
 const redo = frame => {
   let action = getRedoStack(frame).pop();
   action.redoFn();
   getUndoStack(frame).push(action);
-  sendEvent(frame);
+  sendUndoEvent(frame);
 };
 
 // clear buttons on when new doc is created
-sendEvent(null);
+sendUndoEvent(null);
 
-export {
-  undo,
-  redo,
-  pushUndo,
-  pushDocUndo,
-  sendEvent as update,
-  clear
-};
+export { undo, redo, pushUndo, pushDocUndo, sendUndoEvent as update, clear };

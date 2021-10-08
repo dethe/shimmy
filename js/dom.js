@@ -15,6 +15,8 @@
 
 // DOM utilities
 
+import assignKey from "../lib/keymaster.js";
+
 var SVG_NS = "http://www.w3.org/2000/svg";
 
 function html(name, attributes, children) {
@@ -217,7 +219,7 @@ var isMac = navigator.platform.toUpperCase().indexOf("MAC") >= 0;
 
 // shortcuts depends on keymaster.js
 function addShortcuts(shortcuts, fn, uxid, macHint, pcHint) {
-  key(shortcuts, (evt, handler) => {
+  assignKey(shortcuts, (evt, handler) => {
     fn(evt, handler);
     return false;
   });
@@ -248,6 +250,21 @@ function arrayToPath(arr) {
     .join(" ");
 }
 
+const sendEvent = (name, data) => {
+  let evt = new CustomEvent(name, { detail: data });
+  document.dispatchEvent(evt);
+};
+
+// Taken from waterbearlang/waterbear, originally based on Paul Irish's random hex color:
+// http://www.paulirish.com/2009/random-hex-color-code-snippets/
+// Theoretically could return non-unique values, not going to let that keep me up at night
+const randomId = () => "k" + Math.floor(Math.random() * 16777215).toString(16); // 'k' because ids have to start with a letter
+
+const ensureIds = selector =>
+  findAll(selector).forEach(elem =>
+    elem.id ? elem.id : (elem.id = randomId())
+  );
+
 export {
   element,
   html,
@@ -268,4 +285,7 @@ export {
   toggleClass,
   indexOf,
   addShortcuts,
+  sendEvent,
+  randomId,
+  ensureIds,
 };

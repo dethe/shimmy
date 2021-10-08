@@ -27,6 +27,7 @@ function play() {
   if (onion) {
     onion.classList.replace("onionskin", "nskin");
   }
+  state.playing = true;
   document.body.classList.add("playing");
   $(".frame").classList.add("play-frame");
   canvas.setAttribute("width", width + "px");
@@ -50,6 +51,7 @@ function stop() {
   // re-enable onionskin if needed
   // turn stop button into play button
   removeClass(playingFrame(), "play-frame");
+  state.playing = false;
   document.body.classList.remove("playing");
   let onion = $(".nskin");
   if (onion) {

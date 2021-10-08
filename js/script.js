@@ -13,17 +13,39 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-/* globals GIF key */
+/* globals  key */
 
 import * as file from "./file.js";
 import state from "./state.js";
 import ui from "./ui.js";
 import * as frames from "./frames.js";
 import * as dom from "./dom.js";
-const { $, $$, listen, addShortcuts } = dom;
+const { $, $$, sendEvent } = dom;
 import * as animation from "./animation.js";
 import * as stepper from "./stepper.js";
 import * as undo from "./undo.js";
+import GIF from "../lib/gif.js";
+
+// Wrap `dom.listen` and `dom.addShortcuts` so that events don't trigger during animation playback
+
+const listen = (selector, event, listener) =>
+  dom.listen(selector, event, evt => {
+    if (!state.playing) {
+      listener(evt);
+    }
+  });
+const addShortcuts = (shortcuts, fn, uxid, macHint, pcHint) =>
+  dom.addShortcuts(
+    shortcuts,
+    evt => {
+      if (!state.playing) {
+        fn(evt);
+      }
+    },
+    uxid,
+    macHint,
+    pcHint
+  );
 
 // for debugging, FIXME
 window.ui = ui;
@@ -83,6 +105,8 @@ function listenCanvas() {
 listen(body, "mouseup", toolStop);
 listen(window, "keydown", escCancel);
 
+listen(window, "updateTimeline", evt => ui.updateThumbnail(evt.detail.frame));
+
 function undoLine() {
   dom.remove(ui.currentFrame().lastElementChild);
 }
@@ -97,6 +121,7 @@ function newAnimation(evt) {
     clear();
     ui.updateFrameCount();
     undo.clear();
+    ui.makeThumbnails();
   }
 }
 
@@ -107,9 +132,11 @@ function restoreFormat(savetext) {
   ui.canvas.outerHTML = savetext;
   ui.canvas = $("#canvas");
   ui.updateFrameCount();
+  dom.ensureIds(".frame");
   ui.resize();
   restoreSavedState();
   listenCanvas();
+  ui.makeThumbnails();
 }
 
 function restoreLocal() {
@@ -296,8 +323,6 @@ if (!localStorage.hasSeenAbout) {
   ui.showAbout(3000);
   localStorage.hasSeenAbout = true;
 }
-
-// If we don't explicitly request moat integration, hide it
 
 // Show/Hide Timeline
 
@@ -511,8 +536,11 @@ listen("#doonionskin", "change", state.toggleOnionskin);
 listen("#animate", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
 listen("#animateplay", "click", animation.play);
 listen("#framerate", "change", evt => (state.fps = evt.currentTarget.value));
-listen("#timeline", "click", toggleTimeline);
+listen(".timeline-label", "click", toggleTimeline);
 listen("#shortcuts", "click", ui.showShortcuts);
+listen(".timeline-frames", "click", evt =>
+  frames.goToFrame(ui.currentFrame(), ui.frameForThumbnail(evt.originalTarget))
+);
 // File Events
 listen(window, "unload", saveLocal);
 listen(window, "load", restoreLocal);

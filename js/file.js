@@ -13,9 +13,9 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-/* globals QRCode timeago*/
+/* globals QRCode */
 
-// TODO: Separate out Moat and file-format specifics, other non-file functions
+// TODO: Separate out file-format specifics, other non-file functions
 
 import * as dom from "./dom.js";
 const { $, $$ } = dom;

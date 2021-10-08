@@ -7,6 +7,8 @@ import SVGCanvas from "./svgcanvas.js";
 import state from "./state.js";
 import * as tool from "./tool.js";
 
+import KellyColorPicker from "../lib/html5-color-picker.js";
+
 // polyfill for dialog
 const dialog = $$("dialog").forEach(dialog =>
   dialogPolyfill.registerDialog(dialog)
@@ -98,7 +100,7 @@ function selectTool(name) {
       break;
     case "rotate":
       enablePenSize(false);
-      sel.selectedIndex = 3;
+      sel.selectedIndex = 1;
       break;
     case "zoomin":
       enablePenSize(false);
@@ -167,6 +169,54 @@ class ui {
     }
   }
 
+  static frameToThumbnail(frame) {
+    return this.frameToImage(frame, 0, 0, WIDTH, HEIGHT, 64);
+  }
+
+  static thumbnailForFrame(frame) {
+    if (!frame) {
+      console.error("error: no frame in thumbnailForFrame");
+      return null;
+    }
+    let thumb = $(`#${frame.id}-canvas`);
+    return thumb;
+  }
+
+  static frameForThumbnail(thumb) {
+    return $(`#${thumb.id.split("-")[0]}`);
+  }
+
+  static makeThumbnails() {
+    const tl = $(".timeline-frames");
+    tl.innerHTML = ""; // remove any existing children
+    $$(".frame").forEach(frame => {
+      const thumb = this.frameToThumbnail(frame);
+      tl.appendChild(dom.html("div", [thumb]));
+    });
+    tl.children[state.currentFrame].firstChild.classList.add("selected");
+  }
+
+  static updateThumbnail(frame) {
+    const oldThumb = this.thumbnailForFrame(frame);
+    const newThumb = this.frameToThumbnail(frame);
+    if (oldThumb.classList.contains("selected")) {
+      newThumb.classList.add("selected");
+    }
+    oldThumb.replaceWith(newThumb);
+  }
+
+  static addThumbnail(frame) {
+    const oldThumb = this.thumbnailForFrame(
+      frame.nextElementSibling
+    ).parentNode;
+    const newThumb = dom.html("div", [this.frameToThumbnail(frame)]);
+    $(".timeline-frames").insertBefore(newThumb, oldThumb);
+  }
+
+  static removeThumbnail(frame) {
+    this.thumbnailForFrame(frame).parentNode.remove();
+  }
+
   static toggleUI() {
     $("body").classList.toggle("noui");
   }
@@ -175,56 +225,83 @@ class ui {
     state[`${name}Tab`] = !state[`${name}Tab`];
   }
 
-  static frameToImage(frame, x, y, width, height, callback) {
-    let c = new SVGCanvas(frame, x, y, width, height);
-    return c.canvas;
+  static frameToImage(frame, x, y, width, height, maxHeight) {
+    return new SVGCanvas(frame, x, y, width, height, maxHeight).canvas;
   }
 
   static animationToImages() {
     let { x, y, width, height } = this.getAnimationBBox();
     return $$(".frame").map(frame =>
-      this.frameToImage(frame, x, y, width, height)
+      ui.frameToImage(frame, x, y, width, height)
     );
+  }
+
+  static getBBox(frame) {
+    if (!frame.classList.contains("frame")) {
+      console.log("OK, that's odd: %o", frame);
+    }
+    if (frame.classList.contains("selected")) {
+      return frame.getBoundingClientRect();
+    } else {
+      frame.classList.add("selected");
+      let box = frame.getBoundingClientRect();
+      frame.classList.remove("selected");
+      return box;
+    }
+  }
+
+  static showBBoxes() {
+    $$(".frame").forEach(frame =>
+      frame.appendChild(ui.rectForBox(ui.paddedBox(ui.getBBox(frame))))
+    );
+  }
+
+  static hideBBoxes() {
+    let boxes = $$(".guidebox");
+    boxes.forEach(box => box.remove());
+  }
+
+  // get a red SVG rect for a frame
+  static rectForBox(box) {
+    return dom.svg("rect", {
+      x: box.x,
+      y: box.y,
+      width: box.width,
+      height: box.height,
+      stroke: "red",
+      fill: "none",
+      class: "guidebox",
+    });
+  }
+
+  // return an x,y,right,bottom,width,height with a bit of room around (10px)
+  static paddedBox(bbox) {
+    let box = {
+      x: Math.max(bbox.x - 10, 0),
+      y: Math.max(bbox.y - 10, 0),
+      right: Math.min(bbox.right + 10, document.body.clientWidth),
+      bottom: Math.min(bbox.bottom + 10, document.body.clientHeight),
+    };
+    box.width = box.right - box.x;
+    box.height = box.bottom - box.y;
+    return box;
+  }
+
+  static unionBoxes(boxes) {
+    return {
+      x: Math.floor(Math.min(...boxes.map(b => b.x))),
+      y: Math.floor(Math.min(...boxes.map(b => b.y))),
+      right: Math.floor(Math.max(...boxes.map(b => b.right))),
+      bottom: Math.floor(Math.max(...boxes.map(b => b.bottom))),
+    };
   }
 
   static getAnimationBBox(show) {
     let frames = $$(".frame");
-    let boxes = frames.map(frame => {
-      if (frame.classList.contains("selected")) {
-        return frame.getBoundingClientRect();
-      } else {
-        frame.classList.add("selected");
-        let box = frame.getBoundingClientRect();
-        frame.classList.remove("selected");
-        return box;
-      }
-    });
-    let box = {
-      x: Math.max(Math.floor(Math.min(...boxes.map(b => b.x))) - 10, 0),
-      y: Math.max(Math.floor(Math.min(...boxes.map(b => b.y))) - 10, 0),
-      right: Math.min(
-        Math.floor(Math.max(...boxes.map(b => b.right))) + 10,
-        document.body.clientWidth
-      ),
-      bottom: Math.min(
-        Math.floor(Math.max(...boxes.map(b => b.bottom))) + 10,
-        document.body.clientHeight
-      ),
-    };
-    box.width = box.right - box.x;
-    box.height = box.bottom - box.y;
+    let boxes = frames.map(ui.getBBox);
+    let box = ui.paddedBox(ui.unionBoxes(boxes));
     if (show) {
-      insertAfter(
-        dom.svg("rect", {
-          x: box.x,
-          y: box.y,
-          width: box.width,
-          height: box.height,
-          stroke: "red",
-          fill: "none",
-        }),
-        ui.currentFrame()
-      );
+      insertAfter(ui.rectForBox(box), ui.currentFrame());
     }
     return box;
   }
@@ -232,8 +309,9 @@ class ui {
   static updateFrameCount() {
     try {
       let frames = $$(".frame");
-      let index = frames.indexOf(this.currentFrame()) + 1;
-      $(".framecount output").textContent = index + " of " + frames.length;
+      let index = frames.indexOf(this.currentFrame());
+      state.currentFrame = index; // 0-based index for both frames and timeline thumbnails
+      $(".framecount output").textContent = index + 1 + " of " + frames.length;
     } catch (e) {
       // wait for the file to load, probably
     }

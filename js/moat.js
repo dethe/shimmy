@@ -2,6 +2,7 @@
 // See moat server: https://glitch.com/~sd-moat
 
 import { $ } from "./dom.js";
+import timeago from "../lib/timeago.js";
 
 // CONFIGURATION
 let params = new URLSearchParams(new URL(window.location).search);

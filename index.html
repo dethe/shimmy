@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!--
-Copyright (C) 2020 Dethe Elza
+Copyright (C) 2020, 2021 Dethe Elza
 
 This program is free software: you can redistribute it and/or modify
 it under the terms of the GNU General Public License as published by
@@ -37,30 +37,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </button>
       <!-- Always visible, no toggle -->
       <nav class="toolbar active" id="always">
-        <button id="about" title="About Shimmy">
-          About<br />Shimmy
-        </button>
+        <button id="about" title="About Shimmy">About<br />Shimmy</button>
         <div class="feedback framecount">
           <label>Frame</label>
           <output>X of Y</output>
         </div>
-        <button
-          title="Frame Undo"
-          id="frameundo"
-        ></button>
-        <button
-          title="Frame Redo"
-          id="frameredo"
-        ></button>
+        <button title="Frame Undo" id="frameundo"></button>
+        <button title="Frame Redo" id="frameredo"></button>
       </nav>
 
       <!-- FILE -->
       <nav class="toolbar" id="file-toolbar">
-        <button
-          id="file"
-          title="File"
-          class="js-tab tab"
-        >
+        <button id="file" title="File" class="js-tab tab">
           <span>File</span>
         </button>
         <button id="filenew" title="New file">
@@ -75,36 +63,23 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           Save<br />
           <i class="far fa-2x fa-download"></i>
         </button>
-        <button id="filegif" title="Save as GIF">
-          Save as GIF
-        </button>
-        <button id="filepng" title="Save as PNG">
-          Save as PNG
-        </button>
+        <button id="filegif" title="Save as GIF">Save as GIF</button>
+        <button id="filepng" title="Save as PNG">Save as PNG</button>
         <div class="feedback moat" id="moat-container">
-          <button id="save-moat">
-            Save to Moat
-          </button>
-          <select id="moat" class="js-moat select-css"> </select>
+          <button id="save-moat">Save to Moat</button>
+          <select id="moat" class="js-moat select-css"></select>
         </div>
       </nav>
 
       <!-- DRAW -->
       <nav class="toolbar active" id="draw-toolbar">
-        <button
-          id="draw"
-          title="Draw"
-          class="js-tab tab"
-        >
+        <button id="draw" title="Draw" class="js-tab tab">
           <span>Draw</span>
         </button>
         <div class="feedback tools">
           <label
             >Tool<br />
-            <select
-              id="toolpicker"
-              class="tools select-css far"
-            >
+            <select id="toolpicker" class="tools select-css far">
               <option value="pen" selected>&#xf304; Pen</option>
               <option value="rotate">&#xf021; Rotate</option>
               <option value="move">&#xf047; Move</option>
@@ -140,8 +115,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
             <select
               id="colorpalette"
               class="palettechooser js-colorpalette select-css"
-            >
-            </select>
+            ></select>
           </label>
         </div>
         <div class="stack colors">
@@ -163,61 +137,38 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           </button>
         </div>
         <div class="stack colors quickcolors">
-          <button
-            id="color1"
-            class="color miniwell js-miniwell"
-          ></button>
-          <button
-            id="color2"
-            class="color miniwell js-miniwell"
-          ></button>
-          <button
-            id="color3"
-            class="color miniwell js-miniwell"
-          ></button>
-          <button
-            id="color4"
-            class="color miniwell js-miniwell"
-          ></button>
-          <button
-            id="color5"
-            class="color miniwell js-miniwell"
-          ></button>
+          <button id="color1" class="color miniwell js-miniwell"></button>
+          <button id="color2" class="color miniwell js-miniwell"></button>
+          <button id="color3" class="color miniwell js-miniwell"></button>
+          <button id="color4" class="color miniwell js-miniwell"></button>
+          <button id="color5" class="color miniwell js-miniwell"></button>
           <button
             id="color6"
             class="color miniwell"
             value="#666666"
-            style="background-color: #666666;"
+            style="background-color: #666666"
           ></button>
           <button
             id="color7"
             class="color miniwell"
             value="#000000"
-            style="background-color: #000000;"
+            style="background-color: #000000"
           ></button>
           <button
             id="color8"
             class="color miniwell"
             value="#FFFFFF"
-            style="background-color: #FFFFFF;"
+            style="background-color: #ffffff"
           ></button>
         </div>
       </nav>
 
       <!-- FRAMES -->
       <nav class="toolbar" id="frames-toolbar">
-        <button
-          id="frames"
-          title="Frames"
-          class="js-tab tab"
-        >
+        <button id="frames" title="Frames" class="js-tab tab">
           <span>Frames</span>
         </button>
-        <button
-          id="framedelete"
-          title="Delete Frame"
-          disabled
-        >
+        <button id="framedelete" title="Delete Frame" disabled>
           Delete<br />
           <span class="fa-stack">
             <i class="fas fa-film-alt fa-stack-2x"></i>
@@ -243,10 +194,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           First<br />
           <i class="far fa-2x fa-fast-backward"></i>
         </button>
-        <button
-          id="frameprev"
-          title="Previous Frame"
-        >
+        <button id="frameprev" title="Previous Frame">
           Back<br />
           <i class="far fa-2x fa-step-backward"></i>
         </button>
@@ -261,11 +209,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <div class="feedback onionskin">
           <label>
             Onionskin
-            <input
-              type="checkbox"
-              checked
-              id="doonionskin"
-            />
+            <input type="checkbox" checked id="doonionskin" />
             <i class="unchecked far fa-square"></i>
             <i class="checked far fa-check-square"></i>
           </label>
@@ -273,11 +217,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </nav>
       <!-- ANIMATE -->
       <nav class="toolbar" id="animate-toolbar">
-        <button
-          id="animate"
-          title="Animate"
-          class="js-tab tab"
-        >
+        <button id="animate" title="Animate" class="js-tab tab">
           <span>Animate</span>
         </button>
         <button id="animateplay" title="Play">
@@ -286,24 +226,19 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         </button>
         <div class="feedback framerate">
           <label title="Frames Per Second">FPS</label>
-          <input
-            id="framerate"
-            type="number"
-            value="10"
-          />
+          <input id="framerate" type="number" value="10" />
         </div>
       </nav>
     </header>
-    <!--section class="timeline">
-      <label id="timeline" onclick="toggleTimeline()">Timeline</label>
-      <div class="timeline-clock"></div>
-      <div class="timeline-frames"></div>
-    </section-->
+    <section class="timeline">
+      <label class="timeline-label">Timeline</label>
+      <div class="timeline-scroll">
+        <div class="timeline-frames"></div>
+      </div>
+    </section>
     <div class="popup-color"></div>
     <dialog id="aboutShimmy">
-      <h3>
-        About Shimmy
-      </h3>
+      <h3>About Shimmy</h3>
       <p>
         Shimmy is a simple sketch-based animation tool for flipbook-style
         animation. You can save your animations as animated GIFs, PNGs
@@ -311,9 +246,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </p>
       <p>
         <a href="https://rpl.yourlibrary.ca/"
-          ><img
-            class="logo"
-            src="img/rpl-logo.png"/></a
+          ><img class="logo" src="img/rpl-logo.png" /></a
         ><br />
         Shimmy code is &copy; 2020 Richond Public Library.<br />
         Individual works made with Shimmy are owned by the individual
@@ -327,8 +260,8 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"
           ><img
             alt="Creative Commons License"
-            style="border-width:0"
-            src="https://i.creativecommons.org/l/by/4.0/88x31.png"/></a
+            style="border-width: 0"
+            src="https://i.creativecommons.org/l/by/4.0/88x31.png" /></a
         ><br />Shimmy documentation, tutorials, and examples are licensed under
         a
         <a rel="license" href="http://creativecommons.org/licenses/by/4.0/"
@@ -336,19 +269,13 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         >.
       </p>
       <form method="dialog">
-        <button id="shortcuts">
-          Keyboard Shortcuts
-        </button>
+        <button id="shortcuts">Keyboard Shortcuts</button>
         <input type="submit" class="close" value="Close" />
       </form>
     </dialog>
     <dialog id="shortcutsDialog">
-      <h3>
-        Keyboard Shortcuts
-      </h3>
-      <p>
-        The following keyboard shortcuts are available.
-      </p>
+      <h3>Keyboard Shortcuts</h3>
+      <p>The following keyboard shortcuts are available.</p>
       <ul>
         <li><kbd>tab</kbd> Toggle UI</li>
         <li><kbd>d</kbd> Toggle Storyboard view (in progress)</li>
@@ -383,16 +310,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <input type="submit" class="close" value="Close" />
       </form>
     </dialog>
-    <!-- To Do: library scripts should be imported as modules -->
     <script src="lib/dialog-polyfill.js"></script>
-    <script src="lib/svgToDataURL.js"></script>
-    <script src="lib/gif.js"></script>
-    <script src="lib/html5-color-picker.js"></script>
-    <script src="lib/qrcode.js"></script><!-- used by Moat integration -->
-    <script src="lib/timeago.js"></script><!-- used by Moat integration -->
-    <script src="lib/keymaster.js"></script><!-- used for shortcut keys -->
-    <script src="lib/mess.js"></script><!-- used for "toast" popups -->
-    <!-- app scripts vanished into modules -->
     <script type="module" src="js/script.js"></script>
   </body>
 </html>

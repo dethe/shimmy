@@ -12,12 +12,14 @@ import * as undo from "./undo.js";
 
 function updateOnionskin() {
   if (!state.doOnionskin) return;
-  $$('.frame.onionskin').forEach(frame => frame.classList.remove('onionskin'));
+  $$(".frame.onionskin").forEach(frame => frame.classList.remove("onionskin"));
   dom.addClass(dom.previous(ui.currentFrame(), ".frame"), "onionskin");
 }
 
 function insertFrame(before, frame) {
   dom.insertAfter(frame, before);
+  frame.id = dom.randomId();
+  ui.addThumbnail(frame);
   return frame;
 }
 
@@ -45,6 +47,7 @@ function deleteFrame(suppressUndo) {
   let next = frameToDelete.nextElementSibling;
   if (frameToDelete.parentNode.children.length > 1) {
     dom.remove(frameToDelete);
+    ui.removeThumbnail(frameToDelete);
     if (!suppressUndo) {
       undo.pushDocUndo(
         "Delete Frame",
@@ -52,6 +55,7 @@ function deleteFrame(suppressUndo) {
         curr,
         () => {
           parent.insertBefore(frameToDelete, next);
+          ui.addThumbnail(frameToDelete);
           goToFrame(curr, frameToDelete);
         },
         () => deleteFrame(true)
@@ -66,25 +70,38 @@ function restore(node, children, transform) {
     node.setAttribute("transform", transform);
   }
   children.forEach(child => node.appendChild(child));
+  ui.updateThumbnail(node);
   return node;
 }
 
-function clearFrame() {
-  let curr = ui.currentFrame();
+function clearFrame(curr) {
+  if (!curr) {
+    curr = ui.currentFrame();
+  }
   let oldTransform = curr.getAttribute("transform") || "";
   let children = [...curr.children];
   dom.clear(curr);
+  ui.updateThumbnail(curr);
   undo.pushUndo(
     "Clear",
     curr,
     () => restore(curr, children, oldTransform),
-    () => clear(curr)
+    () => clearFrame(curr)
   );
 }
 
 function goToFrame(prev, next) {
+  if (next.classList.contains("selected")){
+    // Trying to go to frame that is already selected
+    return;
+  }
   prev.classList.remove("selected");
+  let prevThumb = ui.thumbnailForFrame(prev);
+  prevThumb.classList.remove("selected");
   next.classList.add("selected");
+  let nextThumb = ui.thumbnailForFrame(next);
+  nextThumb.classList.add("selected");
+  nextThumb.scrollIntoView();
   updateOnionskin();
   ui.updateFrameCount();
   undo.update(next);
@@ -108,14 +125,28 @@ function decrementFrame() {
 
 function goToFirstFrame() {
   let curr = ui.currentFrame();
-  let first = document.querySelector(".frame");
+  let first = $(".frame");
   goToFrame(curr, first);
 }
 
 function goToLastFrame() {
   const curr = ui.currentFrame();
-  const last = document.querySelector(".frame:last-child");
+  const last = $(".frame:last-child");
   goToFrame(curr, last);
 }
 
-export { insertFrame, addFrame, cloneFrame, deleteFrame, clearFrame, goToFrame, incrementFrame, decrementFrame, goToFirstFrame, goToLastFrame, updateOnionskin };
+window.goToFrame = goToFrame;
+
+export {
+  insertFrame,
+  addFrame,
+  cloneFrame,
+  deleteFrame,
+  clearFrame,
+  goToFrame,
+  incrementFrame,
+  decrementFrame,
+  goToFirstFrame,
+  goToLastFrame,
+  updateOnionskin,
+};

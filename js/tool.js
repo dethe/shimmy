@@ -1,6 +1,5 @@
-
 import * as dom from "./dom.js";
-const {$, $$} = dom;
+const { $, $$, sendEvent } = dom;
 import state from "./state.js";
 import ui from "./ui.js";
 import * as undo from "./undo.js";
@@ -23,8 +22,7 @@ class Pen {
   }
 
   select() {
-    $("svg").style.cursor =
-      "url(img/pen.svg) 1 31, auto";
+    $("svg").style.cursor = "url(img/pen.svg) 1 31, auto";
   }
 
   startPath(x, y) {
@@ -35,7 +33,7 @@ class Pen {
       "stroke-width": state.strokeWidth,
       "stroke-linejoin": "round",
       "stroke-linecap": "round",
-      fill: "none"
+      fill: "none",
     });
     this.currentPath = ui.currentFrame().appendChild(path);
   }
@@ -94,13 +92,20 @@ class Pen {
     undo.pushUndo(
       "Draw",
       ui.currentFrame(),
-      () => path.remove(),
-      () => parent.appendChild(path)
+      () => {
+        path.remove(),
+          sendEvent("updateTimeline", { frame: ui.currentFrame() });
+      },
+      () => {
+        parent.appendChild(path);
+        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+      }
     );
+    sendEvent("updateTimeline", { frame: ui.currentFrame() });
   }
 
   cancel() {
-    if (this.currentPath){
+    if (this.currentPath) {
       this.currentPath.remove();
     }
     this.currentPath = null;
@@ -117,8 +122,7 @@ class Move {
   }
 
   select() {
-    $("svg").style.cursor =
-      "url(img/arrows.svg) 16 16, auto";
+    $("svg").style.cursor = "url(img/arrows.svg) 16 16, auto";
   }
 
   start(evt) {
@@ -164,9 +168,16 @@ class Move {
     undo.pushUndo(
       "Move",
       curr,
-      () => curr.setAttribute("transform", oldTransform),
-      () => curr.setAttribute("transform", newTransform)
+      () => {
+        curr.setAttribute("transform", oldTransform);
+        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+      },
+      () => {
+        curr.setAttribute("transform", newTransform);
+        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+      }
     );
+    sendEvent("updateTimeline", { frame: ui.currentFrame() });
   }
 
   cancel() {
@@ -191,8 +202,7 @@ class Rotate {
   }
 
   select() {
-    $("svg").style.cursor =
-      "url(img/sync-alt.svg) 16 16, auto";
+    $("svg").style.cursor = "url(img/sync-alt.svg) 16 16, auto";
   }
 
   start(evt) {
@@ -250,9 +260,16 @@ class Rotate {
     undo.pushUndo(
       "Rotate",
       curr,
-      () => curr.setAttribute("transform", oldTransform),
-      () => curr.setAttribute("transform", newTransform)
+      () => {
+        curr.setAttribute("transform", oldTransform);
+        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+      },
+      () => {
+        curr.setAttribute("transform", newTransform);
+        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+      }
     );
+    sendEvent("updateTimeline", { frame: ui.currentFrame() });
   }
 
   cancel(evt) {
@@ -269,8 +286,7 @@ class ZoomIn {
   }
 
   select() {
-    $("svg").style.cursor =
-      "url(img/expand-arrows-alt.svg) 16 16,auto";
+    $("svg").style.cursor = "url(img/expand-arrows-alt.svg) 16 16,auto";
   }
 
   start(evt) {
@@ -287,9 +303,16 @@ class ZoomIn {
     undo.pushUndo(
       "Zoom In",
       curr,
-      () => curr.setAttribute("transform", oldTransform),
-      () => curr.setAttribute("transform", newTransform)
+      () => {
+        curr.setAttribute("transform", oldTransform);
+        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+      },
+      () => {
+        curr.setAttribute("transform", newTransform);
+        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+      }
     );
+    sendEvent("updateTimeline", { frame: ui.currentFrame() });
   }
 
   move(evt) {
@@ -311,8 +334,7 @@ class ZoomOut {
   }
 
   select() {
-    $("svg").style.cursor =
-      "url(img/compress-arrows-alt.svg) 16 16, auto";
+    $("svg").style.cursor = "url(img/compress-arrows-alt.svg) 16 16, auto";
   }
 
   start(evt) {
@@ -329,9 +351,16 @@ class ZoomOut {
     undo.pushUndo(
       "Zoom Out",
       curr,
-      () => curr.setAttribute("transform", oldTransform),
-      () => curr.setAttribute("transform", newTransform)
+      () => {
+        curr.setAttribute("transform", oldTransform);
+        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+      },
+      () => {
+        curr.setAttribute("transform", newTransform);
+        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+      }
     );
+    sendEvent("updateTimeline", { frame: ui.currentFrame() });
   }
 
   move(evt) {
@@ -353,8 +382,7 @@ class Eraser {
   }
 
   select() {
-    $("svg").style.cursor =
-      "url(img/eraser.svg) 16 28, auto";
+    $("svg").style.cursor = "url(img/eraser.svg) 16 28, auto";
   }
 
   start(evt) {
@@ -391,7 +419,7 @@ class Eraser {
   }
 
   stop(evt) {
-    if (!this.dragging){
+    if (!this.dragging) {
       return;
     }
     this.dragging = false;
@@ -402,10 +430,17 @@ class Eraser {
     undo.pushUndo(
       "Erase",
       curr,
-      () => (curr.innerHTML = before),
-      () => (curr.innerHTML = after)
+      () => {
+        curr.innerHTML = before;
+        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+      },
+      () => {
+        curr.innerHTML = after;
+        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+      }
     );
     this.before = null;
+    sendEvent("updateTimeline", { frame: ui.currentFrame() });
   }
 
   cancel() {
@@ -419,17 +454,14 @@ class Eraser {
 function pointFromText(t) {
   // expects t to be in the form of M124,345 or L23,345, i.e. an absolute move or lineTo followed by x,y coordinates
   let cmd = t[0];
-  let [x, y] = t
-    .slice(1)
-    .split(",")
-    .map(Number);
+  let [x, y] = t.slice(1).split(",").map(Number);
   return { cmd, x, y };
 }
 
 function pointsFromPath(path) {
   return path
     .getAttribute("d")
-    .replace(/, /g, ',')
+    .replace(/, /g, ",")
     .split(/[ ]+/)
     .map(pointFromText);
 }
@@ -477,7 +509,7 @@ function saveMatrix() {
       matrix.c,
       matrix.d,
       matrix.e,
-      matrix.f
+      matrix.f,
     ]);
   }
   currentMatrix = matrix.inverse();
@@ -527,7 +559,7 @@ function drawBoundingBox(bbox, color) {
     width: bbox.width,
     height: bbox.height,
     fill: "none",
-    stroke: color || "#00F"
+    stroke: color || "#00F",
   });
   ui.currentFrame().appendChild(r);
 }
@@ -582,7 +614,7 @@ function collidePaths(point, paths) {
     x: point.x - d,
     y: point.y - d,
     width: state.eraserWidth,
-    height: state.eraserWidth
+    height: state.eraserWidth,
   };
   // drawBoundingBox(eraserBox, '#F00');
   return paths.filter(path =>
@@ -590,5 +622,4 @@ function collidePaths(point, paths) {
   );
 }
 
-
-export {Pen, Move, Rotate, ZoomIn, ZoomOut, Eraser};
+export { Pen, Move, Rotate, ZoomIn, ZoomOut, Eraser, radians, degrees };
