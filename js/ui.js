@@ -191,9 +191,9 @@ class ui {
     tl.innerHTML = ""; // remove any existing children
     $$(".frame").forEach(frame => {
       const thumb = this.frameToThumbnail(frame);
-      tl.appendChild(thumb);
+      tl.appendChild(dom.html("div", [thumb]));
     });
-    tl.children[state.currentFrame].classList.add("selected");
+    tl.children[state.currentFrame].firstChild.classList.add("selected");
   }
 
   static updateThumbnail(frame) {
@@ -206,13 +206,15 @@ class ui {
   }
 
   static addThumbnail(frame) {
-    const oldThumb = this.thumbnailForFrame(frame.nextElementSibling);
-    const newThumb = this.frameToThumbnail(frame);
+    const oldThumb = this.thumbnailForFrame(
+      frame.nextElementSibling
+    ).parentNode;
+    const newThumb = dom.html("div", [this.frameToThumbnail(frame)]);
     $(".timeline-frames").insertBefore(newThumb, oldThumb);
   }
 
   static removeThumbnail(frame) {
-    this.thumbnailForFrame(frame).remove();
+    this.thumbnailForFrame(frame).parentNode.remove();
   }
 
   static toggleUI() {

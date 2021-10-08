@@ -400,7 +400,7 @@ dialog .close {
   background-color: white;
 }
 
-.timeline-scroll{
+.timeline-scroll {
   overflow-x: scroll;
 }
 
@@ -422,13 +422,37 @@ dialog .close {
   display: flex;
   flex-wrap: nowrap;
   flex-direction: row;
-  height: 64px;
+  /* height: 70px; */
+  padding-top: 3px;
+  padding-bottom: 3px;
+  background-color: #000;
+  counter-reset: thumbCounter;
 }
 
-.timeline-frames > canvas:not(:first-child) {
-  border-left: 3px dashed #333;
+.timeline-frames canvas {
+  border: 0.5px solid #666;
+  border-radius: 2px;
+  margin-left: 3px;
+  background-color: #fff;
 }
 
-.timeline-frames > canvas.selected {
-  outline: 2px solid blue;
+.timeline-frames canvas.selected {
+  outline: 3px solid blue;
+  border-radius: 4px;
+}
+
+.timeline-frames > div {
+  position: relative;
+  counter-increment: thumbCounter;
+}
+
+.timeline-frames > div::after {
+  content: counter(thumbCounter);
+  color: white;
+  background: green;
+  position: absolute;
+  top: 4px;
+  left: 6px;
+  padding: 2px;
+  font-family: sans-serif;
 }
