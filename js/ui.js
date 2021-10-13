@@ -11,7 +11,6 @@ import Mess from "../lib/mess.js";
 import KellyColorPicker from "../lib/html5-color-picker.js";
 
 const mess = new Mess(); // toast-style popups, exposed as ui.popup()
-mess.init();
 
 // polyfill for dialog
 const dialog = $$("dialog").forEach(dialog =>
@@ -221,8 +220,12 @@ class ui {
     this.thumbnailForFrame(frame).parentNode.remove();
   }
 
+  static toggleTimeline() {
+    document.body.classList.toggle("notimeline");
+  }
+
   static toggleUI() {
-    $("body").classList.toggle("noui");
+    document.body.classList.toggle("noui");
   }
 
   static toggleToolbar(name) {
@@ -469,13 +472,14 @@ class ui {
     return $(".frame.onionskin");
   }
 
-  static popup(html, fn){
+  static popup(html, fn) {
     mess.showHtml(html, fn);
   }
 
   static setPaletteHandler = setPaletteHandler;
   static currentTool = null;
 }
+
 if (!ui.canvas) {
   ui.canvas = dom.svg("svg");
   ui.canvas.id = "canvas";

@@ -36,7 +36,7 @@
 // }
 
 import { sendEvent } from "./dom.js";
-import { popup } from "./ui.js";
+import ui from "./ui.js";
 const undoStack = new Map();
 const redoStack = new Map();
 
@@ -90,6 +90,7 @@ const pushDocUndo = (name, targetFrame, newCurrentFrame, undoFn, redoFn) => {
       oldUndo();
       sendUndoEvent(targetFrame);
     };
+    console.log("frame deleted, preparing undo");
     ui.popup("You deleted a frame <button>undo</button>", undoFn);
   }
   sendUndoEvent(newCurrentFrame);

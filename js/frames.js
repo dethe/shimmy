@@ -49,6 +49,7 @@ function deleteFrame(suppressUndo) {
     dom.remove(frameToDelete);
     ui.removeThumbnail(frameToDelete);
     if (!suppressUndo) {
+      console.log("pushing the undo");
       undo.pushDocUndo(
         "Delete Frame",
         frameToDelete,
@@ -60,6 +61,8 @@ function deleteFrame(suppressUndo) {
         },
         () => deleteFrame(true)
       );
+    } else {
+      console.log("why is undo suppressed?");
     }
     goToFrame(frameToDelete, curr);
   }
@@ -91,13 +94,12 @@ function clearFrame(curr) {
 }
 
 function goToFrame(prev, next) {
-  if (next.classList.contains("selected")){
+  if (prev === next) {
     // Trying to go to frame that is already selected
+    console.warn("next frame is already selected");
     return;
   }
-  prev.classList.remove("selected");
-  let prevThumb = ui.thumbnailForFrame(prev);
-  prevThumb.classList.remove("selected");
+  $$(".selected").forEach(elem => elem.classList.remove("selected"));
   next.classList.add("selected");
   let nextThumb = ui.thumbnailForFrame(next);
   nextThumb.classList.add("selected");
