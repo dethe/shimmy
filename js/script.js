@@ -456,13 +456,7 @@ addShortcuts(
 );
 addShortcuts("shift+c", () => frames.cloneFrame(), "#framecopy", "⇧+c", "⇧+c");
 addShortcuts("shift+x", () => frames.clearFrame(), "#frameclear", "⇧+x", "⇧+x");
-addShortcuts(
-  "shift+left",
-  frames.goToFirstFrame(),
-  "#framefirst",
-  "⇧+←",
-  "⇧+←"
-);
+addShortcuts("shift+left", frames.goToFirstFrame, "#framefirst", "⇧+←", "⇧+←");
 addShortcuts("left", frames.decrementFrame, "#frameprev", "←", "←");
 addShortcuts("right", frames.incrementFrame, "#framenext", "→", "→");
 addShortcuts("shift+right", frames.goToLastFrame, "#framelast", "⇧+→", "⇧+→");
