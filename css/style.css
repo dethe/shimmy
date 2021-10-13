@@ -400,8 +400,7 @@ dialog .close {
   background-color: white;
 }
 
-.notimeline .timeline > div,
-.noui .timeline > div {
+.notimeline .timeline > div{
   display: none;
 }
 
@@ -482,7 +481,6 @@ dialog .close {
   opacity: 1;
 }
 
-.notimeline #mess-messElement,
-.noui #mess-messElement {
+.notimeline #mess-messElement{
   bottom: 4px; /* FIXME: This is fragile, but should be above the (collapsed) Timeline widget */
 }

@@ -99,6 +99,11 @@ function goToFrame(prev, next) {
     console.warn("next frame is already selected");
     return;
   }
+  if (!next){
+    // How the hell can this happen?
+    console.error("there is no next frame????");
+    return;
+  }
   $$(".selected").forEach(elem => elem.classList.remove("selected"));
   next.classList.add("selected");
   let nextThumb = ui.thumbnailForFrame(next);

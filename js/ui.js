@@ -209,9 +209,10 @@ class ui {
   }
 
   static addThumbnail(frame) {
-    const oldThumb = this.thumbnailForFrame(
-      frame.nextElementSibling
-    ).parentNode;
+    const oldFrame = frame.nextElementSibling;
+    const oldThumb = oldFrame
+      ? this.thumbnailForFrame(frame.nextElementSibling).parentNode
+      : null;
     const newThumb = dom.html("div", [this.frameToThumbnail(frame)]);
     $(".timeline-frames").insertBefore(newThumb, oldThumb);
   }
