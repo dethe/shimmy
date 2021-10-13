@@ -332,10 +332,6 @@ function toggleVisible(element) {
     : element.setAttribute("hidden", "hidden");
 }
 
-function toggleTimeline() {
-  $$(".timeline > div").forEach(toggleVisible);
-}
-
 //////////////////////////////////////////////////////////
 //
 // keyboard shortcuts
@@ -524,7 +520,7 @@ listen("#color, #bgcolor", "click", evt =>
 listen(".miniwell", "click", evt => ui.selectColor(evt.currentTarget));
 listen(".miniwell", "dblclick", evt => ui.showColorPopup(evt.currentTarget));
 listen("#frames", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
-listen("#framedelete", "click", frames.deleteFrame);
+listen("#framedelete", "click", evt => frames.deleteFrame());
 listen("#framenew", "click", frames.addFrame);
 listen("#framecopy", "click", frames.cloneFrame);
 listen("#frameclear", "click", frames.clearFrame);
@@ -536,7 +532,7 @@ listen("#doonionskin", "change", state.toggleOnionskin);
 listen("#animate", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
 listen("#animateplay", "click", animation.play);
 listen("#framerate", "change", evt => (state.fps = evt.currentTarget.value));
-listen(".timeline-label", "click", toggleTimeline);
+listen(".timeline-label", "click", ui.toggleTimeline);
 listen("#shortcuts", "click", ui.showShortcuts);
 listen(".timeline-frames", "click", evt =>
   frames.goToFrame(ui.currentFrame(), ui.frameForThumbnail(evt.originalTarget))

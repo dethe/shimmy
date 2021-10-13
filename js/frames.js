@@ -91,13 +91,17 @@ function clearFrame(curr) {
 }
 
 function goToFrame(prev, next) {
-  if (next.classList.contains("selected")){
+  if (prev === next) {
     // Trying to go to frame that is already selected
+    console.warn("next frame is already selected");
     return;
   }
-  prev.classList.remove("selected");
-  let prevThumb = ui.thumbnailForFrame(prev);
-  prevThumb.classList.remove("selected");
+  if (!next){
+    // How the hell can this happen?
+    console.error("there is no next frame????");
+    return;
+  }
+  $$(".selected").forEach(elem => elem.classList.remove("selected"));
   next.classList.add("selected");
   let nextThumb = ui.thumbnailForFrame(next);
   nextThumb.classList.add("selected");

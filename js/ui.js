@@ -6,8 +6,11 @@ import { palettes } from "./palettes.js";
 import SVGCanvas from "./svgcanvas.js";
 import state from "./state.js";
 import * as tool from "./tool.js";
+import Mess from "../lib/mess.js";
 
 import KellyColorPicker from "../lib/html5-color-picker.js";
+
+const mess = new Mess(); // toast-style popups, exposed as ui.popup()
 
 // polyfill for dialog
 const dialog = $$("dialog").forEach(dialog =>
@@ -206,9 +209,10 @@ class ui {
   }
 
   static addThumbnail(frame) {
-    const oldThumb = this.thumbnailForFrame(
-      frame.nextElementSibling
-    ).parentNode;
+    const oldFrame = frame.nextElementSibling;
+    const oldThumb = oldFrame
+      ? this.thumbnailForFrame(frame.nextElementSibling).parentNode
+      : null;
     const newThumb = dom.html("div", [this.frameToThumbnail(frame)]);
     $(".timeline-frames").insertBefore(newThumb, oldThumb);
   }
@@ -217,8 +221,12 @@ class ui {
     this.thumbnailForFrame(frame).parentNode.remove();
   }
 
+  static toggleTimeline() {
+    document.body.classList.toggle("notimeline");
+  }
+
   static toggleUI() {
-    $("body").classList.toggle("noui");
+    document.body.classList.toggle("noui");
   }
 
   static toggleToolbar(name) {
@@ -237,9 +245,6 @@ class ui {
   }
 
   static getBBox(frame) {
-    if (!frame.classList.contains("frame")) {
-      console.log("OK, that's odd: %o", frame);
-    }
     if (frame.classList.contains("selected")) {
       return frame.getBoundingClientRect();
     } else {
@@ -465,9 +470,14 @@ class ui {
     return $(".frame.onionskin");
   }
 
+  static popup(html, fn) {
+    mess.showHtml(html, fn);
+  }
+
   static setPaletteHandler = setPaletteHandler;
   static currentTool = null;
 }
+
 if (!ui.canvas) {
   ui.canvas = dom.svg("svg");
   ui.canvas.id = "canvas";

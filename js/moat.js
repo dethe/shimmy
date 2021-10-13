@@ -19,7 +19,6 @@ function sendToMoat(data, filename, progid) {
 }
 
 function sendToMoatCB(blob, filename, progid) {
-  console.log("sendToMoatCB(%s)", filename);
   let formData = new FormData();
   formData.append("program", progid);
   formData.append("file", blob, filename);
