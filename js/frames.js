@@ -77,6 +77,8 @@ function restore(node, children, transform) {
 function clearFrame(curr) {
   if (!curr) {
     curr = ui.currentFrame();
+  } else {
+    console.log("curr: %o", curr);
   }
   let oldTransform = curr.getAttribute("transform") || "";
   let children = [...curr.children];
@@ -96,7 +98,7 @@ function goToFrame(prev, next) {
     console.warn("next frame is already selected");
     return;
   }
-  if (!next){
+  if (!next) {
     // How the hell can this happen?
     console.error("there is no next frame????");
     return;

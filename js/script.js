@@ -454,9 +454,15 @@ addShortcuts(
   "⇧+⌫",
   "⇧+⌦"
 );
-addShortcuts("shift+c", frames.cloneFrame, "#framecopy", "⇧+c", "⇧+c");
-addShortcuts("shift+x", frames.clearFrame, "#frameclear", "⇧+x", "⇧+x");
-addShortcuts("shift+left", frames.goToFirstFrame, "#framefirst", "⇧+←", "⇧+←");
+addShortcuts("shift+c", () => frames.cloneFrame(), "#framecopy", "⇧+c", "⇧+c");
+addShortcuts("shift+x", () => frames.clearFrame(), "#frameclear", "⇧+x", "⇧+x");
+addShortcuts(
+  "shift+left",
+  frames.goToFirstFrame(),
+  "#framefirst",
+  "⇧+←",
+  "⇧+←"
+);
 addShortcuts("left", frames.decrementFrame, "#frameprev", "←", "←");
 addShortcuts("right", frames.incrementFrame, "#framenext", "→", "→");
 addShortcuts("shift+right", frames.goToLastFrame, "#framelast", "⇧+→", "⇧+→");
@@ -522,8 +528,8 @@ listen(".miniwell", "dblclick", evt => ui.showColorPopup(evt.currentTarget));
 listen("#frames", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
 listen("#framedelete", "click", evt => frames.deleteFrame());
 listen("#framenew", "click", frames.addFrame);
-listen("#framecopy", "click", frames.cloneFrame);
-listen("#frameclear", "click", frames.clearFrame);
+listen("#framecopy", "click", () => frames.cloneFrame());
+listen("#frameclear", "click", () => frames.clearFrame());
 listen("#framefirst", "click", frames.goToFirstFrame);
 listen("#frameprev", "click", frames.decrementFrame);
 listen("#framenext", "click", frames.incrementFrame);

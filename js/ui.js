@@ -71,7 +71,6 @@ function setPaletteHandler(evt) {
 setPaletteHandler({ originalTarget: colorpaletteselect });
 
 function colorButton(button, color) {
-  console.log("button: %o, color: %o", button, color);
   switch (color[0]) {
     case "r":
       break; // rgb()
