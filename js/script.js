@@ -51,7 +51,7 @@ const addShortcuts = (shortcuts, fn, uxid, macHint, pcHint) =>
 window.ui = ui;
 window.state = state;
 
-const defaultCanvas = `<svg id="canvas" width="2560px" height="1116px" data-name="untitled" data-tool="pen" data-strokeWidth="2" data-doOnionskin="true" data-fps="10" data-palette="0" data-color="#000000" data-bgcolor="#FFFFFF" data-color1="#FF0000" data-color2="#FFFF00" data-color3="#00FF00" data-color4="#00FFFF" data-color5="#0000FF" data-color6="#666666" data-color7="#000000" data-color8="#FFFFFF" data-fileTab="false" data-drawTab="true" data-framesTab="true" data-animateTab="false"><g class="frame selected"></g></svg>`;
+const defaultCanvas = `<svg id="canvas" width="2560px" height="1116px" data-name="untitled" data-tool="pen" data-strokeWidth="2" data-doOnionskin="true" data-fps="10" data-palette="Primary" data-color="#000000" data-bgcolor="#FFFFFF" data-color1="#FF0000" data-color2="#FFFF00" data-color3="#00FF00" data-color4="#00FFFF" data-color5="#0000FF" data-color6="#666666" data-color7="#000000" data-color8="#FFFFFF" data-fileTab="false" data-drawTab="true" data-framesTab="true" data-animateTab="false"><g class="frame selected"></g></svg>`;
 
 function getSvgPoint(x, y) {
   let point = $("svg").createSVGPoint();
