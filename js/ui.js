@@ -6,8 +6,12 @@ import { palettes } from "./palettes.js";
 import SVGCanvas from "./svgcanvas.js";
 import state from "./state.js";
 import * as tool from "./tool.js";
+import Mess from "../lib/mess.js";
 
 import KellyColorPicker from "../lib/html5-color-picker.js";
+
+const mess = new Mess(); // toast-style popups, exposed as ui.popup()
+mess.init();
 
 // polyfill for dialog
 const dialog = $$("dialog").forEach(dialog =>
@@ -463,6 +467,10 @@ class ui {
 
   static currentOnionskinFrame() {
     return $(".frame.onionskin");
+  }
+
+  static popup(html, fn){
+    mess.showHtml(html, fn);
   }
 
   static setPaletteHandler = setPaletteHandler;

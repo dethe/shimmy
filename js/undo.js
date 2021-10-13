@@ -35,15 +35,10 @@
 //   evt.detail.docRedo = nameOfDocRedo or null;
 // }
 
-/* globals Mess */
-
 import { sendEvent } from "./dom.js";
-import Mess from "../lib/mess.js";
+import { popup } from "./ui.js";
 const undoStack = new Map();
 const redoStack = new Map();
-// Fixme: Move Mess to ui.js
-const mess = new Mess(); // toast-style popups for document-level undo messages
-mess.init();
 
 const clear = () => {
   undoStack.clear();
@@ -95,7 +90,7 @@ const pushDocUndo = (name, targetFrame, newCurrentFrame, undoFn, redoFn) => {
       oldUndo();
       sendUndoEvent(targetFrame);
     };
-    mess.showHtml("You deleted a frame <button>undo</button>", undoFn);
+    ui.popup("You deleted a frame <button>undo</button>", undoFn);
   }
   sendUndoEvent(newCurrentFrame);
 };
