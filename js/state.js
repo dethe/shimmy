@@ -3,6 +3,8 @@
    and sync the DOM to that */
 /* All state functions that are event handlers should likewise be split. Event handling can go in script.js or if needed we can create an event.js. State functions should only update the JS state */
 
+import palettes from "./palettes.js";
+
 let values = {
   _dirty: false,
   name: "untitled",
@@ -13,7 +15,7 @@ let values = {
   doOnionskin: true,
   fps: 10,
   _frameDelay: 100,
-  palette: 0,
+  palette: "Primary",
   color: "#000000",
   bgcolor: "transparent",
   color1: "#FF0000",
@@ -144,6 +146,16 @@ class state {
   }
 
   static set palette(val) {
+    // Catch some earlier save values
+    if (Number.isInteger(val) || Number.isInteger(Number(val))) {
+      val = "Primary";
+    }
+    const palette = palettes.filter(p => p.name === val)[0];
+    this.color1 = palette.colors[0];
+    this.color2 = palette.colors[1];
+    this.color3 = palette.colors[2];
+    this.color4 = palette.colors[3];
+    this.color5 = palette.colors[4];
     values.palette = val;
     values._dirty = true;
   }

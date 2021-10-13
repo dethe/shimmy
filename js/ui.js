@@ -2,9 +2,9 @@
 
 import * as dom from "./dom.js";
 const { $, $$ } = dom;
-import { palettes } from "./palettes.js";
 import SVGCanvas from "./svgcanvas.js";
 import state from "./state.js";
+import palettes from "./palettes.js";
 import * as tool from "./tool.js";
 import Mess from "../lib/mess.js";
 
@@ -65,16 +65,20 @@ const colorpicker = new KellyColorPicker({
 
 function setPaletteHandler(evt) {
   const sel = evt.target || evt.originalTarget;
-  let palette = palettes.filter(p => p.name === sel.value)[0];
-  let wells = $$(".js-miniwell");
-  for (let i = 0; i < 5; i++) {
-    colorButton(wells[i], "#" + palette.colors[i]);
-  }
+  state.palette = sel.value;
   sel.blur();
 }
 setPaletteHandler({ originalTarget: colorpaletteselect });
 
 function colorButton(button, color) {
+  switch (color[0]) {
+    case "r":
+      break; // rgb()
+    case "#":
+      break; // #RRGGBB
+    default:
+      color = `#${color}`; // add missing #
+  }
   button.value = color;
   button.style.backgroundColor = color;
   if (hexToValue(color) < 0.5) {
@@ -367,8 +371,11 @@ class ui {
   }
 
   static set palette(val) {
-    // FIXME
-    $("#colorpalette").select;
+    $$("#colorpalette option").forEach(o => {
+      if (o.value === val) {
+        o.selected = true;
+      }
+    });
   }
 
   static isColorPopupVisible = false;
