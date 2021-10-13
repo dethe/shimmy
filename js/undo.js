@@ -90,8 +90,7 @@ const pushDocUndo = (name, targetFrame, newCurrentFrame, undoFn, redoFn) => {
       oldUndo();
       sendUndoEvent(targetFrame);
     };
-    console.log("frame deleted, preparing undo");
-    ui.popup("You deleted a frame <button>undo</button>", undoFn);
+    ui.popup("You deleted a frame <button>Undo</button>", undoFn);
   }
   sendUndoEvent(newCurrentFrame);
 };

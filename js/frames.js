@@ -49,7 +49,6 @@ function deleteFrame(suppressUndo) {
     dom.remove(frameToDelete);
     ui.removeThumbnail(frameToDelete);
     if (!suppressUndo) {
-      console.log("pushing the undo");
       undo.pushDocUndo(
         "Delete Frame",
         frameToDelete,
@@ -61,8 +60,6 @@ function deleteFrame(suppressUndo) {
         },
         () => deleteFrame(true)
       );
-    } else {
-      console.log("why is undo suppressed?");
     }
     goToFrame(frameToDelete, curr);
   }
