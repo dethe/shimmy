@@ -406,6 +406,9 @@ dialog .close {
 
 .timeline-scroll {
   overflow-x: scroll;
+  padding-top: 3px;
+  padding-bottom: 3px;
+  background-color: #000;
 }
 
 .timeline label {
@@ -427,9 +430,6 @@ dialog .close {
   flex-wrap: nowrap;
   flex-direction: row;
   /* height: 70px; */
-  padding-top: 3px;
-  padding-bottom: 3px;
-  background-color: #000;
   counter-reset: thumbCounter;
 }
 
