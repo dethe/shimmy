@@ -176,6 +176,14 @@ class ui {
     }
   }
 
+  static startSpinner() {
+    $("#shimmy i").classList.add("spinning");
+  }
+
+  static stopSpinner() {
+    $("#shimmy i").classList.remove("spinning");
+  }
+
   static frameToThumbnail(frame) {
     return this.frameToImage(frame, 0, 0, WIDTH, HEIGHT, 64);
   }

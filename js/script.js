@@ -177,6 +177,8 @@ function saveAsSvg(evt) {
     state.name = prompt("Save SVG file as: ");
   }
   if (!state.name) return;
+  ui.startSpinner();
+  dom.listen(document, "FileSaved", evt => ui.stopSpinner());
   file.save(saveFormat(), state.name);
 }
 
@@ -192,6 +194,7 @@ function saveAsGif(evt) {
     state.name = prompt("Save SVG file as: ");
   }
   if (!state.name) return;
+  ui.startSpinner();
   let gif = new GIF({
     workers: 2,
     quality: 10,
@@ -203,8 +206,9 @@ function saveAsGif(evt) {
   gif.on("finished", function (blob) {
     console.info("gif completed");
     file.saveAs(blob, `${state.name}.gif`);
-    window.open(URL.createObjectURL(blob));
+    // window.open(URL.createObjectURL(blob));
   });
+  dom.listen(document, "FileSaved", evt => ui.stopSpinner());
   gif.render();
 }
 
@@ -217,6 +221,7 @@ function saveAsSpritesheet() {
     state.name = prompt("Save PNG file as: ");
   }
   if (!state.name) return;
+  ui.startSpinner();
   let { x, y, width, height } = ui.getAnimationBBox();
   let frames = $$(".frame");
   let canvas = dom.html("canvas", {
@@ -227,6 +232,7 @@ function saveAsSpritesheet() {
   frames.forEach((frame, idx) => {
     ctx.drawImage(ui.frameToImage(frame, x, y, width, height), 0, height * idx);
   });
+  dom.listen(document, "FileSaved", evt => ui.stopSpinner());
   file.saveAs(canvas, `${state.name}.png`);
 }
 
