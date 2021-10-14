@@ -597,7 +597,7 @@ function erasePath(pt1, path) {
     let p = points[i];
     if (p.cmd === "M") {
       if (!points[i + 1] || points[i + 1].cmd === "M") {
-        points.splice[(i, 1)]; // Don't need two moves in a row, or a trailing move
+        points.splice(i, 1); // Don't need two moves in a row, or a trailing move
       }
     }
   }
