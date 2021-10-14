@@ -482,6 +482,7 @@ listen("#about", "click", ui.showAbout);
 listen("#frameundo", "click", evt => undo.undo(ui.currentFrame()));
 listen("#frameredo", "click", evt => undo.redo(ui.currentFrame()));
 listen("#file", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
+listen("#filename", "change", evt => state.name = $('#filename').value);
 listen("#filenew", "click", newAnimation);
 listen("#fileopen", "click", openSvg);
 listen("#filesave", "click", saveAsSvg);

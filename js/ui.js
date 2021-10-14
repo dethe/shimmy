@@ -347,6 +347,7 @@ class ui {
 
   // Render state as needed
   static set name(val) {
+    $("#filename").value = val;
     document.title = "Shimmy: " + val;
   }
 

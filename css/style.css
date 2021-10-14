@@ -212,6 +212,12 @@ header > * {
   flex: 1;
 }
 
+input[type="text"]{
+  border: 2px inset #666;
+  margin: 2px;
+  padding: 4px 8px;
+}
+
 input[type="checkbox"] {
   display: none;
 }
