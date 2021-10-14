@@ -51,7 +51,6 @@ class Pen {
     if (err) {
       return;
     }
-    console.log("start(%s, %s)", x, y);
     this.firstPoint = { x, y };
     this.prevPoint = { x, y };
     this.startPath(x, y);
