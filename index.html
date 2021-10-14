@@ -53,6 +53,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <button id="file" title="File" class="js-tab tab">
           <span>File</span>
         </button>
+        <div class="feedback file">
+          <label for="filename">File name</label>
+          <input type="text" id="filename" />
+        </div>
         <button id="filenew" title="New file">
           New<br />
           <i class="far fa-2x fa-file-alt"></i>
@@ -79,20 +83,18 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           <span>Draw</span>
         </button>
         <div class="feedback tools">
-          <label
-            >Tool<br />
-            <select id="toolpicker" class="tools select-css far">
-              <option value="pen" selected>&#xf304; Pen</option>
-              <option value="rotate">&#xf021; Rotate</option>
-              <option value="move">&#xf047; Move</option>
-              <option value="zoomin">&#xf00e; Zoom In</option>
-              <option value="zoomout">&#xf010; Zoom Out</option>
-              <option value="eraser">&#xf12d; Eraser</option>
-            </select>
-          </label>
+          <label for="toolpicker"> Tool</label>
+          <select id="toolpicker" class="tools select-css far">
+            <option value="pen" selected>&#xf304; Pen</option>
+            <option value="rotate">&#xf021; Rotate</option>
+            <option value="move">&#xf047; Move</option>
+            <option value="zoomin">&#xf00e; Zoom In</option>
+            <option value="zoomout">&#xf010; Zoom Out</option>
+            <option value="eraser">&#xf12d; Eraser</option>
+          </select>
         </div>
         <div hidden class="feedback pensize">
-          <label class="pensize">Pen Size</label>
+          <label class="pensize" for="pensize">Pen Size</label>
           <input
             id="pensize"
             type="number"
@@ -102,7 +104,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           />
         </div>
         <div class="feedback erasersize">
-          <label class="erasersize">Eraser Size</label>
+          <label class="erasersize" for="erasersize">Eraser Size</label>
           <input
             id="erasersize"
             type="number"
@@ -112,13 +114,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           />
         </div>
         <div class="feedback palette">
-          <label
-            >Palette<br />
+          <label for="colorpalette">
+            Palette</label>
             <select
               id="colorpalette"
               class="palettechooser js-colorpalette select-css"
             ></select>
-          </label>
         </div>
         <div class="stack colors">
           <button
@@ -209,12 +210,11 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           <i class="far fa-2x fa-fast-forward"></i>
         </button>
         <div class="feedback onionskin">
-          <label>
-            Onionskin
+          <label for="doonionskin">
+            Onionskin</label>
             <input type="checkbox" checked id="doonionskin" />
             <i class="unchecked far fa-square"></i>
             <i class="checked far fa-check-square"></i>
-          </label>
         </div>
       </nav>
       <!-- ANIMATE -->
@@ -227,7 +227,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           <i class="far fa-2x fa-play"></i>
         </button>
         <div class="feedback framerate">
-          <label title="Frames Per Second">FPS</label>
+          <label title="Frames Per Second" for="framerate">FPS</label>
           <input id="framerate" type="number" value="10" />
         </div>
       </nav>
