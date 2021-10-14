@@ -81,8 +81,10 @@ class Pen {
     }
     let path = this.currentPath;
     let parent = ui.currentFrame();
-    if (this.currentPath) {
-      if (inBounds(wx, wy) && this.sx === x && this.sy === y) {
+    if (path) {
+      let { x: sx, y: sy } = this.firstPoint;
+      if (inBounds(wx, wy) && sx === x && sy === y) {
+        // make a dot if we haven't moved
         this.appendToPath(x, y);
       }
       this.currentPath = null;
