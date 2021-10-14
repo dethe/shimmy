@@ -206,7 +206,7 @@ class state {
   }
 
   static get color4() {
-    return values.color1;
+    return values.color4;
   }
 
   static set color4(val) {
