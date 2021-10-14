@@ -201,6 +201,7 @@ class ui {
       tl.appendChild(dom.html("div", [thumb]));
     });
     tl.children[state.currentFrame].firstChild.classList.add("selected");
+    tl.children[state.currentFrame].firstChild.scrollIntoView();
   }
 
   static updateThumbnail(frame) {
@@ -210,6 +211,7 @@ class ui {
       newThumb.classList.add("selected");
     }
     oldThumb.replaceWith(newThumb);
+    newThumb.scrollIntoView();
   }
 
   static addThumbnail(frame) {
@@ -219,6 +221,7 @@ class ui {
       : null;
     const newThumb = dom.html("div", [this.frameToThumbnail(frame)]);
     $(".timeline-frames").insertBefore(newThumb, oldThumb);
+    newThumb.scrollIntoView();
   }
 
   static removeThumbnail(frame) {
@@ -329,8 +332,9 @@ class ui {
   static resize() {
     window.WIDTH = document.body.clientWidth;
     window.HEIGHT = document.body.clientHeight;
-    this.canvas.setAttribute("width", window.WIDTH + "px");
-    this.canvas.setAttribute("height", window.HEIGHT + "px");
+    ui.canvas.setAttribute("width", window.WIDTH + "px");
+    ui.canvas.setAttribute("height", window.HEIGHT + "px");
+    ui.makeThumbnails();
   }
 
   // Render state as needed
