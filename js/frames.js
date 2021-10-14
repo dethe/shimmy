@@ -77,8 +77,6 @@ function restore(node, children, transform) {
 function clearFrame(curr) {
   if (!curr) {
     curr = ui.currentFrame();
-  } else {
-    console.log("curr: %o", curr);
   }
   let oldTransform = curr.getAttribute("transform") || "";
   let children = [...curr.children];

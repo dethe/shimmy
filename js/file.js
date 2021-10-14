@@ -63,6 +63,7 @@ function saveBlob(blob, filename) {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+    dom.sendEvent('FileSaved', {filename});
   };
   reader.readAsDataURL(blob);
 }
