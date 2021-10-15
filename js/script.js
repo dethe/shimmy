@@ -25,6 +25,7 @@ import * as animation from "./animation.js";
 import * as stepper from "./stepper.js";
 import * as undo from "./undo.js";
 import GIF from "../lib/gif.js";
+import JSZip from "../lib/jszip.min.js";
 
 // Wrap `dom.listen` and `dom.addShortcuts` so that events don't trigger during animation playback
 
@@ -222,18 +223,40 @@ function saveAsSpritesheet() {
   }
   if (!state.name) return;
   ui.startSpinner();
-  let { x, y, width, height } = ui.getAnimationBBox();
   let frames = $$(".frame");
-  let canvas = dom.html("canvas", {
-    width: width,
-    height: height * frames.length,
-  });
   let ctx = canvas.getContext("2d");
   frames.forEach((frame, idx) => {
-    ctx.drawImage(ui.frameToImage(frame, x, y, width, height), 0, height * idx);
+    ui.frameToImage(frame, x, y, width, height);
   });
   dom.listen(document, "FileSaved", evt => ui.stopSpinner());
   file.saveAs(canvas, `${state.name}.png`);
+}
+
+function saveAsZip() {
+  if (!state.name || state.name === "untitled") {
+    state.name = prompt("Save PNG file as: ");
+  }
+  if (!state.name) return;
+  ui.startSpinner();
+  let { x, y, width, height } = ui.getAnimationBBox();
+  var zip = new JSZip();
+  var img = zip.folder(state.name);
+  let frames = $$(".frame");
+  var digits = frames.length.toString().length;
+  const pad = number => number.toString().padStart(digits, "0");
+  frames.forEach((frame, idx) => {
+    // add each frame to the zip as a PNG
+    img.file(
+      state.name + pad(idx) + ".png",
+      ui.frameToImage(frame, x, y, width, height),
+      { base64: true }
+    );
+  });
+  zip.generateAsync({ type: "blob" }).then(function (content) {
+    // see FileSaver.js
+    saveAs(content, state.name + ".zip");
+    ui.stopSpinner();
+  });
 }
 
 function saveLocal() {
@@ -401,6 +424,7 @@ addShortcuts("⌘+s, ctrl+s", saveAsSvg, "#filesave", "⌘+s", "⌃+s");
 addShortcuts("⌘+o, ctrl+o", openSvg, "#fileopen", "⌘+o", "⌃+o");
 addShortcuts("g", saveAsGif, "#filegif", "g", "g");
 addShortcuts("p", saveAsSpritesheet, "#filepng", "p", "p");
+addShortcuts("z", saveAsZip, "#filezip", "z", "z");
 // Tools
 addShortcuts("shift+1", () => (state.tool = "pen"), "#toolpen", "⇧+1", "⇧+1");
 addShortcuts(
@@ -482,12 +506,13 @@ listen("#about", "click", ui.showAbout);
 listen("#frameundo", "click", evt => undo.undo(ui.currentFrame()));
 listen("#frameredo", "click", evt => undo.redo(ui.currentFrame()));
 listen("#file", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
-listen("#filename", "change", evt => state.name = $('#filename').value);
+listen("#filename", "change", evt => (state.name = $("#filename").value));
 listen("#filenew", "click", newAnimation);
 listen("#fileopen", "click", openSvg);
 listen("#filesave", "click", saveAsSvg);
 listen("#filegif", "click", saveAsGif);
 listen("#filepng", "click", saveAsSpritesheet);
+listen("#filezip", "click", saveAsZip);
 listen("#save-moat", "click", saveToMoat);
 listen("#draw", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
 listen("#toolpicker", "change", evt => selectToolHandler(evt.currentTarget));
