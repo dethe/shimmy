@@ -21,7 +21,6 @@ import * as dom from "./dom.js";
 const { $, $$ } = dom;
 import { sendToMoat } from "./moat.js"; // Conditionally handle secure sharing via Moat
 
-
 function save(data, title) {
   if (!title) {
     return;
@@ -33,6 +32,7 @@ const filetypes = {
   svg: "image/svg+xml",
   png: "image/png",
   gif: "image/gif",
+  zip: "application/zip",
 };
 
 // Used by both file and moat
@@ -40,7 +40,9 @@ function saveToCallback(data, filename, cb) {
   // Callback is shaped cb(blob, filename);
   let ext = filename.split(".").pop();
   let filetype = filetypes[ext];
-  if (data.toBlob) {
+  if (data.constructor === Blob) {
+    cb(data, filename);
+  } else if (data.toBlob) {
     // ex: canvas.toBlob()
     data.toBlob(blob => cb(blob, filename), filetype);
   } else {
@@ -63,7 +65,7 @@ function saveBlob(blob, filename) {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
-    dom.sendEvent('FileSaved', {filename});
+    dom.sendEvent("FileSaved", { filename });
   };
   reader.readAsDataURL(blob);
 }
