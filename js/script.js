@@ -231,7 +231,7 @@ function saveAsSpritesheet() {
   });
   let ctx = canvas.getContext("2d");
   frames.forEach((frame, idx) => {
-    ui.frameToImage(frame, x, y, width, height);
+    ctx.drawImage(ui.frameToImage(frame, x, y, width, height), 0, height * idx);
   });
   dom.listen(document, "FileSaved", evt => ui.stopSpinner());
   file.saveAs(canvas, `${state.name}.png`);
