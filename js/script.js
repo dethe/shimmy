@@ -223,7 +223,12 @@ function saveAsSpritesheet() {
   }
   if (!state.name) return;
   ui.startSpinner();
+  let { x, y, width, height } = ui.getAnimationBBox();
   let frames = $$(".frame");
+  let canvas = dom.html("canvas", {
+    width: width,
+    height: height * frames.length,
+  });
   let ctx = canvas.getContext("2d");
   frames.forEach((frame, idx) => {
     ui.frameToImage(frame, x, y, width, height);
@@ -244,7 +249,7 @@ async function saveAsZip() {
   let frames = $$(".frame");
   var digits = frames.length.toString().length;
   const pad = number => number.toString().padStart(digits, "0");
-  for (let idx = 0; idx < frames.length; idx++){
+  for (let idx = 0; idx < frames.length; idx++) {
     const frame = frames[idx];
     // add each frame to the zip as a PNG
     let blob = await new Promise(resolve =>
