@@ -232,7 +232,7 @@ function saveAsSpritesheet() {
   file.saveAs(canvas, `${state.name}.png`);
 }
 
-function saveAsZip() {
+async function saveAsZip() {
   if (!state.name || state.name === "untitled") {
     state.name = prompt("Save PNG file as: ");
   }
@@ -244,17 +244,16 @@ function saveAsZip() {
   let frames = $$(".frame");
   var digits = frames.length.toString().length;
   const pad = number => number.toString().padStart(digits, "0");
-  frames.forEach((frame, idx) => {
+  for (let idx = 0; idx < frames.length; idx++){
+    const frame = frames[idx];
     // add each frame to the zip as a PNG
-    img.file(
-      state.name + pad(idx) + ".png",
-      ui.frameToImage(frame, x, y, width, height),
-      { base64: true }
+    let blob = await new Promise(resolve =>
+      ui.frameToImage(frame, x, y, width, height).toBlob(blob => resolve(blob))
     );
-  });
+    img.file(state.name + pad(idx) + ".png", blob, { base64: true });
+  }
   zip.generateAsync({ type: "blob" }).then(function (content) {
-    // see FileSaver.js
-    saveAs(content, state.name + ".zip");
+    file.saveAs(content, state.name + ".zip");
     ui.stopSpinner();
   });
 }
