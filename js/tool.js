@@ -96,13 +96,16 @@ class Pen {
       ui.currentFrame(),
       () => {
         path.remove(),
-          sendEvent("updateTimeline", { frame: ui.currentFrame() });
+        // FIXME: #81 Timeline Dependencies
+        sendEvent("updateTimeline", { frame: ui.currentFrame() });
       },
       () => {
         parent.appendChild(path);
+        // FIXME: #81 Timeline Dependencies
         sendEvent("updateTimeline", { frame: ui.currentFrame() });
       }
     );
+    // FIXME: #81 Timeline Dependencies
     sendEvent("updateTimeline", { frame: ui.currentFrame() });
   }
 
@@ -172,13 +175,16 @@ class Move {
       curr,
       () => {
         curr.setAttribute("transform", oldTransform);
+        // FIXME: #81 Timeline Dependencies
         sendEvent("updateTimeline", { frame: ui.currentFrame() });
       },
       () => {
         curr.setAttribute("transform", newTransform);
+        // FIXME: #81 Timeline Dependencies
         sendEvent("updateTimeline", { frame: ui.currentFrame() });
       }
     );
+    // FIXME: #81 Timeline Dependencies
     sendEvent("updateTimeline", { frame: ui.currentFrame() });
   }
 
@@ -264,13 +270,16 @@ class Rotate {
       curr,
       () => {
         curr.setAttribute("transform", oldTransform);
+        // FIXME: #81 Timeline Dependencies
         sendEvent("updateTimeline", { frame: ui.currentFrame() });
       },
       () => {
         curr.setAttribute("transform", newTransform);
+        // FIXME: #81 Timeline Dependencies
         sendEvent("updateTimeline", { frame: ui.currentFrame() });
       }
     );
+    // FIXME: #81 Timeline Dependencies
     sendEvent("updateTimeline", { frame: ui.currentFrame() });
   }
 
@@ -307,13 +316,16 @@ class ZoomIn {
       curr,
       () => {
         curr.setAttribute("transform", oldTransform);
+        // FIXME: #81 Timeline Dependencies
         sendEvent("updateTimeline", { frame: ui.currentFrame() });
       },
       () => {
         curr.setAttribute("transform", newTransform);
+        // FIXME: #81 Timeline Dependencies
         sendEvent("updateTimeline", { frame: ui.currentFrame() });
       }
     );
+    // FIXME: #81 Timeline Dependencies
     sendEvent("updateTimeline", { frame: ui.currentFrame() });
   }
 
@@ -355,13 +367,16 @@ class ZoomOut {
       curr,
       () => {
         curr.setAttribute("transform", oldTransform);
+        // FIXME: #81 Timeline Dependencies
         sendEvent("updateTimeline", { frame: ui.currentFrame() });
       },
       () => {
         curr.setAttribute("transform", newTransform);
+        // FIXME: #81 Timeline Dependencies
         sendEvent("updateTimeline", { frame: ui.currentFrame() });
       }
     );
+    // FIXME: #81 Timeline Dependencies
     sendEvent("updateTimeline", { frame: ui.currentFrame() });
   }
 
@@ -434,14 +449,17 @@ class Eraser {
       curr,
       () => {
         curr.innerHTML = before;
+        // FIXME: #81 Timeline Dependencies
         sendEvent("updateTimeline", { frame: ui.currentFrame() });
       },
       () => {
         curr.innerHTML = after;
+        // FIXME: #81 Timeline Dependencies
         sendEvent("updateTimeline", { frame: ui.currentFrame() });
       }
     );
     this.before = null;
+    // FIXME: #81 Timeline Dependencies
     sendEvent("updateTimeline", { frame: ui.currentFrame() });
   }
 

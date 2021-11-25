@@ -106,6 +106,7 @@ function listenCanvas() {
 listen(body, "mouseup", toolStop);
 listen(window, "keydown", escCancel);
 
+// FIXME: #81 Timeline Dependencies
 listen(window, "updateTimeline", evt => ui.updateThumbnail(evt.detail.frame));
 
 function undoLine() {
@@ -568,8 +569,10 @@ listen("#doonionskin", "change", state.toggleOnionskin);
 listen("#animate", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
 listen("#animateplay", "click", animation.play);
 listen("#framerate", "change", evt => (state.fps = evt.currentTarget.value));
+// FIXME: #81 Timeline Dependencies
 listen(".timeline-label", "click", ui.toggleTimeline);
 listen("#shortcuts", "click", ui.showShortcuts);
+// FIXME: #81 Timeline Dependencies
 listen(".timeline-frames", "click", evt =>
   frames.goToFrame(ui.currentFrame(), ui.frameForThumbnail(evt.originalTarget))
 );

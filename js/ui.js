@@ -202,6 +202,7 @@ class ui {
   }
 
   static makeThumbnails() {
+    // FIXME: #81 Timeline Dependencies
     const tl = $(".timeline-frames");
     tl.innerHTML = ""; // remove any existing children
     $$(".frame").forEach(frame => {
@@ -228,6 +229,7 @@ class ui {
       ? this.thumbnailForFrame(frame.nextElementSibling).parentNode
       : null;
     const newThumb = dom.html("div", [this.frameToThumbnail(frame)]);
+    // FIXME: #81 Timeline Dependencies
     $(".timeline-frames").insertBefore(newThumb, oldThumb);
     newThumb.scrollIntoView();
   }
@@ -237,6 +239,7 @@ class ui {
   }
 
   static toggleTimeline() {
+    // FIXME: #81 Timeline Dependencies
     document.body.classList.toggle("notimeline");
   }
 
