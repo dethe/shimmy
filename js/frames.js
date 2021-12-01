@@ -19,6 +19,7 @@ function updateOnionskin() {
 function insertFrame(before, frame) {
   dom.insertAfter(frame, before);
   frame.id = dom.randomId();
+  // FIXME: #81 Timeline Dependencies
   ui.addThumbnail(frame);
   return frame;
 }
@@ -47,6 +48,7 @@ function deleteFrame(suppressUndo) {
   let next = frameToDelete.nextElementSibling;
   if (frameToDelete.parentNode.children.length > 1) {
     dom.remove(frameToDelete);
+    // FIXME: #81 Timeline Dependencies
     ui.removeThumbnail(frameToDelete);
     if (!suppressUndo) {
       undo.pushDocUndo(
@@ -55,6 +57,7 @@ function deleteFrame(suppressUndo) {
         curr,
         () => {
           parent.insertBefore(frameToDelete, next);
+          // FIXME: #81 Timeline Dependencies
           ui.addThumbnail(frameToDelete);
           goToFrame(curr, frameToDelete);
         },
@@ -70,6 +73,7 @@ function restore(node, children, transform) {
     node.setAttribute("transform", transform);
   }
   children.forEach(child => node.appendChild(child));
+  // FIXME: #81 Timeline Dependencies
   ui.updateThumbnail(node);
   return node;
 }
@@ -81,6 +85,7 @@ function clearFrame(curr) {
   let oldTransform = curr.getAttribute("transform") || "";
   let children = [...curr.children];
   dom.clear(curr);
+  // FIXME: #81 Timeline Dependencies
   ui.updateThumbnail(curr);
   undo.pushUndo(
     "Clear",
@@ -103,6 +108,7 @@ function goToFrame(prev, next) {
   }
   $$(".selected").forEach(elem => elem.classList.remove("selected"));
   next.classList.add("selected");
+  // FIXME: #81 Timeline Dependencies
   let nextThumb = ui.thumbnailForFrame(next);
   nextThumb.classList.add("selected");
   nextThumb.scrollIntoView();

@@ -184,11 +184,15 @@ class ui {
     $("#shimmy i").classList.remove("spinning");
   }
 
+  // FIXME: #81 Extract to Timeline API
   static frameToThumbnail(frame) {
+    // FIXME: #81 Timeline Dependencies
     return this.frameToImage(frame, 0, 0, WIDTH, HEIGHT, 64);
   }
 
+  // FIXME: #81 Extract to Timeline API
   static thumbnailForFrame(frame) {
+    // FIXME: #81 Timeline Dependencies
     if (!frame) {
       console.error("error: no frame in thumbnailForFrame");
       return null;
@@ -197,10 +201,13 @@ class ui {
     return thumb;
   }
 
+  // FIXME: #81 Extract to Timeline API
   static frameForThumbnail(thumb) {
+    // FIXME: #81 Timeline Dependencies
     return $(`#${thumb.id.split("-")[0]}`);
   }
 
+  // FIXME: #81 Extract to Timeline API
   static makeThumbnails() {
     // FIXME: #81 Timeline Dependencies
     const tl = $(".timeline-frames");
@@ -213,7 +220,9 @@ class ui {
     tl.children[state.currentFrame].firstChild.scrollIntoView();
   }
 
+  // FIXME: #81 Extract to Timeline API
   static updateThumbnail(frame) {
+    // FIXME: #81 Timeline Dependencies
     const oldThumb = this.thumbnailForFrame(frame);
     const newThumb = this.frameToThumbnail(frame);
     if (oldThumb.classList.contains("selected")) {
@@ -223,6 +232,7 @@ class ui {
     newThumb.scrollIntoView();
   }
 
+  // FIXME: #81 Extract to Timeline API
   static addThumbnail(frame) {
     const oldFrame = frame.nextElementSibling;
     const oldThumb = oldFrame
@@ -234,10 +244,12 @@ class ui {
     newThumb.scrollIntoView();
   }
 
+  // FIXME: #81 Extract to Timeline API
   static removeThumbnail(frame) {
     this.thumbnailForFrame(frame).parentNode.remove();
   }
 
+  // FIXME: #81 Extract to Timeline API
   static toggleTimeline() {
     // FIXME: #81 Timeline Dependencies
     document.body.classList.toggle("notimeline");
@@ -345,6 +357,7 @@ class ui {
     window.HEIGHT = document.body.clientHeight;
     ui.canvas.setAttribute("width", window.WIDTH + "px");
     ui.canvas.setAttribute("height", window.HEIGHT + "px");
+    // FIXME: #81 Timeline Dependencies
     ui.makeThumbnails();
   }
 

@@ -123,6 +123,7 @@ function newAnimation(evt) {
     clear();
     ui.updateFrameCount();
     undo.clear();
+    // FIXME: #81 Timeline Dependencies
     ui.makeThumbnails();
   }
 }
@@ -138,6 +139,7 @@ function restoreFormat(savetext) {
   ui.resize();
   restoreSavedState();
   listenCanvas();
+  // FIXME: #81 Timeline Dependencies
   ui.makeThumbnails();
 }
 
