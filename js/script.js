@@ -24,6 +24,7 @@ const { $, $$, sendEvent } = dom;
 import * as animation from "./animation.js";
 import * as stepper from "./stepper.js";
 import * as undo from "./undo.js";
+import * as timeline from "./timeline.js";
 import GIF from "../lib/gif.js";
 import JSZip from "../lib/jszip.min.js";
 
@@ -107,7 +108,7 @@ listen(body, "mouseup", toolStop);
 listen(window, "keydown", escCancel);
 
 // FIXME: #81 Timeline Dependencies
-listen(window, "updateTimeline", evt => ui.updateThumbnail(evt.detail.frame));
+listen(window, "updateFrame", evt => timeline.updateThumbnail(evt.detail.frame));
 
 function undoLine() {
   dom.remove(ui.currentFrame().lastElementChild);
@@ -123,8 +124,7 @@ function newAnimation(evt) {
     clear();
     ui.updateFrameCount();
     undo.clear();
-    // FIXME: #81 Timeline Dependencies
-    ui.makeThumbnails();
+    timeline.makeThumbnails();
   }
 }
 
@@ -139,8 +139,7 @@ function restoreFormat(savetext) {
   ui.resize();
   restoreSavedState();
   listenCanvas();
-  // FIXME: #81 Timeline Dependencies
-  ui.makeThumbnails();
+  timeline.makeThumbnails();
 }
 
 function restoreLocal() {
