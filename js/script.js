@@ -565,6 +565,7 @@ listen("#frameprev", "click", frames.decrementFrame);
 listen("#framenext", "click", frames.incrementFrame);
 listen("#framelast", "click", frames.goToLastFrame);
 listen("#doonionskin", "change", state.toggleOnionskin);
+listen(".onionskin > i", "click", state.toggleOnionskin);
 listen("#animate", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
 listen("#animateplay", "click", animation.play);
 listen("#framerate", "change", evt => (state.fps = evt.currentTarget.value));
