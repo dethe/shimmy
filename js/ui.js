@@ -184,62 +184,6 @@ class ui {
     $("#shimmy i").classList.remove("spinning");
   }
 
-  static frameToThumbnail(frame) {
-    return this.frameToImage(frame, 0, 0, WIDTH, HEIGHT, 64);
-  }
-
-  static thumbnailForFrame(frame) {
-    if (!frame) {
-      console.error("error: no frame in thumbnailForFrame");
-      return null;
-    }
-    let thumb = $(`#${frame.id}-canvas`);
-    return thumb;
-  }
-
-  static frameForThumbnail(thumb) {
-    return $(`#${thumb.id.split("-")[0]}`);
-  }
-
-  static makeThumbnails() {
-    const tl = $(".timeline-frames");
-    tl.innerHTML = ""; // remove any existing children
-    $$(".frame").forEach(frame => {
-      const thumb = this.frameToThumbnail(frame);
-      tl.appendChild(dom.html("div", [thumb]));
-    });
-    tl.children[state.currentFrame].firstChild.classList.add("selected");
-    tl.children[state.currentFrame].firstChild.scrollIntoView();
-  }
-
-  static updateThumbnail(frame) {
-    const oldThumb = this.thumbnailForFrame(frame);
-    const newThumb = this.frameToThumbnail(frame);
-    if (oldThumb.classList.contains("selected")) {
-      newThumb.classList.add("selected");
-    }
-    oldThumb.replaceWith(newThumb);
-    newThumb.scrollIntoView();
-  }
-
-  static addThumbnail(frame) {
-    const oldFrame = frame.nextElementSibling;
-    const oldThumb = oldFrame
-      ? this.thumbnailForFrame(frame.nextElementSibling).parentNode
-      : null;
-    const newThumb = dom.html("div", [this.frameToThumbnail(frame)]);
-    $(".timeline-frames").insertBefore(newThumb, oldThumb);
-    newThumb.scrollIntoView();
-  }
-
-  static removeThumbnail(frame) {
-    this.thumbnailForFrame(frame).parentNode.remove();
-  }
-
-  static toggleTimeline() {
-    document.body.classList.toggle("notimeline");
-  }
-
   static toggleUI() {
     document.body.classList.toggle("noui");
   }
@@ -342,7 +286,6 @@ class ui {
     window.HEIGHT = document.body.clientHeight;
     ui.canvas.setAttribute("width", window.WIDTH + "px");
     ui.canvas.setAttribute("height", window.HEIGHT + "px");
-    ui.makeThumbnails();
   }
 
   // Render state as needed
@@ -514,7 +457,5 @@ let tools = {
 };
 ui.tool = "pen";
 
-// FIXME: use proper event handling
-window.onresize = ui.resize;
 
 export default ui;

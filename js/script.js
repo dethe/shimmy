@@ -24,6 +24,7 @@ const { $, $$, sendEvent } = dom;
 import * as animation from "./animation.js";
 import * as stepper from "./stepper.js";
 import * as undo from "./undo.js";
+import * as timeline from "./timeline.js";
 import GIF from "../lib/gif.js";
 import JSZip from "../lib/jszip.min.js";
 
@@ -106,7 +107,8 @@ function listenCanvas() {
 listen(body, "mouseup", toolStop);
 listen(window, "keydown", escCancel);
 
-listen(window, "updateTimeline", evt => ui.updateThumbnail(evt.detail.frame));
+// FIXME: #81 Timeline Dependencies
+listen(window, "updateFrame", evt => timeline.updateThumbnail(evt.detail.frame));
 
 function undoLine() {
   dom.remove(ui.currentFrame().lastElementChild);
@@ -122,7 +124,7 @@ function newAnimation(evt) {
     clear();
     ui.updateFrameCount();
     undo.clear();
-    ui.makeThumbnails();
+    timeline.makeThumbnails();
   }
 }
 
@@ -137,7 +139,7 @@ function restoreFormat(savetext) {
   ui.resize();
   restoreSavedState();
   listenCanvas();
-  ui.makeThumbnails();
+  timeline.makeThumbnails();
 }
 
 function restoreLocal() {
@@ -396,6 +398,11 @@ function render() {
   requestAnimationFrame(render);
 }
 
+function resize(){
+  ui.resize();
+  timeline.makeThumbnails();
+}
+
 requestAnimationFrame(render);
 
 // Key shortcuts: Command: ⌘
@@ -569,11 +576,23 @@ listen(".onionskin > i", "click", state.toggleOnionskin);
 listen("#animate", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
 listen("#animateplay", "click", animation.play);
 listen("#framerate", "change", evt => (state.fps = evt.currentTarget.value));
+// FIXME: #81 Timeline Dependencies
 listen(".timeline-label", "click", ui.toggleTimeline);
 listen("#shortcuts", "click", ui.showShortcuts);
+// FIXME: #81 Timeline Dependencies
 listen(".timeline-frames", "click", evt =>
-  frames.goToFrame(ui.currentFrame(), ui.frameForThumbnail(evt.originalTarget))
+  frames.goToFrame(ui.currentFrame(), timeline.frameForThumbnail(evt.originalTarget))
 );
 // File Events
 listen(window, "unload", saveLocal);
 listen(window, "load", restoreLocal);
+
+// Resize events
+// FIXME: use proper event handling
+listen(window, "resize", resize);
+
+// Frame events
+listen(document, "addFrame", evt => timeline.addThumbnail(evt.detail.frame));
+listen(document, "removeFrame", evt => timeline.removeThumbnail(evt.detail.frame));
+listen(document, "updateFrame", evt => timeline.updateThumbnail(evt.detail.frame));
+listen(document, "selectFrame", evt => timeline.selectThumbnail(evt.detail.frame));

@@ -96,14 +96,17 @@ class Pen {
       ui.currentFrame(),
       () => {
         path.remove(),
-          sendEvent("updateTimeline", { frame: ui.currentFrame() });
+        // FIXME: #81 Timeline Dependencies
+        sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         parent.appendChild(path);
-        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+        // FIXME: #81 Timeline Dependencies
+        sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
-    sendEvent("updateTimeline", { frame: ui.currentFrame() });
+    // FIXME: #81 Timeline Dependencies
+    sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
   cancel() {
@@ -172,14 +175,17 @@ class Move {
       curr,
       () => {
         curr.setAttribute("transform", oldTransform);
-        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+        // FIXME: #81 Timeline Dependencies
+        sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         curr.setAttribute("transform", newTransform);
-        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+        // FIXME: #81 Timeline Dependencies
+        sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
-    sendEvent("updateTimeline", { frame: ui.currentFrame() });
+    // FIXME: #81 Timeline Dependencies
+    sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
   cancel() {
@@ -264,14 +270,17 @@ class Rotate {
       curr,
       () => {
         curr.setAttribute("transform", oldTransform);
-        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+        // FIXME: #81 Timeline Dependencies
+        sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         curr.setAttribute("transform", newTransform);
-        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+        // FIXME: #81 Timeline Dependencies
+        sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
-    sendEvent("updateTimeline", { frame: ui.currentFrame() });
+    // FIXME: #81 Timeline Dependencies
+    sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
   cancel(evt) {
@@ -307,14 +316,17 @@ class ZoomIn {
       curr,
       () => {
         curr.setAttribute("transform", oldTransform);
-        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+        // FIXME: #81 Timeline Dependencies
+        sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         curr.setAttribute("transform", newTransform);
-        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+        // FIXME: #81 Timeline Dependencies
+        sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
-    sendEvent("updateTimeline", { frame: ui.currentFrame() });
+    // FIXME: #81 Timeline Dependencies
+    sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
   move(evt) {
@@ -355,14 +367,17 @@ class ZoomOut {
       curr,
       () => {
         curr.setAttribute("transform", oldTransform);
-        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+        // FIXME: #81 Timeline Dependencies
+        sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         curr.setAttribute("transform", newTransform);
-        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+        // FIXME: #81 Timeline Dependencies
+        sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
-    sendEvent("updateTimeline", { frame: ui.currentFrame() });
+    // FIXME: #81 Timeline Dependencies
+    sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
   move(evt) {
@@ -434,15 +449,18 @@ class Eraser {
       curr,
       () => {
         curr.innerHTML = before;
-        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+        // FIXME: #81 Timeline Dependencies
+        sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         curr.innerHTML = after;
-        sendEvent("updateTimeline", { frame: ui.currentFrame() });
+        // FIXME: #81 Timeline Dependencies
+        sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
     this.before = null;
-    sendEvent("updateTimeline", { frame: ui.currentFrame() });
+    // FIXME: #81 Timeline Dependencies
+    sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
   cancel() {
