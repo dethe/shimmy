@@ -19,8 +19,7 @@ function updateOnionskin() {
 function insertFrame(before, frame) {
   dom.insertAfter(frame, before);
   frame.id = dom.randomId();
-  // FIXME: #81 Timeline Dependencies
-  ui.addThumbnail(frame);
+  dom.sendEvent("addFrame", {frame});
   return frame;
 }
 
@@ -48,8 +47,7 @@ function deleteFrame(suppressUndo) {
   let next = frameToDelete.nextElementSibling;
   if (frameToDelete.parentNode.children.length > 1) {
     dom.remove(frameToDelete);
-    // FIXME: #81 Timeline Dependencies
-    ui.removeThumbnail(frameToDelete);
+    dom.sendEvent("removeFrame", {frame: frameToDelete});
     if (!suppressUndo) {
       undo.pushDocUndo(
         "Delete Frame",
@@ -57,8 +55,7 @@ function deleteFrame(suppressUndo) {
         curr,
         () => {
           parent.insertBefore(frameToDelete, next);
-          // FIXME: #81 Timeline Dependencies
-          ui.addThumbnail(frameToDelete);
+          dom.sendEvent("addFrame", {frame: frameToDelete});
           goToFrame(curr, frameToDelete);
         },
         () => deleteFrame(true)
@@ -68,30 +65,28 @@ function deleteFrame(suppressUndo) {
   }
 }
 
-function restore(node, children, transform) {
+function restore(frame, children, transform) {
   if (transform) {
-    node.setAttribute("transform", transform);
+    frame.setAttribute("transform", transform);
   }
-  children.forEach(child => node.appendChild(child));
-  // FIXME: #81 Timeline Dependencies
-  ui.updateThumbnail(node);
-  return node;
+  children.forEach(child => frame.appendChild(child));
+  dom.sendEvent("updateFrame", {frame});
+  return frame;
 }
 
-function clearFrame(curr) {
-  if (!curr) {
-    curr = ui.currentFrame();
+function clearFrame(frame) {
+  if (!frame) {
+    frame = ui.currentFrame();
   }
-  let oldTransform = curr.getAttribute("transform") || "";
-  let children = [...curr.children];
-  dom.clear(curr);
-  // FIXME: #81 Timeline Dependencies
-  ui.updateThumbnail(curr);
+  let oldTransform = frame.getAttribute("transform") || "";
+  let children = [...frame.children];
+  dom.clear(frame);
+  dom.sendEvent("updateFrame", {frame});
   undo.pushUndo(
     "Clear",
-    curr,
-    () => restore(curr, children, oldTransform),
-    () => clearFrame(curr)
+    frame,
+    () => restore(frame, children, oldTransform),
+    () => clearFrame(frame)
   );
 }
 
@@ -106,12 +101,9 @@ function goToFrame(prev, next) {
     console.error("there is no next frame????");
     return;
   }
-  $$(".selected").forEach(elem => elem.classList.remove("selected"));
+  $$(".frame.selected").forEach(elem => elem.classList.remove("selected"));
   next.classList.add("selected");
-  // FIXME: #81 Timeline Dependencies
-  let nextThumb = ui.thumbnailForFrame(next);
-  nextThumb.classList.add("selected");
-  nextThumb.scrollIntoView();
+  dom.sendEvent("selectFrame", {frame:next});
   updateOnionskin();
   ui.updateFrameCount();
   undo.update(next);

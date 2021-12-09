@@ -71,8 +71,15 @@ function removeThumbnail(frame) {
   this.thumbnailForFrame(frame).parentNode.remove();
 }
 
-function toggleTimeline() {
+function toggleTimeline() {F
   document.body.classList.toggle("notimeline");
 }
 
-export { frameToThumbnail, thumbnailForFrame, makeThumbnails, updateThumbnail, addThumbnail, removeThumbnail, toggleTimeline }
+function selectThumbnail(frame){
+    $$('.canvas-frame.selected').forEach(thumb => thumb.classList.remove("selected"));
+    let nextThumb = thumbnailForFrame(frame);
+    nextThumb.classList.add("selected");
+    nextThumb.scrollIntoView();
+}
+
+export { frameToThumbnail, frameForThumbnail, thumbnailForFrame, makeThumbnails, updateThumbnail, addThumbnail, removeThumbnail, selectThumbnail, toggleTimeline }

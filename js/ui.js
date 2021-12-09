@@ -286,8 +286,6 @@ class ui {
     window.HEIGHT = document.body.clientHeight;
     ui.canvas.setAttribute("width", window.WIDTH + "px");
     ui.canvas.setAttribute("height", window.HEIGHT + "px");
-    // FIXME: #81 Timeline Dependencies
-    ui.makeThumbnails();
   }
 
   // Render state as needed
@@ -459,7 +457,5 @@ let tools = {
 };
 ui.tool = "pen";
 
-// FIXME: use proper event handling
-window.onresize = ui.resize;
 
 export default ui;
