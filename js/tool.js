@@ -55,6 +55,7 @@ class Pen {
     this.prevPoint = { x, y };
     this.startPath(x, y);
     this.drawing = true;
+    document.body.classList.add('nocontextmenu');
   }
 
   move(evt) {
@@ -91,6 +92,7 @@ class Pen {
     }
     this.drawing = false;
     currentMatrix = null;
+    document.body.classList.remove('nocontextmenu');
     undo.pushUndo(
       "Draw",
       ui.currentFrame(),
@@ -140,6 +142,7 @@ class Move {
     this.py = y;
     this.dragging = true;
     this.origTransform = ui.currentFrame().getAttribute("transform") || "";
+    document.body.classList.add('nocontextmenu');
   }
 
   move(evt) {
@@ -170,6 +173,7 @@ class Move {
     currentMatrix = null;
     let curr = ui.currentFrame();
     let newTransform = curr.getAttribute("transform");
+    document.body.classList.remove('nocontextmenu');
     undo.pushUndo(
       "Move",
       curr,
@@ -223,6 +227,7 @@ class Rotate {
     this.py = y;
     this.dragging = true;
     this.origTransform = ui.currentFrame().getAttribute("transform") || "";
+    document.body.classList.add('nocontextmenu');
   }
 
   move(evt) {
@@ -265,6 +270,7 @@ class Rotate {
     currentMatrix = null;
     let curr = ui.currentFrame();
     let newTransform = curr.getAttribute("transform");
+    document.body.classList.remove('nocontextmenu');
     undo.pushUndo(
       "Rotate",
       curr,
@@ -415,6 +421,7 @@ class Eraser {
     if (inBounds(wx, wy)) {
       erasePaths({ x, y });
     }
+    document.body.classList.add('nocontextmenu');
   }
 
   move(evt) {
@@ -444,6 +451,7 @@ class Eraser {
     let before = this.before;
     let curr = ui.currentFrame();
     let after = curr.innerHTML;
+    document.body.classList.add('nocontextmenu');
     undo.pushUndo(
       "Erase",
       curr,
@@ -641,5 +649,12 @@ function collidePaths(point, paths) {
     collideBox(eraserBox, path.getBBox({ stroke: true }))
   );
 }
+
+document.body.addEventListener('contextmenu', evt => {
+  if (document.body.classList.contains('nocontextmenu')){
+    evt.preventDefault();
+    return false;
+  }
+})
 
 export { Pen, Move, Rotate, ZoomIn, ZoomOut, Eraser, radians, degrees };
