@@ -13,16 +13,22 @@ const radians = degs => degs / DEG;
 
 let currentMatrix;
 
+document.body.appendChild(dom.html('canvas', {width: "32", height: "32", hidden:"hidden", id: "pencursor", class: "cursor"}));
+
 class Pen {
   constructor() {
     this.name = "pen";
     this.drawing = false;
     this.currentPath = null;
     this.prevPoint = null;
+    this.cursor = $("#pencursor");
   }
 
   select() {
-    $("svg").style.cursor = "url(img/pen.svg) 1 31, auto";
+    //$("svg").style.cursor = "url(#pencursor) 16 16, auto";
+    $("svg").style.cursor = "none";
+    this.cursor.removeAttribute('hidden');
+    this.cursor.style.display = "block";
   }
 
   startPath(x, y) {
@@ -55,6 +61,8 @@ class Pen {
     this.prevPoint = { x, y };
     this.startPath(x, y);
     this.drawing = true;
+    this.cursor.style.x = x - 16;
+    this.cursor.style.y = y - 16;
     document.body.classList.add('nocontextmenu');
   }
 
@@ -68,6 +76,8 @@ class Pen {
       // too close to previous point to both drawing
       return;
     }
+    this.cursor.style.x = x - 16;
+    this.cursor.style.y = y - 16;
     this.prevPoint = { x, y };
     if (inBounds(wx, wy)) {
       this.appendToPath(x, y);
@@ -93,6 +103,7 @@ class Pen {
     this.drawing = false;
     currentMatrix = null;
     document.body.classList.remove('nocontextmenu');
+    this.cursor.setAttribute('hidden', 'hidden');
     undo.pushUndo(
       "Draw",
       ui.currentFrame(),
