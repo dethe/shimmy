@@ -87,10 +87,8 @@ const escCancel = evt => {
   }
 };
 
-listen(document, 'changePen', evt => {
-  console.log('received changePen event');
+listen(document, "changePen", evt => {
   ui.tools.pen.setCursor(evt.detail.url, ui.currentTool === ui.tools.pen);
-
 });
 
 let body = document.body;
@@ -114,7 +112,9 @@ listen(body, "mouseup", toolStop);
 listen(window, "keydown", escCancel);
 
 // FIXME: #81 Timeline Dependencies
-listen(window, "updateFrame", evt => timeline.updateThumbnail(evt.detail.frame));
+listen(window, "updateFrame", evt =>
+  timeline.updateThumbnail(evt.detail.frame)
+);
 
 function undoLine() {
   dom.remove(ui.currentFrame().lastElementChild);
@@ -404,7 +404,7 @@ function render() {
   requestAnimationFrame(render);
 }
 
-function resize(){
+function resize() {
   ui.resize();
   timeline.makeThumbnails();
 }
@@ -587,7 +587,10 @@ listen(".timeline-label", "click", ui.toggleTimeline);
 listen("#shortcuts", "click", ui.showShortcuts);
 // FIXME: #81 Timeline Dependencies
 listen(".timeline-frames", "click", evt =>
-  frames.goToFrame(ui.currentFrame(), timeline.frameForThumbnail(evt.originalTarget))
+  frames.goToFrame(
+    ui.currentFrame(),
+    timeline.frameForThumbnail(evt.originalTarget)
+  )
 );
 // File Events
 listen(window, "unload", saveLocal);
@@ -599,6 +602,12 @@ listen(window, "resize", resize);
 
 // Frame events
 listen(document, "addFrame", evt => timeline.addThumbnail(evt.detail.frame));
-listen(document, "removeFrame", evt => timeline.removeThumbnail(evt.detail.frame));
-listen(document, "updateFrame", evt => timeline.updateThumbnail(evt.detail.frame));
-listen(document, "selectFrame", evt => timeline.selectThumbnail(evt.detail.frame));
+listen(document, "removeFrame", evt =>
+  timeline.removeThumbnail(evt.detail.frame)
+);
+listen(document, "updateFrame", evt =>
+  timeline.updateThumbnail(evt.detail.frame)
+);
+listen(document, "selectFrame", evt =>
+  timeline.selectThumbnail(evt.detail.frame)
+);

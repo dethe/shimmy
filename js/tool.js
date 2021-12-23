@@ -13,7 +13,15 @@ const radians = degs => degs / DEG;
 
 let currentMatrix;
 
-document.body.appendChild(dom.html('canvas', {width: "32", height: "32", hidden:"hidden", id: "pencursor", class: "cursor"}));
+document.body.appendChild(
+  dom.html("canvas", {
+    width: "32",
+    height: "32",
+    hidden: "hidden",
+    id: "pencursor",
+    class: "cursor",
+  })
+);
 
 class Pen {
   constructor() {
@@ -21,14 +29,13 @@ class Pen {
     this.drawing = false;
     this.currentPath = null;
     this.prevPoint = null;
-    this.cursor = "url(img/pen.svg) 16 16, auto"
+    this.cursor = "url(img/pen.svg) 16 16, auto";
   }
 
-  setCursor(url, isCurrent){
-    console.log(`setCursor(${url}, ${isCurrent})`);
+  setCursor(url, isCurrent) {
     this.cursor = url;
-    if (isCurrent){
-      $('svg').style.cursor = `${url} 16 16, auto`;
+    if (isCurrent) {
+      $("svg").style.cursor = `${url} 16 16, auto`;
     }
   }
 
@@ -66,7 +73,7 @@ class Pen {
     this.prevPoint = { x, y };
     this.startPath(x, y);
     this.drawing = true;
-    document.body.classList.add('nocontextmenu');
+    document.body.classList.add("nocontextmenu");
   }
 
   move(evt) {
@@ -103,14 +110,14 @@ class Pen {
     }
     this.drawing = false;
     currentMatrix = null;
-    document.body.classList.remove('nocontextmenu');
+    document.body.classList.remove("nocontextmenu");
     undo.pushUndo(
       "Draw",
       ui.currentFrame(),
       () => {
         path.remove(),
-        // FIXME: #81 Timeline Dependencies
-        sendEvent("updateFrame", { frame: ui.currentFrame() });
+          // FIXME: #81 Timeline Dependencies
+          sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         parent.appendChild(path);
@@ -153,7 +160,7 @@ class Move {
     this.py = y;
     this.dragging = true;
     this.origTransform = ui.currentFrame().getAttribute("transform") || "";
-    document.body.classList.add('nocontextmenu');
+    document.body.classList.add("nocontextmenu");
   }
 
   move(evt) {
@@ -184,7 +191,7 @@ class Move {
     currentMatrix = null;
     let curr = ui.currentFrame();
     let newTransform = curr.getAttribute("transform");
-    document.body.classList.remove('nocontextmenu');
+    document.body.classList.remove("nocontextmenu");
     undo.pushUndo(
       "Move",
       curr,
@@ -238,7 +245,7 @@ class Rotate {
     this.py = y;
     this.dragging = true;
     this.origTransform = ui.currentFrame().getAttribute("transform") || "";
-    document.body.classList.add('nocontextmenu');
+    document.body.classList.add("nocontextmenu");
   }
 
   move(evt) {
@@ -281,7 +288,7 @@ class Rotate {
     currentMatrix = null;
     let curr = ui.currentFrame();
     let newTransform = curr.getAttribute("transform");
-    document.body.classList.remove('nocontextmenu');
+    document.body.classList.remove("nocontextmenu");
     undo.pushUndo(
       "Rotate",
       curr,
@@ -432,7 +439,7 @@ class Eraser {
     if (inBounds(wx, wy)) {
       erasePaths({ x, y });
     }
-    document.body.classList.add('nocontextmenu');
+    document.body.classList.add("nocontextmenu");
   }
 
   move(evt) {
@@ -462,7 +469,7 @@ class Eraser {
     let before = this.before;
     let curr = ui.currentFrame();
     let after = curr.innerHTML;
-    document.body.classList.add('nocontextmenu');
+    document.body.classList.add("nocontextmenu");
     undo.pushUndo(
       "Erase",
       curr,
@@ -661,11 +668,11 @@ function collidePaths(point, paths) {
   );
 }
 
-document.body.addEventListener('contextmenu', evt => {
-  if (document.body.classList.contains('nocontextmenu')){
+document.body.addEventListener("contextmenu", evt => {
+  if (document.body.classList.contains("nocontextmenu")) {
     evt.preventDefault();
     return false;
   }
-})
+});
 
 export { Pen, Move, Rotate, ZoomIn, ZoomOut, Eraser, radians, degrees };
