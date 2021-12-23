@@ -87,6 +87,12 @@ const escCancel = evt => {
   }
 };
 
+listen(document, 'changePen', evt => {
+  console.log('received changePen event');
+  ui.tools.pen.setCursor(evt.detail.url, ui.currentTool === ui.tools.pen);
+
+});
+
 let body = document.body;
 
 let toolStartOrHidePopup = evt => {

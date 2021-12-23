@@ -190,6 +190,7 @@ function drawPenToCanvas(){
   ctx.strokeStyle = invertColor(state.color, true);
   ctx.strokeWidth = 1;
   ctx.ellipse(width/2, height/2, width/2, height/2, 0, 0, Math.PI * 2, false);
+  cursor.toBlob(blob => dom.sendEvent('changePen', {url: `url(${URL.createObjectURL(blob)})`}));
 }
 
 class ui {
@@ -506,6 +507,8 @@ let tools = {
   zoomout: new tool.ZoomOut(ui.canvas),
   eraser: new tool.Eraser(ui.canvas),
 };
+// FIXME move tools to script?
+ui.tools = tools;
 ui.tool = "pen";
 
 

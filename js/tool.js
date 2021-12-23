@@ -21,14 +21,19 @@ class Pen {
     this.drawing = false;
     this.currentPath = null;
     this.prevPoint = null;
-    this.cursor = $("#pencursor");
+    this.cursor = "url(img/pen.svg) 16 16, auto"
+  }
+
+  setCursor(url, isCurrent){
+    console.log(`setCursor(${url}, ${isCurrent})`);
+    this.cursor = url;
+    if (isCurrent){
+      $('svg').style.cursor = `${url} 16 16, auto`;
+    }
   }
 
   select() {
-    //$("svg").style.cursor = "url(#pencursor) 16 16, auto";
-    $("svg").style.cursor = "none";
-    this.cursor.removeAttribute('hidden');
-    this.cursor.style.display = "block";
+    $("svg").style.cursor = this.cursor;
   }
 
   startPath(x, y) {
@@ -61,8 +66,6 @@ class Pen {
     this.prevPoint = { x, y };
     this.startPath(x, y);
     this.drawing = true;
-    this.cursor.style.x = x - 16;
-    this.cursor.style.y = y - 16;
     document.body.classList.add('nocontextmenu');
   }
 
@@ -76,8 +79,6 @@ class Pen {
       // too close to previous point to both drawing
       return;
     }
-    this.cursor.style.x = x - 16;
-    this.cursor.style.y = y - 16;
     this.prevPoint = { x, y };
     if (inBounds(wx, wy)) {
       this.appendToPath(x, y);
@@ -103,7 +104,6 @@ class Pen {
     this.drawing = false;
     currentMatrix = null;
     document.body.classList.remove('nocontextmenu');
-    this.cursor.setAttribute('hidden', 'hidden');
     undo.pushUndo(
       "Draw",
       ui.currentFrame(),
