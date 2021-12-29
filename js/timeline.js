@@ -22,7 +22,6 @@ function frameToThumbnail(frame) {
 }
 
 function thumbnailForFrame(frame) {
-    // FIXME: #81 Timeline Dependencies
   if (!frame) {
     console.error("error: no frame in thumbnailForFrame");
     return null;
@@ -32,7 +31,6 @@ function thumbnailForFrame(frame) {
 }
 
 function frameForThumbnail(thumb) {
-  // FIXME: #81 Timeline Dependencies
   return $(`#${thumb.id.split("-")[0]}`);
 }
 

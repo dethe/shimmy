@@ -143,6 +143,104 @@ let aboutShimmyDialog = $("#aboutShimmy");
 let shortcutsDialog = $("#shortcutsDialog");
 let currentDisplay = "drawingboard";
 
+/* source: https://stackoverflow.com/a/35970186 */
+function invertColor(hex, bw) {
+  if (hex.indexOf("#") === 0) {
+    hex = hex.slice(1);
+  }
+  // convert 3-digit hex to 6-digits.
+  if (hex.length === 3) {
+    hex = hex[0] + hex[0] + hex[1] + hex[1] + hex[2] + hex[2];
+  }
+  if (hex.length !== 6) {
+    throw new Error("Invalid HEX color.");
+  }
+  var r = parseInt(hex.slice(0, 2), 16),
+    g = parseInt(hex.slice(2, 4), 16),
+    b = parseInt(hex.slice(4, 6), 16);
+  if (bw) {
+    // https://stackoverflow.com/a/3943023/112731
+    return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "#000000" : "#FFFFFF";
+  }
+  // invert color components
+  r = (255 - r).toString(16);
+  g = (255 - g).toString(16);
+  b = (255 - b).toString(16);
+  // pad each with zeros and return
+  return "#" + padZero(r) + padZero(g) + padZero(b);
+}
+
+function padZero(str, len) {
+  len = len || 2;
+  var zeros = new Array(len).join("0");
+  return (zeros + str).slice(-len);
+}
+
+function drawPenToCanvas() {
+  const width = 32;
+  const height = 32;
+  const radius = state.strokeWidth / 2;
+  let cursor = $("canvas.cursor");
+  let ctx = cursor.getContext("2d");
+  ctx.clearRect(0, 0, width, height);
+  ctx.fillStyle = state.color;
+  ctx.strokeStyle = invertColor(state.color, true);
+  ctx.strokeWidth = 1;
+  ctx.beginPath();
+  ctx.ellipse(width / 2, height / 2, radius, radius, 0, 0, Math.PI * 2, false);
+  ctx.fill();
+  ctx.stroke();
+  dom.sendEvent("changePen", { url: `url(${cursor.toDataURL()})` });
+}
+
+let checkerboard;
+
+function initCheckerboard() {
+  checkerboard = dom.html("canvas", { width: 32, height: 32 });
+  const ctx = checkerboard.getContext("2d");
+  const width = 32;
+  const height = 32;
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, width, height);
+  ctx.fillStyle = "white";
+  for (let x = 0; x < width / 2; x++) {
+    for (let y = 0; y < height / 2; y++) {
+      if (y % 2 === 0) {
+        if (x % 2 === 0) {
+          ctx.fillRect(x * 2, y * 2, 2, 2);
+        }
+      } else {
+        if (x % 2 !== 0) {
+          ctx.fillRect(x * 2, y * 2, 2, 2);
+        }
+      }
+    }
+  }
+}
+
+function drawEraserToCanvas() {
+  if (!checkerboard) {
+    initCheckerboard();
+  }
+  const width = 32;
+  const height = 32;
+  const radius = state.eraserWidth / 2;
+  let cursor = $("canvas.cursor");
+  let ctx = cursor.getContext("2d");
+  ctx.clearRect(0, 0, width, height);
+  // Can we have a fill style of checkerboard?
+  ctx.strokeStyle = "green";
+  ctx.strokeWidth = 1;
+  ctx.beginPath();
+  ctx.ellipse(width / 2, height / 2, radius, radius, 0, 0, Math.PI * 2, false);
+  ctx.save();
+  ctx.clip();
+  ctx.drawImage(checkerboard, 0, 0);
+  ctx.restore();
+  ctx.stroke();
+  dom.sendEvent("changeEraser", { url: `url(${cursor.toDataURL()})` });
+}
+
 class ui {
   static canvas = $("#canvas");
 
@@ -305,10 +403,12 @@ class ui {
 
   static set strokeWidth(val) {
     $("#pensize").value = val;
+    drawPenToCanvas();
   }
 
   static set eraserWidth(val) {
     $("#erasersize").value = val;
+    drawEraserToCanvas();
   }
 
   static set doOnionskin(val) {
@@ -358,6 +458,7 @@ class ui {
 
   static set color(color) {
     colorButton($("#color"), color);
+    drawPenToCanvas();
   }
 
   static set bgcolor(color) {
@@ -455,7 +556,8 @@ let tools = {
   zoomout: new tool.ZoomOut(ui.canvas),
   eraser: new tool.Eraser(ui.canvas),
 };
+// FIXME move tools to script?
+ui.tools = tools;
 ui.tool = "pen";
-
 
 export default ui;

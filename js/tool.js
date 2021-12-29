@@ -13,16 +13,34 @@ const radians = degs => degs / DEG;
 
 let currentMatrix;
 
+document.body.appendChild(
+  dom.html("canvas", {
+    width: "32",
+    height: "32",
+    hidden: "hidden",
+    id: "pencursor",
+    class: "cursor",
+  })
+);
+
 class Pen {
   constructor() {
     this.name = "pen";
     this.drawing = false;
     this.currentPath = null;
     this.prevPoint = null;
+    this.cursor = "url(img/pen.svg) 16 16, auto";
+  }
+
+  setCursor(url, isCurrent) {
+    this.cursor = url;
+    if (isCurrent) {
+      $("svg").style.cursor = `${url} 16 16, auto`;
+    }
   }
 
   select() {
-    $("svg").style.cursor = "url(img/pen.svg) 1 31, auto";
+    $("svg").style.cursor = this.cursor;
   }
 
   startPath(x, y) {
@@ -55,7 +73,7 @@ class Pen {
     this.prevPoint = { x, y };
     this.startPath(x, y);
     this.drawing = true;
-    document.body.classList.add('nocontextmenu');
+    document.body.classList.add("nocontextmenu");
   }
 
   move(evt) {
@@ -92,22 +110,19 @@ class Pen {
     }
     this.drawing = false;
     currentMatrix = null;
-    document.body.classList.remove('nocontextmenu');
+    document.body.classList.remove("nocontextmenu");
     undo.pushUndo(
       "Draw",
       ui.currentFrame(),
       () => {
         path.remove(),
-        // FIXME: #81 Timeline Dependencies
-        sendEvent("updateFrame", { frame: ui.currentFrame() });
+          sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         parent.appendChild(path);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
-    // FIXME: #81 Timeline Dependencies
     sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
@@ -142,7 +157,7 @@ class Move {
     this.py = y;
     this.dragging = true;
     this.origTransform = ui.currentFrame().getAttribute("transform") || "";
-    document.body.classList.add('nocontextmenu');
+    document.body.classList.add("nocontextmenu");
   }
 
   move(evt) {
@@ -173,22 +188,19 @@ class Move {
     currentMatrix = null;
     let curr = ui.currentFrame();
     let newTransform = curr.getAttribute("transform");
-    document.body.classList.remove('nocontextmenu');
+    document.body.classList.remove("nocontextmenu");
     undo.pushUndo(
       "Move",
       curr,
       () => {
         curr.setAttribute("transform", oldTransform);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         curr.setAttribute("transform", newTransform);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
-    // FIXME: #81 Timeline Dependencies
     sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
@@ -227,7 +239,7 @@ class Rotate {
     this.py = y;
     this.dragging = true;
     this.origTransform = ui.currentFrame().getAttribute("transform") || "";
-    document.body.classList.add('nocontextmenu');
+    document.body.classList.add("nocontextmenu");
   }
 
   move(evt) {
@@ -270,22 +282,19 @@ class Rotate {
     currentMatrix = null;
     let curr = ui.currentFrame();
     let newTransform = curr.getAttribute("transform");
-    document.body.classList.remove('nocontextmenu');
+    document.body.classList.remove("nocontextmenu");
     undo.pushUndo(
       "Rotate",
       curr,
       () => {
         curr.setAttribute("transform", oldTransform);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         curr.setAttribute("transform", newTransform);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
-    // FIXME: #81 Timeline Dependencies
     sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
@@ -322,16 +331,13 @@ class ZoomIn {
       curr,
       () => {
         curr.setAttribute("transform", oldTransform);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         curr.setAttribute("transform", newTransform);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
-    // FIXME: #81 Timeline Dependencies
     sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
@@ -373,16 +379,13 @@ class ZoomOut {
       curr,
       () => {
         curr.setAttribute("transform", oldTransform);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         curr.setAttribute("transform", newTransform);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
-    // FIXME: #81 Timeline Dependencies
     sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
@@ -402,10 +405,18 @@ class ZoomOut {
 class Eraser {
   constructor() {
     this.name = "eraser";
+    this.cursor = "url(img/eraser.svg) 16 28, auto";
+  }
+
+  setCursor(url, isCurrent) {
+    this.cursor = url;
+    if (isCurrent) {
+      $("svg").style.cursor = `${url} 16 16, auto`;
+    }
   }
 
   select() {
-    $("svg").style.cursor = "url(img/eraser.svg) 16 28, auto";
+    $("svg").style.cursor = this.cursor;
   }
 
   start(evt) {
@@ -421,7 +432,7 @@ class Eraser {
     if (inBounds(wx, wy)) {
       erasePaths({ x, y });
     }
-    document.body.classList.add('nocontextmenu');
+    document.body.classList.add("nocontextmenu");
   }
 
   move(evt) {
@@ -451,23 +462,20 @@ class Eraser {
     let before = this.before;
     let curr = ui.currentFrame();
     let after = curr.innerHTML;
-    document.body.classList.add('nocontextmenu');
+    document.body.classList.add("nocontextmenu");
     undo.pushUndo(
       "Erase",
       curr,
       () => {
         curr.innerHTML = before;
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         curr.innerHTML = after;
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
     this.before = null;
-    // FIXME: #81 Timeline Dependencies
     sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
@@ -650,11 +658,11 @@ function collidePaths(point, paths) {
   );
 }
 
-document.body.addEventListener('contextmenu', evt => {
-  if (document.body.classList.contains('nocontextmenu')){
+document.body.addEventListener("contextmenu", evt => {
+  if (document.body.classList.contains("nocontextmenu")) {
     evt.preventDefault();
     return false;
   }
-})
+});
 
 export { Pen, Move, Rotate, ZoomIn, ZoomOut, Eraser, radians, degrees };
