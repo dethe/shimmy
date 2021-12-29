@@ -193,6 +193,54 @@ function drawPenToCanvas() {
   dom.sendEvent("changePen", { url: `url(${cursor.toDataURL()})` });
 }
 
+let checkerboard;
+
+function initCheckerboard() {
+  checkerboard = dom.html("canvas", { width: 32, height: 32 });
+  const ctx = checkerboard.getContext("2d");
+  const width = 32;
+  const height = 32;
+  ctx.fillStyle = "black";
+  ctx.fillRect(0, 0, width, height);
+  ctx.fillStyle = "white";
+  for (let x = 0; x < width / 2; x++) {
+    for (let y = 0; y < height / 2; y++) {
+      if (y % 2 === 0) {
+        if (x % 2 === 0) {
+          ctx.fillRect(x * 2, y * 2, 2, 2);
+        }
+      } else {
+        if (x % 2 !== 0) {
+          ctx.fillRect(x * 2, y * 2, 2, 2);
+        }
+      }
+    }
+  }
+}
+
+function drawEraserToCanvas() {
+  if (!checkerboard) {
+    initCheckerboard();
+  }
+  const width = 32;
+  const height = 32;
+  const radius = state.eraserWidth / 2;
+  let cursor = $("canvas.cursor");
+  let ctx = cursor.getContext("2d");
+  ctx.clearRect(0, 0, width, height);
+  // Can we have a fill style of checkerboard?
+  ctx.strokeStyle = "green";
+  ctx.strokeWidth = 1;
+  ctx.beginPath();
+  ctx.ellipse(width / 2, height / 2, radius, radius, 0, 0, Math.PI * 2, false);
+  ctx.save();
+  ctx.clip();
+  ctx.drawImage(checkerboard, 0, 0);
+  ctx.restore();
+  ctx.stroke();
+  dom.sendEvent("changeEraser", { url: `url(${cursor.toDataURL()})` });
+}
+
 class ui {
   static canvas = $("#canvas");
 
@@ -360,6 +408,7 @@ class ui {
 
   static set eraserWidth(val) {
     $("#erasersize").value = val;
+    drawEraserToCanvas();
   }
 
   static set doOnionskin(val) {

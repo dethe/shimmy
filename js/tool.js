@@ -116,16 +116,13 @@ class Pen {
       ui.currentFrame(),
       () => {
         path.remove(),
-          // FIXME: #81 Timeline Dependencies
           sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         parent.appendChild(path);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
-    // FIXME: #81 Timeline Dependencies
     sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
@@ -197,16 +194,13 @@ class Move {
       curr,
       () => {
         curr.setAttribute("transform", oldTransform);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         curr.setAttribute("transform", newTransform);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
-    // FIXME: #81 Timeline Dependencies
     sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
@@ -294,16 +288,13 @@ class Rotate {
       curr,
       () => {
         curr.setAttribute("transform", oldTransform);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         curr.setAttribute("transform", newTransform);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
-    // FIXME: #81 Timeline Dependencies
     sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
@@ -340,16 +331,13 @@ class ZoomIn {
       curr,
       () => {
         curr.setAttribute("transform", oldTransform);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         curr.setAttribute("transform", newTransform);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
-    // FIXME: #81 Timeline Dependencies
     sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
@@ -391,16 +379,13 @@ class ZoomOut {
       curr,
       () => {
         curr.setAttribute("transform", oldTransform);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         curr.setAttribute("transform", newTransform);
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
-    // FIXME: #81 Timeline Dependencies
     sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
@@ -420,10 +405,18 @@ class ZoomOut {
 class Eraser {
   constructor() {
     this.name = "eraser";
+    this.cursor = "url(img/eraser.svg) 16 28, auto";
+  }
+
+  setCursor(url, isCurrent) {
+    this.cursor = url;
+    if (isCurrent) {
+      $("svg").style.cursor = `${url} 16 16, auto`;
+    }
   }
 
   select() {
-    $("svg").style.cursor = "url(img/eraser.svg) 16 28, auto";
+    $("svg").style.cursor = this.cursor;
   }
 
   start(evt) {
@@ -475,17 +468,14 @@ class Eraser {
       curr,
       () => {
         curr.innerHTML = before;
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       },
       () => {
         curr.innerHTML = after;
-        // FIXME: #81 Timeline Dependencies
         sendEvent("updateFrame", { frame: ui.currentFrame() });
       }
     );
     this.before = null;
-    // FIXME: #81 Timeline Dependencies
     sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 

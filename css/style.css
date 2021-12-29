@@ -468,12 +468,6 @@ dialog .close {
   font-family: sans-serif;
 }
 
-/* Custom cursor */
-
-canvas.cursor{
-  position: absolute;
-}
-
 /* Moving  Mess popup styles here */
 #mess-messElement {
   background-color: rgba(0, 0, 0, 0.8);
