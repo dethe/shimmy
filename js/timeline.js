@@ -31,6 +31,7 @@ function thumbnailForFrame(frame) {
 }
 
 function frameForThumbnail(thumb) {
+  // FIXME: #81 Timeline Dependencies
   return $(`#${thumb.id.split("-")[0]}`);
 }
 
@@ -69,7 +70,7 @@ function removeThumbnail(frame) {
   this.thumbnailForFrame(frame).parentNode.remove();
 }
 
-function toggleTimeline() {F
+function toggleTimeline() {
   document.body.classList.toggle("notimeline");
 }
 
