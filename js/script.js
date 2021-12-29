@@ -585,7 +585,7 @@ listen(".onionskin > i", "click", state.toggleOnionskin);
 listen("#animate", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
 listen("#animateplay", "click", animation.play);
 listen("#framerate", "change", evt => (state.fps = evt.currentTarget.value));
-listen(".timeline-label", "click", ui.toggleTimeline);
+listen(".timeline-label", "click", timeline.toggleTimeline);
 listen("#shortcuts", "click", ui.showShortcuts);
 listen(".timeline-frames", "click", evt =>
   frames.goToFrame(
