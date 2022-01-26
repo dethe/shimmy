@@ -228,8 +228,7 @@ class Rotate {
     $("svg").style.cursor = "url(img/sync-alt.svg) 16 16, auto";
   }
 
-  createRotationAnchor() {
-    console.log("createRotationAnchor()");
+  createOverlay() {
     this.overlay = dom.html("canvas", {
       width: innerWidth,
       height: innerHeight,
@@ -238,48 +237,64 @@ class Rotate {
     });
     this.ctx = this.overlay.getContext("2d");
     document.body.appendChild(this.overlay);
+  }
+
+  drawRotationAnchor() {
     this.ctx.lineWidth = 3;
     this.ctx.beginPath();
-    this.ctx.arc(this.anchorX, this.anchorY, 4, 0, 1.75 * Math.PI);
+    let off = this.offset * 0.05;
+    this.ctx.arc(this.anchorX, this.anchorY, 4, 0 + off, 1.75 * Math.PI + off);
     this.ctx.stroke();
     this.ctx.beginPath();
-    this.ctx.arc(this.anchorX, this.anchorY, 8, 0.25 * Math.PI, 2 * Math.PI);
+    this.ctx.arc(
+      this.anchorX,
+      this.anchorY,
+      8,
+      0.25 * Math.PI - off,
+      2 * Math.PI - off
+    );
     this.ctx.stroke();
     this.ctx.beginPath();
-    this.ctx.arc(this.anchorX, this.anchorY, 12, 0.5 * Math.PI, 2.25 * Math.PI);
+    this.ctx.arc(
+      this.anchorX,
+      this.anchorY,
+      12,
+      0.5 * Math.PI + off,
+      2.25 * Math.PI + off
+    );
     this.ctx.stroke();
   }
 
-  removeRotationAnchor() {
+  removeOverlay() {
+    clearTimeout(this.timer);
+    this.timer = null;
     this.overlay.remove();
     this.overlay = null;
     this.ctx = null;
   }
 
-  drawMarchingAnts() {
-    this.ctx.lineWidth = 1;
-    this.offset = 0;
-    this.march();
-  }
-
   drawAnts() {
-    this.ctx.clearRect(0, 0, innerWidth, innerHeight);
+    this.ctx.save();
+    this.ctx.lineWidth = 3;
     this.ctx.setLineDash([4, 2]);
-    this.ctx.lineDashOffset = -this.offset;
+    this.ctx.lineDashOffset = -(this.offset % 8);
     this.ctx.beginPath();
     this.ctx.moveTo(this.anchorX, this.anchorY);
     this.ctx.lineTo(this.mouseX, this.mouseY);
     this.ctx.stroke();
+    this.ctx.restore();
   }
 
   march() {
-    this.offset++;
-    if (this.offset > 16) {
-      this.offset = 0;
+    if (!this.ctx) {
+      this.createOverlay();
     }
+    this.offset++;
     if (this.ctx) {
+      this.ctx.clearRect(0, 0, innerWidth, innerHeight);
       this.drawAnts();
-      setTimeout(() => this.march(), 20);
+      this.drawRotationAnchor();
+      this.timer = setTimeout(() => this.march(), 20);
     }
   }
 
@@ -294,7 +309,8 @@ class Rotate {
     this.px = x;
     this.py = y;
     this.dragging = true;
-    this.createRotationAnchor();
+    this.offset = 0;
+    this.march();
     this.origTransform = ui.currentFrame().getAttribute("transform") || "";
     document.body.classList.add("nocontextmenu");
   }
@@ -326,7 +342,6 @@ class Rotate {
     } else {
       this.originalAngle = degrees(Math.atan2(dy, dx));
     }
-    this.drawMarchingAnts();
   }
 
   stop(evt) {
@@ -343,7 +358,7 @@ class Rotate {
     let curr = ui.currentFrame();
     let newTransform = curr.getAttribute("transform");
     document.body.classList.remove("nocontextmenu");
-    this.removeRotationAnchor();
+    this.removeOverlay();
     undo.pushUndo(
       "Rotate",
       curr,
@@ -361,7 +376,7 @@ class Rotate {
 
   cancel(evt) {
     ui.currentFrame().setAttribute("transform", this.origTransform);
-    this.removeRotationAnchor();
+    this.removeOverlay();
     this.dragging = false;
     this.origTransform = false;
     currentMatrix = null;
