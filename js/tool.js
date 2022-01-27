@@ -393,41 +393,63 @@ class ZoomIn {
   }
 
   start(evt) {
+    if (this.dragging) {
+      return false;
+    }
     saveMatrix();
     let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
       return;
     }
-    let curr = ui.currentFrame();
-    let oldTransform = curr.getAttribute("transform") || "";
-    let newTransform = `${oldTransform} translate(${x} ${y}) scale(${ZOOMIN}) translate(-${x}, -${y})`;
-    ui.currentFrame().setAttribute("transform", newTransform);
-    currentMatrix = null;
-    undo.pushUndo(
-      "Zoom In",
-      curr,
-      () => {
-        curr.setAttribute("transform", oldTransform);
-        sendEvent("updateFrame", { frame: ui.currentFrame() });
-      },
-      () => {
-        curr.setAttribute("transform", newTransform);
-        sendEvent("updateFrame", { frame: ui.currentFrame() });
-      }
-    );
-    sendEvent("updateFrame", { frame: ui.currentFrame() });
+    this.px = x;
+    this.py = y;
+    this.dragging = true;
+    this.curr = ui.currentFrame();
+    this.oldTransform = this.curr.getAttribute("transform") || "";
   }
 
   move(evt) {
-    // do nothing
+    if (!this.dragging) {
+      return;
+    }
+    let { x, y, wx, wy, err } = getXY(evt);
+    if (err) {
+      return;
+    }
+    let zoomin = 1 + dist(x, y, this.px, this.py) / 2000;
+    let newTransform = `${this.oldTransform} translate(${this.px} ${this.py}) scale(${zoomin}) translate(-${this.px}, -${this.py})`;
+    console.log(`zoom in: ${zoomin}`);
+    this.curr.setAttribute("transform", newTransform);
   }
 
   stop(evt) {
-    // do nothing
+    if (!this.dragging) {
+      return;
+    }
+    currentMatrix = null;
+    this.dragging = false;
+    undo.pushUndo(
+      "Zoom In",
+      this.curr,
+      () => {
+        this.curr.setAttribute("transform", oldTransform);
+        sendEvent("updateFrame", { frame: this.curr });
+      },
+      () => {
+        this.curr.setAttribute("transform", newTransform);
+        sendEvent("updateFrame", { frame: this.curr });
+      }
+    );
+    sendEvent("updateFrame", { frame: this.curr });
   }
 
   cancel(evt) {
-    // do nothing
+    if (!this.dragging) {
+      return;
+    }
+    this.dragging = false;
+    currentMatrix = null;
+    this.curr.setAttribute("transform", this.oldTransform);
   }
 }
 
