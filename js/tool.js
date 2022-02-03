@@ -403,9 +403,12 @@ class ZoomIn {
     }
     this.px = x;
     this.py = y;
+    this.wx = wx;
+    this.wy = wy;
     this.dragging = true;
     this.curr = ui.currentFrame();
     this.oldTransform = this.curr.getAttribute("transform") || "";
+    this.drawAnchor();
   }
 
   move(evt) {
@@ -416,9 +419,10 @@ class ZoomIn {
     if (err) {
       return;
     }
-    let zoomin = 1 + dist(x, y, this.px, this.py) / 2000;
+    let d = dist(wx, wy, this.wx, this.wy);
+    let zoomin = 1 + dist(wx, wy, this.wx, this.wy) / 2000;
+    console.log(`dist: ${d}, zoomin: ${zoomin}`);
     let newTransform = `${this.oldTransform} translate(${this.px} ${this.py}) scale(${zoomin}) translate(-${this.px}, -${this.py})`;
-    console.log(`zoom in: ${zoomin}`);
     this.curr.setAttribute("transform", newTransform);
   }
 
@@ -440,6 +444,7 @@ class ZoomIn {
         sendEvent("updateFrame", { frame: this.curr });
       }
     );
+    this.removeOverlay();
     sendEvent("updateFrame", { frame: this.curr });
   }
 
@@ -449,7 +454,57 @@ class ZoomIn {
     }
     this.dragging = false;
     currentMatrix = null;
+    this.removeOverlay();
     this.curr.setAttribute("transform", this.oldTransform);
+  }
+
+  drawArrow(index) {
+    const angle = (index * Math.PI) / 6;
+    let length = 8 + Math.sin((this.offset * Math.PI) / 25) * 4;
+    this.ctx.save();
+    this.ctx.lineWidth = 1;
+    this.ctx.beginPath();
+    this.ctx.moveTo(this.wx, this.wy);
+    this.ctx.lineTo(
+      this.wx + Math.cos(angle) * length,
+      this.wy + Math.sin(angle) * length
+    );
+    this.ctx.stroke();
+    this.ctx.restore();
+  }
+
+  drawAnchor() {
+    if (!this.ctx) {
+      this.createOverlay();
+    }
+    this.offset++;
+    if (this.ctx) {
+      this.ctx.clearRect(0, 0, innerWidth, innerHeight);
+      for (let angle = 0; angle < 12; angle++) {
+        this.drawArrow(angle);
+      }
+      this.timer = setTimeout(() => this.drawAnchor(), 20);
+    }
+  }
+
+  createOverlay() {
+    this.overlay = dom.html("canvas", {
+      width: innerWidth,
+      height: innerHeight,
+      style:
+        "position:absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none;",
+    });
+    this.ctx = this.overlay.getContext("2d");
+    this.offset = 0;
+    document.body.appendChild(this.overlay);
+  }
+
+  removeOverlay() {
+    clearTimeout(this.timer);
+    this.timer = null;
+    this.overlay.remove();
+    this.overlay = null;
+    this.ctx = null;
   }
 }
 
