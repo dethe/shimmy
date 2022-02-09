@@ -4,8 +4,7 @@ import state from "./state.js";
 import ui from "./ui.js";
 import * as undo from "./undo.js";
 
-const ZOOMIN = 1.2;
-const ZOOMOUT = 1 / ZOOMIN;
+const ZOOM_FACTOR = 1000;
 
 const DEG = 180 / Math.PI;
 const degrees = rads => rads * DEG;
@@ -420,10 +419,7 @@ class ZoomIn {
       return;
     }
     let d = dist(wx - this.wx, wy - this.wy);
-    let zoomin = 1 + d / 2000;
-    console.log(`dist: ${d}, zoomin: ${zoomin}`);
-    // compare old version of newTransform with new version, is this why it is jumping?
-    //   let newTransform = `${oldTransform} translate(${x} ${y}) scale(${ZOOMIN}) translate(-${x}, -${y})`;
+    let zoomin = 1 + d / ZOOM_FACTOR;
     let newTransform = `${this.oldTransform} translate(${this.px} ${this.py}) scale(${zoomin}) translate(-${this.px}, -${this.py})`;
     this.curr.setAttribute("transform", newTransform);
   }
@@ -520,41 +516,116 @@ class ZoomOut {
   }
 
   start(evt) {
+    if (this.dragging) {
+      return false;
+    }
     saveMatrix();
     let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
       return;
     }
-    let curr = ui.currentFrame();
-    let oldTransform = curr.getAttribute("transform") || "";
-    let newTransform = `${oldTransform} translate(${x} ${y}) scale(${ZOOMOUT}) translate(-${x}, -${y})`;
-    ui.currentFrame().setAttribute("transform", newTransform);
-    currentMatrix = null;
-    undo.pushUndo(
-      "Zoom Out",
-      curr,
-      () => {
-        curr.setAttribute("transform", oldTransform);
-        sendEvent("updateFrame", { frame: ui.currentFrame() });
-      },
-      () => {
-        curr.setAttribute("transform", newTransform);
-        sendEvent("updateFrame", { frame: ui.currentFrame() });
-      }
-    );
-    sendEvent("updateFrame", { frame: ui.currentFrame() });
+    this.px = x;
+    this.py = y;
+    this.wx = wx;
+    this.wy = wy;
+    this.dragging = true;
+    this.curr = ui.currentFrame();
+    this.oldTransform = this.curr.getAttribute("transform") || "";
+    this.drawAnchor();
   }
 
   move(evt) {
-    // do nothing
+    if (!this.dragging) {
+      return;
+    }
+    let { x, y, wx, wy, err } = getXY(evt);
+    if (err) {
+      return;
+    }
+    let d = dist(wx - this.wx, wy - this.wy);
+    let zoomin = 1 / (1 + d / ZOOM_FACTOR);
+    let newTransform = `${this.oldTransform} translate(${this.px} ${this.py}) scale(${zoomin}) translate(-${this.px}, -${this.py})`;
+    this.curr.setAttribute("transform", newTransform);
   }
 
   stop(evt) {
-    // do nothing
+    if (!this.dragging) {
+      return;
+    }
+    currentMatrix = null;
+    this.dragging = false;
+    undo.pushUndo(
+      "Zoom Out",
+      this.curr,
+      () => {
+        this.curr.setAttribute("transform", oldTransform);
+        sendEvent("updateFrame", { frame: this.curr });
+      },
+      () => {
+        this.curr.setAttribute("transform", newTransform);
+        sendEvent("updateFrame", { frame: this.curr });
+      }
+    );
+    this.removeOverlay();
+    sendEvent("updateFrame", { frame: this.curr });
   }
 
   cancel(evt) {
-    // do nothing
+    if (!this.dragging) {
+      return;
+    }
+    this.dragging = false;
+    currentMatrix = null;
+    this.removeOverlay();
+    this.curr.setAttribute("transform", this.oldTransform);
+  }
+  drawArrow(index) {
+    const angle = (index * Math.PI) / 6;
+    let length = 8 + Math.sin((this.offset * Math.PI) / 25) * 4;
+    this.ctx.save();
+    this.ctx.lineWidth = 1;
+    this.ctx.beginPath();
+    this.ctx.moveTo(this.wx, this.wy);
+    this.ctx.lineTo(
+      this.wx + Math.cos(angle) * length,
+      this.wy + Math.sin(angle) * length
+    );
+    this.ctx.stroke();
+    this.ctx.restore();
+  }
+
+  drawAnchor() {
+    if (!this.ctx) {
+      this.createOverlay();
+    }
+    this.offset++;
+    if (this.ctx) {
+      this.ctx.clearRect(0, 0, innerWidth, innerHeight);
+      for (let angle = 0; angle < 12; angle++) {
+        this.drawArrow(angle);
+      }
+      this.timer = setTimeout(() => this.drawAnchor(), 20);
+    }
+  }
+
+  createOverlay() {
+    this.overlay = dom.html("canvas", {
+      width: innerWidth,
+      height: innerHeight,
+      style:
+        "position:absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none;",
+    });
+    this.ctx = this.overlay.getContext("2d");
+    this.offset = 0;
+    document.body.appendChild(this.overlay);
+  }
+
+  removeOverlay() {
+    clearTimeout(this.timer);
+    this.timer = null;
+    this.overlay.remove();
+    this.overlay = null;
+    this.ctx = null;
   }
 }
 
