@@ -419,11 +419,11 @@ class ZoomIn {
     if (err) {
       return;
     }
-    let d = dist(wx, wy, this.wx, this.wy);
-    let zoomin = 1 + dist(wx, wy, this.wx, this.wy) / 2000;
+    let d = dist(wx - this.wx, wy - this.wy);
+    let zoomin = 1 + d / 2000;
     console.log(`dist: ${d}, zoomin: ${zoomin}`);
     // compare old version of newTransform with new version, is this why it is jumping?
-//   let newTransform = `${oldTransform} translate(${x} ${y}) scale(${ZOOMIN}) translate(-${x}, -${y})`;
+    //   let newTransform = `${oldTransform} translate(${x} ${y}) scale(${ZOOMIN}) translate(-${x}, -${y})`;
     let newTransform = `${this.oldTransform} translate(${this.px} ${this.py}) scale(${zoomin}) translate(-${this.px}, -${this.py})`;
     this.curr.setAttribute("transform", newTransform);
   }
