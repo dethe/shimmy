@@ -70,6 +70,17 @@ function setPaletteHandler(evt) {
 }
 setPaletteHandler({ originalTarget: colorpaletteselect });
 
+function compareColorButton(button, color) {
+  switch (color[0]) {
+    case "r":
+      return button.value === color;
+    case "#":
+      return button.value === color;
+    default:
+      return button.value === `#${color}`;
+  }
+}
+
 function colorButton(button, color) {
   switch (color[0]) {
     case "r":
@@ -457,9 +468,12 @@ class ui {
   }
 
   static set color(color) {
-    colorButton($("#color"), color);
-    drawPenToCanvas();
-    sendEvent('colorChanged');
+    let button = $("#color");
+    if (!compareColorButton(button, color)) {
+      colorButton(button, color);
+      drawPenToCanvas();
+      sendEvent("colorChanged");
+    }
   }
 
   static set bgcolor(color) {
