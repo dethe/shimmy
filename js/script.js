@@ -67,6 +67,9 @@ function selectToolHandler(sel) {
   sel.blur();
 }
 
+// select the Pen tool if the color changes
+listen(document, "colorChanged", evt => (state.tool = "pen"));
+
 // Prevent control clicks from passing through to svg
 function swallowClicks(evt) {
   evt.stopPropagation();

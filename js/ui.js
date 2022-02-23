@@ -1,7 +1,7 @@
 /* Functions specifically to manipulate the DOM go here */
 
 import * as dom from "./dom.js";
-const { $, $$ } = dom;
+const { $, $$, sendEvent } = dom;
 import SVGCanvas from "./svgcanvas.js";
 import state from "./state.js";
 import palettes from "./palettes.js";
@@ -459,6 +459,7 @@ class ui {
   static set color(color) {
     colorButton($("#color"), color);
     drawPenToCanvas();
+    sendEvent('colorChanged');
   }
 
   static set bgcolor(color) {
