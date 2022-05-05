@@ -217,6 +217,7 @@ function dist(dx, dy) {
 
 class Rotate extends OverlayHelper {
   constructor() {
+    super();
     this.name = "rotate";
     this.dragging = false;
     this.px = 0;
@@ -239,7 +240,7 @@ class Rotate extends OverlayHelper {
     this.px = x;
     this.py = y;
     this.dragging = true;
-    this.drawRotationalAnchor(this);
+    this.drawRotationAnchor(this);
     this.origTransform = ui.currentFrame().getAttribute("transform") || "";
     document.body.classList.add("nocontextmenu");
   }
@@ -312,8 +313,9 @@ class Rotate extends OverlayHelper {
   }
 }
 
-class ZoomIn {
+class ZoomIn extends OverlayHelper {
   constructor() {
+    super();
     this.name = "zoomin";
   }
 
@@ -416,8 +418,9 @@ class ZoomIn {
   }
 }
 
-class ZoomOut {
+class ZoomOut extends OverlayHelper {
   constructor() {
+    super();
     this.name = "zoomout";
   }
 
@@ -489,24 +492,25 @@ class ZoomOut {
     this.removeOverlay();
     this.curr.setAttribute("transform", this.oldTransform);
   }
-  drawArrow(index) {
-    const angle = (index * Math.PI) / 6;
-    let length = 8 + Math.sin((this.offset * Math.PI) / 25) * 4;
-    this.ctx.save();
-    this.ctx.lineWidth = 1;
-    this.ctx.beginPath();
-    this.ctx.moveTo(this.wx, this.wy);
-    this.ctx.lineTo(
-      this.wx + Math.cos(angle) * length,
-      this.wy + Math.sin(angle) * length
-    );
-    this.ctx.stroke();
-    this.ctx.restore();
-  }
+  // drawArrow(index) {
+  //   const angle = (index * Math.PI) / 6;
+  //   let length = 8 + Math.sin((this.offset * Math.PI) / 25) * 4;
+  //   this.ctx.save();
+  //   this.ctx.lineWidth = 1;
+  //   this.ctx.beginPath();
+  //   this.ctx.moveTo(this.wx, this.wy);
+  //   this.ctx.lineTo(
+  //     this.wx + Math.cos(angle) * length,
+  //     this.wy + Math.sin(angle) * length
+  //   );
+  //   this.ctx.stroke();
+  //   this.ctx.restore();
+  // }
 }
 
-class Select {
+class Select extends OverlayHelper {
   constructor() {
+    super();
     this.name = "select";
   }
 
@@ -518,16 +522,89 @@ class Select {
     if (this.dragging) {
       return false;
     }
+    saveMatrix();
     let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
       return;
     }
+    this.ax = x;
+    this.ay = y;
     this.px = x;
     this.py = y;
     this.wx = wx;
     this.wy = wy;
     this.dragging = true;
     this.curr = ui.currentFrame();
+    this.drawSelectBox();
+  }
+
+  move(evt) {
+    if (!this.dragging) {
+      return;
+    }
+    let { x, y, wx, wy, err } = getXY(evt);
+    this.px = x;
+    this.py = y;
+    if (err) {
+      return;
+    }
+    this.selectLines();
+  }
+
+  stop(evt) {
+    if (!this.dragging) {
+      return;
+    }
+    this.dragging = false;
+    this.matrix = null;
+    this.removeOverlay();
+    sendEvent("updateFrame", { frame: this.curr });
+  }
+
+  cancel(evt) {
+    if (!this.dragging) {
+      return;
+    }
+    this.dragging = false;
+    this.matrix = null;
+    this.removeOverlay();
+  }
+
+  selectLines() {
+    // FIXME
+  }
+}
+class Eraser {
+  constructor() {
+    this.name = "eraser";
+    this.cursor = "url(img/eraser.svg) 16 28, auto";
+  }
+
+  setCursor(url, isCurrent) {
+    this.cursor = url;
+    if (isCurrent) {
+      $("svg").style.cursor = `${url} 16 16, auto`;
+    }
+  }
+
+  select() {
+    $("svg").style.cursor = this.cursor;
+  }
+
+  start(evt) {
+    saveMatrix();
+    this.before = ui.currentFrame().innerHTML;
+    let { x, y, wx, wy, err } = getXY(evt);
+    if (err) {
+      console.error("Houston, we have a problem");
+      return;
+    }
+    this.prevPoint = { x, y };
+    this.dragging = true;
+    if (inBounds(wx, wy)) {
+      erasePaths({ x, y });
+    }
+    document.body.classList.add("nocontextmenu");
   }
 
   move(evt) {
@@ -538,8 +615,14 @@ class Select {
     if (err) {
       return;
     }
-    this.drawSelectBox(this.px, this.py, x, y);
-    this.selectLines();
+    if (collideCircle({ x, y }, 1, this.prevPoint, 1)) {
+      // too close to previous point to bother erasing
+      return;
+    }
+    this.prevPoint = { x, y };
+    if (inBounds(wx, wy)) {
+      erasePaths({ x, y });
+    }
   }
 
   stop(evt) {
@@ -547,20 +630,30 @@ class Select {
       return;
     }
     this.dragging = false;
-    this.removeOverlay();
-    sendEvent("updateFrame", { frame: this.curr });
+    this.prevPoint = null;
+    let before = this.before;
+    let curr = ui.currentFrame();
+    let after = curr.innerHTML;
+    document.body.classList.add("nocontextmenu");
+    undo.pushUndo(
+      "Erase",
+      curr,
+      () => {
+        curr.innerHTML = before;
+        sendEvent("updateFrame", { frame: ui.currentFrame() });
+      },
+      () => {
+        curr.innerHTML = after;
+        sendEvent("updateFrame", { frame: ui.currentFrame() });
+      }
+    );
+    this.before = null;
+    sendEvent("updateFrame", { frame: ui.currentFrame() });
   }
 
-  cancel(evt) {
-    if (!this.dragging) {
-      return;
-    }
+  cancel() {
     this.dragging = false;
-    this.removeOverlay();
-  }
-
-  selectLines() {
-    // FIXME
+    this.prevPoint = null;
   }
 }
 

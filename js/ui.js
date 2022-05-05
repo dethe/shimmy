@@ -132,6 +132,10 @@ function selectTool(name) {
       enableEraserSize();
       sel.selectedIndex = 5;
       break;
+    case "select":
+      enablePenSize(false);
+      sel.selectedIndex = 6;
+      break;
     default:
       console.error("unrecognized tool name: %s", name);
   }
@@ -569,6 +573,7 @@ let tools = {
   zoomin: new tool.ZoomIn(ui.canvas),
   zoomout: new tool.ZoomOut(ui.canvas),
   eraser: new tool.Eraser(ui.canvas),
+  select: new tool.Select(ui.canvas),
 };
 // FIXME move tools to script?
 ui.tools = tools;

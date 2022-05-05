@@ -17,7 +17,9 @@ class OverlayHelper {
   removeOverlay() {
     clearTimeout(this.timer);
     this.timer = null;
-    this.overlay.remove();
+    if (this.overlay) {
+      this.overlay.remove();
+    }
     this.overlay = null;
     this.ctx = null;
   }
@@ -38,39 +40,37 @@ class OverlayHelper {
     if (!this.ctx) {
       this.createOverlay();
     }
+    this.ctx.clearRect(0, 0, innerWidth, innerHeight);
     this.ctx.save();
     this.ctx.lineWidth = 3;
     this.ctx.beginPath();
     let off = this.offset * 0.05;
-    this.ctx.arc(
-      this.tool.anchorX,
-      this.tool.anchorY,
-      4,
-      0 + off,
-      1.75 * Math.PI + off
-    );
-    // this.ctx.stroke();
+    this.ctx.arc(this.anchorX, this.anchorY, 4, 0 + off, 1.75 * Math.PI + off);
+    this.ctx.stroke();
     this.ctx.beginPath();
     this.ctx.arc(
-      this.tool.anchorX,
-      this.tool.anchorY,
+      this.anchorX,
+      this.anchorY,
       8,
       0.25 * Math.PI - off,
       2 * Math.PI - off
     );
-    // this.ctx.stroke();
+    this.ctx.stroke();
     this.ctx.beginPath();
     this.ctx.arc(
-      this.tool.anchorX,
-      this.tool.anchorY,
+      this.anchorX,
+      this.anchorY,
       12,
       0.5 * Math.PI + off,
       2.25 * Math.PI + off
     );
-    // this.ctx.stroke();
+    this.ctx.stroke();
+    this.ctx.beginPath();
+    this.ctx.moveTo(this.anchorX, this.anchorY);
+    this.ctx.lineTo(this.mouseX, this.mouseY);
     this.drawAnts();
     this.ctx.restore();
-    this.timer = setTimeout(() => this.drawRotationalAnchor(), 20);
+    this.timer = setTimeout(() => this.drawRotationAnchor(), 20);
   }
 
   drawAnts() {
@@ -81,15 +81,21 @@ class OverlayHelper {
     this.ctx.stroke();
   }
 
-  drawSelectBox(x1, y1, x2, y2) {
+  drawSelectBox() {
     if (!this.ctx) {
       this.createOverlay();
     }
-    this.ctx.clearRect(0, 0, innerWidth, innerHeight);
-    this.cts.save();
-    this.ctx.rect(x1, y1, Math.abs(x2 - x1), Math.abs(y2 - y1));
+    this.ctx.clearRect(0, 0, this.overlay.width, this.overlay.height);
+    this.ctx.save();
+    let x = Math.min(this.ax, this.px);
+    let y = Math.min(this.ay, this.py);
+    let width = Math.abs(this.ax - this.px);
+    let height = Math.abs(this.ay - this.py);
+    this.ctx.beginPath();
+    this.ctx.rect(x, y, width, height);
     this.drawAnts();
     this.ctx.restore();
+    this.timer = setTimeout(() => this.drawSelectBox(), 20);
   }
 }
 
