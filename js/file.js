@@ -1,4 +1,4 @@
-// Copyright (C) 2020 Dethe Elza
+// Copyright (C) 2022 Dethe Elza
 
 // This program is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by

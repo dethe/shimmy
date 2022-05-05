@@ -2,6 +2,7 @@ import * as dom from "./dom.js";
 const { $, $$, sendEvent } = dom;
 import state from "./state.js";
 import ui from "./ui.js";
+import OverlayHelper from "./overlay.js";
 import * as undo from "./undo.js";
 
 const ZOOM_FACTOR = 1000;
@@ -214,7 +215,7 @@ function dist(dx, dy) {
   return Math.sqrt(dx * dx + dy * dy);
 }
 
-class Rotate {
+class Rotate extends OverlayHelper {
   constructor() {
     this.name = "rotate";
     this.dragging = false;
@@ -238,7 +239,7 @@ class Rotate {
     this.px = x;
     this.py = y;
     this.dragging = true;
-    ui.march(this);
+    this.drawRotationalAnchor(this);
     this.origTransform = ui.currentFrame().getAttribute("transform") || "";
     document.body.classList.add("nocontextmenu");
   }
@@ -286,7 +287,7 @@ class Rotate {
     let curr = ui.currentFrame();
     let newTransform = curr.getAttribute("transform");
     document.body.classList.remove("nocontextmenu");
-    ui.removeOverlay();
+    this.removeOverlay();
     undo.pushUndo(
       "Rotate",
       curr,
@@ -304,7 +305,7 @@ class Rotate {
 
   cancel(evt) {
     ui.currentFrame().setAttribute("transform", this.origTransform);
-    ui.removeOverlay();
+    this.removeOverlay();
     this.dragging = false;
     this.origTransform = false;
     currentMatrix = null;
@@ -413,26 +414,6 @@ class ZoomIn {
       this.timer = setTimeout(() => this.drawAnchor(), 20);
     }
   }
-
-  createOverlay() {
-    this.overlay = dom.html("canvas", {
-      width: innerWidth,
-      height: innerHeight,
-      style:
-        "position:absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none;",
-    });
-    this.ctx = this.overlay.getContext("2d");
-    this.offset = 0;
-    document.body.appendChild(this.overlay);
-  }
-
-  removeOverlay() {
-    clearTimeout(this.timer);
-    this.timer = null;
-    this.overlay.remove();
-    this.overlay = null;
-    this.ctx = null;
-  }
 }
 
 class ZoomOut {
@@ -522,73 +503,31 @@ class ZoomOut {
     this.ctx.stroke();
     this.ctx.restore();
   }
-
-  drawAnchor() {
-    if (!this.ctx) {
-      this.createOverlay();
-    }
-    this.offset++;
-    if (this.ctx) {
-      this.ctx.clearRect(0, 0, innerWidth, innerHeight);
-      for (let angle = 0; angle < 12; angle++) {
-        this.drawArrow(angle);
-      }
-      this.timer = setTimeout(() => this.drawAnchor(), 20);
-    }
-  }
-
-  createOverlay() {
-    this.overlay = dom.html("canvas", {
-      width: innerWidth,
-      height: innerHeight,
-      style:
-        "position:absolute; left: 0; top: 0; width: 100%; height: 100%; pointer-events: none;",
-    });
-    this.ctx = this.overlay.getContext("2d");
-    this.offset = 0;
-    document.body.appendChild(this.overlay);
-  }
-
-  removeOverlay() {
-    clearTimeout(this.timer);
-    this.timer = null;
-    this.overlay.remove();
-    this.overlay = null;
-    this.ctx = null;
-  }
 }
 
-class Eraser {
+class Select {
   constructor() {
-    this.name = "eraser";
-    this.cursor = "url(img/eraser.svg) 16 28, auto";
-  }
-
-  setCursor(url, isCurrent) {
-    this.cursor = url;
-    if (isCurrent) {
-      $("svg").style.cursor = `${url} 16 16, auto`;
-    }
+    this.name = "select";
   }
 
   select() {
-    $("svg").style.cursor = this.cursor;
+    $("svg").style.cursor = "url(img/mouse-pointer.svg) 16 16, auto";
   }
 
   start(evt) {
-    saveMatrix();
-    this.before = ui.currentFrame().innerHTML;
+    if (this.dragging) {
+      return false;
+    }
     let { x, y, wx, wy, err } = getXY(evt);
     if (err) {
-      console.error("Houston, we have a problem");
       return;
     }
-    this.prevPoint = { x, y };
+    this.px = x;
+    this.py = y;
+    this.wx = wx;
+    this.wy = wy;
     this.dragging = true;
-    if (inBounds(wx, wy)) {
-      erasePaths({ x, y });
-    }
-    document.body.classList.add("nocontextmenu");
+    this.curr = ui.currentFrame();
   }
 
   move(evt) {
@@ -599,14 +538,8 @@ class Eraser {
     if (err) {
       return;
     }
-    if (collideCircle({ x, y }, 1, this.prevPoint, 1)) {
-      // too close to previous point to bother erasing
-      return;
-    }
-    this.prevPoint = { x, y };
-    if (inBounds(wx, wy)) {
-      erasePaths({ x, y });
-    }
+    this.drawSelectBox(this.px, this.py, x, y);
+    this.selectLines();
   }
 
   stop(evt) {
@@ -614,30 +547,20 @@ class Eraser {
       return;
     }
     this.dragging = false;
-    this.prevPoint = null;
-    let before = this.before;
-    let curr = ui.currentFrame();
-    let after = curr.innerHTML;
-    document.body.classList.add("nocontextmenu");
-    undo.pushUndo(
-      "Erase",
-      curr,
-      () => {
-        curr.innerHTML = before;
-        sendEvent("updateFrame", { frame: ui.currentFrame() });
-      },
-      () => {
-        curr.innerHTML = after;
-        sendEvent("updateFrame", { frame: ui.currentFrame() });
-      }
-    );
-    this.before = null;
-    sendEvent("updateFrame", { frame: ui.currentFrame() });
+    this.removeOverlay();
+    sendEvent("updateFrame", { frame: this.curr });
   }
 
-  cancel() {
+  cancel(evt) {
+    if (!this.dragging) {
+      return;
+    }
     this.dragging = false;
-    this.prevPoint = null;
+    this.removeOverlay();
+  }
+
+  selectLines() {
+    // FIXME
   }
 }
 
@@ -821,4 +744,4 @@ document.body.addEventListener("contextmenu", evt => {
   }
 });
 
-export { Pen, Move, Rotate, ZoomIn, ZoomOut, Eraser, radians, degrees };
+export { Pen, Move, Rotate, ZoomIn, ZoomOut, Select, Eraser, radians, degrees };
