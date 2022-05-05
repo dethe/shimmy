@@ -514,3 +514,10 @@ dialog .close {
     transform: rotate(360deg);
   }
 }
+
+/* Code to highlight selected lines. Requires highlight filter to be defined in SVG */
+
+path.userSelected {
+  /* filter:url(#highlight); */
+  stroke: url(#highlightGradient);
+}

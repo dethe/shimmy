@@ -568,10 +568,48 @@ class Select extends OverlayHelper {
     this.dragging = false;
     this.matrix = null;
     this.removeOverlay();
+    this.deselectLines();
   }
 
   selectLines() {
-    // FIXME
+    let defs = $(ui.canvas, "defs");
+    if (!defs) {
+      defs = dom.svg("defs");
+      ui.canvas.prepend(defs);
+    }
+    defs.innerHTML = `<filter id="highlight" filterUnits="userSpaceOnUse">
+      <feDropShadow dx="0" dy="0" stdDeviation="2"
+          flood-color="cyan">
+        <animate attributeName="flood-color" values="cyan;forestgreen;plum;cyan" dur="3s" repeatCount="indefinite" />
+      </feDropShadow>
+    </filter>
+    <linearGradient id="highlightGradient" gradientUnits="userSpaceOnUse" spreadMethod="repeat" x1="-20" y1="-20" x2="+20" y2="+20">
+      <stop offset="0" stop-color="cyan">
+        <animate attributeName="stop-color" dur="1s" values="cyan;blue;plum;cyan" repeatCount="indefinite" />
+      </stop>
+      <stop offset=".33" stop-color="blue">
+        <animate attributeName="stop-color" dur="1s" values="blue;plum;cyan;blue" repeatCount="indefinite" />
+      </stop>
+      <stop offset=".66" stop-color="plum">
+        <animate attributeName="stop-color" dur="1s" values="plum;cyan;blue;plum" repeatCount="indefinite" />
+      </stop>
+      <stop offset="1" stop-color="cyan">
+        <animate attributeName="stop-color" dur="1s" values="cyan;blue;plum;cyan" repeatCount="indefinite" />
+      </stop>
+    </linearGradient>
+    `;
+    // FIXME, currently selecting all paths in the frame
+    let curr = ui.currentFrame();
+    let prev = $$(curr, "path");
+    prev.forEach(p => p.classList.remove("userSelected"));
+    let paths = $$(curr, "path");
+    paths.forEach(p => p.classList.add("userSelected"));
+  }
+
+  deselectLines() {
+    $$(ui.currentFrame(), "path").forEach(p =>
+      p.classList.remove("userSelected")
+    );
   }
 }
 class Eraser {
