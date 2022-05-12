@@ -91,6 +91,8 @@ class OverlayHelper {
     let y = Math.min(this.ay, this.py);
     let width = Math.abs(this.ax - this.px);
     let height = Math.abs(this.ay - this.py);
+    // save box to test intersections
+    this.box = {x,y,width,height};
     this.ctx.beginPath();
     this.ctx.rect(x, y, width, height);
     this.drawAnts();

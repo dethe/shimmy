@@ -557,6 +557,7 @@ class Select extends OverlayHelper {
     }
     this.dragging = false;
     this.matrix = null;
+    this.box = null;
     this.removeOverlay();
     sendEvent("updateFrame", { frame: this.curr });
   }
@@ -567,6 +568,7 @@ class Select extends OverlayHelper {
     }
     this.dragging = false;
     this.matrix = null;
+    this.box = null;
     this.removeOverlay();
     this.deselectLines();
   }
@@ -577,12 +579,7 @@ class Select extends OverlayHelper {
       defs = dom.svg("defs");
       ui.canvas.prepend(defs);
     }
-    defs.innerHTML = `<filter id="highlight" filterUnits="userSpaceOnUse">
-      <feDropShadow dx="0" dy="0" stdDeviation="2"
-          flood-color="cyan">
-        <animate attributeName="flood-color" values="cyan;forestgreen;plum;cyan" dur="3s" repeatCount="indefinite" />
-      </feDropShadow>
-    </filter>
+    defs.innerHTML = `
     <linearGradient id="highlightGradient" gradientUnits="userSpaceOnUse" spreadMethod="repeat" x1="-20" y1="-20" x2="+20" y2="+20">
       <stop offset="0" stop-color="cyan">
         <animate attributeName="stop-color" dur="1s" values="cyan;blue;plum;cyan" repeatCount="indefinite" />
@@ -602,7 +599,7 @@ class Select extends OverlayHelper {
     let curr = ui.currentFrame();
     let prev = $$(curr, "path");
     prev.forEach(p => p.classList.remove("userSelected"));
-    let paths = $$(curr, "path");
+    let paths = $$(curr, "path").filter(path => this.intersects(path));
     paths.forEach(p => p.classList.add("userSelected"));
   }
 
@@ -610,6 +607,10 @@ class Select extends OverlayHelper {
     $$(ui.currentFrame(), "path").forEach(p =>
       p.classList.remove("userSelected")
     );
+  }
+
+  intersects(path) {
+    return collidePathWithBox(path, this.box);
   }
 }
 class Eraser {
@@ -724,6 +725,35 @@ function collideCircle(p1, r1, p2, r2) {
   return (
     Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2) < Math.pow(r1 + r2, 2)
   );
+}
+
+function collidePathWithBox(path, box) {
+  if (!collideBox(path.getBBox(), box)) {
+    return false;
+  }
+  let points = pointsFromPath(path);
+  for (let idx = 0; idx < points.length; idx++) {
+    if (collidePointWithBox(points[idx], box)) {
+      return true;
+    }
+  }
+  return false;
+}
+
+function collidePointWithBox(point, box) {
+  if (point.x < box.x) {
+    return false;
+  }
+  if (point.y < box.y) {
+    return false;
+  }
+  if (point.x > box.x + box.width) {
+    return false;
+  }
+  if (point.y > box.y + box.height) {
+    return false;
+  }
+  return true;
 }
 
 function collideBox(r1, r2) {
@@ -854,7 +884,7 @@ function erasePath(pt1, path) {
 }
 
 function collidePaths(point, paths) {
-  // quck check to try to eliminate paths that don't intersect
+  // quick check to try to eliminate paths that don't intersect
   let d = state.eraserWidth / 2;
   let eraserBox = {
     x: point.x - d,
