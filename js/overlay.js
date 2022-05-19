@@ -87,12 +87,18 @@ class OverlayHelper {
     }
     this.ctx.clearRect(0, 0, this.overlay.width, this.overlay.height);
     this.ctx.save();
+    // windows coordinates
     let x = Math.min(this.ax, this.px);
     let y = Math.min(this.ay, this.py);
     let width = Math.abs(this.ax - this.px);
     let height = Math.abs(this.ay - this.py);
+    // translated coordinate
+    let tx = Math.min(this.atx, this.ptx);
+    let ty = Math.min(this.aty, this.pty);
+    let twidth = Math.abs(this.atx - this.ptx);
+    let theight = Math.abs(this.aty - this.pty);
     // save box to test intersections
-    this.box = {x,y,width,height};
+    this.box = {x: tx, y: ty, width: twidth, height: theight};
     this.ctx.beginPath();
     this.ctx.rect(x, y, width, height);
     this.drawAnts();

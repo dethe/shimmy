@@ -492,20 +492,6 @@ class ZoomOut extends OverlayHelper {
     this.removeOverlay();
     this.curr.setAttribute("transform", this.oldTransform);
   }
-  // drawArrow(index) {
-  //   const angle = (index * Math.PI) / 6;
-  //   let length = 8 + Math.sin((this.offset * Math.PI) / 25) * 4;
-  //   this.ctx.save();
-  //   this.ctx.lineWidth = 1;
-  //   this.ctx.beginPath();
-  //   this.ctx.moveTo(this.wx, this.wy);
-  //   this.ctx.lineTo(
-  //     this.wx + Math.cos(angle) * length,
-  //     this.wy + Math.sin(angle) * length
-  //   );
-  //   this.ctx.stroke();
-  //   this.ctx.restore();
-  // }
 }
 
 class Select extends OverlayHelper {
@@ -527,12 +513,18 @@ class Select extends OverlayHelper {
     if (err) {
       return;
     }
-    this.ax = x;
-    this.ay = y;
-    this.px = x;
-    this.py = y;
-    this.wx = wx;
-    this.wy = wy;
+    // anchor point for the box in windows coordinates
+    this.ax = wx;
+    this.ay = wy;
+    // current pointer in windows coordinates
+    this.px = wx;
+    this.py = wy;
+    // anchor point in transformed coordinates
+    this.atx = x;
+    this.aty = y;
+    // current pointer in transformed coordinates
+    this.ptx = x;
+    this.pty = y;
     this.dragging = true;
     this.curr = ui.currentFrame();
     this.drawSelectBox();
@@ -543,8 +535,12 @@ class Select extends OverlayHelper {
       return;
     }
     let { x, y, wx, wy, err } = getXY(evt);
-    this.px = x;
-    this.py = y;
+    // current pointer in windows coordinate
+    this.px = wx;
+    this.py = wy;
+    // current pointer in transformed coordinates
+    this.ptx = x;
+    this.pty = y;
     if (err) {
       return;
     }
@@ -597,7 +593,7 @@ class Select extends OverlayHelper {
     `;
     // FIXME, currently selecting all paths in the frame
     let curr = ui.currentFrame();
-    let prev = $$(curr, "path");
+    let prev = $$(curr, "path.userSelected");
     prev.forEach(p => p.classList.remove("userSelected"));
     let paths = $$(curr, "path").filter(path => this.intersects(path));
     paths.forEach(p => p.classList.add("userSelected"));
@@ -613,6 +609,7 @@ class Select extends OverlayHelper {
     return collidePathWithBox(path, this.box);
   }
 }
+
 class Eraser {
   constructor() {
     this.name = "eraser";
