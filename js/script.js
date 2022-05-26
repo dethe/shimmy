@@ -64,6 +64,9 @@ function getSvgPoint(x, y) {
 
 function selectToolHandler(sel) {
   state.tool = sel.value;
+  if (sel.value === "pen" || sel.value === "eraser") {
+    ui.tools.select.deselectLines();
+  }
   sel.blur();
 }
 

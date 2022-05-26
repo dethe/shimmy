@@ -102,7 +102,7 @@ class Pen {
     let parent = ui.currentFrame();
     if (path) {
       let { x: sx, y: sy } = this.firstPoint;
-      if (inBounds(wx, wy) && sx === x && sy === y) {
+      if (inBounds(wx, wy) && dist2({ x, y }, this.prevPoint) < 2) {
         // make a dot if we haven't moved
         this.appendToPath(x, y);
       }
@@ -211,6 +211,10 @@ class Move {
   }
 }
 
+function dist2(p1, p2) {
+  return dist(p1.x - p2.x, p1.y - p2.y);
+}
+
 function dist(dx, dy) {
   return Math.sqrt(dx * dx + dy * dy);
 }
@@ -237,6 +241,8 @@ class Rotate extends OverlayHelper {
     }
     this.anchorX = wx;
     this.anchorY = wy;
+    this.mouseX = wx;
+    this.mouseY = wy;
     this.px = x;
     this.py = y;
     this.dragging = true;
@@ -278,7 +284,7 @@ class Rotate extends OverlayHelper {
     if (!this.dragging) {
       return;
     }
-    this.px = 9;
+    this.px = 0;
     this.py = 0;
     this.dragging = false;
     let oldTransform = this.origTransform;
@@ -551,6 +557,14 @@ class Select extends OverlayHelper {
     if (!this.dragging) {
       return;
     }
+    let { x, y, wx, wy, err } = getXY(evt);
+    if (
+      inBounds(wx, wy) &&
+      dist2({ x: wx, y: wy }, { x: this.ax, y: this.ay }) < 2
+    ) {
+      this.deselectLines();
+    }
+
     this.dragging = false;
     this.matrix = null;
     this.box = null;
@@ -559,9 +573,6 @@ class Select extends OverlayHelper {
   }
 
   cancel(evt) {
-    if (!this.dragging) {
-      return;
-    }
     this.dragging = false;
     this.matrix = null;
     this.box = null;
@@ -600,7 +611,7 @@ class Select extends OverlayHelper {
   }
 
   deselectLines() {
-    $$(ui.currentFrame(), "path").forEach(p =>
+    $$(ui.currentFrame(), "path.userSelected").forEach(p =>
       p.classList.remove("userSelected")
     );
   }
@@ -720,7 +731,7 @@ function pointsToPath(points) {
 // Because points are actually circles (due to penWidth / eraserWidth) this is a basic circle collision algorithm
 function collideCircle(p1, r1, p2, r2) {
   return (
-    Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2) < Math.pow(r1 + r2, 2)
+    Math.pow(p1.x - p2.x, 2) + Math.pow(p1.y - p2.y, 2) <= Math.pow(r1 + r2, 2)
   );
 }
 
