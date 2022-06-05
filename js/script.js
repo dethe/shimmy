@@ -526,6 +526,7 @@ $$("input[type=number]").forEach(stepper.upgrade);
 listen(".palettechooser", "change", ui.setPaletteHandler);
 listen("#shimmy", "click", ui.toggleUI);
 listen("#about", "click", ui.showAbout);
+listen("#fullscreen", "click", ui.toggleFullscreen);
 listen("#frameundo", "click", evt => undo.undo(ui.currentFrame()));
 listen("#frameredo", "click", evt => undo.redo(ui.currentFrame()));
 listen("#file", "click", evt => ui.toggleToolbar(evt.currentTarget.id));
