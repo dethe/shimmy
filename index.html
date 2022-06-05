@@ -39,48 +39,61 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </button>
       <!-- Always visible, no toggle -->
       <nav class="toolbar active" id="always">
-        <button id="about" title="About Shimmy">About<br />Shimmy</button>
+        <button id="about" type="button" title="About Shimmy">
+          About<br />Shimmy
+        </button>
+        <button id="fullscreen" type="button" title="request fullscreen">
+          Fullscreen
+        </button>
         <div class="feedback framecount">
           <label>Frame</label>
           <output>X of Y</output>
         </div>
-        <button title="Frame Undo" id="frameundo"></button>
-        <button title="Frame Redo" id="frameredo"></button>
+        <button title="Frame Undo" id="frameundo" type="button"></button>
+        <button title="Frame Redo" id="frameredo" type="button"></button>
       </nav>
 
       <!-- FILE -->
       <nav class="toolbar" id="file-toolbar">
-        <button id="file" title="File" class="js-tab tab">
+        <button id="file" title="File" type="button" class="js-tab tab">
           <span>File</span>
         </button>
         <div class="feedback file">
           <label for="filename">File name</label>
           <input type="text" id="filename" />
         </div>
-        <button id="filenew" title="New file">
+        <button id="filenew" type="button" title="New file">
           New<br />
           <i class="far fa-2x fa-file-alt"></i>
         </button>
-        <button id="fileopen" title="Load file">
+        <button id="fileopen" type="button" title="Load file">
           Load<br />
           <i class="far fa-2x fa-upload"></i>
         </button>
-        <button id="filesave" title="Save file">
+        <button id="filesave" type="button" title="Save file">
           Save<br />
           <i class="far fa-2x fa-download"></i>
         </button>
-        <button id="filegif" title="Save as GIF">Save as GIF</button>
-        <button id="filepng" title="Save as PNG">Save as PNG</button>
-        <button id="filezip" title="Save as ZIP">Save as ZIP</button>
+        <button id="filegif" type="button" title="Save as GIF">
+          Save as GIF
+        </button>
+        <button id="filepng" type="button" title="Save as PNG">
+          Save as PNG
+        </button>
+        <button id="filezip" type="button" title="Save as ZIP">
+          Save as ZIP
+        </button>
         <div class="feedback moat" id="moat-container">
-          <button id="save-moat">Save to Moat</button>
+          <button id="save-moat" type="button" title="Save to Moat">
+            Save to Moat
+          </button>
           <select id="moat" class="js-moat select-css"></select>
         </div>
       </nav>
 
       <!-- DRAW -->
       <nav class="toolbar active" id="draw-toolbar">
-        <button id="draw" title="Draw" class="js-tab tab">
+        <button id="draw" title="Draw" type="button" class="js-tab tab">
           <span>Draw</span>
         </button>
         <div class="feedback tools">
@@ -124,6 +137,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <div class="stack colors">
           <button
             title="Pen Colour"
+            type="button"
             id="color"
             value="#000000"
             class="js-color fgcolor colorwell"
@@ -132,6 +146,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           </button>
           <button
             title="Background Color"
+            type="button"
             value="#FFFFFF"
             class="js-bgcolor colorwell bgcolor"
             id="bgcolor"
@@ -140,19 +155,41 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
           </button>
         </div>
         <div class="stack colors quickcolors">
-          <button id="color1" class="color miniwell js-miniwell"></button>
-          <button id="color2" class="color miniwell js-miniwell"></button>
-          <button id="color3" class="color miniwell js-miniwell"></button>
-          <button id="color4" class="color miniwell js-miniwell"></button>
-          <button id="color5" class="color miniwell js-miniwell"></button>
+          <button
+            id="color1"
+            type="button"
+            class="color miniwell js-miniwell"
+          ></button>
+          <button
+            id="color2"
+            type="button"
+            class="color miniwell js-miniwell"
+          ></button>
+          <button
+            id="color3"
+            type="button"
+            class="color miniwell js-miniwell"
+          ></button>
+          <button
+            id="color4"
+            type="button"
+            class="color miniwell js-miniwell"
+          ></button>
+          <button
+            id="color5"
+            type="button"
+            class="color miniwell js-miniwell"
+          ></button>
           <button
             id="color6"
+            type="button"
             class="color miniwell"
             value="#666666"
             style="background-color: #666666"
           ></button>
           <button
             id="color7"
+            type="button"
             class="color miniwell"
             value="#000000"
             style="background-color: #000000"
@@ -168,44 +205,44 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
       <!-- FRAMES -->
       <nav class="toolbar" id="frames-toolbar">
-        <button id="frames" title="Frames" class="js-tab tab">
+        <button id="frames" title="Frames" type="button" class="js-tab tab">
           <span>Frames</span>
         </button>
-        <button id="framedelete" title="Delete Frame" disabled>
+        <button id="framedelete" title="Delete Frame" type="button" disabled>
           Delete<br />
           <span class="fa-stack">
             <i class="fas fa-film-alt fa-stack-2x"></i>
             <i class="far fa-minus fa-stack-1x fa-inverse"></i>
           </span>
         </button>
-        <button id="framenew" title="Add Frame">
+        <button id="framenew" title="Add Frame" type="button">
           Add<br />
           <span class="fa-stack">
             <i class="fas fa-film-alt fa-stack-2x"></i>
             <i class="far fa-plus fa-stack-1x fa-inverse"></i>
           </span>
         </button>
-        <button id="framecopy" title="Copy Frame">
+        <button id="framecopy" title="Copy Frame" type="button">
           Copy<br />
           <i class="far fa-photo-video fa-2x"></i>
         </button>
-        <button id="frameclear" title="Clear">
+        <button id="frameclear" title="Clear" type="button">
           Clear<br />
           <i class="far fa-2x fa-sparkles"></i>
         </button>
-        <button id="framefirst" title="First Frame">
+        <button id="framefirst" title="First Frame" type="button">
           First<br />
           <i class="far fa-2x fa-fast-backward"></i>
         </button>
-        <button id="frameprev" title="Previous Frame">
+        <button id="frameprev" title="Previous Frame" type="button">
           Back<br />
           <i class="far fa-2x fa-step-backward"></i>
         </button>
-        <button id="framenext" title="Next Frame">
+        <button id="framenext" title="Next Frame" type="button">
           Next<br />
           <i class="far fa-2x fa-step-forward"></i>
         </button>
-        <button id="framelast" title="Last Frame">
+        <button id="framelast" title="Last Frame" type="button">
           Last<br />
           <i class="far fa-2x fa-fast-forward"></i>
         </button>
@@ -218,10 +255,10 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
       </nav>
       <!-- ANIMATE -->
       <nav class="toolbar" id="animate-toolbar">
-        <button id="animate" title="Animate" class="js-tab tab">
+        <button id="animate" title="Animate" type="button" class="js-tab tab">
           <span>Animate</span>
         </button>
-        <button id="animateplay" title="Play">
+        <button id="animateplay" title="Play" type="button">
           Play<br />
           <i class="far fa-2x fa-play"></i>
         </button>
@@ -249,7 +286,7 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
         <a href="https://rpl.yourlibrary.ca/"
           ><img class="logo" src="img/rpl-logo.png" /></a
         ><br />
-        Shimmy code is &copy; 2020 Richond Public Library.<br />
+        Shimmy code is &copy; 2020,2021,2022 Dethe Elza.<br />
         Individual works made with Shimmy are owned by the individual
         authors.<br />
         Code libraries under <code>/lib</code> is external to Shimmy and
