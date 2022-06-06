@@ -28,6 +28,11 @@ import * as timeline from "./timeline.js";
 import GIF from "../lib/gif.js";
 import JSZip from "../lib/jszip.min.js";
 
+if('serviceWorker' in navigator) {
+  navigator.serviceWorker.register('./js/sw.js');
+};
+
+
 // Wrap `dom.listen` and `dom.addShortcuts` so that events don't trigger during animation playback
 
 const listen = (selector, event, listener) =>
