@@ -98,4 +98,4 @@ function load(cb) {
   input.click();
 }
 
-export { load, save, saveAs };
+export { load, save, saveAs, sendToMoat, saveToCallback };
