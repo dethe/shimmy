@@ -28,10 +28,9 @@ import * as timeline from "./timeline.js";
 import GIF from "../lib/gif.js";
 import JSZip from "../lib/jszip.min.js";
 
-if('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('./js/sw.js');
-};
-
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./js/sw.js");
+}
 
 // Wrap `dom.listen` and `dom.addShortcuts` so that events don't trigger during animation playback
 
@@ -596,12 +595,11 @@ listen("#framerate", "change", evt => (state.fps = evt.currentTarget.value));
 listen(".timeline-label", "click", timeline.toggleTimeline);
 listen("#shortcuts", "click", ui.showShortcuts);
 listen(".timeline-frames", "click", evt => {
-  frames.goToFrame(
-    ui.currentFrame(),
-    timeline.frameForThumbnail(evt.target)
-  );
+  if (!evt.target.matches(".canvas-frame")) {
+    return;
   }
-);
+  frames.goToFrame(ui.currentFrame(), timeline.frameForThumbnail(evt.target));
+});
 // File Events
 listen(window, "unload", saveLocal);
 listen(window, "load", restoreLocal);
