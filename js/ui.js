@@ -262,21 +262,6 @@ class ui {
     }
   }
 
-  static toggleFullscreen(evt) {
-    if (!document.fullscreenEnabled) {
-      alert("Sorry, full screen is not enabled in this browser");
-      return;
-    }
-    if (document.fullscreenElement) {
-      document.exitFullscreen();
-      $("#fullscreen").textContent = "Fullscreen";
-    } else {
-      document.body
-        .requestFullscreen()
-        .then(() => ($("#fullscreen").textContent = "End Fullscreen"));
-    }
-  }
-
   static showShortcuts() {
     aboutShimmyDialog.close();
     shortcutsDialog.showModal();
