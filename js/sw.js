@@ -30,7 +30,7 @@ self.addEventListener("fetch", e => {
 
 const cacheName = "shimmy-v1";
 const appShellFiles = [
-  "../index.html",
+  "../",
   "./animation.js",
   "./dom.js",
   "./file.js",

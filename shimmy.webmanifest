@@ -24,6 +24,12 @@
       "type": "image/png"
     },
     {
+      "src": "icons/maskable_icon.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
       "src": "icons/icon0_180.png",
       "sizes": "180x180",
       "type": "image/png"
@@ -74,10 +80,10 @@
       "type": "image/png"
     }
   ],
-  "start_url": "./index.html",
+  "start_url": "./",
   "display": "fullscreen",
   "theme_color": "#663399",
   "background_color": "#000000",
-  "categories": [ "kids", "art", "animation" ],
+  "categories": ["kids", "art", "animation"],
   "orientation": "landscape-primary"
 }
