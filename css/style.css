@@ -466,6 +466,7 @@ dialog .close {
   left: 6px;
   padding: 2px;
   font-family: sans-serif;
+  pointer-events: none;
 }
 
 /* Moving  Mess popup styles here */
