@@ -64,11 +64,11 @@ const colorpicker = new KellyColorPicker({
 });
 
 function setPaletteHandler(evt) {
-  const sel = evt.target || evt.originalTarget;
+  const sel = evt.target;
   state.palette = sel.value;
   sel.blur();
 }
-setPaletteHandler({ originalTarget: colorpaletteselect });
+setPaletteHandler({ target: colorpaletteselect });
 
 function compareColorButton(button, color) {
   switch (color[0]) {
