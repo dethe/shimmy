@@ -14,8 +14,7 @@
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
 import ui from "./ui.js";
-import {$, $$, html} from "./dom.js";
-
+import { $, $$, html } from "./dom.js";
 
 function frameToThumbnail(frame) {
   return ui.frameToImage(frame, 0, 0, WIDTH, HEIGHT, 64);
@@ -31,7 +30,6 @@ function thumbnailForFrame(frame) {
 }
 
 function frameForThumbnail(thumb) {
-  // FIXME: #81 Timeline Dependencies
   return $(`#${thumb.id.split("-")[0]}`);
 }
 
@@ -74,11 +72,23 @@ function toggleTimeline() {
   document.body.classList.toggle("notimeline");
 }
 
-function selectThumbnail(frame){
-    $$('.canvas-frame.selected').forEach(thumb => thumb.classList.remove("selected"));
-    let nextThumb = thumbnailForFrame(frame);
-    nextThumb.classList.add("selected");
-    nextThumb.scrollIntoView();
+function selectThumbnail(frame) {
+  $$(".canvas-frame.selected").forEach(thumb =>
+    thumb.classList.remove("selected")
+  );
+  let nextThumb = thumbnailForFrame(frame);
+  nextThumb.classList.add("selected");
+  nextThumb.scrollIntoView();
 }
 
-export { frameToThumbnail, frameForThumbnail, thumbnailForFrame, makeThumbnails, updateThumbnail, addThumbnail, removeThumbnail, selectThumbnail, toggleTimeline }
+export {
+  frameToThumbnail,
+  frameForThumbnail,
+  thumbnailForFrame,
+  makeThumbnails,
+  updateThumbnail,
+  addThumbnail,
+  removeThumbnail,
+  selectThumbnail,
+  toggleTimeline,
+};

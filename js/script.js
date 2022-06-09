@@ -595,11 +595,12 @@ listen("#animateplay", "click", animation.play);
 listen("#framerate", "change", evt => (state.fps = evt.currentTarget.value));
 listen(".timeline-label", "click", timeline.toggleTimeline);
 listen("#shortcuts", "click", ui.showShortcuts);
-listen(".timeline-frames", "click", evt =>
+listen(".timeline-frames", "click", evt => {
   frames.goToFrame(
     ui.currentFrame(),
-    timeline.frameForThumbnail(evt.originalTarget)
-  )
+    timeline.frameForThumbnail(evt.target)
+  );
+  }
 );
 // File Events
 listen(window, "unload", saveLocal);
