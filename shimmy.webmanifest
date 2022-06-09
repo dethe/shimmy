@@ -2,6 +2,12 @@
   "name": "Shimmy",
   "short_name": "Shimmy",
   "description": "A sketch-based flipbook-style animation tool",
+  "start_url": "./",
+  "display": "fullscreen",
+  "theme_color": "#663399",
+  "background_color": "#000000",
+  "categories": ["kids", "art", "animation"],
+  "orientation": "landscape-primary",
   "icons": [
     {
       "src": "icons/icon0_512.png",
@@ -79,11 +85,5 @@
       "sizes": "48x48",
       "type": "image/png"
     }
-  ],
-  "start_url": "./",
-  "display": "fullscreen",
-  "theme_color": "#663399",
-  "background_color": "#000000",
-  "categories": ["kids", "art", "animation"],
-  "orientation": "landscape-primary"
+  ]
 }
