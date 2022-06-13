@@ -573,6 +573,21 @@ listen(
   "change",
   evt => (state.eraserWidth = Number(evt.currentTarget.value))
 );
+listen(
+  ".framerate .stepper-add-button",
+  "click",
+  evt => (state.frameRate += 1)
+);
+listen(
+  ".framerate .stepper-remove-button",
+  "click",
+  evt => (state.frameRate -= 1)
+);
+listen(
+  "#framerate",
+  "click",
+  evt => (state.frameRate = Number(evt.currentTarget.value))
+);
 listen("#color, #bgcolor", "click", evt =>
   ui.showColorPopup(evt.currentTarget)
 );
