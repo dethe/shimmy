@@ -29,7 +29,7 @@ import GIF from "/shimmy/lib/gif.js";
 import JSZip from "/shimmy/lib/jszip.min.js";
 
 if ("serviceWorker" in navigator) {
-  navigator.serviceWorker.register("/shimmy/js/sw.js", { scope: "/shimmy/" });
+  navigator.serviceWorker.register("/shimmy/sw.js", { scope: "/shimmy/" });
 }
 
 // Wrap `dom.listen` and `dom.addShortcuts` so that events don't trigger during animation playback
