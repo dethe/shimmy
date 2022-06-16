@@ -1,10 +1,10 @@
 // File support for use with Moat filesharing
 // See moat server: https://glitch.com/~sd-moat
 
-import timeago from "../lib/timeago.js";
-import QrCreatopr from "../lib/qr-creator.js";
-import { saveToCallback } from "./file.js";
-import * as dom from "./dom.js";
+import timeago from "/shimmy/lib/timeago.js";
+import QrCreator from "/shimmy/lib/qr-creator.js";
+import { saveToCallback } from "/shimmy/js/file.js";
+import * as dom from "/shimmy/js/dom.js";
 const { $, $$ } = dom;
 
 // CONFIGURATION

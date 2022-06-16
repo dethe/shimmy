@@ -17,9 +17,9 @@
 
 // TODO: Separate out file-format specifics, other non-file functions
 
-import * as dom from "./dom.js";
+import * as dom from "/shimmy/js/dom.js";
 const { $, $$ } = dom;
-import { sendToMoat } from "./moat.js"; // Conditionally handle secure sharing via Moat
+import { sendToMoat } from "/shimmy/js/moat.js"; // Conditionally handle secure sharing via Moat
 
 function save(data, title) {
   if (!title) {

@@ -1,5 +1,5 @@
-import * as dom from "./dom.js";
-import { radians } from "./tool.js";
+import * as dom from "/shimmy/js/dom.js";
+import { radians } from "/shimmy/js/tool.js";
 
 class SVGCanvas {
   constructor(frame, x, y, width, height, maxHeight) {

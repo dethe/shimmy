@@ -1,8 +1,8 @@
-import * as dom from "./dom.js";
+import * as dom from "/shimmy/js/dom.js";
 const { $, $$, sendEvent } = dom;
-import state from "./state.js";
-import ui from "./ui.js";
-import * as undo from "./undo.js";
+import state from "/shimmy/js/state.js";
+import ui from "/shimmy/js/ui.js";
+import * as undo from "/shimmy/js/undo.js";
 
 const ZOOM_FACTOR = 1000;
 
