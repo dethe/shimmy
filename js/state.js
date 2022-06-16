@@ -3,7 +3,7 @@
    and sync the DOM to that */
 /* All state functions that are event handlers should likewise be split. Event handling can go in script.js or if needed we can create an event.js. State functions should only update the JS state */
 
-import palettes from "./palettes.js";
+import palettes from "/shimmy/js/palettes.js";
 
 let values = {
   _dirty: false,

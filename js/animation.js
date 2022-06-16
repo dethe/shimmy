@@ -4,9 +4,9 @@
    exports playingFrame(), play()
 */
 
-import { svg, removeClass, insertAfter, next, $, $$ } from "./dom.js";
-import state from "./state.js";
-import ui from "./ui.js";
+import { svg, removeClass, insertAfter, next, $, $$ } from "/shimmy/js/dom.js";
+import state from "/shimmy/js/state.js";
+import ui from "/shimmy/js/ui.js";
 
 let _lastFrameTime = 0;
 let _style = "";

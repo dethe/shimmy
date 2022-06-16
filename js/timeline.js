@@ -13,8 +13,8 @@
 // You should have received a copy of the GNU General Public License
 // along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-import ui from "./ui.js";
-import { $, $$, html } from "./dom.js";
+import ui from "/shimmy/js/ui.js";
+import { $, $$, html } from "/shimmy/js/dom.js";
 
 function frameToThumbnail(frame) {
   return ui.frameToImage(frame, 0, 0, WIDTH, HEIGHT, 64);
