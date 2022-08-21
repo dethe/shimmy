@@ -22,16 +22,20 @@ function sendToMoat(data, filename, progid) {
 }
 
 function sendToMoatCB(blob, filename, progid) {
-  let formData = new FormData();
-  formData.append("program", progid);
-  formData.append("file", blob, filename);
-  let request = new XMLHttpRequest();
-  request.open("POST", MOAT_URL + "file/create");
-  request.setRequestHeader("X-Requested-With", "XMLHTTPRequest");
-  request.send(formData);
-  request.onload = () => showFilePage(request.response);
-  request.onerror = () => handleError("send file");
-  request.ontimeout = () => handleTimeout("send file");
+  try{
+    let formData = new FormData();
+    formData.append("program", progid);
+    formData.append("file", blob, filename);
+    let request = new XMLHttpRequest();
+    request.open("POST", MOAT_URL + "file/create");
+    request.setRequestHeader("X-Requested-With", "XMLHTTPRequest");
+    request.send(formData);
+    request.onload = () => showFilePage(request.response);
+    request.onerror = () => handleError("send file");
+    request.ontimeout = () => handleTimeout("send file");
+  }catch(e){
+    alert('something went wrong: %s', e.message);
+  }
 }
 
 function handleError(step) {
