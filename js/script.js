@@ -291,6 +291,12 @@ function updateSavedState() {
 
 function restoreSavedState() {
   state.keys.forEach(key => (state[key] = ui.canvas.dataset[key]));
+  // setting color changes the tool to pen, so set tool last
+  // but relinquish thread control first so events can fire.
+  // Alternatively, the color change events could detect that we're loading
+  // but that would require too much coupling
+  render(true);
+  queueMicrotask(() => (state.tool = ui.canvas.dataset.tool));
 }
 
 function keydownHandler(evt) {
@@ -405,13 +411,15 @@ function changePenOrEraserSize(evt, handler) {
   }
 }
 
-function render() {
+function render(once) {
   if (state.dirty) {
     state.clearDirtyFlag();
     state.keys.forEach(key => (ui[key] = state[key]));
     frames.updateOnionskin();
   }
-  requestAnimationFrame(render);
+  if (!once) {
+    requestAnimationFrame(render);
+  }
 }
 
 function resize() {
