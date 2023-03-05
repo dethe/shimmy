@@ -4,11 +4,11 @@
  *
  ***************************************/
 
-import state from "./state.js";
-import ui from "./ui.js";
-import * as dom from "./dom.js";
+import state from "/shimmy/js/state.js";
+import ui from "/shimmy/js/ui.js";
+import * as dom from "/shimmy/js/dom.js";
 const { $, $$ } = dom;
-import * as undo from "./undo.js";
+import * as undo from "/shimmy/js/undo.js";
 
 function updateOnionskin() {
   if (!state.doOnionskin) return;

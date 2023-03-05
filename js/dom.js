@@ -15,7 +15,7 @@
 
 // DOM utilities
 
-import assignKey from "../lib/keymaster.js";
+import assignKey from "/shimmy/lib/keymaster.js";
 
 var SVG_NS = "http://www.w3.org/2000/svg";
 

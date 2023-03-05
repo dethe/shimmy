@@ -1,14 +1,14 @@
 /* Functions specifically to manipulate the DOM go here */
 
-import * as dom from "./dom.js";
+import * as dom from "/shimmy/js/dom.js";
 const { $, $$, sendEvent } = dom;
-import SVGCanvas from "./svgcanvas.js";
-import state from "./state.js";
-import palettes from "./palettes.js";
-import * as tool from "./tool.js";
-import Mess from "../lib/mess.js";
+import SVGCanvas from "/shimmy/js/svgcanvas.js";
+import state from "/shimmy/js/state.js";
+import palettes from "/shimmy/js/palettes.js";
+import * as tool from "/shimmy/js/tool.js";
+import Mess from "/shimmy/lib/mess.js";
 
-import KellyColorPicker from "../lib/html5-color-picker.js";
+import KellyColorPicker from "/shimmy/lib/html5-color-picker.js";
 
 const mess = new Mess(); // toast-style popups, exposed as ui.popup()
 
@@ -64,11 +64,11 @@ const colorpicker = new KellyColorPicker({
 });
 
 function setPaletteHandler(evt) {
-  const sel = evt.target || evt.originalTarget;
+  const sel = evt.target;
   state.palette = sel.value;
   sel.blur();
 }
-setPaletteHandler({ originalTarget: colorpaletteselect });
+setPaletteHandler({ target: colorpaletteselect });
 
 function compareColorButton(button, color) {
   switch (color[0]) {

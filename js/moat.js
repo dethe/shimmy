@@ -1,12 +1,15 @@
 // File support for use with Moat filesharing
 // See moat server: https://glitch.com/~sd-moat
 
-import { $ } from "./dom.js";
-import timeago from "../lib/timeago.js";
+import timeago from "/shimmy/lib/timeago.js";
+import QrCreator from "/shimmy/lib/qr-creator.js";
+import { saveToCallback } from "/shimmy/js/file.js";
+import * as dom from "/shimmy/js/dom.js";
+const { $, $$ } = dom;
 
 // CONFIGURATION
 let params = new URLSearchParams(new URL(window.location).search);
-const USE_MOAT = params.has("moat");
+const USE_MOAT = params.has("moat") || ("" + location).includes("launchpad");
 
 const MOAT_URL = window.location.host.includes("glitch")
   ? "https://sd-moat.glitch.me/"
@@ -19,16 +22,20 @@ function sendToMoat(data, filename, progid) {
 }
 
 function sendToMoatCB(blob, filename, progid) {
-  let formData = new FormData();
-  formData.append("program", progid);
-  formData.append("file", blob, filename);
-  let request = new XMLHttpRequest();
-  request.open("POST", MOAT_URL + "file/create");
-  request.setRequestHeader("X-Requested-With", "XMLHTTPRequest");
-  request.send(formData);
-  request.onload = () => showFilePage(request.response);
-  request.onerror = () => handleError("send file");
-  request.ontimeout = () => handleTimeout("send file");
+  try{
+    let formData = new FormData();
+    formData.append("program", progid);
+    formData.append("file", blob, filename);
+    let request = new XMLHttpRequest();
+    request.open("POST", MOAT_URL + "file/create");
+    request.setRequestHeader("X-Requested-With", "XMLHTTPRequest");
+    request.send(formData);
+    request.onload = () => showFilePage(request.response);
+    request.onerror = () => handleError("send file");
+    request.ontimeout = () => handleTimeout("send file");
+  }catch(e){
+    alert('something went wrong: %s', e.message);
+  }
 }
 
 function handleError(step) {
@@ -39,16 +46,19 @@ function handleTimeout(step) {
   alert("Timeout uploading to Moat during " + step + ", please try again.");
 }
 
-function showQRCode() {
-  if (document.querySelector("#qrcode")) {
-    let qrcode = new QRCode("qrcode", {
-      text: "{{urlbase}}/file/{{id}}",
-      width: 128,
-      height: 128,
-      colorDark: "#000000",
-      colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.H,
-    });
+function showQRCode(url) {
+  let qrElement = $("#qrcode");
+  if (qrElement) {
+    QrCreator.render(
+      {
+        text: url,
+        ecLevel: "H",
+        fill: "#000000",
+        background: "#FFFFFF", // null for transparent
+        size: 128,
+      },
+      qrElement
+    );
   }
 }
 
@@ -62,17 +72,17 @@ function updateExpires() {
   }
 }
 
-function updateDialog() {
-  showQRCode();
+function updateDialog(url) {
+  showQRCode(url);
   updateExpires();
 }
 
+const dialog = $("#moat-dialog");
+
 function showFilePage(res) {
-  dialog.innerHTML = res;
-  dialog.append(
-    dom.html("button", { onClick: "this.parentElement.close()" }, "OK")
-  );
-  updateDialog();
+  dialog.firstElementChild.innerHTML = res;
+  let url = dialog.firstElementChild.querySelector("a").href;
+  updateDialog(url);
   dialog.showModal();
 }
 

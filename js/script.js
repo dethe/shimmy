@@ -15,18 +15,22 @@
 
 /* globals  key */
 
-import * as file from "./file.js";
-import state from "./state.js";
-import ui from "./ui.js";
-import * as frames from "./frames.js";
-import * as dom from "./dom.js";
+import * as file from "/shimmy/js/file.js";
+import state from "/shimmy/js/state.js";
+import ui from "/shimmy/js/ui.js";
+import * as frames from "/shimmy/js/frames.js";
+import * as dom from "/shimmy/js/dom.js";
 const { $, $$, sendEvent } = dom;
-import * as animation from "./animation.js";
-import * as stepper from "./stepper.js";
-import * as undo from "./undo.js";
-import * as timeline from "./timeline.js";
-import GIF from "../lib/gif.js";
-import JSZip from "../lib/jszip.min.js";
+import * as animation from "/shimmy/js/animation.js";
+import * as stepper from "/shimmy/js/stepper.js";
+import * as undo from "/shimmy/js/undo.js";
+import * as timeline from "/shimmy/js/timeline.js";
+import GIF from "/shimmy/lib/gif.js";
+import JSZip from "/shimmy/lib/jszip.min.js";
+
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("/shimmy/sw.js", { scope: "/shimmy/" });
+}
 
 // Wrap `dom.listen` and `dom.addShortcuts` so that events don't trigger during animation playback
 
@@ -572,6 +576,13 @@ listen(
   "change",
   evt => (state.eraserWidth = Number(evt.currentTarget.value))
 );
+listen(".framerate .stepper-add-button", "click", evt => (state.fps += 1));
+listen(".framerate .stepper-remove-button", "click", evt => (state.fps -= 1));
+listen(
+  "#framerate",
+  "click",
+  evt => (state.fps = Number(evt.currentTarget.value))
+);
 listen("#color, #bgcolor", "click", evt =>
   ui.showColorPopup(evt.currentTarget)
 );
@@ -593,12 +604,12 @@ listen("#animateplay", "click", animation.play);
 listen("#framerate", "change", evt => (state.fps = evt.currentTarget.value));
 listen(".timeline-label", "click", timeline.toggleTimeline);
 listen("#shortcuts", "click", ui.showShortcuts);
-listen(".timeline-frames", "click", evt =>
-  frames.goToFrame(
-    ui.currentFrame(),
-    timeline.frameForThumbnail(evt.originalTarget)
-  )
-);
+listen(".timeline-frames", "click", evt => {
+  if (!evt.target.matches(".canvas-frame")) {
+    return;
+  }
+  frames.goToFrame(ui.currentFrame(), timeline.frameForThumbnail(evt.target));
+});
 // File Events
 listen(window, "unload", saveLocal);
 listen(window, "load", restoreLocal);

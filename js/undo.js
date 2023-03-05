@@ -35,8 +35,8 @@
 //   evt.detail.docRedo = nameOfDocRedo or null;
 // }
 
-import { sendEvent } from "./dom.js";
-import ui from "./ui.js";
+import { sendEvent } from "/shimmy/js/dom.js";
+import ui from "/shimmy/js/ui.js";
 const undoStack = new Map();
 const redoStack = new Map();
 
