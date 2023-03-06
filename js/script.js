@@ -290,12 +290,18 @@ function updateSavedState() {
 }
 
 function restoreSavedState() {
-  state.keys.forEach(key => {state[key] = ui.canvas.dataset[key]; ui[key] = state[key];});
+  state.keys.forEach(key => {
+    state[key] = ui.canvas.dataset[key];
+    ui[key] = state[key];
+  });
   // setting color changes the tool to pen, so set tool last
   // but relinquish thread control first so events can fire.
   // Alternatively, the color change events could detect that we're loading
   // but that would require too much coupling
-  queueMicrotask(() => {state.tool = ui.canvas.dataset.tool; ui.tool = state.tool;});
+  queueMicrotask(() => {
+    state.tool = ui.canvas.dataset.tool;
+    ui.tool = state.tool;
+  });
 }
 
 function keydownHandler(evt) {
@@ -538,7 +544,6 @@ listen("#about", "click", ui.showAbout);
 listen("#frameundo", "click", evt => undo.undo(ui.currentFrame()));
 listen("#frameredo", "click", evt => undo.redo(ui.currentFrame()));
 listen("#file", "click", evt => {
-  console.log("file clicked");
   ui.toggleToolbar(evt.currentTarget.id);
 });
 listen("#filename", "change", evt => (state.name = $("#filename").value));

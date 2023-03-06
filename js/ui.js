@@ -206,10 +206,10 @@ function drawPenToCanvas() {
   // draw crosshairs
   ctx.strokeStyle = "white";
   ctx.beginPath();
-  ctx.moveTo(-5,1);
-  ctx.lineTo(5,1);
-  ctx.moveTo(1,-5);
-  ctx.lineTo(1,5);
+  ctx.moveTo(-5, 1);
+  ctx.lineTo(5, 1);
+  ctx.moveTo(1, -5);
+  ctx.lineTo(1, 5);
   ctx.stroke();
   ctx.strokeStyle = "black";
   ctx.beginPath();
@@ -432,7 +432,6 @@ class ui {
   }
 
   static set strokeWidth(val) {
-    console.log(`setting strokeWidth to ${val}`);
     $("#pensize").value = val;
     drawPenToCanvas();
   }
