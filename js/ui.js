@@ -197,14 +197,33 @@ function drawPenToCanvas() {
   const radius = state.strokeWidth / 2;
   let cursor = $("canvas.cursor");
   let ctx = cursor.getContext("2d");
+  ctx.strokeWidth = 1;
   ctx.clearRect(0, 0, width, height);
+  ctx.save();
+  ctx.translate(width / 2, height / 2);
   ctx.fillStyle = state.color;
   ctx.strokeStyle = invertColor(state.color, true);
-  ctx.strokeWidth = 1;
   ctx.beginPath();
-  ctx.ellipse(width / 2, height / 2, radius, radius, 0, 0, Math.PI * 2, false);
+  ctx.ellipse(0, 0, radius, radius, 0, 0, Math.PI * 2, false);
   ctx.fill();
   ctx.stroke();
+  // draw crosshairs
+  ctx.strokeStyle = "white";
+  ctx.beginPath();
+  ctx.moveTo(-5, 1);
+  ctx.lineTo(5, 1);
+  ctx.moveTo(1, -5);
+  ctx.lineTo(1, 5);
+  ctx.stroke();
+  ctx.strokeStyle = "black";
+  ctx.beginPath();
+  ctx.moveTo(-5, 0);
+  ctx.lineTo(5, 0);
+  ctx.moveTo(0, -5);
+  ctx.lineTo(0, 5);
+  ctx.stroke();
+  ctx.restore();
+
   dom.sendEvent("changePen", { url: `url(${cursor.toDataURL()})` });
 }
 
