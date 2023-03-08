@@ -3,6 +3,7 @@ const { $, $$, sendEvent } = dom;
 import state from "/shimmy/js/state.js";
 import ui from "/shimmy/js/ui.js";
 import * as undo from "/shimmy/js/undo.js";
+import OverlayHelper from "/shimmy/js/overlay.js";
 
 const ZOOM_FACTOR = 1000;
 
