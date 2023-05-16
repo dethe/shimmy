@@ -19,6 +19,12 @@ along with this program.  If not, see <https://www.gnu.org/licenses/>.
 html {
   font-family: "Inter", sans-serif;
 }
+
+option {
+  appearance: none; /* turn off default browser styling */
+  font-family: "Font Awesome 5 Pro", "Inter" !important;
+}
+
 @supports (font-variation-settings: normal) {
   html,
   input,
