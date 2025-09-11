@@ -1,7 +1,0 @@
-{
-  "files.exclude": {
-    "": true,
-    "font": true,
-    "lib": true
-  }
-}
